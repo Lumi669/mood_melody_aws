@@ -8,6 +8,10 @@
   },
   "scripts": {
     "fix-prettier": "pnpx prettier --write .",
-    "check-prettier": "pnpx prettier --check ."
+    "check-prettier": "pnpx prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
