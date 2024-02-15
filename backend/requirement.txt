@@ -1,1 +1,15 @@
 
+# python web frameork
+flask
+
+# allows Python applications to connect to a PostgreSQL database
+psycopg2-binary
+
+# extension for Flask that adds support for SQLAlchemy to 
+# your application. SQLAlchemy is an Object-Relational 
+# Mapping (ORM) tool that facilitates the interaction between 
+# Python objects and a relational database by abstracting the 
+# complexities of SQL.
+Flask-SQLAlchmy
+
+Flask-CORS
