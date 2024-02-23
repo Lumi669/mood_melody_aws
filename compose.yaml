@@ -1,4 +1,21 @@
 services:
+  # nextjs service
+  nextapp:
+    container_name: nextapp
+    image: nextapp:1.0.0
+    build:
+      context: ./frontend/frontend-app
+      dockerfile: next.dockerfile
+    ports: -3000:3000
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
+    depends_on:
+      - flaskapp
+
+  # falsk service
+
+  # falskapp:
+
   db:
     container_name: db
     image: postgres:13
