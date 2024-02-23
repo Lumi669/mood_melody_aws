@@ -1,0 +1,33 @@
+name: Deploy Full-Stack App to Heroku
+
+on:
+  push:
+    branches:
+      - main # Adjust this as needed
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container Registry
+        run: heroku container:login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Build and push frontend Docker image
+        run: |
+          heroku container:push web -a ${{ secrets.HEROKU_APP_NAME_FRONTEND }}
+          heroku container:release web -a ${{ secrets.HEROKU_APP_NAME_FRONTEND }}
+
+  deploy-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container Registry
+        run: heroku container:login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Build and push backend Docker image
+        run: |
+          heroku container:push web -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
+          heroku container:release web -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
