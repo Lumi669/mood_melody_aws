@@ -7,14 +7,14 @@ on:
 
 jobs:
   # Failed Workflow Example to test CI/CD pipeline's error notification systems
-  fail-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+  # fail-job:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
 
-      - name: Fail step
-        run: exit 1
+  #     - name: Fail step
+  #       run: exit 1
 
   deploy-frontend:
     runs-on: ubuntu-latest
