@@ -10,6 +10,6 @@ psycopg2-binary
 # Mapping (ORM) tool that facilitates the interaction between 
 # Python objects and a relational database by abstracting the 
 # complexities of SQL.
-Flask-SQLAlchmy
+Flask-SQLAlchemy
 
 Flask-CORS
