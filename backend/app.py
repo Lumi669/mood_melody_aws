@@ -8,6 +8,7 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL')
 db = SQLAlchemy(app)
 
+
 class Music(db.Model):
     __tablename__ = 'music'
     id = db.Column(db.Integer, primary_key=True)
@@ -25,6 +26,10 @@ class Image(db.Model):
 
     def json(self):
         return {'id': self.id, 'name': self.name, 'mood': self.mood}
+    
+# Ensure db.create_all() is called within an application context
+with app.app_context():
+    db.create_all()
 
 @app.route('/test', methods=['GET'])  
 def test():
