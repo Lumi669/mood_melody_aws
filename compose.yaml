@@ -5,7 +5,7 @@ services:
     image: nextapp:1.0.0
     build:
       context: ./frontend
-      dockerfile: next.dockerfile
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     environment:
@@ -19,7 +19,7 @@ services:
     image: flaskapp:1.0.0
     build:
       context: ./backend
-      dockerfile: flask.dockerfile
+      dockerfile: Dockerfile
     ports:
       - 4000:4000
     environment:
