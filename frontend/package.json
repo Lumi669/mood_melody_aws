@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "heroku-postbuild": "npm install -g pnpm && pnpm install",
     "start": "next start",
     "lint": "next lint"
   },
