@@ -6,6 +6,8 @@ from os import environ
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL')
+
+print("database_url ====== ", environ.get('DATABASE_URL'))
 db = SQLAlchemy(app)
 
 
