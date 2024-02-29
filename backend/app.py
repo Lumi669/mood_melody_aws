@@ -35,7 +35,7 @@ with app.app_context():
 
 @app.route('/test', methods=['GET'])  
 def test():
-    return jsonify({'message': 'The server is running .........'})
+    return jsonify({'message': 'The server is running ....====.....'})
 
 @app.route('/api/flask/musics', methods=['POST'])  
 def create_music():
