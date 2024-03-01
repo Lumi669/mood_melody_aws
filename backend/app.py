@@ -42,7 +42,7 @@ def create_tables():
 def test():
     return jsonify({'message': 'The server is running ....===ooooookkkkkkkpppppkk'})
 
-@app.route('/api/flask/musics', methods=['POST'])
+@app.route('/api/musics', methods=['POST'])
 def create_music():
     try:
         data = request.get_json()
@@ -58,7 +58,7 @@ def create_music():
     except Exception as e:
         return make_response(jsonify({'message': 'error creating music', 'error': str(e)}), 500)
 
-@app.route('/api/flask/musics', methods=['GET'])
+@app.route('/api/musics', methods=['GET'])
 def get_musics():
     try:
         musics = Music.query.all()
