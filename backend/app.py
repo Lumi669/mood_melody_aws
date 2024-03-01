@@ -143,7 +143,7 @@ def home():
 
 @app.route('/favicon.ico')
 def favicon():
-    return '', 204
+    return jsonify({'message': 'NO such file as favicon.ico!'}), 204
 
 
 
