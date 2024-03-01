@@ -61,3 +61,9 @@ def get_musics():
         return jsonify(musics_data), 200
     except Exception as e:
         return make_response(jsonify({'message': 'error getting musics', 'error': str(e), 'data': '[]'}, ), 500)
+
+
+if __name__ == '__main__':
+    # Ensuring the app runs on the correct port for Heroku
+    port = int(os.environ.get('PORT', 4000))  # Default to 5000 if PORT not found
+    app.run(host='0.0.0.0', port=port)
