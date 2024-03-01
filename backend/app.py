@@ -140,4 +140,4 @@ def get_musics():
 if __name__ == '__main__':
     # Ensuring the app runs on the correct port for Heroku
     port = int(os.environ.get('PORT', 4000))  # Default to 4000 if PORT not found
-    app.run(host='0.0.0.0', port=port, debug=True)  # Consider setting debug=False in production
+    app.run(host='0.0.0.0', port=port, debug=False)  # Consider setting debug=False in production
