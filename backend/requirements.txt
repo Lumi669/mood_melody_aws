@@ -15,3 +15,5 @@ Flask-SQLAlchemy
 Flask-CORS
 
 Gunicorn
+
+Flask-Migrate
