@@ -110,7 +110,7 @@ def create_tables():
 
 @app.route('/test', methods=['GET'])
 def test():
-    return jsonify({'message': 'The server is running ....===ooooookkkkkkkkk'})
+    return jsonify({'message': 'The server is running ....===ooooookkkkkkkpppppkk'})
 
 @app.route('/api/flask/musics', methods=['POST'])
 def create_music():
