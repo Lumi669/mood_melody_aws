@@ -110,7 +110,7 @@ def create_tables():
 
 @app.route('/test', methods=['GET'])
 def test():
-    return jsonify({'message': 'The server is running ....===oooooo'})
+    return jsonify({'message': 'The server is running ....===ooooookkkkkkkkk'})
 
 @app.route('/api/flask/musics', methods=['POST'])
 def create_music():
@@ -136,6 +136,16 @@ def get_musics():
         return jsonify(musics_data), 200
     except Exception as e:
         return make_response(jsonify({'message': 'error getting musics', 'error': str(e), 'data': '[]'}), 500)
+    
+@app.route('/')
+def home():
+    return jsonify({'message': 'Welcome to the Music Mood API!'})
+
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204
+
+
 
 if __name__ == '__main__':
     # Ensuring the app runs on the correct port for Heroku
