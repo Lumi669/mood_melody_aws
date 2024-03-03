@@ -18,10 +18,14 @@ jobs:
 
       # Create GitHub Deployment
       - name: Create GitHub Deployment
+
         id: create_deployment
         uses: octokit/request-action@v2.x
         with:
-          route: POST /repos/${{ github.repository }}/deployments
+          route: POST /repos/:owner/:repo/deployments
+          mediaType: '{"previews": ["ant-man"]}' # Include this if you're using a preview API
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
           ref: ${{ github.sha }}
           environment: "production"
           required_contexts: "[]"
