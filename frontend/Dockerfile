@@ -118,8 +118,9 @@ COPY --from=base /app/.next ./.next
 COPY --from=base /app/node_modules ./node_modules
 COPY --from=base /app/package.json ./package.json
 
+
 # Expose the port Next.js runs on
 EXPOSE 3000
 
 # Define the command to run the app
-CMD ["npm", "start"]
+CMD ["pnpm", "run", "start"]
