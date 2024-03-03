@@ -34,6 +34,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Debug Configuration
+        run: |
+          cat ./frontend/tsconfig.json
+          cat ./frontend/next.config.js
+
       - name: Login to Heroku Container Registry
         run: heroku container:login
         env:

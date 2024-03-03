@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "heroku-postbuild": "npm install -g pnpm && pnpm install",
-    "start": "next start -p $PORT",
+    "start": "next start -p ${PORT:-3000}",
     "lint": "next lint"
   },
   "dependencies": {
