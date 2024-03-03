@@ -1,64 +1,3 @@
-# name: Deploy Full-Stack App to Heroku
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   deploy-backend:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-
-#       - name: Login to Heroku Container Registry
-#         run: heroku container:login
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-#       - name: Build and push backend (Flask) Docker image
-#         run: |
-#           docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME_BACKEND }}/web ./backend
-#           docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME_BACKEND }}/web
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-#       - name: Release backend Docker image to Heroku app
-#         run: heroku container:release web -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-#   deploy-frontend:
-#     needs: deploy-backend
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-
-#       - name: Login to Heroku Container Registry
-#         run: heroku container:login
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-#       - name: Build and push frontend (Next.js) Docker image
-#         run: |
-#           docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME_FRONTEND }}/web ./frontend
-#           docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME_FRONTEND }}/web
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-#       # New step: Retrieve backend URL and set it for the frontend app
-#       - name: Set Backend URL in Frontend App's Config Vars
-#         run: |
-#           BACKEND_URL=$(heroku apps:info -s -a ${{ secrets.HEROKU_APP_NAME_BACKEND }} | grep web_url | cut -d= -f2 | tr -d '[:space:]')
-#           heroku config:set NEXT_PUBLIC_API_URL=$BACKEND_URL -a ${{ secrets.HEROKU_APP_NAME_FRONTEND }}
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-#       - name: Release frontend Docker image to Heroku app
-#         run: heroku container:release web -a ${{ secrets.HEROKU_APP_NAME_FRONTEND }}
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
 name: Deploy Full-Stack App to Heroku
 
 on:
@@ -85,25 +24,7 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
       - name: Release backend Docker image to Heroku app
-        run: |
-          heroku container:release web -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
-          status=$?
-          if [ $status -eq 0 ]; then
-            curl \
-              -X POST \
-              -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
-              -H "Accept: application/vnd.github.ant-man-preview+json" \
-              https://api.github.com/repos/${GITHUB_REPOSITORY}/deployments \
-              --data "{\"environment\":\"production\",\"state\":\"success\",\"description\":\"Backend deployment successful\"}"
-          else
-            curl \
-              -X POST \
-              -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
-              -H "Accept: application/vnd.github.ant-man-preview+json" \
-              https://api.github.com/repos/${GITHUB_REPOSITORY}/deployments \
-              --data "{\"environment\":\"production\",\"state\":\"failure\",\"description\":\"Backend deployment failed\"}"
-            exit $status
-          fi
+        run: heroku container:release web -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
@@ -125,6 +46,7 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
+      # New step: Retrieve backend URL and set it for the frontend app
       - name: Set Backend URL in Frontend App's Config Vars
         run: |
           BACKEND_URL=$(heroku apps:info -s -a ${{ secrets.HEROKU_APP_NAME_BACKEND }} | grep web_url | cut -d= -f2 | tr -d '[:space:]')
@@ -133,24 +55,6 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
       - name: Release frontend Docker image to Heroku app
-        run: |
-          heroku container:release web -a ${{ secrets.HEROKU_APP_NAME_FRONTEND }}
-          status=$?
-          if [ $status -eq 0 ]; then
-            curl \
-              -X POST \
-              -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
-              -H "Accept: application/vnd.github.ant-man-preview+json" \
-              https://api.github.com/repos/${GITHUB_REPOSITORY}/deployments \
-              --data "{\"environment\":\"production\",\"state\":\"success\",\"description\":\"Frontend deployment successful\"}"
-          else
-            curl \
-              -X POST \
-              -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
-              -H "Accept: application/vnd.github.ant-man-preview+json" \
-              https://api.github.com/repos/${GITHUB_REPOSITORY}/deployments \
-              --data "{\"environment\":\"production\",\"state\":\"failure\",\"description\":\"Frontend deployment failed\"}"
-            exit $status
-          fi
+        run: heroku container:release web -a ${{ secrets.HEROKU_APP_NAME_FRONTEND }}
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
