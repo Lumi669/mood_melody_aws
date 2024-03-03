@@ -17,5 +17,9 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "baseUrl": ".", // Assuming this points to the root of your TypeScript or Next.js project
+  "paths": {
+    "components/*": ["src/components/*"]
+  }
 }
