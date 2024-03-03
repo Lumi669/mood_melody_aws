@@ -21,18 +21,21 @@ class Music(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     mood = db.Column(db.String(80), unique=False, nullable=False)
+    url = db.Column(db.String(300), unique=True, nullable=False)
+
 
     def json(self):
-        return {'id': self.id, 'name': self.name, 'mood': self.mood}
+        return {'id': self.id, 'name': self.name, 'mood': self.mood, 'url': self.url}
 
 class Image(db.Model):
     __tablename__ = 'images'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     mood = db.Column(db.String(80), unique=False, nullable=False)
+    url = db.Column(db.String(300), unique=True, nullable=False)
 
     def json(self):
-        return {'id': self.id, 'name': self.name, 'mood': self.mood}
+        return {'id': self.id, 'name': self.name, 'mood': self.mood, 'url': self.url}
 
 @app.before_first_request
 def create_tables():
@@ -40,19 +43,20 @@ def create_tables():
 
 @app.route('/test', methods=['GET'])
 def test():
-    return jsonify({'message': 'The server is running ...pppsssss'})
+    return jsonify({'message': 'The server is running ...'})
 
 @app.route('/api/musics', methods=['POST'])
 def create_music():
     try:
         data = request.get_json()
-        new_music = Music(name=data['name'], mood=data['mood'])
+        new_music = Music(name=data['name'], mood=data['mood'], url=data['url'])
         db.session.add(new_music)
         db.session.commit()
         return jsonify({
             'id': new_music.id,
             'name': new_music.name,
-            'mood': new_music.mood
+            'mood': new_music.mood,
+            'url': new_music.url
         }), 201
 
     except Exception as e:
@@ -62,7 +66,7 @@ def create_music():
 def get_musics():
     try:
         musics = Music.query.all()
-        musics_data = [{'id': music.id, 'name': music.name, 'mood': music.mood} for music in musics]
+        musics_data = [{'id': music.id, 'name': music.name, 'mood': music.mood, 'url': music.url} for music in musics]
         return jsonify(musics_data), 200
     except Exception as e:
         return make_response(jsonify({'message': 'error getting musics', 'error': str(e), 'data': '[]'}), 500)
