@@ -8,7 +8,7 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      <div>Happy weekend :D??????!</div>
+      <div>Happy weekend :D Satuday!</div>
     </main>
   );
 }

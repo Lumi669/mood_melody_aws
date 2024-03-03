@@ -40,7 +40,7 @@ def create_tables():
 
 @app.route('/test', methods=['GET'])
 def test():
-    return jsonify({'message': 'The server is running ...ppp'})
+    return jsonify({'message': 'The server is running ...pppsssss'})
 
 @app.route('/api/musics', methods=['POST'])
 def create_music():
