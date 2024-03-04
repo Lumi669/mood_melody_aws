@@ -1,31 +1,81 @@
+# services:
+#   # nextjs service
+#   nextapp:
+#     container_name: nextapp
+#     image: nextapp:1.0.0
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     ports:
+#       - 3000:3000
+#     environment:
+#       - NEXT_PUBLIC_API_URL=http://localhost:${FLASK_APP_PORT}
+#     depends_on:
+#       - flaskapp
+
+#   # flssk service
+#   flaskapp:
+#     container_name: flaskapp
+#     image: flaskapp:1.0.0
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     ports:
+#       - 4000:4000
+#     environment:
+#       - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+#     depends_on:
+#       - db
+
+#   db:
+#     container_name: db
+#     image: postgres:13
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#       POSTGRES_DB: postgres
+#     ports:
+#       - 5432:5432
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
+
+# volumes:
+#   pgdata: {}
+
+version: "3.8"
 services:
-  # nextjs service
+  # Next.js service
   nextapp:
     container_name: nextapp
-    image: nextapp:1.0.0
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app # Mount the frontend directory into the container
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:${FLASK_APP_PORT}
     depends_on:
       - flaskapp
+    command: pnpm run dev # Ensure the Next.js app starts in development mode
 
-  # flssk service
+  # Flask service
   flaskapp:
     container_name: flaskapp
-    image: flaskapp:1.0.0
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - 4000:4000
+      - "4000:4000"
+    volumes:
+      - ./backend:/app # Mount the backend directory into the container
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - FLASK_ENV=development # Set Flask environment to development to enable hot reload
     depends_on:
       - db
+    command: flask run --host=0.0.0.0 # Ensure Flask app listens on all network interfaces
 
   db:
     container_name: db
@@ -35,7 +85,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
