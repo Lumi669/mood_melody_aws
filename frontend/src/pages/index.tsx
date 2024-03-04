@@ -7,8 +7,15 @@ import Ui from "@/components/Ui";
 
 const inter = Inter({ subsets: ["latin"] });
 
+interface Music {
+  id: number;
+  name: string;
+  url: string;
+  mood: boolean;
+}
+
 export default function Home() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Music[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
