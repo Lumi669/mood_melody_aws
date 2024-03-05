@@ -72,7 +72,7 @@ def get_musics():
         return make_response(jsonify({'message': 'error getting musics', 'error': str(e), 'data': '[]'}), 500)
     
 @app.route('/api/musics', methods=['DELETE'])
-def delete_all_data():
+def delete_all_musics():
     try:
         db.session.query(Music).delete()
         db.session.commit()
@@ -83,6 +83,46 @@ def delete_all_data():
         db.session.rollback()
         return make_response(jsonify({'message': 'Error deleting data', 'error': str(e)}), 500)
 
+
+
+
+@app.route('/api/images', methods=['POST'])
+def create_image():
+    try:
+        data = request.get_json()
+        new_image = Image(name=data['name'], mood=data['mood'], url=data['url'])
+        db.session.add(new_image)
+        db.session.commit()
+        return jsonify({
+            'id': new_image.id,
+            'name': new_image.name,
+            'mood': new_image.mood,
+            'url': new_image.url
+        }), 201
+
+    except Exception as e:
+        return make_response(jsonify({'message': 'error creating image', 'error': str(e)}), 500)
+
+@app.route('/api/images', methods=['GET'])
+def get_images():
+    try:
+        images = Image.query.all()
+        images_data = [{'id': image.id, 'name': image.name, 'mood': image.mood, 'url': image.url} for image in images]
+        return jsonify(images_data), 200
+    except Exception as e:
+        return make_response(jsonify({'message': 'error getting images', 'error': str(e), 'data': '[]'}), 500)
+    
+@app.route('/api/images', methods=['DELETE'])
+def delete_all_images():
+    try:
+        db.session.query(Image).delete()
+        db.session.commit()
+        return make_response(jsonify({'message': 'All data deleted successfully'}), 200)
+
+    except Exception as e:
+        # In case of an error, roll back the changes
+        db.session.rollback()
+        return make_response(jsonify({'message': 'Error deleting data', 'error': str(e)}), 500)
     
 @app.route('/')
 def home():
