@@ -30,7 +30,7 @@ export default function Homepage() {
     };
 
     fetchData();
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     console.log("Updated data === ", data);
