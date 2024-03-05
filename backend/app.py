@@ -71,6 +71,19 @@ def get_musics():
     except Exception as e:
         return make_response(jsonify({'message': 'error getting musics', 'error': str(e), 'data': '[]'}), 500)
     
+@app.route('/api/musics', methods=['DELETE'])
+def delete_all_data():
+    try:
+        db.session.query(Music).delete()
+        db.session.commit()
+        return make_response(jsonify({'message': 'All data deleted successfully'}), 200)
+
+    except Exception as e:
+        # In case of an error, roll back the changes
+        db.session.rollback()
+        return make_response(jsonify({'message': 'Error deleting data', 'error': str(e)}), 500)
+
+    
 @app.route('/')
 def home():
     return jsonify({'message': 'Welcome to the Music Mood API!'})
