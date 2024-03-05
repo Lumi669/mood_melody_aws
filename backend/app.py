@@ -45,22 +45,28 @@ def create_tables():
 def test():
     return jsonify({'message': 'The server is running ooo..hhh.'})
 
+
+
 @app.route('/api/musics', methods=['POST'])
 def create_music():
     try:
         data = request.get_json()
-        new_music = Music(name=data['name'], mood=data['mood'], url=data['url'])
-        db.session.add(new_music)
+        if isinstance(data, dict):  # Single music object
+            new_musics = [Music(name=data['name'], mood=data['mood'], url=data['url'])]
+        elif isinstance(data, list):  # List of music objects
+            new_musics = [Music(name=item['name'], mood=item['mood'], url=item['url']) for item in data]
+        else:
+            return make_response(jsonify({'message': 'Invalid data format'}), 400)
+
+        db.session.add_all(new_musics)
         db.session.commit()
-        return jsonify({
-            'id': new_music.id,
-            'name': new_music.name,
-            'mood': new_music.mood,
-            'url': new_music.url
-        }), 201
+
+        return jsonify([{'id': music.id, 'name': music.name, 'mood': music.mood, 'url': music.url} for music in new_musics]), 201
 
     except Exception as e:
-        return make_response(jsonify({'message': 'error creating music', 'error': str(e)}), 500)
+        db.session.rollback()  # It's a good practice to rollback the session in case of errors
+        return make_response(jsonify({'message': 'Error creating music', 'error': str(e)}), 500)
+
 
 @app.route('/api/musics', methods=['GET'])
 def get_musics():
