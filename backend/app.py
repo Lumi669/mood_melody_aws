@@ -96,18 +96,22 @@ def delete_all_musics():
 def create_image():
     try:
         data = request.get_json()
-        new_image = Image(name=data['name'], mood=data['mood'], url=data['url'])
-        db.session.add(new_image)
+        if isinstance(data, dict): 
+            new_images = [Image(name=data['name'], mood=data['mood'], url=data['url'])]
+        elif isinstance(data, list):  
+            new_images = [Image(name=item['name'], mood=item['mood'], url=item['url']) for item in data]
+        else:
+            return make_response(jsonify({'message': 'Invalid data format'}), 400)
+
+        db.session.add_all(new_images)
         db.session.commit()
-        return jsonify({
-            'id': new_image.id,
-            'name': new_image.name,
-            'mood': new_image.mood,
-            'url': new_image.url
-        }), 201
+
+        return jsonify([{'id': image.id, 'name': image.name, 'mood': image.mood, 'url': image.url} for image in new_images]), 201
 
     except Exception as e:
-        return make_response(jsonify({'message': 'error creating image', 'error': str(e)}), 500)
+        db.session.rollback()  # It's a good practice to rollback the session in case of errors
+        return make_response(jsonify({'message': 'Error creating image', 'error': str(e)}), 500)
+
 
 @app.route('/api/images', methods=['GET'])
 def get_images():
