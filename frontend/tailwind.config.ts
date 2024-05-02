@@ -13,6 +13,10 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+
+      fontFamily: {
+        jersey: ['"Jersey 20 Charted"'], // fallback to sans-serif
+      },
     },
   },
   plugins: [],
