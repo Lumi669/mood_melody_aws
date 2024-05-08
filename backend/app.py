@@ -21,8 +21,9 @@ class Music(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     mood = db.Column(db.String(80), unique=False, nullable=False)
-    url = db.Column(db.String(300), unique=True, nullable=False)
 
+    url = db.Column(db.String(300), unique=True, nullable=False)
+    ctg = db.Column(db.String(300), unique=True, nullable=False)
 
     def json(self):
         return {'id': self.id, 'name': self.name, 'mood': self.mood, 'url': self.url, 'ctg': self.ctg}
@@ -33,6 +34,8 @@ class Image(db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
     mood = db.Column(db.String(80), unique=False, nullable=False)
     url = db.Column(db.String(300), unique=True, nullable=False)
+    ctg = db.Column(db.String(300), unique=True, nullable=False)
+
 
     def json(self):
         return {'id': self.id, 'name': self.name, 'mood': self.mood, 'url': self.url, 'ctg': self.ctg}
@@ -52,16 +55,16 @@ def create_music():
     try:
         data = request.get_json()
         if isinstance(data, dict):  # Single music object
-            new_musics = [Music(name=data['name'], mood=data['mood'], url=data['url'])]
+            new_musics = [Music(name=data['name'], mood=data['mood'], url=data['url'], ctg=data['ctg'])]
         elif isinstance(data, list):  # List of music objects
-            new_musics = [Music(name=item['name'], mood=item['mood'], url=item['url']) for item in data]
+            new_musics = [Music(name=item['name'], mood=item['mood'], url=item['url'], ctg=data['ctg']) for item in data]
         else:
             return make_response(jsonify({'message': 'Invalid data format'}), 400)
 
         db.session.add_all(new_musics)
         db.session.commit()
 
-        return jsonify([{'id': music.id, 'name': music.name, 'mood': music.mood, 'url': music.url} for music in new_musics]), 201
+        return jsonify([{'id': music.id, 'name': music.name, 'mood': music.mood, 'url': music.url, 'ctg': music.ctg} for music in new_musics]), 201
 
     except Exception as e:
         db.session.rollback()  # It's a good practice to rollback the session in case of errors
@@ -72,7 +75,7 @@ def create_music():
 def get_musics():
     try:
         musics = Music.query.all()
-        musics_data = [{'id': music.id, 'name': music.name, 'mood': music.mood, 'url': music.url} for music in musics]
+        musics_data = [{'id': music.id, 'name': music.name, 'mood': music.mood, 'url': music.url, 'ctg': music.ctg} for music in musics]
         return jsonify(musics_data), 200
     except Exception as e:
         return make_response(jsonify({'message': 'error getting musics', 'error': str(e), 'data': '[]'}), 500)
@@ -97,16 +100,16 @@ def create_image():
     try:
         data = request.get_json()
         if isinstance(data, dict): 
-            new_images = [Image(name=data['name'], mood=data['mood'], url=data['url'])]
+            new_images = [Image(name=data['name'], mood=data['mood'], url=data['url'], ctg=data['ctg'])]
         elif isinstance(data, list):  
-            new_images = [Image(name=item['name'], mood=item['mood'], url=item['url']) for item in data]
+            new_images = [Image(name=item['name'], mood=item['mood'], url=item['url'], ctg=data['ctg']) for item in data]
         else:
             return make_response(jsonify({'message': 'Invalid data format'}), 400)
 
         db.session.add_all(new_images)
         db.session.commit()
 
-        return jsonify([{'id': image.id, 'name': image.name, 'mood': image.mood, 'url': image.url} for image in new_images]), 201
+        return jsonify([{'id': image.id, 'name': image.name, 'mood': image.mood, 'url': image.url, 'ctg': image.ctg} for image in new_images]), 201
 
     except Exception as e:
         db.session.rollback()  # It's a good practice to rollback the session in case of errors
@@ -117,7 +120,7 @@ def create_image():
 def get_images():
     try:
         images = Image.query.all()
-        images_data = [{'id': image.id, 'name': image.name, 'mood': image.mood, 'url': image.url} for image in images]
+        images_data = [{'id': image.id, 'name': image.name, 'mood': image.mood, 'url': image.url, 'ctg': image.ctg} for image in images]
         return jsonify(images_data), 200
     except Exception as e:
         return make_response(jsonify({'message': 'error getting images', 'error': str(e), 'data': '[]'}), 500)
