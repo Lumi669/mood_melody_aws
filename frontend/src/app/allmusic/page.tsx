@@ -1,33 +1,32 @@
-// AllMusicPage.tsx
-// import React from "react";
-// import { useMedia } from "../context/MediaContext";
-
-// const AllMusicPage: React.FC = () => {
-//   const { mediaData } = useMedia();
-
-//   console.log("mediaData ==== ", mediaData);
-
-//   return (
-//     <div>
-//       <h1>All Music</h1>
-//       <ul>
-//         {mediaData.map((item) => (
-//           <li key={item.id}>
-//             <h2>{item.name}</h2>
-//             <img src={item.imgUrl} alt={item.name} />
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default AllMusicPage;
-
+"use client";
 import React from "react";
+import Image from "next/image";
 
-const page = () => {
-  return <div>page</div>;
+import { useMedia } from "../context/MediaContext";
+
+const AllMusicPage: React.FC = () => {
+  const { mediaData } = useMedia();
+
+  console.log("mediaData ==== ", mediaData);
+
+  return (
+    <div>
+      <h1>All Music</h1>
+      <ul>
+        {mediaData.map((item) => (
+          <li key={item.id} className="relative h-96 w-full max-w-4xl mx-auto ">
+            <h2>{item.name}</h2>
+            <Image
+              src={item.imgUrl}
+              alt={item.name}
+              layout="fill"
+              objectFit="cover"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
-export default page;
+export default AllMusicPage;

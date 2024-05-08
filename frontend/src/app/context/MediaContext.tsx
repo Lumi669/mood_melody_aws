@@ -11,10 +11,6 @@ import React, {
 import { Music } from "../types/type";
 import { fetchAllMusicWithImages } from "../utils/fetchAllMusicWithImages";
 
-// interface MediaContextType {
-//   mediaData: (Music & { imageUrl: string; mood: "happy" | "sad" })[]; // Include mood property
-// }
-
 interface MediaContextType {
   mediaData: (Music & { imgUrl: string })[]; // Include mood property from Music interface and imgUrl
 }

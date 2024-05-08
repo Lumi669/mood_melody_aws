@@ -15,7 +15,7 @@ export const fetchAllMusicWithImages = async () => {
     const matchingImage = imageData.find(
       (image: Image) => image.ctg === music.ctg,
     );
-    return { ...music, imageUrl: matchingImage ? matchingImage.url : "" };
+    return { ...music, imgUrl: matchingImage ? matchingImage.url : "" };
   });
 
   return matchedData;

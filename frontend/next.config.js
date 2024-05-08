@@ -18,6 +18,9 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    domains: ["mood-melody.s3.eu-north-1.amazonaws.com"],
+  },
 };
 
 module.exports = nextConfig;
