@@ -25,7 +25,7 @@ class Music(db.Model):
 
 
     def json(self):
-        return {'id': self.id, 'name': self.name, 'mood': self.mood, 'url': self.url}
+        return {'id': self.id, 'name': self.name, 'mood': self.mood, 'url': self.url, 'ctg': self.ctg}
 
 class Image(db.Model):
     __tablename__ = 'images'
@@ -35,7 +35,7 @@ class Image(db.Model):
     url = db.Column(db.String(300), unique=True, nullable=False)
 
     def json(self):
-        return {'id': self.id, 'name': self.name, 'mood': self.mood, 'url': self.url}
+        return {'id': self.id, 'name': self.name, 'mood': self.mood, 'url': self.url, 'ctg': self.ctg}
 
 @app.before_first_request
 def create_tables():
