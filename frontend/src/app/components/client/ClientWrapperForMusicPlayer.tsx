@@ -3,8 +3,8 @@
 import React from "react";
 import MusicPlayer from "./MusicPlayer.client";
 
-const ClientSideMusicPlayer: React.FC = () => {
+const ClientWrapperForMusicPlayer: React.FC = () => {
   return <MusicPlayer />;
 };
 
-export default ClientSideMusicPlayer;
+export default ClientWrapperForMusicPlayer;
