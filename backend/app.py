@@ -57,7 +57,7 @@ def create_music():
         if isinstance(data, dict):  # Single music object
             new_musics = [Music(name=data['name'], mood=data['mood'], url=data['url'], ctg=data['ctg'])]
         elif isinstance(data, list):  # List of music objects
-            new_musics = [Music(name=item['name'], mood=item['mood'], url=item['url'], ctg=data['ctg']) for item in data]
+            new_musics = [Music(name=item['name'], mood=item['mood'], url=item['url'], ctg=item['ctg']) for item in data]
         else:
             return make_response(jsonify({'message': 'Invalid data format'}), 400)
 
@@ -102,7 +102,7 @@ def create_image():
         if isinstance(data, dict): 
             new_images = [Image(name=data['name'], mood=data['mood'], url=data['url'], ctg=data['ctg'])]
         elif isinstance(data, list):  
-            new_images = [Image(name=item['name'], mood=item['mood'], url=item['url'], ctg=data['ctg']) for item in data]
+            new_images = [Image(name=item['name'], mood=item['mood'], url=item['url'], ctg=item['ctg']) for item in data]
         else:
             return make_response(jsonify({'message': 'Invalid data format'}), 400)
 
