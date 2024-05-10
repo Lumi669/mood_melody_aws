@@ -1,4 +1,3 @@
-// MusicPlayer.tsx
 import React, { useState, useEffect } from "react";
 import { useMedia } from "../../context/MediaContext";
 
@@ -10,6 +9,9 @@ const MusicPlayer: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   //for progress bar
   const [duration, setDuration] = useState<number>(0);
+
+  //for draggable progress bar
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const playMusic = (mood: "happy" | "sad") => {
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
@@ -24,9 +26,12 @@ const MusicPlayer: React.FC = () => {
     newAudio.addEventListener("loadedmetadata", () => {
       setDuration(newAudio.duration);
     });
-    //for progress bar
+
+    //for draggable progress bar
     newAudio.addEventListener("timeupdate", () => {
-      setCurrentTime(newAudio.currentTime);
+      if (!isDragging) {
+        setCurrentTime(newAudio.currentTime);
+      }
     });
 
     setAudio(newAudio);
@@ -38,7 +43,24 @@ const MusicPlayer: React.FC = () => {
       console.log("audio ===== ", audio);
       audio.pause();
       audio.currentTime = 0;
+      setCurrentTime(0);
     }
+  };
+
+  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const time = parseFloat(event.target.value);
+    if (audio) {
+      audio.currentTime = time;
+      setCurrentTime(time);
+    }
+  };
+
+  const handleSliderStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleSliderEnd = () => {
+    setIsDragging(false);
   };
 
   useEffect(() => {
@@ -81,8 +103,20 @@ const MusicPlayer: React.FC = () => {
       >
         Stop
       </button>
-
-      {audio && <progress value={currentTime} max={duration}></progress>}
+      {audio && (
+        <input
+          type="range"
+          min="0"
+          max={duration || 1} // Ensure max is never 0 to avoid a React error
+          value={currentTime}
+          onChange={handleSliderChange}
+          onMouseDown={handleSliderStart}
+          onMouseUp={handleSliderEnd}
+          onTouchStart={handleSliderStart}
+          onTouchEnd={handleSliderEnd}
+          style={{ width: "100%" }}
+        />
+      )}
     </>
   );
 };
