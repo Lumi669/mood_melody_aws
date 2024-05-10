@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
+
 import { useMedia } from "../../context/MediaContext";
 
 import { addToPlaylist } from "@/app/utils/addToPlaylist";
@@ -8,6 +10,7 @@ import { addToPlaylist } from "@/app/utils/addToPlaylist";
 const MusicPlayer: React.FC = () => {
   const { mediaData } = useMedia();
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null); // Image URL state
 
   //for progress bar
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -40,6 +43,8 @@ const MusicPlayer: React.FC = () => {
         setCurrentTime(newAudio.currentTime);
       }
     });
+
+    setCurrentImageUrl(randomSong.imgUrl);
 
     setAudio(newAudio);
     newAudio.play();
@@ -112,6 +117,15 @@ const MusicPlayer: React.FC = () => {
       >
         Stop
       </button>
+      {currentImageUrl && (
+        <Image
+          src={currentImageUrl}
+          alt="Current playing song"
+          layout="fill"
+          objectFit="cover"
+        />
+      )}
+
       {audio && (
         <input
           type="range"
