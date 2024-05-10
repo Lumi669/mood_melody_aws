@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useMedia } from "../../context/MediaContext";
 
+import { addToPlaylist } from "@/app/utils/addToPlaylist";
+
+// import { MusicWithImage } from "../../types/type";
+
 const MusicPlayer: React.FC = () => {
   const { mediaData } = useMedia();
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -17,6 +21,9 @@ const MusicPlayer: React.FC = () => {
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
     const randomSong =
       filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
+    addToPlaylist(randomSong);
+
+    console.log("random song === ", randomSong);
     if (audio) {
       audio.pause();
     }
@@ -36,6 +43,8 @@ const MusicPlayer: React.FC = () => {
 
     setAudio(newAudio);
     newAudio.play();
+    console.log("audo ccc=== ", audio);
+    console.log("newaudio ccc=== ", newAudio);
   };
 
   const stopMusic = () => {
