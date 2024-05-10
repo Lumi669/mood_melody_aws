@@ -13,3 +13,5 @@ export interface Image {
   ctg: string;
   mood: "happy" | "sad";
 }
+
+export type MusicWithImage = Music & { imgUrl: string };
