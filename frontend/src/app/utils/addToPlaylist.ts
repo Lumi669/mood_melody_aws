@@ -9,10 +9,12 @@ export const addToPlaylist = (currentMusic: MusicWithImage) => {
 
   console.log("playlist === ", playlist);
 
-  // Add current music to playlist
-  if (currentMusic) {
+  const isMusicInPlaylist = playlist.some(
+    (music: MusicWithImage) => music.id === currentMusic.id,
+  );
+
+  if (currentMusic && !isMusicInPlaylist) {
     playlist.push(currentMusic);
-    // Save updated playlist to local storage
     localStorage.setItem("playlist", JSON.stringify(playlist));
   }
 };
