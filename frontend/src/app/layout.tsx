@@ -2,6 +2,8 @@ import React from "react";
 
 import "./styles/globals.css";
 
+import Nav from "./components/Nav";
+
 import { MediaProvider } from "./context/MediaContext";
 
 export const metadata = {
@@ -17,6 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <header>
+          <Nav />
+        </header>
         <MediaProvider>{children} </MediaProvider>
       </body>
     </html>
