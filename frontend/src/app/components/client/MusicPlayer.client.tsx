@@ -18,6 +18,13 @@ const MusicPlayer: React.FC = () => {
     newAudio.play();
   };
 
+  const stopMusic = () => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  };
+
   return (
     <>
       <button
@@ -35,6 +42,14 @@ const MusicPlayer: React.FC = () => {
         style={{ margin: "10px" }}
       >
         Sad
+      </button>
+      <button
+        onClick={() => {
+          stopMusic();
+        }}
+        style={{ margin: "10px" }}
+      >
+        Stop
       </button>
     </>
   );
