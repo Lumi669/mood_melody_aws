@@ -121,8 +121,10 @@ const MusicPlayer: React.FC = () => {
         <Image
           src={currentImageUrl}
           alt="Current playing song"
-          layout="fill"
-          objectFit="cover"
+          layout="responsive"
+          objectFit="contain"
+          width={500} // This width must correspond to the container size
+          height={300} // This height must maintain the aspect ratio
         />
       )}
 
