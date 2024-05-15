@@ -117,31 +117,32 @@ const MusicPlayer: React.FC = () => {
       >
         Stop
       </button>
-      {currentImageUrl && (
-        <Image
-          src={currentImageUrl}
-          alt="Current playing song"
-          layout="responsive"
-          objectFit="contain"
-          width={500} // This width must correspond to the container size
-          height={300} // This height must maintain the aspect ratio
-        />
-      )}
 
-      {audio && (
-        <input
-          type="range"
-          min="0"
-          max={duration || 1} // Ensure max is never 0 to avoid a React error
-          value={currentTime}
-          onChange={handleSliderChange}
-          onMouseDown={handleSliderStart}
-          onMouseUp={handleSliderEnd}
-          onTouchStart={handleSliderStart}
-          onTouchEnd={handleSliderEnd}
-          style={{ width: "100%" }}
-        />
-      )}
+      <div className="w-[500px] h-[400px] bg-red-500 relative ">
+        {currentImageUrl && (
+          <Image
+            src={currentImageUrl}
+            alt="Current playing song"
+            layout="fill"
+            className="object-contain px-10 py-10"
+          />
+        )}
+        {audio && (
+          <input
+            type="range"
+            min="0"
+            max={duration || 1} // Ensure max is never 0 to avoid a React error
+            value={currentTime}
+            onChange={handleSliderChange}
+            onMouseDown={handleSliderStart}
+            onMouseUp={handleSliderEnd}
+            onTouchStart={handleSliderStart}
+            onTouchEnd={handleSliderEnd}
+            style={{ width: "100%" }}
+            className="absolute bottom-0 left-0 w-full"
+          />
+        )}
+      </div>
     </>
   );
 };
