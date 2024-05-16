@@ -16,7 +16,9 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     backgroundColor = "bg-blue-500";
   }
 
-  return <div className={backgroundColor}>{children}</div>;
+  return (
+    <div className={`${backgroundColor} min-h-screen w-full`}>{children}</div>
+  );
 };
 
 export default LayoutWrapper;
