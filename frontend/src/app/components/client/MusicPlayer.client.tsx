@@ -8,7 +8,7 @@ import { addToPlaylist } from "@/app/utils/addToPlaylist";
 // import { MusicWithImage } from "../../types/type";
 
 const MusicPlayer: React.FC = () => {
-  const { mediaData } = useMedia();
+  const { mediaData, setIsRed, setIsBlue } = useMedia();
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null); // Image URL state
 
@@ -43,6 +43,9 @@ const MusicPlayer: React.FC = () => {
         setCurrentTime(newAudio.currentTime);
       }
     });
+
+    setIsRed(randomSong.mood === "happy");
+    setIsBlue(randomSong.mood === "sad");
 
     setCurrentImageUrl(randomSong.imgUrl);
 

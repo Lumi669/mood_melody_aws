@@ -6,6 +6,8 @@ import React, {
   useState,
   useEffect,
   ReactNode,
+  Dispatch,
+  SetStateAction,
 } from "react";
 
 import { Music } from "../types/type";
@@ -13,8 +15,23 @@ import { fetchAllMusicWithImages } from "../utils/fetchAllMusicWithImages";
 
 interface MediaContextType {
   mediaData: (Music & { imgUrl: string })[]; // Include mood property from Music interface and imgUrl
+  isRed: boolean;
+  isBlue: boolean;
+
+  // setIsRed: () => void;
+  // setIsBlue: () => void;
+
+  setIsRed: Dispatch<SetStateAction<boolean>>; // Corrected type
+  setIsBlue: Dispatch<SetStateAction<boolean>>; // Corrected type
 }
-const MediaContext = createContext<MediaContextType>({ mediaData: [] });
+const MediaContext = createContext<MediaContextType>({
+  mediaData: [],
+  isRed: false,
+  isBlue: false,
+
+  setIsRed: () => {},
+  setIsBlue: () => {},
+});
 
 interface MediaProviderProps {
   children: ReactNode;
@@ -24,6 +41,8 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   children,
 }: any) => {
   const [mediaData, setMediaData] = useState<MediaContextType["mediaData"]>([]);
+  const [isRed, setIsRed] = useState(false);
+  const [isBlue, setIsBlue] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +56,9 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   }, []);
 
   return (
-    <MediaContext.Provider value={{ mediaData }}>
+    <MediaContext.Provider
+      value={{ mediaData, isRed, setIsRed, isBlue, setIsBlue }}
+    >
       {children}
     </MediaContext.Provider>
   );
