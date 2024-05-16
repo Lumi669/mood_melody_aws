@@ -4,7 +4,7 @@ import ClientWrapperForMusicPlayer from "./components/client/ClientWrapperForMus
 const Home: React.FC = () => {
   return (
     <div>
-      <h1>Welcome to the Mood Music App</h1>
+      <h1>Welcome to the New Mood Music App</h1>
       <ClientWrapperForMusicPlayer />
     </div>
   );
