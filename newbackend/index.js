@@ -8,7 +8,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Database connection
-const databaseUrl = process.env.DATABASE_URL || 'sqlite::memory:';
+const databaseUrl = process.env.DATABASE_URL || 'sqlite:./moodmelodydatabase.db';
 const sequelize = new Sequelize(databaseUrl, {
   dialect: databaseUrl.startsWith('postgres') ? 'postgres' : 'sqlite',
   logging: false,
