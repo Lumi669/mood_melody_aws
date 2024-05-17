@@ -9,3 +9,5 @@ storybook*
 
 # Storybook stories and related assets
 /frontend/src/stories/
+
+*.db
