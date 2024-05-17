@@ -7,4 +7,4 @@ npx sequelize db:migrate
 
 # Start the Node.js application on Heroku's assigned port or a default port
 echo "Starting Node.js app on port $PORT"
-exec node server.js --port=${PORT:-4000}
+exec node index.js --port=${PORT:-4000}

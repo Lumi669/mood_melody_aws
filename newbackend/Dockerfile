@@ -18,6 +18,8 @@ RUN pnpm install --only=production
 # Copy the current directory contents into the container
 COPY . .
 
+RUN ls -al # This will list all files in the current directory
+
 # Make the entrypoint script executable and run it
 COPY entrypoint.sh /app
 RUN chmod +x /app/entrypoint.sh
