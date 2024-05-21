@@ -13,3 +13,6 @@ storybook*
 *.db
 
 */dist/*
+
+
+*/data/*
