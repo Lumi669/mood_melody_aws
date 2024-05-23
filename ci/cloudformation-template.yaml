@@ -1,0 +1,98 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: An empty CloudFormation template to be used as a starting point for deploying a Node.js backend to Lambda with API Gateway.
+
+Parameters:
+  # Define parameters here if needed
+  DeploymentBucket:
+    Type: String
+    Description: The S3 bucket where the Lambda code is stored
+  LambdaCodeKey:
+    Type: String
+    Description: The S3 key for the Lambda code .zip file
+
+Resources:
+  # Define resources here
+  MyLambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "LambdaBasicExecution"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "arn:aws:logs:*:*:*"
+
+  MyLambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Handler: index.handler # Adjust this to your Lambda function handler
+      Role: !GetAtt MyLambdaExecutionRole.Arn
+      Code:
+        S3Bucket: !Ref DeploymentBucket
+        S3Key: !Ref LambdaCodeKey
+      Runtime: nodejs14.x
+      Timeout: 15
+      Environment:
+        Variables:
+          NODE_ENV: production
+
+  MyApiGateway:
+    Type: "AWS::ApiGateway::RestApi"
+    Properties:
+      Name: MyApi
+
+  MyApiResource:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      ParentId: !GetAtt MyApiGateway.RootResourceId
+      PathPart: "{proxy+}"
+      RestApiId: !Ref MyApiGateway
+
+  MyApiMethod:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: ANY
+      ResourceId: !Ref MyApiResource
+      RestApiId: !Ref MyApiGateway
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction.Arn}/invocations
+
+  ApiDeployment:
+    Type: "AWS::ApiGateway::Deployment"
+    DependsOn: MyApiMethod
+    Properties:
+      RestApiId: !Ref MyApiGateway
+      StageName: prod
+
+  LambdaApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref MyLambdaFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApiGateway}/*/ANY/{proxy+}
+
+Outputs:
+  ApiUrl:
+    Description: "URL for the API Gateway"
+    Value:
+      Fn::Sub: "https://${MyApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/"
