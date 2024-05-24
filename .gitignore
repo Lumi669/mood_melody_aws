@@ -16,3 +16,8 @@ storybook*
 
 
 */data/*
+
+*DS_Store
+
+
+.aws-sam/*
