@@ -3,8 +3,10 @@ import { Sequelize, DataTypes } from "sequelize";
 import cors from "cors";
 import bodyParser from "body-parser";
 
+import serverless from "serverless-http";
+
 const app = express();
-app.use(cors());
+// app.use(cors());
 app.use(bodyParser.json());
 
 // Database connection
@@ -167,6 +169,8 @@ app.get("/", (req: Request, res: Response) => {
 
 // Start server
 const port: number | string = process.env.PORT || 4000;
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running on http://localhost:${port}`);
+// });
+
+export const handler = serverless(app);
