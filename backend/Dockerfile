@@ -89,6 +89,11 @@ COPY --from=build /app/dist .
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json .
 
+
+# Copy the database file
+
+COPY moodmelodydatabase.db .
+
 # Set the entrypoint and command
 ENTRYPOINT ["/lambda-entrypoint.sh"]
 CMD ["index.handler"]
