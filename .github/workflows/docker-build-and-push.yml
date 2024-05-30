@@ -31,6 +31,9 @@ jobs:
         id: vars
         run: echo "::set-output name=timestamp::$(date +%Y%m%d%H%M%S)"
 
+      - name: List files in backend directory
+        run: ls -la ./backend
+
       - name: Build and push backend Docker image
         env:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
