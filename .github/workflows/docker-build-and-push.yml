@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-push-backend:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +26,11 @@ jobs:
       - name: Log in to Amazon ECR
         run: |
           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 536560382233.dkr.ecr.eu-north-1.amazonaws.com
+
+      - name: Create ECR repository if it does not exist
+        run: |
+          aws ecr describe-repositories --repository-names mood-melody-aws --region eu-north-1 || \
+          aws ecr create-repository --repository-name mood-melody-aws --region eu-north-1
 
       - name: Generate timestamp
         id: vars
@@ -37,46 +42,24 @@ jobs:
       - name: Build and push backend Docker image
         env:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-molody-backend
+          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
         run: |
-          docker build -t mood-molody-backend:backend-${TIMESTAMP} -t mood-molody-backend:latest ./backend
-          docker tag mood-molody-backend:backend-${TIMESTAMP} ${REPO_URI}:backend-${TIMESTAMP}
-          docker tag mood-molody-backend:latest ${REPO_URI}:latest
+          docker build -t mood-melody-aws:backend-${TIMESTAMP} -t mood-melody-aws:backend-latest ./backend
+          docker tag mood-melody-aws:backend-${TIMESTAMP} ${REPO_URI}:backend-${TIMESTAMP}
+          docker tag mood-melody-aws:backend-latest ${REPO_URI}:backend-latest
           docker push ${REPO_URI}:backend-${TIMESTAMP}
-          docker push ${REPO_URI}:latest
+          docker push ${REPO_URI}:backend-latest
 
-  build-and-push-frontend:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
-
-      - name: Log in to Amazon ECR
-        run: |
-          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 536560382233.dkr.ecr.eu-north-1.amazonaws.com
-
-      - name: Generate timestamp
-        id: vars
-        run: echo "::set-output name=timestamp::$(date +%Y%m%d%H%M%S)"
+      - name: List files in frontend directory
+        run: ls -la ./frontend
 
       - name: Build and push frontend Docker image
         env:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-frontend
+          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
         run: |
-          docker build -t mood-melody-frontend:frontend-${TIMESTAMP} -t mood-melody-frontend:latest ./frontend
-          docker tag mood-melody-frontend:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
-          docker tag mood-melody-frontend:latest ${REPO_URI}:latest
+          docker build -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./frontend
+          docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
+          docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
           docker push ${REPO_URI}:frontend-${TIMESTAMP}
-          docker push ${REPO_URI}:latest
+          docker push ${REPO_URI}:frontend-latest
