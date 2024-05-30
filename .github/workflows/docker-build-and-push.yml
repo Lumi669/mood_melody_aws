@@ -1,0 +1,39 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Amazon ECR
+        env:
+          AWS_REGION: eu-north-1
+          AWS_ACCOUNT_ID: 536560382233
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - name: Generate timestamp
+        id: vars
+        run: echo "::set-output name=timestamp::$(date +%Y%m%d%H%M%S)"
+
+      - name: Build and push backend Docker image
+        env:
+          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-molody-backend
+        run: |
+          docker build -t mood-molody-backend:${TIMESTAMP} -t mood-molody-backend:latest ./backend
+          docker tag mood-molody-backend:${TIMESTAMP} ${REPO_URI}:backend-${TIMESTAMP}
+          docker tag mood-molody-backend:latest ${REPO_URI}:backend-latest
+          docker push ${REPO_URI}:backend-${TIMESTAMP}
+          docker push ${REPO_URI}:backend-latest
