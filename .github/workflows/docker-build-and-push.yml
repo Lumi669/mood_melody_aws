@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: Docker Build, Push and Deploy Backend to AWS Lambda
 
 on:
   push:
@@ -49,6 +49,29 @@ jobs:
           docker tag mood-melody-aws:backend-latest ${REPO_URI}:backend-latest
           docker push ${REPO_URI}:backend-${TIMESTAMP}
           docker push ${REPO_URI}:backend-latest
+
+      - name: Deploy backend to AWS Lambda
+        env:
+          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+          LAMBDA_FUNCTION_NAME: mood-melody-backend
+          LAMBDA_ROLE: arn:aws:iam::<AWS_ACCOUNT_ID>:role/<LAMBDA_EXECUTION_ROLE>
+        run: |
+          LATEST_IMAGE="${REPO_URI}:backend-${TIMESTAMP}"
+
+          # Check if the Lambda function exists
+          if aws lambda get-function --function-name $LAMBDA_FUNCTION_NAME; then
+            echo "Updating existing Lambda function"
+            aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --image-uri $LATEST_IMAGE
+          else
+            echo "Creating new Lambda function"
+            aws lambda create-function --function-name $LAMBDA_FUNCTION_NAME \
+                                       --package-type Image \
+                                       --code ImageUri=$LATEST_IMAGE \
+                                       --role $LAMBDA_ROLE \
+                                       --timeout 30 \
+                                       --memory-size 512
+          fi
 
       - name: List files in frontend directory
         run: ls -la ./frontend

@@ -90,7 +90,7 @@ sequelize.sync();
 
 // Routes
 app.get("/test", (req: Request, res: Response) => {
-  res.json({ message: "The server is running ooo..hhhpkkkkkkkkkk." });
+  res.json({ message: "The server is running ooo..hhhp000000k." });
 });
 
 app.post("/api/musics", async (req, res) => {
