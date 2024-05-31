@@ -109,6 +109,10 @@ jobs:
               echo "Method $HTTP_METHOD already exists for resource $RESOURCE_PATH"
             else
               aws apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --authorization-type "NONE" --region $AWS_REGION
+            fi
+
+            # Only put integration if the method was newly created
+            if [ "$METHOD_EXISTS" != "$HTTP_METHOD" ]; then
               aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --type "AWS_PROXY" --integration-http-method "POST" --uri "arn:aws:apigateway:$AWS_REGION:lambda:path/2015-03-31/functions/arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME/invocations" --region $AWS_REGION
             fi
           }
