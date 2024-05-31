@@ -93,7 +93,7 @@ jobs:
           fi
 
           # Get root resource id
-          ROOT_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/'].id" --output text --region $AWS_REGION)
+          ROOT_RESOURCE_ID=$(aws.apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/'].id" --output text --region $AWS_REGION)
 
           # Function to create or update resource and method
           create_or_update_resource_and_method() {
@@ -101,20 +101,29 @@ jobs:
             RESOURCE_PATH=$2
             HTTP_METHOD=$3
 
-            RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
+            RESOURCE_ID=$(aws.apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
             if [ "$RESOURCE_ID" == "None" ]; then
-              RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part ${RESOURCE_PATH#/} --query 'id' --output text --region $AWS_REGION)
+              RESOURCE_ID=$(aws.apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part ${RESOURCE_PATH#/} --query 'id' --output text --region $AWS_REGION)
             fi
 
             set +e
-            METHOD_EXISTS=$(aws apigateway get-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --query 'httpMethod' --output text --region $AWS_REGION 2>/dev/null)
+            METHOD_EXISTS=$(aws.apigateway get-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --query 'httpMethod' --output text --region $AWS_REGION 2>/dev/null)
             set -e
 
             if [ "$METHOD_EXISTS" == "$HTTP_METHOD" ]; then
               echo "Method $HTTP_METHOD already exists for resource $RESOURCE_PATH"
             else
+              FUNCTION_ARN="arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME"
+              URI="arn:aws:apigateway:$AWS_REGION:lambda:path/2015-03-31/functions/${FUNCTION_ARN}/invocations"
+
+              echo "Function ARN: $FUNCTION_ARN"
+              echo "URI: $URI"
+              echo "REST_API_ID: $REST_API_ID"
+              echo "RESOURCE_ID: $RESOURCE_ID"
+              echo "HTTP_METHOD: $HTTP_METHOD"
+
               aws apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --authorization-type "NONE" --region $AWS_REGION
-              aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --type "AWS_PROXY" --integration-http-method "POST" --uri "arn:aws:apigateway:$AWS_REGION:lambda:path/2015-03-31/functions/arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME/invocations" --region $AWS_REGION
+              aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --type "AWS_PROXY" --integration-http-method "POST" --uri "$URI" --region $AWS_REGION
             fi
           }
 
