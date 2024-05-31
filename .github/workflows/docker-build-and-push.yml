@@ -93,7 +93,7 @@ jobs:
           fi
 
           # Get root resource id
-          ROOT_RESOURCE_ID=$(aws.apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/'].id" --output text --region $AWS_REGION)
+          ROOT_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/'].id" --output text --region $AWS_REGION)
 
           # Function to create or update resource and method
           create_or_update_resource_and_method() {
@@ -101,13 +101,13 @@ jobs:
             RESOURCE_PATH=$2
             HTTP_METHOD=$3
 
-            RESOURCE_ID=$(aws.apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
+            RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
             if [ "$RESOURCE_ID" == "None" ]; then
-              RESOURCE_ID=$(aws.apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part ${RESOURCE_PATH#/} --query 'id' --output text --region $AWS_REGION)
+              RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part ${RESOURCE_PATH#/} --query 'id' --output text --region $AWS_REGION)
             fi
 
             set +e
-            METHOD_EXISTS=$(aws.apigateway get-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --query 'httpMethod' --output text --region $AWS_REGION 2>/dev/null)
+            METHOD_EXISTS=$(aws apigateway get-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --query 'httpMethod' --output text --region $AWS_REGION 2>/dev/null)
             set -e
 
             if [ "$METHOD_EXISTS" == "$HTTP_METHOD" ]; then
