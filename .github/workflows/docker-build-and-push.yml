@@ -81,6 +81,8 @@ jobs:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_REGION: eu-north-1
         run: |
+          set -e
+
           # Create API Gateway if it doesn't exist
           REST_API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${API_NAME}'].id | [0]" --output text --region $AWS_REGION)
           if [ "$REST_API_ID" == "None" ]; then
@@ -104,15 +106,14 @@ jobs:
               RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part ${RESOURCE_PATH#/} --query 'id' --output text --region $AWS_REGION)
             fi
 
-            METHOD_EXISTS=$(aws apigateway get-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --query 'httpMethod' --output text --region $AWS_REGION || echo "None")
+            set +e
+            METHOD_EXISTS=$(aws apigateway get-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --query 'httpMethod' --output text --region $AWS_REGION 2>/dev/null)
+            set -e
+
             if [ "$METHOD_EXISTS" == "$HTTP_METHOD" ]; then
               echo "Method $HTTP_METHOD already exists for resource $RESOURCE_PATH"
             else
               aws apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --authorization-type "NONE" --region $AWS_REGION
-            fi
-
-            # Only put integration if the method was newly created
-            if [ "$METHOD_EXISTS" != "$HTTP_METHOD" ]; then
               aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --type "AWS_PROXY" --integration-http-method "POST" --uri "arn:aws:apigateway:$AWS_REGION:lambda:path/2015-03-31/functions/arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME/invocations" --region $AWS_REGION
             fi
           }
