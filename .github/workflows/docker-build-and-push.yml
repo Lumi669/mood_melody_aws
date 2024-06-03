@@ -128,6 +128,9 @@ jobs:
               aws apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --authorization-type "NONE" --region $AWS_REGION
             fi
 
+            echo "Function ARN: $FUNCTION_ARN"
+            echo "URI: $URI"
+
             echo "Putting integration for method $HTTP_METHOD for resource $RESOURCE_PATH"
             aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --type "AWS_PROXY" --integration-http-method "POST" --uri "$URI" --region $AWS_REGION
           }
