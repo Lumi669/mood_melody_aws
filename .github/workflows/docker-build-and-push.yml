@@ -145,6 +145,10 @@ jobs:
           # Deploy the API
           aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod --region $AWS_REGION
 
+      - name: Add API Gateway Invoke Permission to Lambda
+        run: |
+          aws lambda add-permission --function-name arn:aws:lambda:eu-north-1:536560382233:function:mood-melody-backend --statement-id api-gateway-invoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn arn:aws:execute-api:eu-north-1:536560382233:${{ REST_API_ID }}/*
+
       - name: List files in frontend directory
         run: ls -la ./frontend
 
