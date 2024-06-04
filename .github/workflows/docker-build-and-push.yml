@@ -156,6 +156,26 @@ jobs:
           # Deploy the API
           aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod --region $AWS_REGION
 
+      - name: Add API Gateway Invoke Permission to Lambda
+        env:
+          API_NAME: mood-melody-api
+          LAMBDA_FUNCTION_NAME: mood-melody-backend
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_REGION: eu-north-1
+
+        run: |
+          # Check if permission already exists
+          set +e
+          PERMISSION_EXISTS=$(aws lambda get-policy --function-name arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME --query "Policy" --output text | grep "arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$REST_API_ID/*")
+          set -e
+          if [ -z "$PERMISSION_EXISTS" ]; then
+            echo "MARKER5: Adding permission with REST_API_ID=$REST_API_ID"
+            echo "LAMBDA_FUNCTION_NAME === $LAMBDA_FUNCTION_NAME"
+            aws lambda add-permission --function-name arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME --statement-id api-gateway-invoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$REST_API_ID/*
+          else
+            echo "Permission already exists for REST_API_ID=$REST_API_ID"
+          fi
+
       - name: List files in frontend directory
         run: ls -la ./frontend
 
