@@ -145,7 +145,7 @@ jobs:
           }
 
           # Create or update resources and methods
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/test" "GET"
+          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/test" "GET"
           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "GET"
           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "POST"
           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "DELETE"
