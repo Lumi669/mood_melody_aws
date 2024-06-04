@@ -4,32 +4,40 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
+
       - name: Log in to Amazon ECR
         run: |
           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 536560382233.dkr.ecr.eu-north-1.amazonaws.com
+
       - name: Create ECR repository if it does not exist
         run: |
           aws ecr describe-repositories --repository-names mood-melody-aws --region eu-north-1 || \
           aws ecr create-repository --repository-name mood-melody-aws --region eu-north-1
+
       - name: Generate timestamp
         id: vars
         run: echo "::set-output name=timestamp::$(date +%Y%m%d%H%M%S)"
+
       - name: List files in backend directory
         run: ls -la ./backend
+
       - name: Build and push backend Docker image
         env:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
@@ -40,6 +48,7 @@ jobs:
           docker tag mood-melody-aws:backend-latest ${REPO_URI}:backend-latest
           docker push ${REPO_URI}:backend-${TIMESTAMP}
           docker push ${REPO_URI}:backend-latest
+
       - name: Deploy backend to AWS Lambda
         env:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
@@ -61,7 +70,7 @@ jobs:
                                        --role $LAMBDA_ROLE \
                                        --timeout 30 \
                                        --memory-size 512
-          fi
+
       - name: Create or update API Gateway
         id: create-or-update-apigateway
         env:
@@ -99,7 +108,7 @@ jobs:
 
             RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
             if [ "$RESOURCE_ID" == "None" ]; then
-              RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part ${RESOURCE_PATH#/} --query 'id' --output text --region $AWS_REGION)
+              RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part "${RESOURCE_PATH#/}" --query 'id' --output text --region $AWS_REGION)
             fi
 
             FUNCTION_ARN="arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME"
@@ -121,21 +130,23 @@ jobs:
               aws apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --authorization-type "NONE" --region $AWS_REGION
             fi
 
-            echo "Function ARN: $FUNCTION_ARN"
-            echo "URI: $URI"
-
             echo "Putting integration for method $HTTP_METHOD for resource $RESOURCE_PATH"
             aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --type "AWS_PROXY" --integration-http-method "POST" --uri "$URI" --region $AWS_REGION
           }
 
           # Create or update resources and methods
+          create_or_update_resource_and_method $ROOT_RESOURCE_ID "test" "GET"
 
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/" "GET"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/api" "ANY"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/test" "GET"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/api/musics" "GET"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/api/musics" "POST"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/api/musics" "DELETE"
+          API_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/api'].id | [0]" --output text --region $AWS_REGION)
+          if [ "$API_RESOURCE_ID" == "None" ]; then
+            API_RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $ROOT_RESOURCE_ID --path-part "api" --query 'id' --output text --region $AWS_REGION)
+          fi
+          create_or_update_resource_and_method $API_RESOURCE_ID "musics" "GET"
+          create_or_update_resource_and_method $API_RESOURCE_ID "musics" "POST"
+          create_or_update_resource_and_method $API_RESOURCE_ID "musics" "DELETE"
+          create_or_update_resource_and_method $API_RESOURCE_ID "images" "GET"
+          create_or_update_resource_and_method $API_RESOURCE_ID "images" "POST"
+          create_or_update_resource_and_method $API_RESOURCE_ID "images" "DELETE"
 
           # Deploy the API
           aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod --region $AWS_REGION
