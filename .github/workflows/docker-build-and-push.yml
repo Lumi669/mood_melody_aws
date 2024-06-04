@@ -113,7 +113,7 @@ jobs:
             for PART in "${PARTS[@]}"; do
               echo "PART ======= $PART"
 
-              FULL_PATH="${FULL_PATH}${PART}/"
+              FULL_PATH="${PART}/"
               echo "FULL_PATH ==== $FULL_PATH"
 
               RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${FULL_PATH%/}'].id | [0]" --output text --region $AWS_REGION)
