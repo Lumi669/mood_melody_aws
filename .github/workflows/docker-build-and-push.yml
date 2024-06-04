@@ -110,7 +110,7 @@ jobs:
             CURRENT_PARENT_ID=$PARENT_ID
 
             for PART in "${PARTS[@]}"; do
-              RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?pathPart=='${PART}'].id | [0]" --output text --region $AWS_REGION)
+              RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${CURRENT_PARENT_ID}/${PART}'].id | [0]" --output text --region $AWS_REGION)
               if [ "$RESOURCE_ID" == "None" ]; then
                 RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $CURRENT_PARENT_ID --path-part "$PART" --query 'id' --output text --region $AWS_REGION)
               fi
