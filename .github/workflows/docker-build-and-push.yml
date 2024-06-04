@@ -110,7 +110,8 @@ jobs:
             CURRENT_PARENT_ID=$PARENT_ID
 
             for PART in "${PARTS[@]}"; do
-              RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?pathPart=='${PART}'].id | [0]" --output text --region $AWS_REGION)
+              RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/${PART}'].id | [0]" --output text --region $AWS_REGION)
+              echo "RESOURCE_ID ======== $RESOURCE_ID"
               if [ "$RESOURCE_ID" == "None" ]; then
                 RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $CURRENT_PARENT_ID --path-part "$PART" --query 'id' --output text --region $AWS_REGION)
               fi
@@ -143,7 +144,7 @@ jobs:
           }
 
           # Create or update resources and methods
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "test" "GET"
+          create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/test" "GET"
           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "GET"
           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "POST"
           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "DELETE"
