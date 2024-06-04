@@ -141,7 +141,6 @@ jobs:
 
           # Deploy the API
           aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod --region $AWS_REGION
-
       - name: Add API Gateway Invoke Permission to Lambda
         env:
           REST_API_ID: ${{ env.REST_API_ID }}
