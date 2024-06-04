@@ -110,7 +110,7 @@ jobs:
             CURRENT_PARENT_ID=$PARENT_ID
 
             for PART in "${PARTS[@]}"; do
-              RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${CURRENT_PARENT_ID}/${PART}'].id | [0]" --output text --region $AWS_REGION)
+              RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?pathPart=='${PART}'].id | [0]" --output text --region $AWS_REGION)
               if [ "$RESOURCE_ID" == "None" ]; then
                 RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $CURRENT_PARENT_ID --path-part "$PART" --query 'id' --output text --region $AWS_REGION)
               fi
@@ -153,28 +153,6 @@ jobs:
 
           # Deploy the API
           aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod --region $AWS_REGION
-
-      - name: Add API Gateway Invoke Permission to Lambda
-        env:
-          API_NAME: mood-melody-api
-          LAMBDA_FUNCTION_NAME: mood-melody-backend
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_REGION: eu-north-1
-
-        run: |
-          # Check if permission already exists
-          set +e
-          PERMISSION_EXISTS=$(aws lambda get-policy --function-name arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME --query "Policy" --output text | grep "arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$REST_API_ID/*")
-          set -e
-
-          echo "LAMBDA_FUNCTION_NAME === $LAMBDA_FUNCTION_NAME"
-
-          if [ -z "$PERMISSION_EXISTS" ]; then
-            echo "MARKER5: Adding permission with REST_API_ID=$REST_API_ID"
-            aws lambda add-permission --function-name arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME --statement-id api-gateway-invoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$REST_API_ID/*
-          else
-            echo "Permission already exists for REST_API_ID=$REST_API_ID"
-          fi
 
       - name: List files in frontend directory
         run: ls -la ./frontend
