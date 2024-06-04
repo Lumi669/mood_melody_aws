@@ -109,27 +109,28 @@ jobs:
             IFS='/' read -ra PARTS <<< "$RESOURCE_PATH"
             CURRENT_PARENT_ID=$PARENT_ID
 
-            FULL_PATH="/"
+            FULL_PATH=""
             for PART in "${PARTS[@]}"; do
-              echo "PART ======= $PART"
+              if [ -n "$PART" ]; then
+                echo "PART ======= $PART"
 
-              FULL_PATH="${PART}/"
-              echo "FULL_PATH ==== $FULL_PATH"
+                FULL_PATH="${FULL_PATH}/${PART}"
+                echo "FULL_PATH ==== $FULL_PATH"
 
-              RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${FULL_PATH%/}'].id | [0]" --output text --region $AWS_REGION)
-              echo "RESOURCE_ID ====== $RESOURCE_ID"
+                RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${FULL_PATH}'].id | [0]" --output text --region $AWS_REGION)
+                echo "RESOURCE_ID ====== $RESOURCE_ID"
 
-              if [ "$RESOURCE_ID" == "None" ]; then
-                RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $CURRENT_PARENT_ID --path-part "$PART" --query 'id' --output text --region $AWS_REGION)
+                if [ "$RESOURCE_ID" == "None" ]; then
+                  RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $CURRENT_PARENT_ID --path-part "$PART" --query 'id' --output text --region $AWS_REGION)
+                fi
+                CURRENT_PARENT_ID=$RESOURCE_ID
+
+                echo "CURRENT_PARENT_ID ====== $CURRENT_PARENT_ID"
               fi
-              CURRENT_PARENT_ID=$RESOURCE_ID
-
-              echo "CURRENT_PARENT_ID ====== $CURRENT_PARENT_ID"
             done
 
             RESOURCE_ID=$CURRENT_PARENT_ID
             echo "RESOURCE_ID from current parent id ====== $RESOURCE_ID"
-            
 
             FUNCTION_ARN="arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME"
             URI="arn:aws:apigateway:$AWS_REGION:lambda:path/2015-03-31/functions/${FUNCTION_ARN}/invocations"
