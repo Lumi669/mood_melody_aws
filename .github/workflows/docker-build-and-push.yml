@@ -98,6 +98,7 @@ jobs:
             HTTP_METHOD=$3
 
             RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
+            echo "RESOURCE_ID ===, $RESOURCE_ID" #debug code
             if [ "$RESOURCE_ID" == "None" ]; then
               RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part "${RESOURCE_PATH#/}" --query 'id' --output text --region $AWS_REGION)
             fi
