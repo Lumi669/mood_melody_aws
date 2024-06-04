@@ -155,6 +155,11 @@ jobs:
           aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod --region $AWS_REGION
 
       - name: Add API Gateway Invoke Permission to Lambda
+        env:
+          API_NAME: mood-melody-api
+          LAMBDA_FUNCTION_NAME: mood-melody-backend
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_REGION: eu-north-1
 
         run: |
           # Check if permission already exists
