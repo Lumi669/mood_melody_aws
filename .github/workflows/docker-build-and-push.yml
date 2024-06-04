@@ -97,6 +97,9 @@ jobs:
             RESOURCE_PATH=$2
             HTTP_METHOD=$3
 
+            echo "PARENT_ID === $PARENT_ID"
+            echo "RESOURCE_PATH === $RESOURCE_PATH"
+
             RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
             echo "RESOURCE_ID ===, $RESOURCE_ID" #debug code
             if [ "$RESOURCE_ID" == "None" ]; then
