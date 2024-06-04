@@ -100,8 +100,17 @@ jobs:
             echo "PARENT_ID === $PARENT_ID"
             echo "RESOURCE_PATH === $RESOURCE_PATH"
 
-            RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
-            echo "RESOURCE_ID ===, $RESOURCE_ID" #debug code
+            # Print all resources for debugging purposes
+            echo "Listing all resources:"
+            aws apigateway get-resources --rest-api-id $REST_API_ID --region $AWS_REGION
+
+            # Trim leading slash from RESOURCE_PATH if present
+            TRIMMED_RESOURCE_PATH="${RESOURCE_PATH#/}"
+
+            RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/${TRIMMED_RESOURCE_PATH}'].id | [0]" --output text --region $AWS_REGION)
+            echo "RESOURCE_ID === $RESOURCE_ID" #debug code
+
+            
             if [ "$RESOURCE_ID" == "None" ]; then
               RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $PARENT_ID --path-part "${RESOURCE_PATH#/}" --query 'id' --output text --region $AWS_REGION)
             fi
