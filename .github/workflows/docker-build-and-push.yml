@@ -110,6 +110,7 @@ jobs:
             CURRENT_PARENT_ID=$PARENT_ID
 
             for PART in "${PARTS[@]}"; do
+              echo "PART ===== $PART"
               RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/${PART}'].id | [0]" --output text --region $AWS_REGION)
               echo "RESOURCE_ID ======== $RESOURCE_ID"
               if [ "$RESOURCE_ID" == "None" ]; then
