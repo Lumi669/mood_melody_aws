@@ -12,11 +12,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Re-checkout the repository
-        uses: actions/checkout@v2
+      - name: Checkout repository of mood_melody_aws
+        uses: actions/checkout@v3
         with:
-          repository: ${{ github.repository }}
-          ref: ${{ github.ref }}
+          repository: Lumi669/mood_melody_aws
+          path: mood_melody_aws
+
       - name: Set up AWS credentials
         uses: ./.github/workflows/aws-credentials.yml
         with:
