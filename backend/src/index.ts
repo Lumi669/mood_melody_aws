@@ -91,7 +91,8 @@ sequelize.sync();
 // Routes
 app.get("/test", (req: Request, res: Response) => {
   res.json({
-    message: "The server is running ooo..hhhookyy==dd==?gkkg?j?uu==h=ppwwwwwww",
+    message:
+      "The server is running ooo..hhhookyy==dd==hh?gkkg?j?uu==h=ppwwwwwww",
   });
 });
 
