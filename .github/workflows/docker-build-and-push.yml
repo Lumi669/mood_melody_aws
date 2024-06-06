@@ -200,3 +200,18 @@ jobs:
           docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
           docker push ${REPO_URI}:frontend-${TIMESTAMP}
           docker push ${REPO_URI}:frontend-latest
+
+      - name: Extract frontend files from Docker image
+        env:
+          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+        run: |
+          docker create --name extract-container mood-melody-aws:frontend-${TIMESTAMP}
+          docker cp extract-container:/app/dist ./dist
+          docker rm extract-container
+
+      - name: Sync frontend files to S3
+        env:
+          AWS_S3_BUCKET: mood-melody-frontend-app
+          AWS_REGION: eu-north-1
+        run: |
+          aws s3 sync ./dist s3://${AWS_S3_BUCKET} --region $AWS_REGION --delete
