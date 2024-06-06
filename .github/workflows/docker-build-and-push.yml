@@ -206,8 +206,11 @@ jobs:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
         run: |
           docker create --name extract-container mood-melody-aws:frontend-${TIMESTAMP}
+          docker start extract-container
+          docker exec extract-container ls -la /app
+          docker exec extract-container ls -la /app/dist
           docker cp extract-container:/app/dist ./dist
-          docker rm extract-container
+          docker rm -f extract-container
 
       - name: Sync frontend files to S3
         env:
