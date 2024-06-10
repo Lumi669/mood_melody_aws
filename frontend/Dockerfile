@@ -104,8 +104,17 @@ RUN if [ -f yarn.lock ]; then yarn run build; \
     else echo "Lockfile not found." && exit 1; \
     fi
 
+# Export the application to static HTML
+RUN if [ -f yarn.lock ]; then yarn run export; \
+    elif [ -f package-lock.json ]; then npm run export; \
+    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run export; \
+    else echo "Lockfile not found." && exit 1; \
+    fi
+
 # Start a new stage from the base image to keep the production image clean and small
-FROM base as production
+# FROM base as production
+FROM node:20.11.0-alpine as production
+
 
 # Set environment variables
 ENV NODE_ENV=production \
@@ -115,6 +124,8 @@ ENV NODE_ENV=production \
 COPY --from=base /app/next.config.js ./
 COPY --from=base /app/public ./public
 COPY --from=base /app/.next ./.next
+COPY --from=base /app/out ./out
+
 COPY --from=base /app/node_modules ./node_modules
 COPY --from=base /app/package.json ./package.json
 
