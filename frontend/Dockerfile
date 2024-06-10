@@ -98,9 +98,9 @@ RUN if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
 COPY . .
 
 # Build the application
-RUN if [ -f yarn.lock ]; then yarn run build; \
-    elif [ -f package-lock.json ]; then npm run build; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+RUN if [ -f yarn.lock ]; then yarn run build && ls -la ./out; \
+    elif [ -f package-lock.json ]; then npm run build && ls -la ./out; \
+    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build && ls -la ./out; \
     else echo "Lockfile not found." && exit 1; \
     fi
 
@@ -120,7 +120,6 @@ COPY --from=base /app/next.config.js ./
 COPY --from=base /app/public ./public
 COPY --from=base /app/.next ./.next
 COPY --from=base /app/out ./out
-
 COPY --from=base /app/node_modules ./node_modules
 COPY --from=base /app/package.json ./package.json
 
