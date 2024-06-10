@@ -104,14 +104,7 @@ RUN if [ -f yarn.lock ]; then yarn run build; \
     else echo "Lockfile not found." && exit 1; \
     fi
 
-# Export the application to static HTML
-RUN echo "Running next export" && \
-    if [ -f yarn.lock ]; then yarn run export; \
-    elif [ -f package-lock.json ]; then npm run export; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run export; \
-    else echo "Lockfile not found." && exit 1; \
-    fi && \
-    echo "next export completed"
+
 
 # Start a new stage from the base image to keep the production image clean and small
 # FROM base as production
