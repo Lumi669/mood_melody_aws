@@ -107,8 +107,8 @@ RUN if [ -f yarn.lock ]; then yarn run build && ls -la ./out; \
 
 
 # Start a new stage from the base image to keep the production image clean and small
-FROM base as production
-# FROM node:20.11.0-alpine as production
+# FROM base as production
+FROM node:20.11.0-alpine as production
 
 
 # Set environment variables
