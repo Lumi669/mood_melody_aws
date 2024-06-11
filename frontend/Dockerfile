@@ -116,12 +116,12 @@ ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1
 
 # Copy the build output to serve the app
-COPY --from=base /app/next.config.js ./
-COPY --from=base /app/public ./public
-COPY --from=base /app/.next ./.next
-COPY --from=base /app/out ./out
-COPY --from=base /app/node_modules ./node_modules
-COPY --from=base /app/package.json ./package.json
+COPY --from=base /next.config.js ./
+COPY --from=base /public ./public
+COPY --from=base /.next ./.next
+COPY --from=base /out ./out
+COPY --from=base /node_modules ./node_modules
+COPY --from=base /package.json ./package.json
 
 
 # Expose the port Next.js runs on

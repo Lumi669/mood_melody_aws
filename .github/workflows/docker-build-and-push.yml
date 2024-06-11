@@ -206,8 +206,8 @@ jobs:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
         run: |
           docker create --name extract-container mood-melody-aws:frontend-${TIMESTAMP}
-          # docker cp extract-container:/app/.next ./dist
-          docker cp extract-container:/app/out ./dist
+          # docker cp extract-container:/.next ./dist
+          docker cp extract-container:/out ./dist
 
           docker rm -f extract-container
 
