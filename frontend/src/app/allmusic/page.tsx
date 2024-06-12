@@ -4,6 +4,8 @@ import Image from "next/image";
 
 import { useMedia } from "../context/MediaContext";
 
+import CustomImage from "../components/CustomImage";
+
 const AllMusicPage: React.FC = () => {
   const { mediaData } = useMedia();
 
@@ -23,16 +25,14 @@ const AllMusicPage: React.FC = () => {
             >
               <h2>{item.name}</h2>
               {/* <Image
+
                 src={item.imgUrl}
                 alt={item.name}
                 layout="fill"
                 objectFit="cover"
               /> */}
-              <img
-                src={item.imgUrl}
-                alt={item.name}
-                style={{ width: "100%", height: "auto" }}
-              />
+
+              <CustomImage src={item.imgUrl} alt={item.name} />
             </li>
           );
         })}

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMedia } from "../../context/MediaContext";
 
 import { addToPlaylist } from "@/app/utils/addToPlaylist";
+import CustomImage from "../CustomImage";
 
 // import { MusicWithImage } from "../../types/type";
 
@@ -125,12 +126,14 @@ const MusicPlayer: React.FC = () => {
 
       <div className="w-[500px] h-[400px] bg-red-500 relative ">
         {currentImageUrl && (
-          <Image
-            src={currentImageUrl}
-            alt="Current playing song"
-            layout="fill"
-            className="object-contain px-10 py-10"
-          />
+          // <Image
+          //   src={currentImageUrl}
+          //   alt="Current playing song"
+          //   layout="fill"
+          //   className="object-contain px-10 py-10"
+          // />
+
+          <CustomImage src={currentImageUrl} alt="Current playing song" />
         )}
         {audio && (
           <input

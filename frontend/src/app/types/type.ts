@@ -15,3 +15,10 @@ export interface Image {
 }
 
 export type MusicWithImage = Music & { imgUrl: string };
+
+export interface CustomImageProps {
+  src: string;
+  alt: string;
+  layout?: "fill" | "fixed" | "intrinsic" | "responsive" | undefined;
+  objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down" | undefined;
+}
