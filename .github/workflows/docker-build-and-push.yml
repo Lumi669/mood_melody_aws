@@ -208,6 +208,7 @@ jobs:
           for i in {0..3}; do
             PARAM_NAME="ApiGatewayInvokeUrl_$i"
             URL=$(aws ssm get-parameter --name "${PARAM_NAME}" --query "Parameter.Value" --output text)
+            echo "URL retrieved by frontend =====, ${URL}"
             echo "NEXT_PUBLIC_API_URL_$i=${URL}" >> $GITHUB_ENV
           done
 
@@ -218,6 +219,10 @@ jobs:
         env:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
           REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+          NEXT_PUBLIC_API_URL_0: ${{ env.NEXT_PUBLIC_API_URL_0 }}
+          NEXT_PUBLIC_API_URL_1: ${{ env.NEXT_PUBLIC_API_URL_1 }}
+          NEXT_PUBLIC_API_URL_2: ${{ env.NEXT_PUBLIC_API_URL_2 }}
+          NEXT_PUBLIC_API_URL_3: ${{ env.NEXT_PUBLIC_API_URL_3 }}
         run: |
           docker build -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./frontend
           docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
