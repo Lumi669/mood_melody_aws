@@ -13,17 +13,24 @@ const AllMusicPage: React.FC = () => {
     <div>
       <h1>All Music</h1>
       <ul>
-        {mediaData.map((item) => (
-          <li key={item.id} className="relative h-96 w-full max-w-4xl mx-auto ">
-            <h2>{item.name}</h2>
-            <Image
-              src={item.imgUrl}
-              alt={item.name}
-              layout="fill"
-              objectFit="cover"
-            />
-          </li>
-        ))}
+        {mediaData.map((item) => {
+          console.log("Image URL: ", item.imgUrl);
+
+          return (
+            <li
+              key={item.id}
+              className="relative h-96 w-full max-w-4xl mx-auto "
+            >
+              <h2>{item.name}</h2>
+              <Image
+                src={item.imgUrl}
+                alt={item.name}
+                layout="fill"
+                objectFit="cover"
+              />
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

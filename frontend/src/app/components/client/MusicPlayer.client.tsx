@@ -94,6 +94,8 @@ const MusicPlayer: React.FC = () => {
     };
   }, [audio]);
 
+  console.log("currentImageUrl ======= ", currentImageUrl);
+
   return (
     <>
       <button
