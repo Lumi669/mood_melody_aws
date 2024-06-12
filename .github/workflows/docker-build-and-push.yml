@@ -187,6 +187,22 @@ jobs:
             echo "Permission already exists for REST_API_ID=$REST_API_ID"
           fi
 
+      - name: Store API Gateway URLs in Parameter Store
+        env:
+          REST_API_ID: ${{ env.REST_API_ID }}
+          AWS_REGION: eu-north-1
+        run: |
+          BASE_URL="https://${REST_API_ID}.execute-api.${AWS_REGION}.amazonaws.com/prod"
+          URLS=(
+            "${BASE_URL}/"
+            "${BASE_URL}/api/images"
+            "${BASE_URL}/api/musics"
+            "${BASE_URL}/test"
+          )
+          for i in "${!URLS[@]}"; do
+            aws ssm put-parameter --name "ApiGatewayInvokeUrl_$i" --value "${URLS[$i]}" --type "String" --overwrite --region $AWS_REGION
+          done
+
       - name: List files in frontend directory
         run: ls -la ./frontend
 
