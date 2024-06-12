@@ -97,6 +97,17 @@ RUN if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
 # Copy the rest of the application's source code to the working directory
 COPY . .
 
+# Accept build arguments and set them as environment variables
+ARG NEXT_PUBLIC_API_URL_0
+ARG NEXT_PUBLIC_API_URL_1
+ARG NEXT_PUBLIC_API_URL_2
+ARG NEXT_PUBLIC_API_URL_3
+
+ENV NEXT_PUBLIC_API_URL_0=${NEXT_PUBLIC_API_URL_0}
+ENV NEXT_PUBLIC_API_URL_1=${NEXT_PUBLIC_API_URL_1}
+ENV NEXT_PUBLIC_API_URL_2=${NEXT_PUBLIC_API_URL_2}
+ENV NEXT_PUBLIC_API_URL_3=${NEXT_PUBLIC_API_URL_3}
+
 # Build the application
 RUN if [ -f yarn.lock ]; then yarn run build && ls -la ./out; \
     elif [ -f package-lock.json ]; then npm run build && ls -la ./out; \
