@@ -202,6 +202,14 @@ jobs:
           for i in "${!URLS[@]}"; do
             aws ssm put-parameter --name "ApiGatewayInvokeUrl_$i" --value "${URLS[$i]}" --type "String" --overwrite --region $AWS_REGION
           done
+      - name: Retrieve API Gateway URLs
+        id: get-urls
+        run: |
+          for i in {0..3}; do
+            PARAM_NAME="ApiGatewayInvokeUrl_$i"
+            URL=$(aws ssm get-parameter --name "${PARAM_NAME}" --query "Parameter.Value" --output text)
+            echo "NEXT_PUBLIC_API_URL_$i=${URL}" >> $GITHUB_ENV
+          done
 
       - name: List files in frontend directory
         run: ls -la ./frontend

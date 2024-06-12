@@ -1,17 +1,10 @@
 import { Music, Image } from "../types/type";
+
+import { apiUrls } from "../config/apiConfig";
+
 export const fetchAllMusicWithImages = async () => {
-  const musicResponse = await fetch(
-    "http://localhost:4000/api/musics",
-  );
-  const imageResponse = await fetch(
-    "http://localhost:4000/api/images",
-  );
-  // const musicResponse = await fetch(
-  //   "https://mood-melody-backend-860ac0ad6346.herokuapp.com/api/musics",
-  // );
-  // const imageResponse = await fetch(
-  //   "https://mood-melody-backend-860ac0ad6346.herokuapp.com/api/images",
-  // );
+  const musicResponse = await fetch(apiUrls.musics);
+  const imageResponse = await fetch(apiUrls.images);
 
   const musicData = await musicResponse.json();
   const imageData = await imageResponse.json();
