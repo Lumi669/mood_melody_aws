@@ -13,7 +13,7 @@ const AllMusicPage: React.FC = () => {
 
   return (
     <div>
-      <h1>All Music</h1>
+      <h1>All Music hello</h1>
       <ul>
         {mediaData.map((item) => {
           console.log("Image URL: ", item.imgUrl);
