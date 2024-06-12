@@ -22,11 +22,16 @@ const AllMusicPage: React.FC = () => {
               className="relative h-96 w-full max-w-4xl mx-auto "
             >
               <h2>{item.name}</h2>
-              <Image
+              {/* <Image
                 src={item.imgUrl}
                 alt={item.name}
                 layout="fill"
                 objectFit="cover"
+              /> */}
+              <img
+                src={item.imgUrl}
+                alt={item.name}
+                style={{ width: "100%", height: "auto" }}
               />
             </li>
           );
