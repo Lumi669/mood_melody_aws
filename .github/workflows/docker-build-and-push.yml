@@ -260,17 +260,21 @@ jobs:
             aws s3 website s3://"$AWS_S3_BUCKET" --index-document index.html --error-document error.html
 
             echo "Setting public access policy for $AWS_S3_BUCKET"
-            aws s3api put-bucket-policy --bucket "$AWS_S3_BUCKET" --policy '{
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Principal": "*",
-                  "Action": "s3:GetObject",
-                  "Resource": "arn:aws:s3:::'"$AWS_S3_BUCKET"'/*"
-                }
-              ]
-            }'
+            aws s3api put-bucket-policy --bucket "$AWS_S3_BUCKET" --policy "$(cat <<EOF
+              {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": "*",
+                    "Action": "s3:GetObject",
+                    "Resource": "arn:aws:s3:::$AWS_S3_BUCKET/*"
+                  }
+                ]
+              }
+              EOF
+              )"
+
           fi
 
 
