@@ -250,11 +250,12 @@ jobs:
           AWS_REGION: eu-north-1
 
         run: |
+          echo "AWS_S3_BUCKET ====== ${AWS_S3_BUCKET}"
           if aws s3api head-bucket --bucket "$AWS_S3_BUCKET" 2>/dev/null; then
             echo "Bucket $AWS_S3_BUCKET already exists."
           else
             echo "Bucket $AWS_S3_BUCKET does not exist. Creating bucket."
-            aws s3 mb s3://"AWS_S3_BUCKET" --region "$AWS_REGION"
+            aws s3 mb s3://"$AWS_S3_BUCKET" --region "$AWS_REGION"
           fi
 
 
