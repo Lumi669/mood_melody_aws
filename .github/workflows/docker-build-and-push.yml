@@ -248,5 +248,16 @@ jobs:
         env:
           AWS_S3_BUCKET: ${{ secrets.FRONTEND_APP_S3_NAME }}
           AWS_REGION: eu-north-1
+
         run: |
+          if aws s3api head-bucket --bucket "$AWS_S3_BUCKET" 2>/dev/null; then
+            echo "Bucket $AWS_S3_BUCKET already exists."
+          else
+            echo "Bucket $AWS_S3_BUCKET does not exist. Creating bucket."
+            aws s3 mb s3://"AWS_S3_BUCKET" --region "$REGION"
+          fi
+
+
+          echo "AWS_S3_BUCKET === ${AWS_S3_BUCKET}"
+
           aws s3 sync ./dist s3://${AWS_S3_BUCKET} --region $AWS_REGION --delete
