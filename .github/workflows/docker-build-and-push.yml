@@ -259,6 +259,14 @@ jobs:
             echo "Enabling static website hosting for $AWS_S3_BUCKET"
             aws s3 website s3://"$AWS_S3_BUCKET" --index-document index.html --error-document error.html
 
+            echo "Disabling Block Public Access settings for $AWS_S3_BUCKET"
+            aws s3api put-public-access-block --bucket "$AWS_S3_BUCKET" --public-access-block-configuration '{
+              "BlockPublicAcls": false,
+              "IgnorePublicAcls": false,
+              "BlockPublicPolicy": false,
+              "RestrictPublicBuckets": false
+            }'
+
             echo "Setting public access policy for $AWS_S3_BUCKET"
             POLICY='{
               "Version": "2012-10-17",
