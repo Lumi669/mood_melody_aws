@@ -3,6 +3,10 @@ import { customLoader } from "../utils/customImageLoader";
 
 import { CustomImageProps } from "../types/type";
 
+const printText = () => {
+  console.log("hello this is test of image click");
+};
+
 const CustomImage: React.FC<CustomImageProps> = ({
   src,
   alt,
@@ -17,6 +21,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
       layout={layout}
       objectFit={objectFit}
       unoptimized // Disable optimization
+      onClick={printText}
     />
   );
 };
