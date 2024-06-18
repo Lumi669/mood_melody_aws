@@ -21,5 +21,5 @@ export interface CustomImageProps {
   alt: string;
   layout?: "fill" | "fixed" | "intrinsic" | "responsive" | undefined;
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down" | undefined;
-  onClick: any;
+  onClick?: () => void;
 }
