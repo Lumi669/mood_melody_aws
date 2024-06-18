@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 
 import { useMedia } from "../context/MediaContext";
 
@@ -28,10 +27,7 @@ const AllMusicPage: React.FC = () => {
               <CustomImage
                 src={item.imgUrl}
                 alt={item.name}
-                onClick={() => {
-                  playTrack(item.url);
-                  togglePlayPause();
-                }}
+                onClick={() => togglePlayPause(item.url)}
               />
             </li>
           );

@@ -23,7 +23,7 @@ interface MediaContextType {
   setIsBlue: Dispatch<SetStateAction<boolean>>; // Corrected type
 
   playTrack: (url: string) => void;
-  togglePlayPause: () => void;
+  togglePlayPause: (url: string) => void;
 }
 const MediaContext = createContext<MediaContextType>({
   mediaData: [],
@@ -72,15 +72,27 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
     newAudio.play();
   };
 
-  const togglePlayPause = () => {
-    if (audio) {
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
+  const togglePlayPause = (url: string) => {
+    if (currentTrack === url) {
+      if (audio) {
+        if (audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
       }
+    } else {
+      playTrack(url);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (audio) {
+        audio.pause();
+      }
+    };
+  }, [audio]);
 
   return (
     <MediaContext.Provider
