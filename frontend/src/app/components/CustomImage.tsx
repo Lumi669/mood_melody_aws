@@ -22,7 +22,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
       layout={layout}
       objectFit={objectFit}
       unoptimized // Disable optimization
-      onClick={printText}
+      onClick={onClick}
     />
   );
 };
