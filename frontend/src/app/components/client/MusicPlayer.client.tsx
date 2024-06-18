@@ -65,6 +65,16 @@ const MusicPlayer: React.FC = () => {
     }
   };
 
+  const toggleMusic = () => {
+    if (audio) {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+  };
+
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const time = parseFloat(event.target.value);
     if (audio) {
@@ -133,7 +143,11 @@ const MusicPlayer: React.FC = () => {
           //   className="object-contain px-10 py-10"
           // />
 
-          <CustomImage src={currentImageUrl} alt="Current playing song" />
+          <CustomImage
+            src={currentImageUrl}
+            alt="Current playing song"
+            onClick={toggleMusic}
+          />
         )}
         {audio && (
           <input

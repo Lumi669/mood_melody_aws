@@ -12,6 +12,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
   alt,
   layout = "fill",
   objectFit = "cover",
+  onClick,
 }) => {
   return (
     <Image
