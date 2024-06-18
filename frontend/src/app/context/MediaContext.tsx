@@ -17,20 +17,25 @@ interface MediaContextType {
   mediaData: (Music & { imgUrl: string })[]; // Include mood property from Music interface and imgUrl
   isRed: boolean;
   isBlue: boolean;
-
-  // setIsRed: () => void;
-  // setIsBlue: () => void;
-
+  audio: HTMLAudioElement | null;
+  currentTrack: string | null;
   setIsRed: Dispatch<SetStateAction<boolean>>; // Corrected type
   setIsBlue: Dispatch<SetStateAction<boolean>>; // Corrected type
+
+  playTrack: (url: string) => void;
+  togglePlayPause: () => void;
 }
 const MediaContext = createContext<MediaContextType>({
   mediaData: [],
   isRed: false,
   isBlue: false,
+  audio: null,
+  currentTrack: null,
 
   setIsRed: () => {},
   setIsBlue: () => {},
+  playTrack: () => {},
+  togglePlayPause: () => {},
 });
 
 interface MediaProviderProps {
@@ -43,6 +48,8 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   const [mediaData, setMediaData] = useState<MediaContextType["mediaData"]>([]);
   const [isRed, setIsRed] = useState(false);
   const [isBlue, setIsBlue] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,9 +62,39 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
     fetchData();
   }, []);
 
+  const playTrack = (url: string) => {
+    if (audio) {
+      audio.pause();
+    }
+    const newAudio = new Audio(url);
+    setAudio(newAudio);
+    setCurrentTrack(url);
+    newAudio.play();
+  };
+
+  const togglePlayPause = () => {
+    if (audio) {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+  };
+
   return (
     <MediaContext.Provider
-      value={{ mediaData, isRed, setIsRed, isBlue, setIsBlue }}
+      value={{
+        mediaData,
+        isRed,
+        setIsRed,
+        isBlue,
+        setIsBlue,
+        audio,
+        currentTrack,
+        playTrack,
+        togglePlayPause,
+      }}
     >
       {children}
     </MediaContext.Provider>

@@ -7,7 +7,7 @@ import { useMedia } from "../context/MediaContext";
 import CustomImage from "../components/CustomImage";
 
 const AllMusicPage: React.FC = () => {
-  const { mediaData } = useMedia();
+  const { mediaData, playTrack, togglePlayPause } = useMedia();
 
   console.log("mediaData ==== ", mediaData);
 
@@ -24,15 +24,15 @@ const AllMusicPage: React.FC = () => {
               className="relative h-96 w-full max-w-4xl mx-auto "
             >
               <h2>{item.name}</h2>
-              {/* <Image
 
+              <CustomImage
                 src={item.imgUrl}
                 alt={item.name}
-                layout="fill"
-                objectFit="cover"
-              /> */}
-
-              <CustomImage src={item.imgUrl} alt={item.name} />
+                onClick={() => {
+                  playTrack(item.url);
+                  togglePlayPause();
+                }}
+              />
             </li>
           );
         })}
