@@ -84,24 +84,17 @@ WORKDIR /app
 # Copy the TypeScript configuration file to the working directory
 COPY tsconfig.json ./
 
-# Install npx to force resolutions if necessary
-RUN npm install -g npm-force-resolutions
-
 # Copy package management files to the working directory
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-# Set the SHELL environment variable
-ENV SHELL=/bin/sh
+# Install pnpm
+RUN corepack enable pnpm
 
-# Install pnpm and set up global bin directory
-RUN corepack enable pnpm && \
+# Install npm-force-resolutions globally using pnpm
+RUN export PNPM_HOME="/root/.local/share/pnpm" && \
+    export PATH="$PNPM_HOME/bin:$PATH" && \
     pnpm setup && \
-    export PNPM_HOME="/root/.local/share/pnpm" && \
-    export PATH="$PNPM_HOME/bin:$PATH"
-
-
-# Ensure npm-force-resolutions is installed globally
-RUN pnpm add -g npm-force-resolutions
+    pnpm add -g npm-force-resolutions
 
 # apply resolutions and Install dependencies based on the presence of the respective lock file
 RUN if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
