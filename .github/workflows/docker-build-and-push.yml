@@ -220,13 +220,36 @@ jobs:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
           REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
 
+        # run: |
+        #   docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
+        #                --build-arg NEXT_PUBLIC_API_URL_1=${{ env.NEXT_PUBLIC_API_URL_1 }} \
+        #                --build-arg NEXT_PUBLIC_API_URL_2=${{ env.NEXT_PUBLIC_API_URL_2 }} \
+        #                --build-arg NEXT_PUBLIC_API_URL_3=${{ env.NEXT_PUBLIC_API_URL_3 }} \
+        #                -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./frontend
+        #   docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
+        #   docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
+        #   docker push ${REPO_URI}:frontend-${TIMESTAMP}
+        #   docker push ${REPO_URI}:frontend-latest
+
         run: |
-          docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
-                       --build-arg NEXT_PUBLIC_API_URL_1=${{ env.NEXT_PUBLIC_API_URL_1 }} \
-                       --build-arg NEXT_PUBLIC_API_URL_2=${{ env.NEXT_PUBLIC_API_URL_2 }} \
-                       --build-arg NEXT_PUBLIC_API_URL_3=${{ env.NEXT_PUBLIC_API_URL_3 }} \
-                       
-                       -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./frontend
+          build_args=(
+            "NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }}"
+            "NEXT_PUBLIC_API_URL_1=${{ env.NEXT_PUBLIC_API_URL_1 }}"
+            "NEXT_PUBLIC_API_URL_2=${{ env.NEXT_PUBLIC_API_URL_2 }}"
+            "NEXT_PUBLIC_API_URL_3=${{ env.NEXT_PUBLIC_API_URL_3 }}"
+            "CACHEBUST=$(date +%s)"
+          )
+
+          build_args_str=""
+          for arg in "${build_args[@]}"; do
+            build_args_str+=" --build-arg $arg"
+          done
+
+          docker build $build_args_str \
+                      -t mood-melody-aws:frontend-${TIMESTAMP} \
+                      -t mood-melody-aws:frontend-latest \
+                      ./frontend
+
           docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
           docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
           docker push ${REPO_URI}:frontend-${TIMESTAMP}
