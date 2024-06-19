@@ -90,11 +90,15 @@ RUN npm install -g npm-force-resolutions
 # Copy package management files to the working directory
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-# Install pnpm
-RUN corepack enable pnpm
+# Install pnpm and set up global bin directory
+RUN corepack enable pnpm && \
+    pnpm setup && \
+    export PNPM_HOME="/root/.local/share/pnpm" && \
+    export PATH="$PNPM_HOME/bin:$PATH"
+
 
 # Ensure npm-force-resolutions is installed globally
-RUN pnpm install -g npm-force-resolutions
+RUN pnpm add -g npm-force-resolutions
 
 # apply resolutions and Install dependencies based on the presence of the respective lock file
 RUN if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
