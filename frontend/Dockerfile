@@ -90,10 +90,16 @@ RUN npm install -g npm-force-resolutions
 # Copy package management files to the working directory
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-# Install dependencies based on the presence of the respective lock file
+# Install pnpm
+RUN corepack enable pnpm
+
+# Ensure npm-force-resolutions is installed globally
+RUN pnpm install -g npm-force-resolutions
+
+# apply resolutions and Install dependencies based on the presence of the respective lock file
 RUN if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
     elif [ -f package-lock.json ]; then npx npm-force-resolutions && npm ci; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+    elif [ -f pnpm-lock.yaml ]; then npx npm-force-resolutions && pnpm install --frozen-lockfile; \
     else echo "Lockfile not found." && exit 1; \
     fi
 
@@ -114,7 +120,7 @@ ENV NEXT_PUBLIC_API_URL_3=${NEXT_PUBLIC_API_URL_3}
 # Build the application
 RUN if [ -f yarn.lock ]; then yarn run build && ls -la ./out; \
     elif [ -f package-lock.json ]; then npm run build && ls -la ./out; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build && ls -la ./out; \
+    elif [ -f pnpm-lock.yaml ]; then pnpm run build && ls -la ./out; \
     else echo "Lockfile not found." && exit 1; \
     fi
 
