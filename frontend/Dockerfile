@@ -93,7 +93,7 @@ RUN corepack enable pnpm
 # Install npm-force-resolutions globally using pnpm
 RUN export PNPM_HOME="/root/.local/share/pnpm" && \
     export PATH="$PNPM_HOME/bin:$PATH" && \
-    pnpm setup && \
+    SHELL=$SHELL pnpm setup && \
     pnpm add -g npm-force-resolutions
 
 # apply resolutions and Install dependencies based on the presence of the respective lock file
