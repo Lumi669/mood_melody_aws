@@ -85,7 +85,7 @@ WORKDIR /app
 COPY tsconfig.json ./
 
 # Copy package management files to the working directory
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml* ./
 
 # Enable corepack and prepare pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -97,12 +97,9 @@ ENV PATH=${PATH}:${PNPM_HOME}
 # Install npm-force-resolutions globally using pnpm
 RUN pnpm add -g npm-force-resolutions
 
-# apply resolutions and Install dependencies based on the presence of the respective lock file
-RUN if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npx npm-force-resolutions && npm ci; \
-    elif [ -f pnpm-lock.yaml ]; then npx npm-force-resolutions && pnpm install --frozen-lockfile; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
+# Apply resolutions and install dependencies using pnpm
+RUN npx npm-force-resolutions && pnpm install --frozen-lockfile
+
 
 # Copy the rest of the application's source code to the working directory
 COPY . .
@@ -119,12 +116,7 @@ ENV NEXT_PUBLIC_API_URL_2=${NEXT_PUBLIC_API_URL_2}
 ENV NEXT_PUBLIC_API_URL_3=${NEXT_PUBLIC_API_URL_3}
 
 # Build the application
-RUN if [ -f yarn.lock ]; then yarn run build && ls -la ./out; \
-    elif [ -f package-lock.json ]; then npm run build && ls -la ./out; \
-    elif [ -f pnpm-lock.yaml ]; then pnpm run build && ls -la ./out; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
-
+RUN pnpm run build && ls -la ./out
 
 # Start a new stage from the base image to keep the production image clean and small
 FROM base as production
