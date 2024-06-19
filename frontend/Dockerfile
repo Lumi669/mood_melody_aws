@@ -87,13 +87,12 @@ COPY tsconfig.json ./
 # Copy package management files to the working directory
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-# Install pnpm with corepack
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
 # Set PNPM_HOME and PATH
 ENV PNPM_HOME=/root/.local/share/pnpm
 ENV PATH=$PNPM_HOME/bin:$PATH
 
+# Install pnpm with corepack
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Install npm-force-resolutions globally using pnpm
 RUN pnpm setup && pnpm add -g npm-force-resolutions
