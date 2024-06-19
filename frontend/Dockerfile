@@ -84,12 +84,15 @@ WORKDIR /app
 # Copy the TypeScript configuration file to the working directory
 COPY tsconfig.json ./
 
+# Install npx to force resolutions if necessary
+RUN npm install -g npm-force-resolutions
+
 # Copy package management files to the working directory
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
 # Install dependencies based on the presence of the respective lock file
 RUN if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm ci; \
+    elif [ -f package-lock.json ]; then then npx npm-force-resolutions && npm ci; \
     elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
     else echo "Lockfile not found." && exit 1; \
     fi
@@ -116,7 +119,6 @@ RUN if [ -f yarn.lock ]; then yarn run build && ls -la ./out; \
     fi
 
 
-
 # Start a new stage from the base image to keep the production image clean and small
 FROM base as production
 
@@ -132,7 +134,6 @@ COPY --from=base /app/.next ./.next
 COPY --from=base /app/out ./out
 COPY --from=base /app/node_modules ./node_modules
 COPY --from=base /app/package.json ./package.json
-
 
 # Expose the port Next.js runs on
 EXPOSE 3000
