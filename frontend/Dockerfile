@@ -90,6 +90,9 @@ RUN npm install -g npm-force-resolutions
 # Copy package management files to the working directory
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
+# Set the SHELL environment variable
+ENV SHELL=/bin/sh
+
 # Install pnpm and set up global bin directory
 RUN corepack enable pnpm && \
     pnpm setup && \
