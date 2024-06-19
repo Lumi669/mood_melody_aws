@@ -225,6 +225,8 @@ jobs:
                        --build-arg NEXT_PUBLIC_API_URL_1=${{ env.NEXT_PUBLIC_API_URL_1 }} \
                        --build-arg NEXT_PUBLIC_API_URL_2=${{ env.NEXT_PUBLIC_API_URL_2 }} \
                        --build-arg NEXT_PUBLIC_API_URL_3=${{ env.NEXT_PUBLIC_API_URL_3 }} \
+                       --build-arg CACHEBUST=$(date +%s) \
+
                        -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./frontend
           docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
           docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest

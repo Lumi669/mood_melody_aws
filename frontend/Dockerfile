@@ -87,6 +87,9 @@ COPY tsconfig.json ./
 # Copy package management files to the working directory
 COPY package.json pnpm-lock.yaml ./
 
+# Cache-busting argument
+ARG CACHEBUST=1
+
 # Enable corepack and prepare pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
