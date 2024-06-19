@@ -87,15 +87,15 @@ COPY tsconfig.json ./
 # Copy package management files to the working directory
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-# Set PNPM_HOME and PATH
-ENV PNPM_HOME=/root/.local/share/pnpm
-ENV PATH=$PNPM_HOME/bin:$PATH
-
-# Install pnpm with corepack
+# Enable corepack and prepare pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
+# Set PNPM_HOME and PATH
+ENV PNPM_HOME=/usr/local/bin
+ENV PATH=${PATH}:${PNPM_HOME}
+
 # Install npm-force-resolutions globally using pnpm
-RUN pnpm setup && pnpm add -g npm-force-resolutions
+RUN pnpm add -g npm-force-resolutions
 
 # apply resolutions and Install dependencies based on the presence of the respective lock file
 RUN if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
