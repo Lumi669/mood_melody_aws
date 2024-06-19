@@ -98,7 +98,7 @@ ENV PATH=${PATH}:${PNPM_HOME}
 # RUN pnpm add --global npm-force-resolutions
 
 # Apply resolutions using npm-force-resolutions
-RUN npx npm-force-resolutions
+# RUN npx npm-force-resolutions
 
 # Install dependencies using pnpm with frozen lockfile to ensure consistency
 RUN pnpm install --frozen-lockfile
