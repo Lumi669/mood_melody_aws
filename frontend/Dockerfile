@@ -85,7 +85,7 @@ WORKDIR /app
 COPY tsconfig.json ./
 
 # Copy package management files to the working directory
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml ./
 
 # Enable corepack and prepare pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -95,11 +95,13 @@ ENV PNPM_HOME=/usr/local/bin
 ENV PATH=${PATH}:${PNPM_HOME}
 
 # Install npm-force-resolutions globally using pnpm
-RUN pnpm add -g npm-force-resolutions
+RUN pnpm add --global npm-force-resolutions
 
-# Apply resolutions and install dependencies using pnpm
-RUN npx npm-force-resolutions && pnpm install --frozen-lockfile
+# Apply resolutions using npm-force-resolutions
+RUN npx npm-force-resolutions
 
+# Install dependencies using pnpm with frozen lockfile to ensure consistency
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application's source code to the working directory
 COPY . .
