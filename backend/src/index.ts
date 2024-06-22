@@ -192,8 +192,16 @@ app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Welcome to the Music Mood API!" });
 });
 
+// Start server locally if not in Lambda
+if (!isLambda) {
+  const port: number | string = process.env.PORT || 4000;
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+}
+
 // Start server
-const port: number | string = process.env.PORT || 4000;
+// const port: number | string = process.env.PORT || 4000;
 // app.listen(port, () => {
 //   console.log(`Server running on http://localhost:${port}`);
 // });
