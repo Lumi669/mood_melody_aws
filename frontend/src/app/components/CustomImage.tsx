@@ -1,11 +1,13 @@
+import React from "react";
+
 import Image from "next/image";
 import { customLoader } from "../utils/customImageLoader";
 
 import { CustomImageProps } from "../types/type";
 
-const printText = () => {
-  console.log("hello this is test of image click");
-};
+// const printText = () => {
+//   console.log("hello this is test of image click");
+// };
 
 const CustomImage: React.FC<CustomImageProps> = ({
   src,

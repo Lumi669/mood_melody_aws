@@ -6,7 +6,7 @@ import { useMedia } from "../context/MediaContext";
 import CustomImage from "../components/CustomImage";
 
 const AllMusicPage: React.FC = () => {
-  const { mediaData, playTrack, togglePlayPause } = useMedia();
+  const { mediaData, /*playTrack,*/ togglePlayPause } = useMedia();
 
   console.log("mediaData ==== ", mediaData);
 
