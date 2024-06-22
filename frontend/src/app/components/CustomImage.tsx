@@ -14,6 +14,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
   objectFit = "cover",
   onClick,
 }) => {
+  console.log("src from CustomImage props === ", src);
   return (
     <Image
       loader={() => customLoader({ srcOfImageUrl: src })}
