@@ -6,20 +6,14 @@
     <title>Redirecting...</title>
     <script type="text/javascript">
       const path = window.location.pathname;
-
-      const redirect = (newPath) => {
-        history.replaceState(null, null, newPath);
-        window.location.reload();
-      };
-
       if (path === "/allmusic") {
-        redirect("/allmusic.html");
+        window.location.replace("/allmusic.html");
       } else if (path === "/live") {
-        redirect("/live.html");
+        window.location.replace("/live.html");
       } else if (path === "/mixtape") {
-        redirect("/mixtape.html");
+        window.location.replace("/mixtape.html");
       } else {
-        redirect("/");
+        window.location.replace("/");
       }
     </script>
   </head>
