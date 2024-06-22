@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Nav: React.FC = () => {
   return (
-    <nav>
+    <nav className="sticky top-0 z-50">
       <Link href="/">Home</Link>
       <Link href="/allmusic">All Music</Link>
       <Link href="/mixtape">Mixtape</Link>
