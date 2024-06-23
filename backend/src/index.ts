@@ -188,6 +188,12 @@ app.delete("/api/images", async (req, res) => {
 
 // Additional routes...
 
+app.post("/submit", (req, res) => {
+  const { name, email, message } = req.body;
+  console.log(`Name: ${name}, Email: ${email}, Message: ${message}`);
+  res.send("Form data received");
+});
+
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Welcome to the Music Mood API!" });
 });
