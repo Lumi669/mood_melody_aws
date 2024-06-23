@@ -218,13 +218,12 @@ jobs:
       - name: Check if redirect.html exists in S3, if not, upload it
         env:
           AWS_S3_BUCKET: ${{ secrets.FRONTEND_APP_S3_NAME }}
-          AWS_REGION: eu-north-1
 
         run: |
           if aws s3 ls s3://${AWS_S3_BUCKET}/redirect.html 2>&1 | grep -q 'NoSuchKey'
           then
             echo "File does not exist"
-            aws s3 cp path/to/your/redirect.html s3://${AWS_S3_BUCKET}/redirect.html
+            aws s3 cp ../frontend/src/app/redirect.html s3://${AWS_S3_BUCKET}/redirect.html
           else
             echo "File exists"
             
