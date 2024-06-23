@@ -215,35 +215,10 @@ jobs:
       - name: List files in frontend directory
         run: ls -la ./frontend
 
-      - name: Check if redirect.html exists in S3, if not, upload it
-        env:
-          AWS_S3_BUCKET: ${{ secrets.FRONTEND_APP_S3_NAME }}
-
-        run: |
-          if aws s3 ls s3://${AWS_S3_BUCKET}/redirect.html 2>&1 | grep -q 'NoSuchKey'
-          then
-            echo "File does not exist"
-            aws s3 cp ../frontend/src/app/redirect.html s3://${AWS_S3_BUCKET}/redirect.html
-          else
-            echo "File exists"
-            
-          fi
-
       - name: Build and push frontend Docker image
         env:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
           REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
-
-        # run: |
-        #   docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
-        #                --build-arg NEXT_PUBLIC_API_URL_1=${{ env.NEXT_PUBLIC_API_URL_1 }} \
-        #                --build-arg NEXT_PUBLIC_API_URL_2=${{ env.NEXT_PUBLIC_API_URL_2 }} \
-        #                --build-arg NEXT_PUBLIC_API_URL_3=${{ env.NEXT_PUBLIC_API_URL_3 }} \
-        #                -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./frontend
-        #   docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
-        #   docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
-        #   docker push ${REPO_URI}:frontend-${TIMESTAMP}
-        #   docker push ${REPO_URI}:frontend-latest
 
         run: |
           build_args=(
@@ -280,6 +255,13 @@ jobs:
           docker rm -f extract-container
 
       - name: List files in dist directory
+        run: ls -la ./dist
+
+      - name: Ensure redirect.html is in dist directory
+        run: |
+          cp ../frontend/src/app/redirect.html ./dist/redirect.html
+
+      - name: List files in dist directory again
         run: ls -la ./dist
 
       - name: Sync frontend files to S3
