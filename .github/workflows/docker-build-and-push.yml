@@ -259,7 +259,7 @@ jobs:
 
       - name: Ensure redirect.html is in dist directory
         run: |
-          cp ../frontend/src/app/redirect.html ./dist/redirect.html
+          cp ../../frontend/src/app/redirect.html ./dist/redirect.html
 
       - name: List files in dist directory again
         run: ls -la ./dist
