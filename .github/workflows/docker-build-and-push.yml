@@ -1,4 +1,4 @@
-name: Docker Build, Push, Deploy Backend to AWS Lambda, and Configure API Gateway
+name: Docker Build, Push, Deploy frontend to AWS S3, and Backend to AWS Lambda, and Configure API Gateway
 
 on:
   push:
