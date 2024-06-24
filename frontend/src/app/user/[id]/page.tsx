@@ -1,6 +1,6 @@
 // app/user/[id]/page.tsx
-import UserProfileClient from "./UserProfileClient";
-import { generateStaticParams } from "./userStaticParams";
+import UserProfileClient from "./helper/UserProfileClient";
+import { generateStaticParams } from "./helper/userStaticParams";
 
 export default function Page() {
   return <UserProfileClient />;
