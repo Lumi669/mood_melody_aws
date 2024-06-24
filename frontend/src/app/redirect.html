@@ -15,7 +15,7 @@
       } else if (path.startsWith("/user/")) {
         // Handle dynamic user routes
         const userId = path.split("/")[2];
-        window.location.replace(`/user-${userId}.html`);
+        window.location.replace(`/${userId}.html`);
       } else {
         window.location.replace("/");
       }
