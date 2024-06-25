@@ -1,10 +1,11 @@
 import React from "react";
 
-import "./styles/globals.css"; // Ensure this is the correct path to your global styles
+import "./styles/globals.css";
 
-import Nav from "../../components/Nav"; // Ensure this is the correct path to your Nav component
+import Nav from "../../components/Nav";
+import Head from "next/head";
 
-import { MediaProvider } from "../../context/MediaContext"; // Ensure this is the correct path to your MediaContext
+import { MediaProvider } from "../../context/MediaContext";
 import LayoutWrapper from "../../components/LayoutWrapper";
 export const metadata = {
   title: "Next.js",
@@ -18,6 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Head>
+        <meta charSet="UTF-8" />
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </Head>
       <body>
         <MediaProvider>
           <LayoutWrapper>
