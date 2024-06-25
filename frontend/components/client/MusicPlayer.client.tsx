@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useMedia } from "../../context/MediaContext";
 
-import { addToPlaylist } from "@/app/utils/addToPlaylist";
+import { addToPlaylist } from "../../utils/addToPlaylist";
 import CustomImage from "../CustomImage";
 
 // import { MusicWithImage } from "../../types/type";

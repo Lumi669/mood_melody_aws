@@ -11,7 +11,6 @@ import React, {
 } from "react";
 
 import { Music } from "../types/type";
-import { fetchAllMusicWithImages } from "../utils/fetchAllMusicWithImages";
 
 interface MediaContextType {
   mediaData: (Music & { imgUrl: string })[]; // Include mood property from Music interface and imgUrl
@@ -21,6 +20,7 @@ interface MediaContextType {
   currentTrack: string | null;
   setIsRed: Dispatch<SetStateAction<boolean>>; // Corrected type
   setIsBlue: Dispatch<SetStateAction<boolean>>; // Corrected type
+  setMediaData: Dispatch<SetStateAction<(Music & { imgUrl: string })[]>>;
 
   playTrack: (url: string) => void;
   togglePlayPause: (url: string) => void;
@@ -34,6 +34,7 @@ const MediaContext = createContext<MediaContextType>({
 
   setIsRed: () => {},
   setIsBlue: () => {},
+  setMediaData: () => {},
   playTrack: () => {},
   togglePlayPause: () => {},
 });
@@ -51,16 +52,16 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      // Fetch music and image data and match them
-      const matchedData = await fetchAllMusicWithImages();
-      console.log("matchedData ===== ", matchedData);
-      setMediaData(matchedData);
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     // Fetch music and image data and match them
+  //     const matchedData = await fetchAllMusicWithImages();
+  //     console.log("matchedData ===== ", matchedData);
+  //     setMediaData(matchedData);
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const playTrack = (url: string) => {
     if (audio) {
@@ -102,6 +103,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
         setIsRed,
         isBlue,
         setIsBlue,
+        setMediaData,
         audio,
         currentTrack,
         playTrack,

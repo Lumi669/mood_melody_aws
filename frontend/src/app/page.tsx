@@ -1,8 +1,8 @@
 import React from "react";
 
-import TestForm from "./components/TestForm";
+import TestForm from "../../components/TestForm";
 
-import ClientWrapperForMusicPlayer from "./components/client/ClientWrapperForMusicPlayer";
+import ClientWrapperForMusicPlayer from "../../components/client/ClientWrapperForMusicPlayer";
 const Home: React.FC = () => {
   return (
     <div>
