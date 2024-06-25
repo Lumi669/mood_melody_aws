@@ -1,9 +1,14 @@
 import React from "react";
 
 import TestForm from "../../components/TestForm";
+import { fetchAllMusicWithImages } from "utils/fetchAllMusicWithImages";
+import { useMedia } from "context/MediaContext";
+import ClientContextUpdater from "../../components/ClientContextUpdater";
 
 import ClientWrapperForMusicPlayer from "../../components/client/ClientWrapperForMusicPlayer";
-const Home: React.FC = () => {
+const Home: React.FC = async () => {
+  const matchedData = await fetchAllMusicWithImages();
+
   return (
     <div>
       <div>
@@ -12,6 +17,7 @@ const Home: React.FC = () => {
       </div>
       <h1>Welcome to the New Mood Music App i have no idea</h1>
       <ClientWrapperForMusicPlayer />
+      <ClientContextUpdater initialData={matchedData} />
     </div>
   );
 };
