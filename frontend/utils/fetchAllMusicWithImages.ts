@@ -5,8 +5,13 @@ import { apiUrls } from "../config/apiConfig";
 export const fetchAllMusicWithImages = async () => {
   console.log("apiUrls.images ====== ", apiUrls.images);
   console.log("apiUrls.musics ====== ", apiUrls.musics);
-  const musicResponse = await fetch(apiUrls.musics);
-  const imageResponse = await fetch(apiUrls.images);
+  const musicResponse = await fetch(
+    `${apiUrls.musics}?cacheBust=${Date.now()}`,
+  );
+  // const imageResponse = await fetch(`${apiUrls.images}?cacheBust=${Date.now()}`);
+  const imageResponse = await fetch(
+    `http://localhost:4000/api/images?cacheBust=${Date.now()}`,
+  );
 
   const musicData = await musicResponse.json();
   const imageData = await imageResponse.json();
