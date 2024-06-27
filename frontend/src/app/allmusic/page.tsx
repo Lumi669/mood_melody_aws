@@ -8,6 +8,7 @@ import Image from "next/image";
 export default async function AllMusicPage() {
   // Fetch music and image data server-side
   const matchedData = await fetchAllMusicWithImages();
+  console.log("matchedData from allmusic page == ", matchedData);
 
   return (
     <div>

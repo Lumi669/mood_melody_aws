@@ -159,6 +159,7 @@ app.post("/api/images", async (req, res) => {
 app.get("/api/images", async (req, res) => {
   try {
     const images = await Image.findAll();
+    console.log("images from database of backend GET === ", images);
     res.status(200).json(images);
   } catch (error: unknown) {
     if (error instanceof Error) {
