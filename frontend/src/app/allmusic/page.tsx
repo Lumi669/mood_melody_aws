@@ -3,7 +3,7 @@ import { MusicWithImage } from "types/type";
 import { fetchAllMusicWithImages } from "../../../utils/fetchAllMusicWithImages";
 import ClientContextUpdater from "../../../components/ClientContextUpdater";
 import ClientInteractivityWrapper from "../../../components/ClientInteractivityWrapper";
-import Image from "next/image";
+import CustomImage from "components/CustomImage";
 
 export default async function AllMusicPage() {
   // Fetch music and image data server-side
@@ -17,13 +17,16 @@ export default async function AllMusicPage() {
         {matchedData.map((item: MusicWithImage) => (
           <li key={item.id} className="relative h-96 w-full max-w-4xl mx-auto">
             <h2>{item.name}</h2>
-            <Image
+
+            <CustomImage
               src={item.imgUrl}
               alt={item.name}
-              layout="fill"
+              layout="responsive"
               objectFit="cover"
+              dataUrl={item.url}
               className="cursor-pointer"
-              data-url={item.url} // Pass the URL as a data attribute
+              width={500}
+              height={500}
             />
           </li>
         ))}

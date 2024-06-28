@@ -8,9 +8,11 @@ import CustomImage from "../CustomImage";
 // import { MusicWithImage } from "../../types/type";
 
 const MusicPlayer: React.FC = () => {
-  const { mediaData, setIsRed, setIsBlue } = useMedia();
+  const { mediaData, setIsRed, setIsBlue, togglePlayPause } = useMedia();
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null); // Image URL state
+  const [currentUrl, setCurrentUrl] = useState<string | null>(null); // music URL state
+  const [currentMusicName, setCurretMusicName] = useState<string | null>(null); // music URL state
 
   //for progress bar
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -48,6 +50,8 @@ const MusicPlayer: React.FC = () => {
     setIsBlue(randomSong.mood === "sad");
 
     setCurrentImageUrl(randomSong.imgUrl);
+    setCurrentUrl(randomSong.url);
+    setCurretMusicName(randomSong.name);
 
     setAudio(newAudio);
     newAudio.play();
@@ -144,8 +148,13 @@ const MusicPlayer: React.FC = () => {
 
           <CustomImage
             src={currentImageUrl}
-            alt="Current playing song"
-            onClick={toggleMusic}
+            alt={currentMusicName || "an image associated with the music"}
+            dataUrl={currentUrl}
+            layout="responsive"
+            width={800}
+            height={800}
+            onClick={() => togglePlayPause(currentImageUrl || "")}
+            className="cursor-pointer"
           />
         )}
         {audio && (

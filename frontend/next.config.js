@@ -12,7 +12,7 @@ const path = require("path");
 const nextConfig = {
   reactStrictMode: true,
   // output: "standalone",
-  output: "export",
+  // output: "export",
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Resolve the '@' alias to the 'src' directory
     config.resolve.alias["@"] = path.resolve(__dirname, "src");
