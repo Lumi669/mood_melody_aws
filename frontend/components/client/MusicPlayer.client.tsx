@@ -139,13 +139,6 @@ const MusicPlayer: React.FC = () => {
 
       <div className="w-[500px] h-[400px] bg-red-500 relative ">
         {currentImageUrl && (
-          // <Image
-          //   src={currentImageUrl}
-          //   alt="Current playing song"
-          //   layout="fill"
-          //   className="object-contain px-10 py-10"
-          // />
-
           <CustomImage
             src={currentImageUrl}
             alt={currentMusicName || "an image associated with the music"}
@@ -153,7 +146,7 @@ const MusicPlayer: React.FC = () => {
             layout="responsive"
             width={800}
             height={800}
-            onClick={() => togglePlayPause(currentImageUrl || "")}
+            onClick={toggleMusic}
             className="cursor-pointer"
           />
         )}

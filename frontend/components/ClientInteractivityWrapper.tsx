@@ -9,6 +9,7 @@ const ClientInteractivityWrapper: React.FC = () => {
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       const url = target.getAttribute("data-url");
+      console.log("url from ClientInteractivityWrapper ====  ", url);
       if (url) {
         togglePlayPause(url);
       }
