@@ -24,19 +24,21 @@ interface MediaContextType {
 
   playTrack: (url: string) => void;
   togglePlayPause: (url: string) => void;
+  stopMusic: () => void;
 }
+
 const MediaContext = createContext<MediaContextType>({
   mediaData: [],
   isRed: false,
   isBlue: false,
   audio: null,
   currentTrack: null,
-
   setIsRed: () => {},
   setIsBlue: () => {},
   setMediaData: () => {},
   playTrack: () => {},
   togglePlayPause: () => {},
+  stopMusic: () => {},
 });
 
 interface MediaProviderProps {
@@ -63,37 +65,57 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   //   fetchData();
   // }, []);
 
-  const playTrack = (url: string) => {
+  const playTrack = async (url: string) => {
     if (audio) {
       audio.pause();
+      audio.currentTime = 0; // Reset the audio
     }
     const newAudio = new Audio(url);
+    console.log("url from playTrck === ", url);
+    console.log("newAudio from playTrck === ", newAudio);
     setAudio(newAudio);
     setCurrentTrack(url);
-    newAudio.play();
+
+    try {
+      await newAudio.play();
+    } catch (error) {
+      console.error("Failed to play audio:", error);
+    }
   };
 
-  const togglePlayPause = (url: string) => {
+  const togglePlayPause = async (url: string) => {
     if (currentTrack === url) {
       if (audio) {
         if (audio.paused) {
-          audio.play();
+          try {
+            await audio.play();
+          } catch (error) {
+            console.error("Failed to play audio:", error);
+          }
         } else {
           audio.pause();
         }
       }
     } else {
-      playTrack(url);
+      await playTrack(url);
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (audio) {
-        audio.pause();
-      }
-    };
-  }, [audio]);
+  const stopMusic = () => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0; // Reset the audio
+      setCurrentTrack(null);
+    }
+  };
+
+  // useEffect(() => {
+  //   return () => {
+  //     if (audio) {
+  //       audio.pause();
+  //     }
+  //   };
+  // }, [audio]);
 
   return (
     <MediaContext.Provider
@@ -108,6 +130,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
         currentTrack,
         playTrack,
         togglePlayPause,
+        stopMusic,
       }}
     >
       {children}

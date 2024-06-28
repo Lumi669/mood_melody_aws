@@ -1,17 +1,22 @@
 "use client"; // Mark this file as a client component
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMedia } from "../context/MediaContext";
 
 const ClientInteractivityWrapper: React.FC = () => {
-  const { togglePlayPause } = useMedia();
+  const { togglePlayPause, stopMusic } = useMedia();
+  const [url, setUrl] = useState<string | null | undefined>(undefined);
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      const url = target.getAttribute("data-url");
-      console.log("url from ClientInteractivityWrapper ====  ", url);
-      if (url) {
-        togglePlayPause(url);
+      const urlOfMusic = target.getAttribute("data-url");
+      setUrl(urlOfMusic);
+      console.log(
+        "urlOfMusic from ClientInteractivityWrapper ====  ",
+        urlOfMusic,
+      );
+      if (urlOfMusic) {
+        togglePlayPause(urlOfMusic);
       }
     };
 
@@ -21,6 +26,14 @@ const ClientInteractivityWrapper: React.FC = () => {
       document.removeEventListener("click", handleClick);
     };
   }, [togglePlayPause]);
+
+  useEffect(() => {
+    console.log("url from ClientInteractivityWrapper ====  ", url);
+
+    if (!url) {
+      stopMusic();
+    }
+  }, [url, stopMusic]);
 
   return null; // No need to render anything
 };
