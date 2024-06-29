@@ -304,7 +304,3 @@ jobs:
           fi
 
           aws s3 sync ./dist s3://"$AWS_S3_BUCKET" --region "$AWS_REGION" --delete
-      - name: Build and Deploy Serverless part
-        run: |
-          pnpm run build:serverless
-          npx serverless deploy

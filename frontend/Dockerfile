@@ -118,37 +118,24 @@ ENV NEXT_PUBLIC_API_URL_3=${NEXT_PUBLIC_API_URL_3}
 # Build the application
 RUN pnpm run build && ls -la ./out
 
-# # Start a new stage from the base image to keep the production image clean and small
-# FROM base as production
-
-
-# # Set environment variables
-# ENV NODE_ENV=production \
-#     NEXT_TELEMETRY_DISABLED=1
-
-# # Copy the build output to serve the app
-# COPY --from=base /app/next.config.js ./
-# COPY --from=base /app/public ./public
-# COPY --from=base /app/.next ./.next
-# COPY --from=base /app/out ./out
-# COPY --from=base /app/node_modules ./node_modules
-# COPY --from=base /app/package.json ./package.json
-
-# # Expose the port Next.js runs on
-# EXPOSE 3000
-
-# # Define the command to run the app
-# CMD ["pnpm", "run", "start"]
-
-
 # Start a new stage from the base image to keep the production image clean and small
-FROM nginx:alpine as production
+FROM base as production
 
-# Copy the build output to the Nginx HTML directory
-COPY --from=base /app/out /usr/share/nginx/html
 
-# Expose the port Nginx runs on
-EXPOSE 80
+# Set environment variables
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1
 
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Copy the build output to serve the app
+COPY --from=base /app/next.config.js ./
+COPY --from=base /app/public ./public
+COPY --from=base /app/.next ./.next
+COPY --from=base /app/out ./out
+COPY --from=base /app/node_modules ./node_modules
+COPY --from=base /app/package.json ./package.json
+
+# Expose the port Next.js runs on
+EXPOSE 3000
+
+# Define the command to run the app
+CMD ["pnpm", "run", "start"]
