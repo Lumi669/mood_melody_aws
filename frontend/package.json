@@ -11,7 +11,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "export": "next export",
-    "preinstall": "npx force-resolutions"
+    "preinstall": "npx force-resolutions",
+    "build:static": "next build -c next.config.static.js && next export -c next.config.static.js",
+    "build:serverless": "next build -c next.config.serverless.js"
   },
   "dependencies": {
     "axios": "^1.6.7",

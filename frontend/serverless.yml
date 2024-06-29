@@ -1,0 +1,16 @@
+service: my-next-app
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+
+plugins:
+  - serverless-nextjs
+
+functions:
+  nextApp:
+    handler: handler.next
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
