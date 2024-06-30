@@ -40,38 +40,71 @@ jobs:
           docker push ${REPO_URI}:backend-${TIMESTAMP}
           docker push ${REPO_URI}:backend-latest
 
-      - name: Build and push frontend Docker image
-
-        env:
-          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
-
+      - name: Deploy CloudFormation stack
         run: |
-          docker build -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./frontend
-          docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
-          docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
-          docker push ${REPO_URI}:frontend-${TIMESTAMP}
-          docker push ${REPO_URI}:frontend-latest
+          aws cloudformation deploy \
+            --template-file cloudformation-template.yaml \
+            --stack-name mood-melody-stack \
+            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+            --parameter-overrides \
+              BackendImageUri=${REPO_URI}:${{ env.TIMESTAMP }} \
+              FrontendImageUri=""
 
-  deploy:
+      - name: Retrieve API Gateway URLs from SSM
+        id: get-urls
+        run: |
+          BACKEND_API_URL=$(aws ssm get-parameter --name /MoodMelody/ApiGatewayUrl --region eu-north-1 --query "Parameter.Value" --output text)
+          echo "::set-output name=backend_api_url::$BACKEND_API_URL"
+
+  build-and-deploy-frontend:
     needs: build-and-push
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy CloudFormation stack
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          name: mood-melody-stack
-          template: moodMelodyCloudFormationTemplate.yaml
-          parameter-overrides: LambdaExecutionRoleArn=${{ secrets.LAMBDA_EXECUTION_ROLE }}
-          capabilities: CAPABILITY_NAMED_IAM
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 536560382233.dkr.ecr.eu-north-1.amazonaws.com
+
+      - name: Build and push frontend Docker image
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: eu-north-1
+          TIMESTAMP: ${{ github.run_id }}
+          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
+          NEXT_PUBLIC_API_URL_0: ${{ needs.build-and-push.outputs.backend_api_url }}
+        run: |
+          docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
+                      --build-arg NEXT_PUBLIC_API_URL_1=${{ secrets.NEXT_PUBLIC_API_URL_1 }} \
+                      --build-arg NEXT_PUBLIC_API_URL_2=${{ secrets.NEXT_PUBLIC_API_URL_2 }} \
+                      --build-arg NEXT_PUBLIC_API_URL_3=${{ secrets.NEXT_PUBLIC_API_URL_3 }} \
+                      -t mood-melody-aws-frontend:${{ env.TIMESTAMP }} \
+                      -t mood-melody-aws-frontend:latest \
+                      ./frontend
+          docker tag mood-melody-aws-frontend:${{ env.TIMESTAMP }} ${REPO_URI}:${{ env.TIMESTAMP }}
+          docker tag mood-melody-aws-frontend:latest ${REPO_URI}:latest
+          docker push ${REPO_URI}:${{ env.TIMESTAMP }}
+          docker push ${REPO_URI}:latest
+
+      - name: Deploy updated CloudFormation stack with frontend image
+        run: |
+          aws cloudformation deploy \
+            --template-file cloudformation-template.yaml \
+            --stack-name mood-melody-stack \
+            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+            --parameter-overrides \
+              BackendImageUri=${REPO_URI}:${{ needs.build-and-push.outputs.backend_api_url }} \
+              FrontendImageUri=${REPO_URI}:${{ env.TIMESTAMP }}
+
 # name: Docker Build, Push, Deploy frontend to AWS S3, and Backend to AWS Lambda, and Configure API Gateway
 
 # on:
