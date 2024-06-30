@@ -43,7 +43,7 @@ jobs:
       - name: Deploy CloudFormation stack
         run: |
           aws cloudformation deploy \
-            --moodMelodyCloudFormationTemplate.yml.yaml \
+            --template-file moodMelodyCloudFormationTemplate.yml.yaml \
             --stack-name mood-melody-stack \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --parameter-overrides \
