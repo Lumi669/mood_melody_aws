@@ -1,306 +1,383 @@
-name: Docker Build, Push, Deploy frontend to AWS S3, and Backend to AWS Lambda, and Configure API Gateway
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: eu-north-1
+      ECR_REGISTRY: 536560382233.dkr.ecr.eu-north-1.amazonaws.com
+      FRONTEND_REPO: mood-melody-frontend
+      BACKEND_REPO: mood-melody-backend
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+
       - name: Set up AWS credentials
-        uses: ./.github/actions/aws-credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Log in to Amazon ECR
         run: |
-          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 536560382233.dkr.ecr.eu-north-1.amazonaws.com
-      - name: Create ECR repository if it does not exist
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+
+      - name: Create ECR repositories if they do not exist
         run: |
-          aws ecr describe-repositories --repository-names mood-melody-aws --region eu-north-1 || \
-          aws ecr create-repository --repository-name mood-melody-aws --region eu-north-1
-      - name: Generate timestamp
-        id: vars
-        run: echo "::set-output name=timestamp::$(date +%Y%m%d%H%M%S)"
-      - name: List files in backend directory
-        run: ls -la ./backend
-      - name: Build and push backend Docker image
-        env:
-          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
-        run: |
-          docker build -t mood-melody-aws:backend-${TIMESTAMP} -t mood-melody-aws:backend-latest ./backend
-          docker tag mood-melody-aws:backend-${TIMESTAMP} ${REPO_URI}:backend-${TIMESTAMP}
-          docker tag mood-melody-aws:backend-latest ${REPO_URI}:backend-latest
-          docker push ${REPO_URI}:backend-${TIMESTAMP}
-          docker push ${REPO_URI}:backend-latest
-      - name: Deploy backend to AWS Lambda
-        env:
-          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
-          LAMBDA_FUNCTION_NAME: mood-melody-backend
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          LAMBDA_ROLE: ${{ secrets.LAMBDA_EXECUTION_ROLE }}
-        run: |
-          LATEST_IMAGE="${REPO_URI}:backend-${TIMESTAMP}"
-          # Check if the Lambda function exists
-          if aws lambda get-function --function-name $LAMBDA_FUNCTION_NAME; then
-            echo "Updating existing Lambda function"
-            aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --image-uri $LATEST_IMAGE
-          else
-            echo "Creating new Lambda function"
-            aws lambda create-function --function-name $LAMBDA_FUNCTION_NAME \
-                                       --package-type Image \
-                                       --code ImageUri=$LATEST_IMAGE \
-                                       --role $LAMBDA_ROLE \
-                                       --timeout 30 \
-                                       --memory-size 512
-          fi
-
-      - name: Create or update API Gateway
-        id: create-or-update-apigateway
-        env:
-          API_NAME: mood-melody-api
-          LAMBDA_FUNCTION_NAME: mood-melody-backend
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_REGION: eu-north-1
-        run: |
-          set -e
-
-          # Create API Gateway if it doesn't exist
-          REST_API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${API_NAME}'].id | [0]" --output text --region $AWS_REGION)
-
-          echo "MARKER1: REST_API_ID: $REST_API_ID"  # Debug statement to print the REST_API_ID
-          if [ "$REST_API_ID" == "None" ]; then
-            echo "Creating new API Gateway"
-            REST_API_ID=$(aws apigateway create-rest-api --name $API_NAME --query 'id' --output text --region $AWS_REGION)
-            echo "REST_API_ID=$REST_API_ID" >> $GITHUB_ENV  # Save the REST_API_ID to the environment
-
-            echo "MARKER2: New REST_API_ID: $REST_API_ID"  # Debug statement
-          else
-            echo "Updating existing API Gateway"
-            echo "REST_API_ID=$REST_API_ID" >> $GITHUB_ENV  # Save the REST_API_ID to the environment
-          fi
-
-          # Get root resource id
-          ROOT_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/'].id" --output text --region $AWS_REGION)
-          echo "MARKER3: ROOT_RESOURCE_ID: $ROOT_RESOURCE_ID"  # Debug statement
-
-          # Function to create or update resource and method
-          create_or_update_resource_and_method() {
-            PARENT_ID=$1
-            RESOURCE_PATH=$2
-            HTTP_METHOD=$3
-
-            echo "PARENT_ID === $PARENT_ID"
-            echo "RESOURCE_PATH === $RESOURCE_PATH"
-
-            # Print all resources for debugging purposes
-            echo "Listing all resources:"
-            aws apigateway get-resources --rest-api-id $REST_API_ID --region $AWS_REGION
-
-            # Create nested resources if necessary
-            IFS='/' read -ra PARTS <<< "$RESOURCE_PATH"
-            CURRENT_PARENT_ID=$PARENT_ID
-
-            FULL_PATH=""
-            for PART in "${PARTS[@]}"; do
-              if [ -n "$PART" ]; then
-                echo "PART ======= $PART"
-
-                FULL_PATH="${FULL_PATH}/${PART}"
-                echo "FULL_PATH ==== $FULL_PATH"
-
-                RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${FULL_PATH}'].id | [0]" --output text --region $AWS_REGION)
-                echo "RESOURCE_ID ====== $RESOURCE_ID"
-
-                if [ "$RESOURCE_ID" == "None" ]; then
-                  RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $CURRENT_PARENT_ID --path-part "$PART" --query 'id' --output text --region $AWS_REGION)
-                fi
-                CURRENT_PARENT_ID=$RESOURCE_ID
-
-                echo "CURRENT_PARENT_ID ====== $CURRENT_PARENT_ID"
-              fi
-            done
-
-            RESOURCE_ID=$CURRENT_PARENT_ID
-            echo "RESOURCE_ID from current parent id ====== $RESOURCE_ID"
-
-            FUNCTION_ARN="arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME"
-            URI="arn:aws:apigateway:$AWS_REGION:lambda:path/2015-03-31/functions/${FUNCTION_ARN}/invocations"
-
-            echo "Function ARN: $FUNCTION_ARN"
-            echo "URI: $URI"
-            echo "MARKER4: REST_API_ID: $REST_API_ID"
-            echo "RESOURCE_ID: $RESOURCE_ID"
-            echo "HTTP_METHOD: $HTTP_METHOD"
-            echo "LAMBDA_FUNCTION_NAME: $LAMBDA_FUNCTION_NAME"  # Debug statement
-
-            set +e
-            METHOD_EXISTS=$(aws apigateway get-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --query 'httpMethod' --output text --region $AWS_REGION 2>/dev/null)
-            set -e
-
-            if [ "$METHOD_EXISTS" != "$HTTP_METHOD" ]; then
-              echo "Creating method $HTTP_METHOD for resource $RESOURCE_PATH"
-              aws apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --authorization-type "NONE" --region $AWS_REGION
-            fi
-
-            echo "Putting integration for method $HTTP_METHOD for resource $RESOURCE_PATH"
-            aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --type "AWS_PROXY" --integration-http-method "POST" --uri "$URI" --region $AWS_REGION
-          }
-
-          # Create or update resources and methods
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/" "GET"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "/test" "GET"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "GET"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "POST"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "DELETE"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/images" "GET"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/images" "POST"
-          create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/images" "DELETE"
-
-          # Deploy the API
-          aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod --region $AWS_REGION
-
-      - name: Add API Gateway Invoke Permission to Lambda
-        env:
-          API_NAME: mood-melody-api
-          LAMBDA_FUNCTION_NAME: mood-melody-backend
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_REGION: eu-north-1
-
-        run: |
-          # Check if permission already exists
-          set +e
-          PERMISSION_EXISTS=$(aws lambda get-policy --function-name arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME --query "Policy" --output text | grep "arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$REST_API_ID/*")
-          set -e
-          if [ -z "$PERMISSION_EXISTS" ]; then
-            echo "MARKER5: Adding permission with REST_API_ID=$REST_API_ID"
-            echo "LAMBDA_FUNCTION_NAME === $LAMBDA_FUNCTION_NAME"
-            aws lambda add-permission --function-name arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME --statement-id api-gateway-invoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$REST_API_ID/*
-          else
-            echo "Permission already exists for REST_API_ID=$REST_API_ID"
-          fi
-
-      - name: Store API Gateway URLs in Parameter Store
-        env:
-          REST_API_ID: ${{ env.REST_API_ID }}
-          AWS_REGION: eu-north-1
-        run: |
-          BASE_URL="https://${REST_API_ID}.execute-api.${AWS_REGION}.amazonaws.com/prod"
-          URLS=(
-            "${BASE_URL}/"
-            "${BASE_URL}/api/images"
-            "${BASE_URL}/api/musics"
-            "${BASE_URL}/test"
-          )
-          for i in "${!URLS[@]}"; do
-            aws ssm put-parameter --name "ApiGatewayInvokeUrl_$i" --value "${URLS[$i]}" --type "String" --overwrite --region $AWS_REGION
-          done
-      - name: Retrieve API Gateway URLs
-        id: get-urls
-        run: |
-          for i in {0..3}; do
-            PARAM_NAME="ApiGatewayInvokeUrl_$i"
-            URL=$(aws ssm get-parameter --name "${PARAM_NAME}" --query "Parameter.Value" --output text)
-            echo "URL retrieved by frontend =====, ${URL}"
-            echo "NEXT_PUBLIC_API_URL_$i=${URL}" >> $GITHUB_ENV
-          done
-
-      - name: List files in frontend directory
-        run: ls -la ./frontend
+          aws ecr describe-repositories --repository-names ${{ env.FRONTEND_REPO }} --region ${{ env.AWS_REGION }} || \
+          aws ecr create-repository --repository-name ${{ env.FRONTEND_REPO }} --region ${{ env.AWS_REGION }}
+          aws ecr describe-repositories --repository-names ${{ env.BACKEND_REPO }} --region ${{ env.AWS_REGION }} || \
+          aws ecr create-repository --repository-name ${{ env.BACKEND_REPO }} --region ${{ env.AWS_REGION }}
 
       - name: Build and push frontend Docker image
         env:
-          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
-
+          REPO_URI: ${{ env.ECR_REGISTRY }}/${{ env.FRONTEND_REPO }}
         run: |
-          build_args=(
-            "NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }}"
-            "NEXT_PUBLIC_API_URL_1=${{ env.NEXT_PUBLIC_API_URL_1 }}"
-            "NEXT_PUBLIC_API_URL_2=${{ env.NEXT_PUBLIC_API_URL_2 }}"
-            "NEXT_PUBLIC_API_URL_3=${{ env.NEXT_PUBLIC_API_URL_3 }}"
-            "CACHEBUST=$(date +%s)"
-          )
+          docker build -t ${{ env.FRONTEND_REPO }}:latest ./frontend
+          docker tag ${{ env.FRONTEND_REPO }}:latest ${REPO_URI}:latest
+          docker push ${REPO_URI}:latest
 
-          build_args_str=""
-          for arg in "${build_args[@]}"; do
-            build_args_str+=" --build-arg $arg"
-          done
-
-          docker build $build_args_str \
-                      -t mood-melody-aws:frontend-${TIMESTAMP} \
-                      -t mood-melody-aws:frontend-latest \
-                      ./frontend
-
-          docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
-          docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
-          docker push ${REPO_URI}:frontend-${TIMESTAMP}
-          docker push ${REPO_URI}:frontend-latest
-
-      - name: Extract frontend files from Docker image
+      - name: Build and push backend Docker image
         env:
-          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+          REPO_URI: ${{ env.ECR_REGISTRY }}/${{ env.BACKEND_REPO }}
         run: |
-          docker create --name extract-container mood-melody-aws:frontend-${TIMESTAMP}
-          # docker cp extract-container:/app/.next ./dist
-          docker cp extract-container:/app/out ./dist
+          docker build -t ${{ env.BACKEND_REPO }}:latest ./backend
+          docker tag ${{ env.BACKEND_REPO }}:latest ${REPO_URI}:latest
+          docker push ${REPO_URI}:latest
 
-          docker rm -f extract-container
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
 
-      - name: List files in dist directory
-        run: ls -la ./dist
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Ensure redirect.html is in dist directory
-        run: |
-          cp frontend/src/app/redirect.html ./dist/redirect.html
-
-      - name: List files in dist directory again
-        run: ls -la ./dist
-
-      - name: Sync frontend files to S3
+      - name: Deploy CloudFormation stack
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: mood-melody-stack
+          template: cloudformation.yaml
+          parameter-overrides: LambdaExecutionRoleArn=${{ secrets.LAMBDA_EXECUTION_ROLE }}
+          capabilities: CAPABILITY_NAMED_IAM
         env:
-          AWS_S3_BUCKET: ${{ secrets.FRONTEND_APP_S3_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: eu-north-1
+# name: Docker Build, Push, Deploy frontend to AWS S3, and Backend to AWS Lambda, and Configure API Gateway
 
-        run: |
-          echo "AWS_S3_BUCKET ====== ${AWS_S3_BUCKET}"
-          if aws s3api head-bucket --bucket "$AWS_S3_BUCKET" 2>/dev/null; then
-            echo "Bucket $AWS_S3_BUCKET already exists."
-          else
-            echo "Bucket $AWS_S3_BUCKET does not exist. Creating bucket."
-            aws s3 mb s3://"$AWS_S3_BUCKET" --region "$AWS_REGION"
-            echo "Enabling static website hosting for $AWS_S3_BUCKET"
-            aws s3 website s3://"$AWS_S3_BUCKET" --index-document index.html --error-document redirect.html
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v1
+#       - name: Set up AWS credentials
+#         uses: ./.github/actions/aws-credentials
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#       - name: Log in to Amazon ECR
+#         run: |
+#           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 536560382233.dkr.ecr.eu-north-1.amazonaws.com
+#       - name: Create ECR repository if it does not exist
+#         run: |
+#           aws ecr describe-repositories --repository-names mood-melody-aws --region eu-north-1 || \
+#           aws ecr create-repository --repository-name mood-melody-aws --region eu-north-1
+#       - name: Generate timestamp
+#         id: vars
+#         run: echo "::set-output name=timestamp::$(date +%Y%m%d%H%M%S)"
+#       - name: List files in backend directory
+#         run: ls -la ./backend
+#       - name: Build and push backend Docker image
+#         env:
+#           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+#           REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+#         run: |
+#           docker build -t mood-melody-aws:backend-${TIMESTAMP} -t mood-melody-aws:backend-latest ./backend
+#           docker tag mood-melody-aws:backend-${TIMESTAMP} ${REPO_URI}:backend-${TIMESTAMP}
+#           docker tag mood-melody-aws:backend-latest ${REPO_URI}:backend-latest
+#           docker push ${REPO_URI}:backend-${TIMESTAMP}
+#           docker push ${REPO_URI}:backend-latest
+#       - name: Deploy backend to AWS Lambda
+#         env:
+#           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+#           REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+#           LAMBDA_FUNCTION_NAME: mood-melody-backend
+#           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+#           LAMBDA_ROLE: ${{ secrets.LAMBDA_EXECUTION_ROLE }}
+#         run: |
+#           LATEST_IMAGE="${REPO_URI}:backend-${TIMESTAMP}"
+#           # Check if the Lambda function exists
+#           if aws lambda get-function --function-name $LAMBDA_FUNCTION_NAME; then
+#             echo "Updating existing Lambda function"
+#             aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --image-uri $LATEST_IMAGE
+#           else
+#             echo "Creating new Lambda function"
+#             aws lambda create-function --function-name $LAMBDA_FUNCTION_NAME \
+#                                        --package-type Image \
+#                                        --code ImageUri=$LATEST_IMAGE \
+#                                        --role $LAMBDA_ROLE \
+#                                        --timeout 30 \
+#                                        --memory-size 512
+#           fi
 
-            echo "Disabling Block Public Access settings for $AWS_S3_BUCKET"
-            aws s3api put-public-access-block --bucket "$AWS_S3_BUCKET" --public-access-block-configuration '{
-              "BlockPublicAcls": false,
-              "IgnorePublicAcls": false,
-              "BlockPublicPolicy": false,
-              "RestrictPublicBuckets": false
-            }'
+#       - name: Create or update API Gateway
+#         id: create-or-update-apigateway
+#         env:
+#           API_NAME: mood-melody-api
+#           LAMBDA_FUNCTION_NAME: mood-melody-backend
+#           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+#           AWS_REGION: eu-north-1
+#         run: |
+#           set -e
 
-            echo "Setting public access policy for $AWS_S3_BUCKET"
-            POLICY='{
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Principal": "*",
-                  "Action": "s3:GetObject",
-                  "Resource": "arn:aws:s3:::'"$AWS_S3_BUCKET"'/*"
-                }
-              ]
-            }'
-            aws s3api put-bucket-policy --bucket "$AWS_S3_BUCKET" --policy "$POLICY"
-            
-          fi
+#           # Create API Gateway if it doesn't exist
+#           REST_API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${API_NAME}'].id | [0]" --output text --region $AWS_REGION)
 
-          aws s3 sync ./dist s3://"$AWS_S3_BUCKET" --region "$AWS_REGION" --delete
+#           echo "MARKER1: REST_API_ID: $REST_API_ID"  # Debug statement to print the REST_API_ID
+#           if [ "$REST_API_ID" == "None" ]; then
+#             echo "Creating new API Gateway"
+#             REST_API_ID=$(aws apigateway create-rest-api --name $API_NAME --query 'id' --output text --region $AWS_REGION)
+#             echo "REST_API_ID=$REST_API_ID" >> $GITHUB_ENV  # Save the REST_API_ID to the environment
+
+#             echo "MARKER2: New REST_API_ID: $REST_API_ID"  # Debug statement
+#           else
+#             echo "Updating existing API Gateway"
+#             echo "REST_API_ID=$REST_API_ID" >> $GITHUB_ENV  # Save the REST_API_ID to the environment
+#           fi
+
+#           # Get root resource id
+#           ROOT_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='/'].id" --output text --region $AWS_REGION)
+#           echo "MARKER3: ROOT_RESOURCE_ID: $ROOT_RESOURCE_ID"  # Debug statement
+
+#           # Function to create or update resource and method
+#           create_or_update_resource_and_method() {
+#             PARENT_ID=$1
+#             RESOURCE_PATH=$2
+#             HTTP_METHOD=$3
+
+#             echo "PARENT_ID === $PARENT_ID"
+#             echo "RESOURCE_PATH === $RESOURCE_PATH"
+
+#             # Print all resources for debugging purposes
+#             echo "Listing all resources:"
+#             aws apigateway get-resources --rest-api-id $REST_API_ID --region $AWS_REGION
+
+#             # Create nested resources if necessary
+#             IFS='/' read -ra PARTS <<< "$RESOURCE_PATH"
+#             CURRENT_PARENT_ID=$PARENT_ID
+
+#             FULL_PATH=""
+#             for PART in "${PARTS[@]}"; do
+#               if [ -n "$PART" ]; then
+#                 echo "PART ======= $PART"
+
+#                 FULL_PATH="${FULL_PATH}/${PART}"
+#                 echo "FULL_PATH ==== $FULL_PATH"
+
+#                 RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $REST_API_ID --query "items[?path=='${FULL_PATH}'].id | [0]" --output text --region $AWS_REGION)
+#                 echo "RESOURCE_ID ====== $RESOURCE_ID"
+
+#                 if [ "$RESOURCE_ID" == "None" ]; then
+#                   RESOURCE_ID=$(aws apigateway create-resource --rest-api-id $REST_API_ID --parent-id $CURRENT_PARENT_ID --path-part "$PART" --query 'id' --output text --region $AWS_REGION)
+#                 fi
+#                 CURRENT_PARENT_ID=$RESOURCE_ID
+
+#                 echo "CURRENT_PARENT_ID ====== $CURRENT_PARENT_ID"
+#               fi
+#             done
+
+#             RESOURCE_ID=$CURRENT_PARENT_ID
+#             echo "RESOURCE_ID from current parent id ====== $RESOURCE_ID"
+
+#             FUNCTION_ARN="arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME"
+#             URI="arn:aws:apigateway:$AWS_REGION:lambda:path/2015-03-31/functions/${FUNCTION_ARN}/invocations"
+
+#             echo "Function ARN: $FUNCTION_ARN"
+#             echo "URI: $URI"
+#             echo "MARKER4: REST_API_ID: $REST_API_ID"
+#             echo "RESOURCE_ID: $RESOURCE_ID"
+#             echo "HTTP_METHOD: $HTTP_METHOD"
+#             echo "LAMBDA_FUNCTION_NAME: $LAMBDA_FUNCTION_NAME"  # Debug statement
+
+#             set +e
+#             METHOD_EXISTS=$(aws apigateway get-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --query 'httpMethod' --output text --region $AWS_REGION 2>/dev/null)
+#             set -e
+
+#             if [ "$METHOD_EXISTS" != "$HTTP_METHOD" ]; then
+#               echo "Creating method $HTTP_METHOD for resource $RESOURCE_PATH"
+#               aws apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --authorization-type "NONE" --region $AWS_REGION
+#             fi
+
+#             echo "Putting integration for method $HTTP_METHOD for resource $RESOURCE_PATH"
+#             aws apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method $HTTP_METHOD --type "AWS_PROXY" --integration-http-method "POST" --uri "$URI" --region $AWS_REGION
+#           }
+
+#           # Create or update resources and methods
+#           create_or_update_resource_and_method $ROOT_RESOURCE_ID "/" "GET"
+#           create_or_update_resource_and_method $ROOT_RESOURCE_ID "/test" "GET"
+#           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "GET"
+#           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "POST"
+#           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/musics" "DELETE"
+#           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/images" "GET"
+#           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/images" "POST"
+#           create_or_update_resource_and_method $ROOT_RESOURCE_ID "api/images" "DELETE"
+
+#           # Deploy the API
+#           aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod --region $AWS_REGION
+
+#       - name: Add API Gateway Invoke Permission to Lambda
+#         env:
+#           API_NAME: mood-melody-api
+#           LAMBDA_FUNCTION_NAME: mood-melody-backend
+#           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+#           AWS_REGION: eu-north-1
+
+#         run: |
+#           # Check if permission already exists
+#           set +e
+#           PERMISSION_EXISTS=$(aws lambda get-policy --function-name arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME --query "Policy" --output text | grep "arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$REST_API_ID/*")
+#           set -e
+#           if [ -z "$PERMISSION_EXISTS" ]; then
+#             echo "MARKER5: Adding permission with REST_API_ID=$REST_API_ID"
+#             echo "LAMBDA_FUNCTION_NAME === $LAMBDA_FUNCTION_NAME"
+#             aws lambda add-permission --function-name arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$LAMBDA_FUNCTION_NAME --statement-id api-gateway-invoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$REST_API_ID/*
+#           else
+#             echo "Permission already exists for REST_API_ID=$REST_API_ID"
+#           fi
+
+#       - name: Store API Gateway URLs in Parameter Store
+#         env:
+#           REST_API_ID: ${{ env.REST_API_ID }}
+#           AWS_REGION: eu-north-1
+#         run: |
+#           BASE_URL="https://${REST_API_ID}.execute-api.${AWS_REGION}.amazonaws.com/prod"
+#           URLS=(
+#             "${BASE_URL}/"
+#             "${BASE_URL}/api/images"
+#             "${BASE_URL}/api/musics"
+#             "${BASE_URL}/test"
+#           )
+#           for i in "${!URLS[@]}"; do
+#             aws ssm put-parameter --name "ApiGatewayInvokeUrl_$i" --value "${URLS[$i]}" --type "String" --overwrite --region $AWS_REGION
+#           done
+#       - name: Retrieve API Gateway URLs
+#         id: get-urls
+#         run: |
+#           for i in {0..3}; do
+#             PARAM_NAME="ApiGatewayInvokeUrl_$i"
+#             URL=$(aws ssm get-parameter --name "${PARAM_NAME}" --query "Parameter.Value" --output text)
+#             echo "URL retrieved by frontend =====, ${URL}"
+#             echo "NEXT_PUBLIC_API_URL_$i=${URL}" >> $GITHUB_ENV
+#           done
+
+#       - name: List files in frontend directory
+#         run: ls -la ./frontend
+
+#       - name: Build and push frontend Docker image
+#         env:
+#           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+#           REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+
+#         run: |
+#           build_args=(
+#             "NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }}"
+#             "NEXT_PUBLIC_API_URL_1=${{ env.NEXT_PUBLIC_API_URL_1 }}"
+#             "NEXT_PUBLIC_API_URL_2=${{ env.NEXT_PUBLIC_API_URL_2 }}"
+#             "NEXT_PUBLIC_API_URL_3=${{ env.NEXT_PUBLIC_API_URL_3 }}"
+#             "CACHEBUST=$(date +%s)"
+#           )
+
+#           build_args_str=""
+#           for arg in "${build_args[@]}"; do
+#             build_args_str+=" --build-arg $arg"
+#           done
+
+#           docker build $build_args_str \
+#                       -t mood-melody-aws:frontend-${TIMESTAMP} \
+#                       -t mood-melody-aws:frontend-latest \
+#                       ./frontend
+
+#           docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
+#           docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
+#           docker push ${REPO_URI}:frontend-${TIMESTAMP}
+#           docker push ${REPO_URI}:frontend-latest
+
+#       - name: Extract frontend files from Docker image
+#         env:
+#           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+#         run: |
+#           docker create --name extract-container mood-melody-aws:frontend-${TIMESTAMP}
+#           # docker cp extract-container:/app/.next ./dist
+#           docker cp extract-container:/app/out ./dist
+
+#           docker rm -f extract-container
+
+#       - name: List files in dist directory
+#         run: ls -la ./dist
+
+#       - name: Ensure redirect.html is in dist directory
+#         run: |
+#           cp frontend/src/app/redirect.html ./dist/redirect.html
+
+#       - name: List files in dist directory again
+#         run: ls -la ./dist
+
+#       - name: Sync frontend files to S3
+#         env:
+#           AWS_S3_BUCKET: ${{ secrets.FRONTEND_APP_S3_NAME }}
+#           AWS_REGION: eu-north-1
+
+#         run: |
+#           echo "AWS_S3_BUCKET ====== ${AWS_S3_BUCKET}"
+#           if aws s3api head-bucket --bucket "$AWS_S3_BUCKET" 2>/dev/null; then
+#             echo "Bucket $AWS_S3_BUCKET already exists."
+#           else
+#             echo "Bucket $AWS_S3_BUCKET does not exist. Creating bucket."
+#             aws s3 mb s3://"$AWS_S3_BUCKET" --region "$AWS_REGION"
+#             echo "Enabling static website hosting for $AWS_S3_BUCKET"
+#             aws s3 website s3://"$AWS_S3_BUCKET" --index-document index.html --error-document redirect.html
+
+#             echo "Disabling Block Public Access settings for $AWS_S3_BUCKET"
+#             aws s3api put-public-access-block --bucket "$AWS_S3_BUCKET" --public-access-block-configuration '{
+#               "BlockPublicAcls": false,
+#               "IgnorePublicAcls": false,
+#               "BlockPublicPolicy": false,
+#               "RestrictPublicBuckets": false
+#             }'
+
+#             echo "Setting public access policy for $AWS_S3_BUCKET"
+#             POLICY='{
+#               "Version": "2012-10-17",
+#               "Statement": [
+#                 {
+#                   "Effect": "Allow",
+#                   "Principal": "*",
+#                   "Action": "s3:GetObject",
+#                   "Resource": "arn:aws:s3:::'"$AWS_S3_BUCKET"'/*"
+#                 }
+#               ]
+#             }'
+#             aws s3api put-bucket-policy --bucket "$AWS_S3_BUCKET" --policy "$POLICY"
+
+#           fi
+
+#           aws s3 sync ./dist s3://"$AWS_S3_BUCKET" --region "$AWS_REGION" --delete

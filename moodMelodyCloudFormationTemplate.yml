@@ -1,0 +1,118 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation template for deploying frontend and backend to AWS Lambda
+
+Parameters:
+  LambdaExecutionRoleArn:
+    Type: String
+    Description: The ARN of the Lambda execution role
+
+Resources:
+  # Frontend Lambda Function
+  FrontendLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: mood-melody-frontend
+      Role: !Ref LambdaExecutionRoleArn
+      PackageType: Image
+      Code:
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-frontend:latest"
+      Timeout: 30
+      MemorySize: 512
+
+  # Backend Lambda Function
+  BackendLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: mood-melody-backend
+      Role: !Ref LambdaExecutionRoleArn
+      PackageType: Image
+      Code:
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-backend:latest"
+      Timeout: 30
+      MemorySize: 512
+
+  # API Gateway REST API
+  ApiGatewayRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: mood-melody-api
+
+  # API Gateway Methods for Backend
+  ApiGatewayBackendResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+      PathPart: backend
+      RestApiId: !Ref ApiGatewayRestApi
+
+  ApiGatewayBackendGetMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      ResourceId: !Ref ApiGatewayBackendResource
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+
+  ApiGatewayBackendPostMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: POST
+      ResourceId: !Ref ApiGatewayBackendResource
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+
+  # API Gateway Methods for Frontend
+  ApiGatewayFrontendResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+      PathPart: frontend
+      RestApiId: !Ref ApiGatewayRestApi
+
+  ApiGatewayFrontendGetMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      ResourceId: !Ref ApiGatewayFrontendResource
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
+
+  # API Gateway Deployment
+  ApiGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      StageName: prod
+    DependsOn:
+      - ApiGatewayBackendGetMethod
+      - ApiGatewayBackendPostMethod
+      - ApiGatewayFrontendGetMethod
+
+  # Lambda Invoke Permissions
+  BackendLambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref BackendLambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*"
+
+  FrontendLambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref FrontendLambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*"
