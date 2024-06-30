@@ -65,7 +65,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: mood-melody-stack
-          template: cloudformation.yaml
+          template: moodMelodyCloudFormationTemplate.yaml
           parameter-overrides: LambdaExecutionRoleArn=${{ secrets.LAMBDA_EXECUTION_ROLE }}
           capabilities: CAPABILITY_NAMED_IAM
         env:
