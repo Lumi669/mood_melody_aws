@@ -47,7 +47,7 @@ jobs:
           REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
 
         run: |
-          docker build -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./backend
+          docker build -t mood-melody-aws:frontend-${TIMESTAMP} -t mood-melody-aws:frontend-latest ./frontend
           docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
           docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
           docker push ${REPO_URI}:frontend-${TIMESTAMP}
