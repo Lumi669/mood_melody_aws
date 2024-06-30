@@ -12,8 +12,8 @@ jobs:
     env:
       AWS_REGION: eu-north-1
       ECR_REGISTRY: 536560382233.dkr.ecr.eu-north-1.amazonaws.com
-      FRONTEND_REPO: mood-melody-frontend
-      BACKEND_REPO: mood-melody-backend
+      FRONTEND_REPO: mood_melody_frontend
+      BACKEND_REPO: mood_melody_backend
 
     steps:
       - name: Checkout code

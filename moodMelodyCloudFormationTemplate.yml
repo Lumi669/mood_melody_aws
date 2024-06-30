@@ -11,11 +11,11 @@ Resources:
   FrontendLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: mood-melody-frontend
+      FunctionName: mood_melody_frontend
       Role: !Ref LambdaExecutionRoleArn
       PackageType: Image
       Code:
-        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-frontend:latest"
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood_melody_frontend:latest"
       Timeout: 30
       MemorySize: 512
 
@@ -23,11 +23,11 @@ Resources:
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: mood-melody-backend
+      FunctionName: mood_melody_backend
       Role: !Ref LambdaExecutionRoleArn
       PackageType: Image
       Code:
-        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-backend:latest"
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood_melody_backend:latest"
       Timeout: 30
       MemorySize: 512
 
