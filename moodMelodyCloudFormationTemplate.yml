@@ -157,4 +157,17 @@ Resources:
     Properties:
       Action: "lambda:InvokeFunction"
       FunctionName: !GetAtt FrontendLambdaFunction.Arn
-      Principal:
+      Principal: "apigateway.amazonaws.com"
+      SourceArn:
+        Fn::Sub: "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${FrontendApiGatewayRestApi}/*/*"
+
+Outputs:
+  BackendApiUrl:
+    Value: !Ref ApiGatewayOutputs
+    Export:
+      Name: BackendApiUrl
+  FrontendApiUrl:
+    Value:
+      Fn::Sub: "https://${FrontendApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/frontend-api"
+    Export:
+      Name: FrontendApiUrl
