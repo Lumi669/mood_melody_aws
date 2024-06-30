@@ -5,7 +5,7 @@ Parameters:
     Description: URI of the Docker image for the backend
   FrontendImageUri:
     Type: String
-    Description: URI of the Docker image for the frontend (if available)
+    Description: URI of the Docker image for the frontend
 
 Resources:
   BackendLambdaFunction:
@@ -19,6 +19,17 @@ Resources:
       Timeout: 30
       MemorySize: 512
 
+  FrontendLambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: "mood-melody-frontend"
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ImageUri: !Ref FrontendImageUri
+      PackageType: "Image"
+      Timeout: 30
+      MemorySize: 512
+
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -27,8 +38,10 @@ Resources:
         Statement:
           - Effect: "Allow"
             Principal:
-              Service: "lambda.amazonaws.com"
-            Action: "sts:AssumeRole"
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
       Policies:
         - PolicyName: "LambdaExecutionPolicy"
           PolicyDocument:
@@ -106,18 +119,6 @@ Resources:
       Value:
         Fn::Sub: "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
 
-  FrontendLambdaFunction:
-    Condition: FrontendImageAvailable
-    Type: "AWS::Lambda::Function"
-    Properties:
-      FunctionName: "mood-melody-frontend"
-      Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        ImageUri: !Ref FrontendImageUri
-      PackageType: "Image"
-      Timeout: 30
-      MemorySize: 512
-
   FrontendApiGatewayRestApi:
     Type: "AWS::ApiGateway::RestApi"
     Properties:
@@ -156,21 +157,4 @@ Resources:
     Properties:
       Action: "lambda:InvokeFunction"
       FunctionName: !GetAtt FrontendLambdaFunction.Arn
-      Principal: "apigateway.amazonaws.com"
-      SourceArn:
-        Fn::Sub: "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${FrontendApiGatewayRestApi}/*/*"
-
-Conditions:
-  FrontendImageAvailable: !Not [!Equals [!Ref FrontendImageUri, ""]]
-
-Outputs:
-  BackendApiUrl:
-    Value: !Ref ApiGatewayOutputs
-    Export:
-      Name: BackendApiUrl
-  FrontendApiUrl:
-    Condition: FrontendImageAvailable
-    Value:
-      Fn::Sub: "https://${FrontendApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/frontend-api"
-    Export:
-      Name: FrontendApiUrl
+      Principal:
