@@ -95,15 +95,58 @@ jobs:
           docker push ${REPO_URI}:${{ env.TIMESTAMP }}
           docker push ${REPO_URI}:latest
 
-      - name: Deploy updated CloudFormation stack with frontend image
+      - name: Delete existing CloudFormation stack if it exists
+        run: |
+          aws cloudformation delete-stack --stack-name mood-melody-stack || true
+          aws cloudformation wait stack-delete-complete --stack-name mood-melody-stack || true
+
+      - name: Deploy initial CloudFormation stack
+        run: |
+          aws cloudformation deploy \
+            --template-file moodMelodyCloudFormationTemplate.yml \
+            --stack-name mood-melody-stack \
+            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+            --parameter-overrides BackendImageUri=${REPO_URI}:${{ env.TIMESTAMP }}
+
+      - name: Retrieve backend API Gateway URL from SSM
+        id: get-urls
+        run: |
+          BACKEND_API_URL=$(aws ssm get-parameter --name /MoodMelody/ApiGatewayUrl --region eu-north-1 --query "Parameter.Value" --output text)
+          echo "::set-output name=backend_api_url::$BACKEND_API_URL"
+
+      - name: Build and push frontend Docker image
+        env:
+          TIMESTAMP: ${{ github.run_id }}
+          REPO_URI: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
+          NEXT_PUBLIC_API_URL_0: ${{ steps.get-urls.outputs.backend_api_url }}
+        run: |
+          docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
+                       --build-arg NEXT_PUBLIC_API_URL_1=${{ secrets.NEXT_PUBLIC_API_URL_1 }} \
+                       --build-arg NEXT_PUBLIC_API_URL_2=${{ secrets.NEXT_PUBLIC_API_URL_2 }} \
+                       --build-arg NEXT_PUBLIC_API_URL_3=${{ secrets.NEXT_PUBLIC_API_URL_3 }} \
+                       -t mood-melody-aws-frontend:${{ env.TIMESTAMP }} \
+                       -t mood-melody-aws-frontend:latest \
+                       ./frontend
+          docker tag mood-melody-aws-frontend:${{ env.TIMESTAMP }} ${REPO_URI}:${{ env.TIMESTAMP }}
+          docker tag mood-melody-aws-frontend:latest ${REPO_URI}:latest
+          docker push mood-melody-aws-frontend:${{ env.TIMESTAMP }}
+          docker push mood-melody-aws-frontend:latest
+
+      - name: Update CloudFormation stack with frontend image
         run: |
           aws cloudformation deploy \
             --template-file moodMelodyCloudFormationTemplate.yml \
             --stack-name mood-melody-stack \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --parameter-overrides \
-              BackendImageUri=${REPO_URI}:${{ needs.build-and-push.outputs.backend_api_url }} \
-              FrontendImageUri=${REPO_URI}:${{ env.TIMESTAMP }}
+              BackendImageUri=${REPO_URI}:${{ github.run_id }} \
+              FrontendImageUri=${REPO_URI}:${{ github.run_id }}
+        continue-on-error: true
+
+      - name: Fetch CloudFormation stack events on failure
+        if: failure()
+        run: |
+          aws cloudformation describe-stack-events --stack-name mood-melody-stack
 
 # name: Docker Build, Push, Deploy frontend to AWS S3, and Backend to AWS Lambda, and Configure API Gateway
 
