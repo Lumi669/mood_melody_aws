@@ -98,7 +98,7 @@ jobs:
       - name: Deploy updated CloudFormation stack with frontend image
         run: |
           aws cloudformation deploy \
-            --template-file cloudformation-template.yaml \
+            --template-file moodMelodyCloudFormationTemplate.yml \
             --stack-name mood-melody-stack \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --parameter-overrides \
