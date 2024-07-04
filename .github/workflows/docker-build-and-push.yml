@@ -70,7 +70,7 @@ jobs:
           echo "::set-output name=outputs::$outputs"
 
   build-and-deploy-frontend:
-    needs: build-and-push
+    needs: build-and-deploy-backend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
