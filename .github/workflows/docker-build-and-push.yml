@@ -57,7 +57,6 @@ jobs:
             --template-file cloudformation/ci-cd-backend.yml \
             --stack-name mood-melody-backend \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
-            # --parameter-overrides BackendImageUri=$IMAGE_URI \
             --region eu-north-1
 
       - name: Describe CloudFormation Stack to save output to a JSON file
