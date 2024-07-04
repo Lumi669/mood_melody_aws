@@ -19,7 +19,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Log in to Amazon ECR
         run: |
-          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com
+          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com
       - name: Create ECR repository if it does not exist
         run: |
           aws ecr describe-repositories --repository-names mood-melody-aws --region eu-north-1 || \
@@ -32,7 +32,7 @@ jobs:
       - name: Build and push backend Docker image
         env:
           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-          REPO_URI: ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+          REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
         run: |
           docker build -t mood-melody-aws:backend-${TIMESTAMP} -t mood-melody-aws:backend-latest ./backend
           docker tag mood-melody-aws:backend-${TIMESTAMP} ${REPO_URI}:backend-${TIMESTAMP}
@@ -42,7 +42,7 @@ jobs:
 
       - name: Store ECR Image URI in SSM Parameter Store
         run: |
-          IMAGE_URI="${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:backend-latest"
+          IMAGE_URI="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:backend-latest"
           echo "Storing Image URI in SSM Parameter Store: $IMAGE_URI"
           aws ssm put-parameter --name "backend-ecr-uri" --value "$IMAGE_URI" --type String --overwrite --region eu-north-1
         env:
@@ -51,7 +51,7 @@ jobs:
 
       - name: Deploy Backend CloudFormation stack
         run: |
-          IMAGE_URI="${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:backend-latest"
+          IMAGE_URI="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:backend-latest"
           echo "Deploying Backend CloudFormation stack with Image URI===== $IMAGE_URI"
           aws cloudformation deploy \
             --template-file cloudformation/ci-cd-backend.yml \
@@ -93,12 +93,12 @@ jobs:
 
       - name: Log in to Amazon ECR
         run: |
-          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com
+          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com
 
       - name: Build and push frontend Docker image
         env:
           TIMESTAMP: ${{ github.run_id }}
-          REPO_URI: ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
+          REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
           NEXT_PUBLIC_API_URL_0: ${{ needs.build-and-push.outputs.backend_api_url }}
         run: |
           docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
@@ -135,7 +135,7 @@ jobs:
       - name: Build and push frontend Docker image
         env:
           TIMESTAMP: ${{ github.run_id }}
-          REPO_URI: ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
+          REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
           NEXT_PUBLIC_API_URL_0: ${{ steps.get-urls.outputs.backend_api_url }}
         run: |
           docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
@@ -187,7 +187,7 @@ jobs:
 #           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 #       - name: Log in to Amazon ECR
 #         run: |
-#           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com
+#           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com
 #       - name: Create ECR repository if it does not exist
 #         run: |
 #           aws ecr describe-repositories --repository-names mood-melody-aws --region eu-north-1 || \
@@ -200,7 +200,7 @@ jobs:
 #       - name: Build and push backend Docker image
 #         env:
 #           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-#           REPO_URI: ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+#           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
 #         run: |
 #           docker build -t mood-melody-aws:backend-${TIMESTAMP} -t mood-melody-aws:backend-latest ./backend
 #           docker tag mood-melody-aws:backend-${TIMESTAMP} ${REPO_URI}:backend-${TIMESTAMP}
@@ -210,7 +210,7 @@ jobs:
 #       - name: Deploy backend to AWS Lambda
 #         env:
 #           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-#           REPO_URI: ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+#           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
 #           LAMBDA_FUNCTION_NAME: mood-melody-backend
 #           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 #           LAMBDA_ROLE: ${{ secrets.LAMBDA_EXECUTION_ROLE }}
@@ -386,7 +386,7 @@ jobs:
 #       - name: Build and push frontend Docker image
 #         env:
 #           TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
-#           REPO_URI: ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+#           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
 
 #         run: |
 #           build_args=(
