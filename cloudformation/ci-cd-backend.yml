@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
   BackendImageUri:
     Type: String
-    # Default: !Sub "{{resolve:ssm:backendImageUri:latest}}"
+    Description: "URI of the backend Docker image"
 
 Resources:
   BackendLambdaFunction:
@@ -75,7 +75,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
   ApiGatewayMethodTest:
     Type: AWS::ApiGateway::Method
@@ -87,7 +87,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri: !Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
   ApiGatewayMethodImages:
     Type: AWS::ApiGateway::Method
@@ -99,7 +99,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri: !Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
   ApiGatewayMethodMusic:
     Type: AWS::ApiGateway::Method
@@ -111,17 +111,15 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri: !Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
-      [
-        ApiGatewayMethodRoot,
-        ApiGatewayMethodTest,
-        ApiGatewayMethodImages,
-        ApiGatewayMethodMusic,
-      ]
+      - ApiGatewayMethodRoot
+      - ApiGatewayMethodTest
+      - ApiGatewayMethodImages
+      - ApiGatewayMethodMusic
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
