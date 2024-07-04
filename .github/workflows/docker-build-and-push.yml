@@ -54,7 +54,7 @@ jobs:
             --stack-name mood-melody-stack \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --parameter-overrides \
-              BackendImageUri=${{ steps.login-ecr.outputs.registry }}/mood_melody_aws:${{ github.sha }} \
+              BackendImageUri=536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:${{ steps.vars.outputs.timestamp }} \
             --region eu-north-1
 
       - name: Describe CloudFormation Stack to save output to a JSON file

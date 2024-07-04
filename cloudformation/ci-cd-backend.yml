@@ -75,8 +75,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri:
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
 
   ApiGatewayMethodTest:
     Type: AWS::ApiGateway::Method
@@ -88,8 +87,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri:
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
+        Uri: !Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
 
   ApiGatewayMethodImages:
     Type: AWS::ApiGateway::Method
@@ -101,8 +99,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri:
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
+        Uri: !Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
 
   ApiGatewayMethodMusic:
     Type: AWS::ApiGateway::Method
@@ -114,8 +111,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri:
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
+        Uri: !Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MoodMelodyBackendFunction.Arn}/invocations
 
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
