@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Parameters:
-  BackendImageUri:
-    Type: "AWS::SSM::Parameter::Value<String>"
-    Description: "URI of the backend Docker image"
+# Parameters:
+#   BackendImageUri:
+#     Type: "AWS::SSM::Parameter::Value<String>"
+#     Description: "URI of the backend Docker image"
 
 Resources:
   BackendLambdaFunction:
@@ -11,7 +11,7 @@ Resources:
       FunctionName: MoodMelodyBackendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        ImageUri: !Ref BackendImageUri
+        ImageUri: "{{resolve:ssm:backend-ecr-uri}}"
       PackageType: Image
 
   LambdaExecutionRole:
