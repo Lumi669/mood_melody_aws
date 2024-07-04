@@ -3,6 +3,7 @@ Parameters:
   BackendImageUri:
     Type: String
     Description: "URI of the backend Docker image"
+    Default: ""
 
 Resources:
   BackendLambdaFunction:
