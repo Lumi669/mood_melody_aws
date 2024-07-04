@@ -1,17 +1,17 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
-  BackendImageUri:
-    Type: "AWS::SSM::Parameter::Value<String>"
-    Description: "URI of the backend Docker image"
+  FrontendImageUri:
+    Type: String
+    Description: "URI of the frontend Docker image"
 
 Resources:
-  BackendLambdaFunction:
+  FrontendLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: MoodMelodyBackendFunction
+      FunctionName: MoodMelodyFrontendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        ImageUri: !Ref BackendImageUri
+        ImageUri: !Ref FrontendImageUri
       PackageType: Image
 
   LambdaExecutionRole:
@@ -41,27 +41,27 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: MoodMelodyBackendApi
+      Name: MoodMelodyFrontendApi
 
   ApiGatewayResourceRoot:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
-      PathPart: api
+      PathPart: /
       RestApiId: !Ref ApiGatewayRestApi
 
-  ApiGatewayResourceImages:
+  ApiGatewayResourceAllMusic:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref ApiGatewayResourceRoot
-      PathPart: images
+      PathPart: allmusic
       RestApiId: !Ref ApiGatewayRestApi
 
   ApiGatewayResourceMusic:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref ApiGatewayResourceRoot
-      PathPart: musics
+      PathPart: allmusic
       RestApiId: !Ref ApiGatewayRestApi
 
   ApiGatewayMethodRoot:
@@ -74,7 +74,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
 
   ApiGatewayMethodTest:
     Type: AWS::ApiGateway::Method
@@ -86,7 +86,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
 
   ApiGatewayMethodImages:
     Type: AWS::ApiGateway::Method
@@ -98,7 +98,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
 
   ApiGatewayMethodMusic:
     Type: AWS::ApiGateway::Method
@@ -110,7 +110,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
-        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
 
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
@@ -127,13 +127,13 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref BackendLambdaFunction
+      FunctionName: !Ref FrontendLambdaFunction
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*"
 
 Outputs:
   BackendApiUrl:
-    Description: "URL for the backend API Gateway"
+    Description: "URL for the frontend API Gateway"
     Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
     Export:
-      Name: BackendApiUrl
+      Name: FrontendApiUrl
