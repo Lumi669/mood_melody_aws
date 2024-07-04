@@ -50,18 +50,24 @@ jobs:
       - name: Deploy CloudFormation stack
         run: |
           aws cloudformation deploy \
-            --template-file moodMelodyCloudFormationTemplate.yml\
+            --template-file cloudformaton/ci-cd-backend.yml\
             --stack-name mood-melody-stack \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --parameter-overrides \
               BackendImageUri=${{ steps.login-ecr.outputs.registry }}/mood_melody_aws:${{ github.sha }} \
             --region eu-north-1
 
-      - name: Retrieve API Gateway URLs from SSM
-        id: get-urls
+      - name: Describe CloudFormation Stack to save output to a JSON file
+        id: describe-stack
         run: |
-          BACKEND_API_URL=$(aws ssm get-parameter --name /MoodMelody/ApiGatewayUrl --region eu-north-1 --query "Parameter.Value" --output text)
-          echo "::set-output name=backend_api_url::$BACKEND_API_URL"
+          aws cloudformation describe-stacks --stack-name mood-melody-backend > stack-description.json
+          cat stack-description.json
+
+      - name: Get Outputs from Stack
+        id: get-outputs
+        run: |
+          outputs=$(jq -r '.Stacks[0].Outputs' stack-description.json)
+          echo "::set-output name=outputs::$outputs"
 
   build-and-deploy-frontend:
     needs: build-and-push
