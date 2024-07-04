@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
   BackendImageUri:
     Type: String
-    Default: !Sub "{{resolve:ssm:backendImageUri:latest}}"
+    # Default: !Sub "{{resolve:ssm:backendImageUri:latest}}"
 
 Resources:
   BackendLambdaFunction:
