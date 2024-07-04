@@ -48,7 +48,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Deploy Backend CloudFormation stack
+
         run: |
+          IMAGE_URI=536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:${{ steps.vars.outputs.timestamp }}
+          echo "Deploying Backend CloudFormation stack with Image URI===== $IMAGE_URI"
           aws cloudformation deploy \
             --template-file cloudformation/ci-cd-backend.yml\
             --stack-name mood-melody-stack \
