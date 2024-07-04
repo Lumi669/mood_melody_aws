@@ -9,7 +9,6 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: MoodMelodyBackendFunction
-      Handler: index.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         ImageUri: !Ref BackendImageUri
