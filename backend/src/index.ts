@@ -128,7 +128,7 @@ app.get("/api/musics", async (req, res) => {
 app.delete("/api/musics", async (req, res) => {
   try {
     await Music.destroy({ where: {} });
-    res.status(200).json({ message: "All data deleted successfully" });
+    res.status(200).json({ message: "All data deleted successfully !!!!!!" });
   } catch (error: unknown) {
     if (error instanceof Error) {
       res
