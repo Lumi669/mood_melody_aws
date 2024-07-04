@@ -3,9 +3,9 @@ Parameters:
   BackendImageUri:
     Type: String
     Description: URI of the Docker image for the backend
-  FrontendImageUri:
-    Type: String
-    Description: URI of the Docker image for the frontend
+  # FrontendImageUri:
+  #   Type: String
+  #   Description: URI of the Docker image for the frontend
 
 Resources:
   BackendLambdaFunction:
