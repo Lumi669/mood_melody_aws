@@ -62,7 +62,7 @@ jobs:
             --template-file cloudformation/ci-cd-backend.yml \
             --stack-name mood-melody-backend \
             --region eu-north-1
-            --debug
+
         env:
           AWS_DEFAULT_REGION: eu-north-1
           AWS_REGION: eu-north-1
