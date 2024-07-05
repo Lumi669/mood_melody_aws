@@ -49,6 +49,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      - name: Validate CloudFormation Template
+        run: |
+          aws cloudformation validate-template \
+            --template-body file://cloudformation/ci-cd-backend.yml \
+            --region eu-north-1
+
       - name: Deploy Backend CloudFormation stack
         run: |
           aws cloudformation deploy \
@@ -57,6 +63,11 @@ jobs:
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --region eu-north-1
             --debug
+        env:
+          AWS_DEFAULT_REGION: eu-north-1
+          AWS_REGION: eu-north-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Describe CloudFormation Stack to save output to a JSON file
         id: describe-stack
