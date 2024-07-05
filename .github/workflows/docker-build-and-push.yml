@@ -56,7 +56,6 @@ jobs:
             --template-file cloudformation/ci-cd-backend.yml \
             --stack-name mood-melody-backend \
             --region eu-north-1
-
         env:
           AWS_DEFAULT_REGION: eu-north-1
           AWS_REGION: eu-north-1
@@ -77,97 +76,97 @@ jobs:
           echo "API URL ======= $api_url"
           aws ssm put-parameter --name "/mood-melody-backend/backend_api_url" --value "$api_url" --type String --overwrite
 
-  build-and-deploy-frontend:
-    needs: build-and-deploy-backend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # build-and-deploy-frontend:
+  #   needs: build-and-deploy-backend
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
 
-      - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
+  #     - name: Set up AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: eu-north-1
 
-      - name: Log in to Amazon ECR
-        run: |
-          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com
+  #     - name: Log in to Amazon ECR
+  #       run: |
+  #         aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com
 
-      - name: Build and push frontend Docker image
-        env:
-          TIMESTAMP: ${{ github.run_id }}
-          REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
-          NEXT_PUBLIC_API_URL_0: ${{ needs.build-and-push.outputs.backend_api_url }}
-        run: |
-          docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
-                      --build-arg NEXT_PUBLIC_API_URL_1=${{ secrets.NEXT_PUBLIC_API_URL_1 }} \
-                      --build-arg NEXT_PUBLIC_API_URL_2=${{ secrets.NEXT_PUBLIC_API_URL_2 }} \
-                      --build-arg NEXT_PUBLIC_API_URL_3=${{ secrets.NEXT_PUBLIC_API_URL_3 }} \
-                      -t mood-melody-aws-frontend:${{ env.TIMESTAMP }} \
-                      -t mood-melody-aws-frontend:latest \
-                      ./frontend
-          docker tag mood-melody-aws-frontend:${{ env.TIMESTAMP }} ${REPO_URI}:${{ env.TIMESTAMP }}
-          docker tag mood-melody-aws-frontend:latest ${REPO_URI}:latest
-          docker push ${REPO_URI}:${{ env.TIMESTAMP }}
-          docker push ${REPO_URI}:latest
+  #     - name: Build and push frontend Docker image
+  #       env:
+  #         TIMESTAMP: ${{ github.run_id }}
+  #         REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
+  #         NEXT_PUBLIC_API_URL_0: ${{ needs.build-and-push.outputs.backend_api_url }}
+  #       run: |
+  #         docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
+  #                     --build-arg NEXT_PUBLIC_API_URL_1=${{ secrets.NEXT_PUBLIC_API_URL_1 }} \
+  #                     --build-arg NEXT_PUBLIC_API_URL_2=${{ secrets.NEXT_PUBLIC_API_URL_2 }} \
+  #                     --build-arg NEXT_PUBLIC_API_URL_3=${{ secrets.NEXT_PUBLIC_API_URL_3 }} \
+  #                     -t mood-melody-aws-frontend:${{ env.TIMESTAMP }} \
+  #                     -t mood-melody-aws-frontend:latest \
+  #                     ./frontend
+  #         docker tag mood-melody-aws-frontend:${{ env.TIMESTAMP }} ${REPO_URI}:${{ env.TIMESTAMP }}
+  #         docker tag mood-melody-aws-frontend:latest ${REPO_URI}:latest
+  #         docker push ${REPO_URI}:${{ env.TIMESTAMP }}
+  #         docker push ${REPO_URI}:latest
 
-      - name: Delete existing CloudFormation stack if it exists
-        run: |
-          aws cloudformation delete-stack --stack-name mood-melody-stack || true
-          aws cloudformation wait stack-delete-complete --stack-name mood-melody-stack || true
+  #     - name: Delete existing CloudFormation stack if it exists
+  #       run: |
+  #         aws cloudformation delete-stack --stack-name mood-melody-stack || true
+  #         aws cloudformation wait stack-delete-complete --stack-name mood-melody-stack || true
 
-      - name: Deploy initial CloudFormation stack
-        run: |
-          aws cloudformation deploy \
-            --template-file moodMelodyCloudFormationTemplate.yml \
-            --stack-name mood-melody-stack \
-            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
-            --parameter-overrides BackendImageUri=${REPO_URI}:${{ env.TIMESTAMP }}
+  #     - name: Deploy initial CloudFormation stack
+  #       run: |
+  #         aws cloudformation deploy \
+  #           --template-file moodMelodyCloudFormationTemplate.yml \
+  #           --stack-name mood-melody-stack \
+  #           --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+  #           --parameter-overrides BackendImageUri=${REPO_URI}:${{ env.TIMESTAMP }}
 
-      - name: Retrieve backend API Gateway URL from SSM
-        id: get-urls
-        run: |
-          BACKEND_API_URL=$(aws ssm get-parameter --name /MoodMelody/ApiGatewayUrl --region eu-north-1 --query "Parameter.Value" --output text)
-          echo "::set-output name=backend_api_url::$BACKEND_API_URL"
+  #     - name: Retrieve backend API Gateway URL from SSM
+  #       id: get-urls
+  #       run: |
+  #         BACKEND_API_URL=$(aws ssm get-parameter --name /MoodMelody/ApiGatewayUrl --region eu-north-1 --query "Parameter.Value" --output text)
+  #         echo "::set-output name=backend_api_url::$BACKEND_API_URL"
 
-      - name: Build and push frontend Docker image
-        env:
-          TIMESTAMP: ${{ github.run_id }}
-          REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
-          NEXT_PUBLIC_API_URL_0: ${{ steps.get-urls.outputs.backend_api_url }}
-        run: |
-          docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
-                       --build-arg NEXT_PUBLIC_API_URL_1=${{ secrets.NEXT_PUBLIC_API_URL_1 }} \
-                       --build-arg NEXT_PUBLIC_API_URL_2=${{ secrets.NEXT_PUBLIC_API_URL_2 }} \
-                       --build-arg NEXT_PUBLIC_API_URL_3=${{ secrets.NEXT_PUBLIC_API_URL_3 }} \
-                       -t mood-melody-aws-frontend:${{ env.TIMESTAMP }} \
-                       -t mood-melody-aws-frontend:latest \
-                       ./frontend
-          docker tag mood-melody-aws-frontend:${{ env.TIMESTAMP }} ${REPO_URI}:${{ env.TIMESTAMP }}
-          docker tag mood-melody-aws-frontend:latest ${REPO_URI}:latest
-          docker push mood-melody-aws-frontend:${{ env.TIMESTAMP }}
-          docker push mood-melody-aws-frontend:latest
+  #     - name: Build and push frontend Docker image
+  #       env:
+  #         TIMESTAMP: ${{ github.run_id }}
+  #         REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws-frontend
+  #         NEXT_PUBLIC_API_URL_0: ${{ steps.get-urls.outputs.backend_api_url }}
+  #       run: |
+  #         docker build --build-arg NEXT_PUBLIC_API_URL_0=${{ env.NEXT_PUBLIC_API_URL_0 }} \
+  #                      --build-arg NEXT_PUBLIC_API_URL_1=${{ secrets.NEXT_PUBLIC_API_URL_1 }} \
+  #                      --build-arg NEXT_PUBLIC_API_URL_2=${{ secrets.NEXT_PUBLIC_API_URL_2 }} \
+  #                      --build-arg NEXT_PUBLIC_API_URL_3=${{ secrets.NEXT_PUBLIC_API_URL_3 }} \
+  #                      -t mood-melody-aws-frontend:${{ env.TIMESTAMP }} \
+  #                      -t mood-melody-aws-frontend:latest \
+  #                      ./frontend
+  #         docker tag mood-melody-aws-frontend:${{ env.TIMESTAMP }} ${REPO_URI}:${{ env.TIMESTAMP }}
+  #         docker tag mood-melody-aws-frontend:latest ${REPO_URI}:latest
+  #         docker push mood-melody-aws-frontend:${{ env.TIMESTAMP }}
+  #         docker push mood-melody-aws-frontend:latest
 
-      - name: Update CloudFormation stack with frontend image
-        run: |
-          aws cloudformation deploy \
-            --template-file moodMelodyCloudFormationTemplate.yml \
-            --stack-name mood-melody-stack \
-            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
-            --parameter-overrides \
-              BackendImageUri=${REPO_URI}:${{ github.run_id }} \
-              FrontendImageUri=${REPO_URI}:${{ github.run_id }}
-        continue-on-error: true
+  #     - name: Update CloudFormation stack with frontend image
+  #       run: |
+  #         aws cloudformation deploy \
+  #           --template-file moodMelodyCloudFormationTemplate.yml \
+  #           --stack-name mood-melody-stack \
+  #           --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+  #           --parameter-overrides \
+  #             BackendImageUri=${REPO_URI}:${{ github.run_id }} \
+  #             FrontendImageUri=${REPO_URI}:${{ github.run_id }}
+  #       continue-on-error: true
 
-      - name: Fetch CloudFormation stack events on failure
-        if: failure()
-        run: |
-          aws cloudformation describe-stack-events --stack-name mood-melody-stack
+  #     - name: Fetch CloudFormation stack events on failure
+  #       if: failure()
+  #       run: |
+  #         aws cloudformation describe-stack-events --stack-name mood-melody-stack
 
 # name: Docker Build, Push, Deploy frontend to AWS S3, and Backend to AWS Lambda, and Configure API Gateway
 
