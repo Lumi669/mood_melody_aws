@@ -5,7 +5,7 @@ on:
     branches:
       - main
 jobs:
-  build-and-deploy-backend:
+  backend-build-and-push-to-ECR:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -49,19 +49,19 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Describe CloudFormation Stack to save output to a JSON file
-        id: describe-stack
-        run: |
-          aws cloudformation describe-stacks --stack-name mood-melody-backend > stack-description.json
-          cat stack-description.json
+      # - name: Describe CloudFormation Stack to save output to a JSON file
+      #   id: describe-stack
+      #   run: |
+      #     aws cloudformation describe-stacks --stack-name mood-melody-backend > stack-description.json
+      #     cat stack-description.json
 
-      - name: Get Outputs from Stack and Store in SSM Parameter Store
-        id: get-and-store-outputs
-        run: |
-          outputs=$(jq -r '.Stacks[0].Outputs' stack-description.json)
-          api_url=$(echo $outputs | jq -r 'map(select(.OutputKey == "BackendApiUrl"))[0].OutputValue')
-          echo "API URL ======= $api_url"
-          aws ssm put-parameter --name "/mood-melody-backend/backend_api_url" --value "$api_url" --type String --overwrite
+      # - name: Get Outputs from Stack and Store in SSM Parameter Store
+      #   id: get-and-store-outputs
+      #   run: |
+      #     outputs=$(jq -r '.Stacks[0].Outputs' stack-description.json)
+      #     api_url=$(echo $outputs | jq -r 'map(select(.OutputKey == "BackendApiUrl"))[0].OutputValue')
+      #     echo "API URL ======= $api_url"
+      #     aws ssm put-parameter --name "/mood-melody-backend/backend_api_url" --value "$api_url" --type String --overwrite
 
   # build-and-deploy-frontend:
   #   needs: build-and-deploy-backend
@@ -154,7 +154,6 @@ jobs:
   #       if: failure()
   #       run: |
   #         aws cloudformation describe-stack-events --stack-name mood-melody-stack
-
 # name: Docker Build, Push, Deploy frontend to AWS S3, and Backend to AWS Lambda, and Configure API Gateway
 
 # on:
