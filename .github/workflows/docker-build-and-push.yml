@@ -60,7 +60,7 @@ jobs:
           aws cloudformation deploy \
             --template-file cloudformation/ci-cd-backend.yml \
             --stack-name mood-melody-backend \
-            --capabilities CAPABILITY_IAM \
+            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND\
             --region eu-north-1
             --debug
         env:
