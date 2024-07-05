@@ -51,13 +51,12 @@ jobs:
 
       - name: Deploy Backend CloudFormation stack
         run: |
-          # IMAGE_URI="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:backend-latest"
-          # echo "Deploying Backend CloudFormation stack with Image URI===== $IMAGE_URI"
           aws cloudformation deploy \
             --template-file cloudformation/ci-cd-backend.yml \
             --stack-name mood-melody-backend \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --region eu-north-1
+            --debug
 
       - name: Describe CloudFormation Stack to save output to a JSON file
         id: describe-stack
