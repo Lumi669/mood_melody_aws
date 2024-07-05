@@ -33,6 +33,9 @@ RUN pnpm install
 # Copy the application code
 COPY . .
 
+# Copy only the ci-cd-backend.yml from the cloudformation directory
+COPY ../cloudformation/ci-cd-backend.yml ./cloudformation/ci-cd-backend.yml
+
 # Build the project
 RUN pnpm run build
 
