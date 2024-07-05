@@ -49,19 +49,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Deploy Backend CloudFormation stack
-        run: |
-          aws cloudformation deploy \
-            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND\
-            --template-file cloudformation/ci-cd-backend.yml \
-            --stack-name mood-melody-backend \
-            --region eu-north-1
-        env:
-          AWS_DEFAULT_REGION: eu-north-1
-          AWS_REGION: eu-north-1
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       - name: Describe CloudFormation Stack to save output to a JSON file
         id: describe-stack
         run: |
