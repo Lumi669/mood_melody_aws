@@ -40,14 +40,14 @@ jobs:
           docker push ${REPO_URI}:backend-${TIMESTAMP}
           docker push ${REPO_URI}:backend-latest
 
-      - name: Store ECR Image URI in SSM Parameter Store
-        run: |
-          IMAGE_URI="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:backend-latest"
-          echo "Storing Image URI in SSM Parameter Store: $IMAGE_URI"
-          aws ssm put-parameter --name "backend-ecr-uri" --value "$IMAGE_URI" --type String --overwrite --region eu-north-1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # - name: Store ECR Image URI in SSM Parameter Store
+      #   run: |
+      #     IMAGE_URI="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:backend-latest"
+      #     echo "Storing Image URI in SSM Parameter Store: $IMAGE_URI"
+      #     aws ssm put-parameter --name "backend-ecr-uri" --value "$IMAGE_URI" --type String --overwrite --region eu-north-1
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # - name: Describe CloudFormation Stack to save output to a JSON file
       #   id: describe-stack
@@ -154,6 +154,7 @@ jobs:
   #       if: failure()
   #       run: |
   #         aws cloudformation describe-stack-events --stack-name mood-melody-stack
+
 # name: Docker Build, Push, Deploy frontend to AWS S3, and Backend to AWS Lambda, and Configure API Gateway
 
 # on:
