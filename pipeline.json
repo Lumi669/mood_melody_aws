@@ -1,0 +1,73 @@
+{
+  "pipeline": {
+    "name": "mood-melody",
+    "roleArn": "arn:aws:iam::536560382233:role/service-role/AWSCodePipelineServiceRole-eu-north-1-mood-melody-auto-generated",
+    "artifactStore": {
+      "type": "S3",
+      "location": "codepipeline-eu-north-1-904081892055"
+    },
+    "stages": [
+      {
+        "name": "Source",
+        "actions": [
+          {
+            "name": "Source",
+            "actionTypeId": {
+              "category": "Source",
+              "owner": "AWS",
+              "provider": "CodeStarSourceConnection",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "BranchName": "main",
+              "ConnectionArn": "arn:aws:codestar-connections:eu-north-1:536560382233:connection/766ef718-a1a0-4cf5-9997-22580f77dbf6",
+              "DetectChanges": "false",
+              "FullRepositoryId": "Lumi669/mood_melody_aws",
+              "OutputArtifactFormat": "CODE_ZIP"
+            },
+            "outputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "inputArtifacts": [],
+            "region": "eu-north-1",
+            "namespace": "SourceVariables"
+          }
+        ]
+      },
+      {
+        "name": "Deploy",
+        "actions": [
+          {
+            "name": "Deploy",
+            "actionTypeId": {
+              "category": "Deploy",
+              "owner": "AWS",
+              "provider": "CloudFormation",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "ActionMode": "REPLACE_ON_FAILURE",
+              "Capabilities": "CAPABILITY_IAM,CAPABILITY_NAMED_IAM",
+              "RoleArn": "arn:aws:iam::536560382233:role/CloudFormationServiceRole-jinghuan-040724",
+              "StackName": "mood-melody-backend",
+              "TemplatePath": "SourceArtifact::cloudformation/ci-cd-backend.yml"
+            },
+            "outputArtifacts": [],
+            "inputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "region": "eu-north-1",
+            "namespace": "DeployVariables"
+          }
+        ]
+      }
+    ],
+    "version": 2
+  }
+}
