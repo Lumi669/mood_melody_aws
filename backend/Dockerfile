@@ -33,9 +33,6 @@ RUN pnpm install
 # Copy the application code
 COPY . .
 
-# Ensure the CloudFormation template is included
-COPY ci-cd-backend.yml /app/ci-cd-backend.yml
-
 # Build the project
 RUN pnpm run build
 
