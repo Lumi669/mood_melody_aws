@@ -72,6 +72,6 @@ build/
 dist/
 out/
 
-# Lambda deployment packages
+# build outputs
 *.zip
-trigger-frontend-githubActions/trigger-frontend-githubActions.zip
+dist/
