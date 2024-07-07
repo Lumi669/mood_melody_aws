@@ -1,8 +1,8 @@
-import { SSM, CloudFormation } from "aws-sdk";
+import * as AWS from "aws-sdk";
 import axios from "axios";
 
-const ssm = new SSM();
-const cloudformation = new CloudFormation();
+const ssm = new AWS.SSM();
+const cloudformation = new AWS.CloudFormation();
 
 export const handler = async (event: any) => {
   try {
@@ -39,7 +39,7 @@ export const handler = async (event: any) => {
     }
 
     // Step 2: Retrieve the GitHub token from Parameter Store
-    const parameterName = "ggithub-token-mood-melody"; // Replace with the name of your parameter
+    const parameterName = "github-token-mood-melody"; // Replace with the name of your parameter
     const ssmResponse = await ssm
       .getParameter({ Name: parameterName, WithDecryption: true })
       .promise();
