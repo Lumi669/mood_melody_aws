@@ -3,8 +3,11 @@ import axios from "axios";
 
 const ssm = new AWS.SSM();
 const cloudformation = new AWS.CloudFormation();
+const codepipeline = new AWS.CodePipeline();
 
 export const handler = async (event: any) => {
+  const jobId = event["CodePipeline.job"].id;
+
   try {
     // Step 1: Retrieve CloudFormation outputs
     const stackName = "mood-melody-backend"; // Replace with your CloudFormation stack name
@@ -65,6 +68,9 @@ export const handler = async (event: any) => {
 
     await axios.post(url, data, { headers });
 
+    // Notify CodePipeline of success
+    await codepipeline.putJobSuccessResult({ jobId }).promise();
+
     return {
       statusCode: 200,
       body: JSON.stringify("Triggered GitHub Actions successfully"),
@@ -75,6 +81,18 @@ export const handler = async (event: any) => {
     if (error instanceof Error) {
       errorMessage = error.message;
     }
+
+    // Notify CodePipeline of failure
+    await codepipeline
+      .putJobFailureResult({
+        jobId,
+        failureDetails: {
+          message: errorMessage,
+          type: "JobFailed",
+          externalExecutionId: event["CodePipeline.job"].id,
+        },
+      })
+      .promise();
 
     return {
       statusCode: 500,
