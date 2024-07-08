@@ -39,13 +39,6 @@ Resources:
     Properties:
       Name: MoodMelodyFrontendApi
 
-  ApiGatewayResourceRoot:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
-      PathPart: /
-      RestApiId: !Ref ApiGatewayRestApi
-
   ApiGatewayResourceAllMusic:
     Type: AWS::ApiGateway::Resource
     Properties:
