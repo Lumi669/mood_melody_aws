@@ -59,6 +59,12 @@ export const handler = async (event: any) => {
     githubToken = githubToken.trim();
     console.log("githubToken (trimmed) ==== ", githubToken);
 
+    // Check if the token contains invalid characters
+    const invalidChars = /[^a-zA-Z0-9_-]/;
+    if (invalidChars.test(githubToken)) {
+      throw new Error("GitHub token contains invalid characters");
+    }
+
     // Step 3: Trigger GitHub Actions workflow via repository dispatch
     const githubRepo = "Lumi669/mood-melody-aws"; // Replace with your GitHub username and frontend repo
     const url = `https://api.github.com/repos/${githubRepo}/dispatches`;
