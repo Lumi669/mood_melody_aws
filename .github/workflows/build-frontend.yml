@@ -51,3 +51,9 @@ jobs:
           docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
           docker push ${REPO_URI}:frontend-${TIMESTAMP}
           docker push ${REPO_URI}:frontend-latest
+
+      - name: Verify backend image exists
+        env:
+          TIMESTAMP: ${{ env.TIMESTAMP }}
+        run: |
+          aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=backend-${TIMESTAMP}
