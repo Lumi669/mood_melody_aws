@@ -1,19 +1,15 @@
 {
-  "name": "trigger-frontend-githubActions",
+  "name": "nodejs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "typescript": "^5.5.3",
-    "@types/aws-sdk": "^2.7.0",
-    "@types/node": "^20.14.10",
+  "dependencies": {
     "aws-sdk": "^2.1655.0",
     "axios": "^1.7.2"
   }
