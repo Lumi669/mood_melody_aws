@@ -66,8 +66,9 @@ export const handler = async (event: any) => {
     }
 
     // Step 3: Trigger GitHub Actions workflow via repository dispatch
-    const githubRepo = "Lumi669/mood-melody-aws"; // Replace with your GitHub username and frontend repo
+    const githubRepo = "Lumi669/mood_melody_aws"; // Replace with your GitHub username and frontend repo
     const url = `https://api.github.com/repos/${githubRepo}/dispatches`;
+    console.log("url of github ==== ", url);
     const headers = {
       Authorization: `token ${githubToken}`,
       Accept: "application/vnd.github.v3+json",
