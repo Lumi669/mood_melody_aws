@@ -1,0 +1,53 @@
+name: Build and Push Frontend
+
+on:
+  repository_dispatch:
+    types: [build-frontend]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up environment variables
+        env:
+          BACKEND_API_URL: ${{ github.event.client_payload.BACKEND_API_URL }}
+        run: |
+
+          echo "BACKEND_API_URL ===== , ${BACKEND_API_URL}"
+
+          echo "REACT_APP_API_URL=${{ env.BACKEND_API_URL }}" >> .env
+
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com
+
+      - name: Build and push frontend Docker image
+        env:
+          TIMESTAMP: ${{ steps.vars.outputs.timestamp }}
+          REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+
+        run: |
+          build_args=(
+            "NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL/api/images}"
+            "NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL/api/musics}"
+            "CACHEBUST=$(date +%s)"
+          )
+
+          build_args_str=""
+          for arg in "${build_args[@]}"; do
+            build_args_str+=" --build-arg $arg"
+          done
+
+          docker build $build_args_str \
+                      -t mood-melody-aws:frontend-${TIMESTAMP} \
+                      -t mood-melody-aws:frontend-latest \
+                      ./frontend
+
+          docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
+          docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
+          docker push ${REPO_URI}:frontend-${TIMESTAMP}
+          docker push ${REPO_URI}:frontend-latest
