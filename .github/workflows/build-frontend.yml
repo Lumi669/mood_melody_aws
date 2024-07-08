@@ -57,3 +57,9 @@ jobs:
           TIMESTAMP: ${{ env.TIMESTAMP }}
         run: |
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=backend-${TIMESTAMP}
+
+      - name: Trigger Specific CodePipeline Stage
+        if: success()
+        run: |
+          # Logic to trigger specific stage
+          aws lambda invoke --function-name deployFrontendStageTrigger response.json
