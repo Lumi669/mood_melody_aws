@@ -7,6 +7,7 @@ const codepipeline = new AWS.CodePipeline();
 
 export const handler = async (event: any) => {
   const jobId = event["CodePipeline.job"].id;
+  console.log("jobId ====== ", jobId);
 
   try {
     // Step 1: Retrieve CloudFormation outputs
@@ -30,6 +31,7 @@ export const handler = async (event: any) => {
       for (const output of outputs) {
         if (output.OutputKey === "BackendApiUrl") {
           backendApiUrl = output.OutputValue;
+          console.log("backendApiUrl === ", backendApiUrl);
           break;
         }
       }
@@ -46,11 +48,16 @@ export const handler = async (event: any) => {
     const ssmResponse = await ssm
       .getParameter({ Name: parameterName, WithDecryption: true })
       .promise();
-    const githubToken = ssmResponse.Parameter?.Value;
+    let githubToken = ssmResponse.Parameter?.Value;
+    console.log("githubtoken ==== ", githubToken);
 
     if (!githubToken) {
       throw new Error("GitHub token not found in Parameter Store");
     }
+
+    // Clean the GitHub token
+    githubToken = githubToken.trim();
+    console.log("githubToken (trimmed) ==== ", githubToken);
 
     // Step 3: Trigger GitHub Actions workflow via repository dispatch
     const githubRepo = "Lumi669/mood-melody-aws"; // Replace with your GitHub username and frontend repo
