@@ -43,7 +43,7 @@ jobs:
 
         run: |
 
-          echo "BACKEND_API_UR from build and push fronten image step ========= ${BACKEND_API_UR}"
+          echo "BACKEND_API_UR from build and push fronten image step ========= ${BACKEND_API_URL}"
           docker build \
             --build-arg NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/api/images \
             --build-arg NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/musics \
@@ -65,6 +65,6 @@ jobs:
       - name: Trigger Lambda Function on Success
         if: success()
         run: |
-          curl -X POST "https://lambda.${{secrets.AWS_REGION.amazonaws}}.com/2015-03-31/functions/deployFrontendStageTrigger/invocations" \
+          curl -X POST "https://lambda.${{secrets.AWS_REGION}}.com/2015-03-31/functions/deployFrontendStageTrigger/invocations" \
           -H "Content-Type: application/json" \
           -d '{"owner": "Lumi669", "repo": "mood_melody_aws", "workflow_id": "build-frontend", "run_id": "${{ github.run_id }}", "token": "${{ secrets.GITHUB_TOKEN_GITHUB }}"}'
