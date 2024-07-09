@@ -19,8 +19,6 @@ jobs:
 
           echo "BACKEND_API_URL ===== , ${BACKEND_API_URL}"
 
-          echo "FRONTEND_BACKEND_API_URL=${{ env.BACKEND_API_URL }}" >> .env
-
       - name: Generate timestamp
         id: vars
         # run: echo "::set-output name=timestamp::$(date +%Y%m%d%H%M%S)"
@@ -43,22 +41,12 @@ jobs:
           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
 
         run: |
-          build_args=(
-            "NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/"
-            "NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/api/images"
-            "NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/musics"
-            "CACHEBUST=$(date +%s)"
-          )
-
-          build_args_str=""
-          for arg in "${build_args[@]}"; do
-            build_args_str+=" --build-arg $arg"
-          done
-
-          docker build $build_args_str \
-                      -t mood-melody-aws:frontend-${TIMESTAMP} \
-                      -t mood-melody-aws:frontend-latest \
-                      ./frontend
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/api/images \
+            --build-arg NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/musics \
+            -t mood-melody-aws:frontend-${TIMESTAMP} \
+            -t mood-melody-aws:frontend-latest \
+            ./frontend
 
           docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
           docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
