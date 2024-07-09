@@ -16,7 +16,7 @@ jobs:
         env:
           BACKEND_API_URL: ${{ github.event.client_payload.BACKEND_API_URL }}
         run: |
-
+          echo "BACKEND_API_URL=${BACKEND_API_URL}" >> $GITHUB_ENV
           echo "BACKEND_API_URL ===== , ${BACKEND_API_URL}"
 
       - name: Generate timestamp
