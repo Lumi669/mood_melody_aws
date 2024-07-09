@@ -5,6 +5,9 @@ import requests
 codepipeline = boto3.client('codepipeline')
 
 def lambda_handler(event, context):
+
+    print("event from checkFrontendWorkflowStatus ======== ", event),
+
     owner = event['owner']
     repo = event['repo']
     workflow_id = event['workflow_id']
