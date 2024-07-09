@@ -39,11 +39,12 @@ jobs:
         env:
           TIMESTAMP: ${{ env.TIMESTAMP }}
           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
+          BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
 
         run: |
           docker build \
-            --build-arg NEXT_PUBLIC_API_URL_0=`${BACKEND_API_URL}/api/images` \
-            --build-arg NEXT_PUBLIC_API_URL_1=`${BACKEND_API_URL}/api/musics` \
+            --build-arg NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/api/images \
+            --build-arg NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/musics \
             -t mood-melody-aws:frontend-${TIMESTAMP} \
             -t mood-melody-aws:frontend-latest \
             ./frontend
