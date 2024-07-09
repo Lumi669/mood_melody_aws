@@ -56,7 +56,7 @@ jobs:
           docker push ${REPO_URI}:frontend-${TIMESTAMP}
           docker push ${REPO_URI}:frontend-latest
 
-      - name: Verify backend image exists
+      - name: Verify frontend image exists
         env:
           TIMESTAMP: ${{ env.TIMESTAMP }}
         run: |
@@ -65,6 +65,6 @@ jobs:
       - name: Trigger Lambda Function on Success
         if: success()
         run: |
-          curl -X POST "https://lambda.${{secrets.AWS_REGION}}.com/2015-03-31/functions/deployFrontendStageTrigger/invocations" \
+          curl -X POST "https://lambda.${{secrets.AWS_REGION}}.amazonaws.com/2015-03-31/functions/deployFrontendStageTrigger/invocations" \
           -H "Content-Type: application/json" \
           -d '{"owner": "Lumi669", "repo": "mood_melody_aws", "workflow_id": "build-frontend", "run_id": "${{ github.run_id }}", "token": "${{ secrets.GITHUB_TOKEN_GITHUB }}"}'
