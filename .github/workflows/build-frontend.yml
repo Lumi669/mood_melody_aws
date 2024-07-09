@@ -42,6 +42,8 @@ jobs:
           BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
 
         run: |
+
+          echo "BACKEND_API_UR from build and push fronten image step ========= ${BACKEND_API_UR}"
           docker build \
             --build-arg NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/api/images \
             --build-arg NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/musics \
