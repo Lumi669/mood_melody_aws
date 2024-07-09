@@ -44,6 +44,7 @@ jobs:
 
         run: |
           build_args=(
+            "NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/"
             "NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/api/images"
             "NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/musics"
             "CACHEBUST=$(date +%s)"
