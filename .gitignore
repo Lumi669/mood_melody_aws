@@ -75,3 +75,41 @@ out/
 # build outputs
 *.zip
 dist/
+
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Installed packages
+*.dist-info/
+
+# Logs
+*.log
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.env/
+
+# Dependency directories and files
+lambda-functions/monitor-githubActions-lambda/bin/
+lambda-functions/monitor-githubActions-lambda/certifi-*
+lambda-functions/monitor-githubActions-lambda/charset_normalizer-*
+lambda-functions/monitor-githubActions-lambda/idna-*
+lambda-functions/monitor-githubActions-lambda/requests-*
+lambda-functions/monitor-githubActions-lambda/urllib3-*
+lambda-functions/monitor-githubActions-lambda/certifi/
+lambda-functions/monitor-githubActions-lambda/charset_normalizer/
+lambda-functions/monitor-githubActions-lambda/idna/
+lambda-functions/monitor-githubActions-lambda/requests/
+lambda-functions/monitor-githubActions-lambda/urllib3/
