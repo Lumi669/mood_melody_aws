@@ -3,6 +3,7 @@ import { Music, Image } from "../types/type";
 import { apiUrls } from "../config/apiConfig";
 
 export const fetchAllMusicWithImages = async () => {
+  console.log("apiUrls ======== ", apiUrls);
   console.log("apiUrls.images ====== ", apiUrls.images);
   console.log("apiUrls.musics ====== ", apiUrls.musics);
 
