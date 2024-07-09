@@ -42,8 +42,8 @@ jobs:
 
         run: |
           docker build \
-            --build-arg NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/api/images \
-            --build-arg NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/musics \
+            --build-arg NEXT_PUBLIC_API_URL_0=`${BACKEND_API_URL}/api/images` \
+            --build-arg NEXT_PUBLIC_API_URL_1=`${BACKEND_API_URL}/api/musics` \
             -t mood-melody-aws:frontend-${TIMESTAMP} \
             -t mood-melody-aws:frontend-latest \
             ./frontend
