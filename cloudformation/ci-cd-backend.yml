@@ -1,8 +1,4 @@
 AWSTemplateFormatVersion: "2010-09-09"
-# Parameters:
-#   BackendImageUri:
-#     Type: "AWS::SSM::Parameter::Value<String>"
-#     Description: "URI of the backend Docker image"
 
 Resources:
   BackendLambdaFunction:
