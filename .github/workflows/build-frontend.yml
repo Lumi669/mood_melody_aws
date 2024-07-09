@@ -67,4 +67,4 @@ jobs:
         run: |
           curl -X POST "https://lambda.${{secrets.AWS_REGION}}.amazonaws.com/2015-03-31/functions/deployFrontendStageTrigger/invocations" \
           -H "Content-Type: application/json" \
-          -d '{"owner": "Lumi669", "repo": "mood_melody_aws", "workflow_id": "build-frontend", "run_id": "${{ github.run_id }}", "token": "${{ secrets.GITHUB_TOKEN_GITHUB }}"}'
+          -d '{"owner": "Lumi669", "repo": "mood_melody_aws", "workflow_id": "build-frontend", "run_id": "${{ github.run_id }}", "token": "${{ vars.TOKEN_GITHUB }}"}'
