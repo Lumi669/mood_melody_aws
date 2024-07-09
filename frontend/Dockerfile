@@ -19,11 +19,17 @@ COPY . .
 # Set the Sharp path
 ENV NEXT_SHARP_PATH=/tmp/node_modules/sharp
 
-# Ensure environment variables are set correctly
-ENV NEXT_PUBLIC_API_URL_0=http://localhost:4000/
-ENV NEXT_PUBLIC_API_URL_1=http://localhost:4000/api/images
-ENV NEXT_PUBLIC_API_URL_2=http://localhost:4000/api/musics
-ENV NEXT_PUBLIC_API_URL_3=http://localhost:4000/test
+# Build arguments for setting environment variables
+ARG NEXT_PUBLIC_API_URL_0
+ARG NEXT_PUBLIC_API_URL_1
+# ARG NEXT_PUBLIC_API_URL_2
+# ARG NEXT_PUBLIC_API_URL_3
+
+# Set the environment variables for build
+ENV NEXT_PUBLIC_API_URL_0=$NEXT_PUBLIC_API_URL_0
+ENV NEXT_PUBLIC_API_URL_1=$NEXT_PUBLIC_API_URL_1
+# ENV NEXT_PUBLIC_API_URL_2=$NEXT_PUBLIC_API_URL_2
+# ENV NEXT_PUBLIC_API_URL_3=$NEXT_PUBLIC_API_URL_3
 
 # Build the application
 RUN pnpm run build
