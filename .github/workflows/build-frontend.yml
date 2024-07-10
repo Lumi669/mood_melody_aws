@@ -69,6 +69,6 @@ jobs:
           GITHUB_RUN_ID: ${{ github.run_id }}
           TOKEN_GITHUB: ${{ vars.TOKEN_GITHUB }}
         run: |
-          curl -X POST "https://lambda.${{secrets.AWS_REGION}}.amazonaws.com/2015-03-31/functions/deployFrontendStageTrigger/invocations" \
+          curl -X POST "https://lambda.${{secrets.AWS_REGION}}.amazonaws.com/2015-03-31/functions/checkFrontendWorkflowStatus/invocations" \
           -H "Content-Type: application/json" \
           -d "{\"owner\": \"Lumi669\", \"repo\": \"mood_melody_aws\", \"workflow_id\": \"build-frontend\", \"run_id\": \"${GITHUB_RUN_ID}\", \"token\": \"${TOKEN_GITHUB}\"}"
