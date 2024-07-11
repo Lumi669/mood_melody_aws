@@ -6,6 +6,22 @@ codepipeline = boto3.client('codepipeline')
 
 def lambda_handler(event, context):
     print("Event from checkFrontendWorkflowStatus ======== ", event)
+
+     # Get the current execution ID from the environment variable
+    current_execution_id = os.environ.get('EXECUTION_ID')
+    
+    # Get the execution ID from the event
+    event_execution_id = event['execution_id']
+
+        # If the execution ID from the event is not the current one, ignore the execution
+    if event_execution_id != current_execution_id:
+        print(f"Ignoring old execution: {event_execution_id}")
+        return {
+            'statusCode': 200,
+            'body': json.dumps(f"Ignored old execution: {event_execution_id}")
+        }
+    
+
     
     owner = event['owner']
     repo = event['repo']
