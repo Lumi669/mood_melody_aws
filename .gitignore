@@ -124,6 +124,7 @@ boto3*/
 s3transfer*/
 jmespath*/
 dateutil*/
-bin/jp.py
+lambda-functions/trigger-a-specific-stage/bin/jp.py
+
 
 six.py
