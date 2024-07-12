@@ -89,17 +89,18 @@ jobs:
           echo "Pipeline Name: $PIPELINE_NAME"
           echo "Stage Name: $STAGE_NAME"
 
-          payload=$(jq -n \
-            --arg pipeline_name "$PIPELINE_NAME" \
-            --arg stage_name "$STAGE_NAME" \
-            '{pipeline_name: $pipeline_name, stage_name: $stage_name}')
+          # payload=$(jq -n \
+          #   --arg pipeline_name "$PIPELINE_NAME" \
+          #   --arg stage_name "$STAGE_NAME" \
+          #   '{pipeline_name: $pipeline_name, stage_name: $stage_name}')
 
-          echo "Payload: $payload"
+          # echo "Payload: $payload"
 
           aws lambda invoke \
-            --function-name "$LAMBDA_FUNCTION_NAME" \
-            --region "$AWS_REGION" \
-            --payload "$payload" \
+            --function-name triggerAspecificStage \
+            --region eu-north-1 \
+            --cli-binary-format raw-in-base64-out \
+            --payload '{"pipeline_name":"mood-melody", "stage_name":"Deploy-frontend"}' \
             response.json
 
           echo "Lambda invocation response:"
