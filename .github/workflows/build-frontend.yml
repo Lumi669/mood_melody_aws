@@ -80,8 +80,17 @@ jobs:
           PIPELINE_NAME: mood-melody
           STAGE_NAME: Deploy-frontend
         run: |
+          echo "Invoking Lambda function to trigger CodePipeline stage..."
+          echo "AWS Region: $AWS_REGION"
+          echo "Lambda Function Name: $LAMBDA_FUNCTION_NAME"
+          echo "Pipeline Name: $PIPELINE_NAME"
+          echo "Stage Name: $STAGE_NAME"
+
           aws lambda invoke \
-            --function-name $LAMBDA_FUNCTION_NAME \
-            --region $AWS_REGION \
+            --function-name "$LAMBDA_FUNCTION_NAME" \
+            --region "$AWS_REGION" \
             --payload '{"pipeline_name": "'"$PIPELINE_NAME"'", "stage_name": "'"$STAGE_NAME"'"}' \
             response.json
+
+          echo "Lambda invocation response:"
+          cat response.json
