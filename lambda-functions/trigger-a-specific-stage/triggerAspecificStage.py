@@ -33,18 +33,12 @@
 
 import json
 import logging
-import boto3
 
-# Configure logging
+# Assuming logger is defined somewhere earlier in the code
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Initialize CodePipeline client
-codepipeline = boto3.client('codepipeline')
-
 def lambda_handler(event, context):
-    logger.info(f"Received event: {json.dumps(event)}")
-
     jobId = None
     
     # Check if the event is from CodePipeline
