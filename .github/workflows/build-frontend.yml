@@ -83,5 +83,5 @@ jobs:
           aws lambda invoke \
             --function-name $LAMBDA_FUNCTION_NAME \
             --region $AWS_REGION \
-            --payload '{"pipeline_name": "$PIPELINE_NAME", "stage_name": "$STAGE_NAME"}' \
+            --payload '{"pipeline_name": "$PIPELINE_NAME", "stage_name": "$STAGE_NAME}' \
             response.json
