@@ -2,6 +2,7 @@ import json
 import boto3
 
 def lambda_handler(event, context):
+    print("event ======= ", event)
     codepipeline = boto3.client('codepipeline')
     pipeline_name = event['pipeline_name']
     stage_name = event['stage_name']
