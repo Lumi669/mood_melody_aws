@@ -113,3 +113,17 @@ lambda-functions/monitor-githubActions-lambda/charset_normalizer/
 lambda-functions/monitor-githubActions-lambda/idna/
 lambda-functions/monitor-githubActions-lambda/requests/
 lambda-functions/monitor-githubActions-lambda/urllib3/
+
+
+
+
+
+botocore*/
+urllib3*/
+boto3*/
+s3transfer*/
+jmespath*/
+dateutil*/
+bin/jp.py
+
+six.py
