@@ -79,7 +79,7 @@ jobs:
       - name: Trigger CodePipeline Stage
         env:
           AWS_REGION: eu-north-1
-          LAMBDA_FUNCTION_NAME: triggerAspecificStage
+          LAMBDA_FUNCTION_NAME: TriggerSpecificStage
           PIPELINE_NAME: mood-melody
           STAGE_NAME: Deploy-frontend
         run: |
@@ -97,7 +97,7 @@ jobs:
           # echo "Payload: $payload"
 
           aws lambda invoke \
-            --function-name triggerAspecificStage \
+            --function-name TriggerSpecificStage \
             --region eu-north-1 \
             --cli-binary-format raw-in-base64-out \
             --payload '{"pipeline_name":"mood-melody", "stage_name":"Deploy-frontend"}' \
