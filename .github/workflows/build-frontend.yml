@@ -12,6 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
       - name: Set up environment variables
         env:
           BACKEND_API_URL: ${{ github.event.client_payload.BACKEND_API_URL }}
