@@ -86,10 +86,17 @@ jobs:
           echo "Pipeline Name: $PIPELINE_NAME"
           echo "Stage Name: $STAGE_NAME"
 
+          payload=$(jq -n \
+            --arg pipeline_name "$PIPELINE_NAME" \
+            --arg stage_name "$STAGE_NAME" \
+            '{pipeline_name: $pipeline_name, stage_name: $stage_name}')
+
+          echo "Payload: $payload"
+
           aws lambda invoke \
             --function-name "$LAMBDA_FUNCTION_NAME" \
             --region "$AWS_REGION" \
-            --payload '{"pipeline_name": "'"$PIPELINE_NAME"'", "stage_name": "'"$STAGE_NAME"'"}' \
+            --payload "$payload" \
             response.json
 
           echo "Lambda invocation response:"
