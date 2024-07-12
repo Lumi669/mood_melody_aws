@@ -62,13 +62,26 @@ jobs:
         run: |
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=frontend-${TIMESTAMP}
 
-      - name: Trigger Lambda Function on Success
-        if: success()
+      # - name: Trigger Lambda Function on Success
+      #   if: success()
+      #   env:
+      #     AWS_REGION: ${{ secrets.AWS_REGION }}
+      #     GITHUB_RUN_ID: ${{ github.run_id }}
+      #     TOKEN_GITHUB: ${{ vars.TOKEN_GITHUB }}
+      #   run: |
+      #     curl -X POST "https://lambda.${{secrets.AWS_REGION}}.amazonaws.com/2015-03-31/functions/checkFrontendWorkflowStatus/invocations" \
+      #     -H "Content-Type: application/json" \
+      #     -d "{\"owner\": \"Lumi669\", \"repo\": \"mood_melody_aws\", \"workflow_id\": \"build-frontend\", \"run_id\": \"${GITHUB_RUN_ID}\", \"token\": \"${TOKEN_GITHUB}\"}"
+
+      - name: Trigger CodePipeline Stage
         env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
-          TOKEN_GITHUB: ${{ vars.TOKEN_GITHUB }}
+          AWS_REGION: eu-north-1
+          LAMBDA_FUNCTION_NAME: triggerAspecificStage
+          PIPELINE_NAME: mood-melody
+          STAGE_NAME: Deploy-frontend
         run: |
-          curl -X POST "https://lambda.${{secrets.AWS_REGION}}.amazonaws.com/2015-03-31/functions/checkFrontendWorkflowStatus/invocations" \
-          -H "Content-Type: application/json" \
-          -d "{\"owner\": \"Lumi669\", \"repo\": \"mood_melody_aws\", \"workflow_id\": \"build-frontend\", \"run_id\": \"${GITHUB_RUN_ID}\", \"token\": \"${TOKEN_GITHUB}\"}"
+          aws lambda invoke \
+            --function-name $LAMBDA_FUNCTION_NAME \
+            --region $AWS_REGION \
+            --payload '{"pipeline_name": "$PIPELINE_NAME", "stage_name": "$STAGE_NAME"}' \
+            response.json
