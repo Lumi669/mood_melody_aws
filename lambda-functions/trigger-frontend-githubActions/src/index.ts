@@ -7,6 +7,7 @@ const cloudformation = new AWS.CloudFormation();
 const codepipeline = new AWS.CodePipeline();
 
 const SIGNAL_BUCKET = "mood-melody-signal-bucket";
+const SIGNAL_KEY_PREFIX = "github-action-signal-";
 
 export const handler = async (event: any) => {
   console.log("event ===== ", event);
@@ -71,6 +72,8 @@ export const handler = async (event: any) => {
 
     // Step 3: Trigger GitHub Actions workflow via repository dispatch
     const githubRepo = "Lumi669/mood_melody_aws"; // Replace with your GitHub username and frontend repo
+    const uniqueId = new Date().toISOString().replace(/[-:.TZ]/g, "");
+
     const url = `https://api.github.com/repos/${githubRepo}/dispatches`;
     console.log("url of github ==== ", url);
     const headers = {
@@ -82,27 +85,39 @@ export const handler = async (event: any) => {
       event_type: "build-frontend",
       client_payload: {
         BACKEND_API_URL: backendApiUrl,
-        UUID: uuid,
+        UNIQUE_ID: uniqueId,
       },
     };
 
     await axios.post(url, data, { headers });
 
-    // Check if the signal file exists in S3
-    const signalKey = `github-action-signal-${uuid}.json`;
+    // Step 4: Wait for the signal file to appear in S3
+    const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
+    const waitForSignalFile = async () => {
+      for (let i = 0; i < 60; i++) {
+        // Wait for up to 5 minutes
+        try {
+          await s3
+            .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
+            .promise();
+          return true;
+        } catch (error) {
+          await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for 5 seconds before retrying
+        }
+      }
+      throw new Error("Signal file not found in S3 within the timeout period.");
+    };
 
-    try {
-      await s3.headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey }).promise();
+    await waitForSignalFile();
 
-      // Signal file exists, proceed to notify CodePipeline of success
-      await codepipeline.putJobSuccessResult({ jobId }).promise();
-    } catch (s3Error) {
-      throw new Error("Signal from GitHub Actions not received yet");
-    }
+    // Step 5: Notify CodePipeline of success
+    await codepipeline.putJobSuccessResult({ jobId }).promise();
 
     return {
       statusCode: 200,
-      body: JSON.stringify("Triggered GitHub Actions successfully"),
+      body: JSON.stringify(
+        "Triggered GitHub Actions and verified signal successfully",
+      ),
     };
   } catch (error) {
     let errorMessage = "An unknown error occurred";
