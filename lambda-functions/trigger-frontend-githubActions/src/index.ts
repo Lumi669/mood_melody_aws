@@ -101,7 +101,10 @@ export const handler = async (event: any) => {
         statusCode: 200,
         body: JSON.stringify("Already processed."),
       };
-    } catch (error) {
+    } catch (error: any) {
+      if (error.code !== "NotFound") {
+        throw error;
+      }
       // Proceed if the uniqueId has not been processed
       console.log(`Processing new uniqueId: ${uniqueId}`);
     }
@@ -121,7 +124,11 @@ export const handler = async (event: any) => {
             .promise();
           console.log("Signal file found in S3: ", signalKey);
           return true;
-        } catch (error) {
+        } catch (error: any) {
+          if (error.code === "AccessDenied") {
+            console.error("Access Denied when trying to read the signal file.");
+            throw error;
+          }
           console.log("Signal file not found yet, retrying...");
           await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         }
@@ -151,7 +158,7 @@ export const handler = async (event: any) => {
         "Triggered GitHub Actions and verified signal successfully",
       ),
     };
-  } catch (error) {
+  } catch (error: any) {
     let errorMessage = "An unknown error occurred";
 
     if (error instanceof Error) {
