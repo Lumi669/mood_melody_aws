@@ -7,9 +7,9 @@ const cloudformation = new AWS.CloudFormation();
 const codepipeline = new AWS.CodePipeline();
 
 const SIGNAL_BUCKET = "mood-melody-signal-bucket";
-const SIGNAL_KEY = "github-action-signal.json";
 
 export const handler = async (event: any) => {
+  console.log("event ===== ", event);
   const jobId = event["CodePipeline.job"].id;
   console.log("jobId ====== ", jobId);
 
@@ -77,31 +77,26 @@ export const handler = async (event: any) => {
       Authorization: `token ${githubToken}`,
       Accept: "application/vnd.github.v3+json",
     };
+    const uuid = require("uuid").v4();
     const data = {
-      event_type: "build-frontend", // The event type to trigger
+      event_type: "build-frontend",
       client_payload: {
         BACKEND_API_URL: backendApiUrl,
+        UUID: uuid,
       },
     };
 
     await axios.post(url, data, { headers });
 
-    // // Notify CodePipeline of success
-    // await codepipeline.putJobSuccessResult({ jobId }).promise();
-
-    // return {
-    //   statusCode: 200,
-    //   body: JSON.stringify("Triggered GitHub Actions successfully"),
-    // };
-
     // Check if the signal file exists in S3
+    const signalKey = `github-action-signal-${uuid}.json`;
+
     try {
-      await s3.headObject({ Bucket: SIGNAL_BUCKET, Key: SIGNAL_KEY }).promise();
+      await s3.headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey }).promise();
 
       // Signal file exists, proceed to notify CodePipeline of success
       await codepipeline.putJobSuccessResult({ jobId }).promise();
     } catch (s3Error) {
-      // Signal file does not exist, keep the job waiting
       throw new Error("Signal from GitHub Actions not received yet");
     }
 

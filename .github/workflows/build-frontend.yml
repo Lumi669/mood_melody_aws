@@ -21,8 +21,11 @@ jobs:
 
       - name: Generate timestamp
         id: vars
-        # run: echo "::set-output name=timestamp::$(date +%Y%m%d%H%M%S)"
         run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      - name: Generate unique identifier
+        id: uuid
+        run: echo "UUID=$(uuidgen)" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -42,7 +45,6 @@ jobs:
           BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
 
         run: |
-
           echo "BACKEND_API_UR from build and push fronten image step ========= ${BACKEND_API_URL}"
           docker build \
             --build-arg NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/api/images \
@@ -63,33 +65,11 @@ jobs:
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=frontend-${TIMESTAMP}
 
       - name: Signal Lambda to trigger next stage of stage Retrieve-bakendApiUrl-trigger-frontend-githubActions
-        run: |
-          echo '{"signal": true}' > signal.json
-          aws s3 cp signal.json s3://mood-melody-signal-bucket/github-action-signal.json
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-
-      # - name: Trigger CodePipeline Stage
-      #   env:
-      #     AWS_REGION: eu-north-1
-      #     LAMBDA_FUNCTION_NAME: TriggerSpecificStage
-      #     PIPELINE_NAME: mood-melody
-      #     STAGE_NAME: Deploy-frontend
-      #   run: |
-      #     echo "Invoking Lambda function to trigger CodePipeline stage..."
-      #     echo "AWS Region: $AWS_REGION"
-      #     echo "Lambda Function Name: $LAMBDA_FUNCTION_NAME"
-      #     echo "Pipeline Name: $PIPELINE_NAME"
-      #     echo "Stage Name: $STAGE_NAME"
-
-      #     aws lambda invoke \
-      #       --function-name TriggerSpecificStage \
-      #       --region eu-north-1 \
-      #       --cli-binary-format raw-in-base64-out \
-      #       --payload '{"pipeline_name":"mood-melody", "stage_name":"Deploy-frontend"}' \
-      #       response.json
-
-      #     echo "Lambda invocation response:"
-      #     cat response.json
+          UUID: ${{ env.UUID }}
+        run: |
+          echo '{"signal": true, "uuid": "'${UUID}'"}' > signal.json
+          aws s3 cp signal.json s3://mood-melody-signal-bucket/github-action-signal-${UUID}.json
