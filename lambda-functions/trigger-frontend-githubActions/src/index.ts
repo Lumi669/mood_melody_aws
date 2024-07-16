@@ -8,9 +8,10 @@ const codepipeline = new AWS.CodePipeline();
 
 const SIGNAL_BUCKET = "mood-melody-signal-bucket";
 const SIGNAL_KEY_PREFIX = "github-action-signal-";
+const PROCESSED_KEY_PREFIX = "processed-uniqueid-";
 
 export const handler = async (event: any) => {
-  console.log("event ===== ", event);
+  console.log("event ===== ", JSON.stringify(event, null, 2));
   const jobId = event["CodePipeline.job"].id;
   console.log("jobId ====== ", jobId);
 
@@ -89,6 +90,22 @@ export const handler = async (event: any) => {
       },
     };
 
+    // Idempotency: Check if this uniqueId has already been processed
+    const processedKey = `${PROCESSED_KEY_PREFIX}${uniqueId}.json`;
+    try {
+      await s3
+        .headObject({ Bucket: SIGNAL_BUCKET, Key: processedKey })
+        .promise();
+      console.log(`UniqueId ${uniqueId} has already been processed. Exiting.`);
+      return {
+        statusCode: 200,
+        body: JSON.stringify("Already processed."),
+      };
+    } catch (error) {
+      // Proceed if the uniqueId has not been processed
+      console.log(`Processing new uniqueId: ${uniqueId}`);
+    }
+
     await axios.post(url, data, { headers });
 
     console.log("GitHub Actions workflow triggered with uniqueId: ", uniqueId);
@@ -113,6 +130,16 @@ export const handler = async (event: any) => {
     };
 
     await waitForSignalFile();
+
+    // Mark this uniqueId as processed
+    await s3
+      .putObject({
+        Bucket: SIGNAL_BUCKET,
+        Key: processedKey,
+        Body: JSON.stringify({ processed: true }),
+      })
+      .promise();
+    console.log(`Marked uniqueId ${uniqueId} as processed.`);
 
     // Step 5: Notify CodePipeline of success
     await codepipeline.putJobSuccessResult({ jobId }).promise();
