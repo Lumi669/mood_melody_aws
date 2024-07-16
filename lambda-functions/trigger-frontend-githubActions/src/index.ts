@@ -95,14 +95,14 @@ export const handler = async (event: any) => {
     const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
     const waitForSignalFile = async () => {
       for (let i = 0; i < 60; i++) {
-        // Wait for up to 5 minutes
+        // Wait for up to 10 minutes
         try {
           await s3
             .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
             .promise();
           return true;
         } catch (error) {
-          await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for 5 seconds before retrying
+          await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         }
       }
       throw new Error("Signal file not found in S3 within the timeout period.");
