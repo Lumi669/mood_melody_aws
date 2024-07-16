@@ -41,7 +41,7 @@
         "name": "Deploy",
         "actions": [
           {
-            "name": "Deploy",
+            "name": "Deploy-backend",
             "actionTypeId": {
               "category": "Deploy",
               "owner": "AWS",
@@ -66,8 +66,64 @@
             "namespace": "DeployVariables"
           }
         ]
+      },
+      {
+        "name": "Retrieve-bakendApiUrl-trigger-frontend-githubActions",
+        "actions": [
+          {
+            "name": "retrieveAndTrigger",
+            "actionTypeId": {
+              "category": "Invoke",
+              "owner": "AWS",
+              "provider": "Lambda",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "FunctionName": "mood-melody-fetchBackendImageApi-triggerFrontentBuild"
+            },
+            "outputArtifacts": [],
+            "inputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "region": "eu-north-1"
+          }
+        ]
+      },
+      {
+        "name": "Deploy-frontend",
+        "actions": [
+          {
+            "name": "Deploy-frontend",
+            "actionTypeId": {
+              "category": "Deploy",
+              "owner": "AWS",
+              "provider": "CloudFormation",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "ActionMode": "REPLACE_ON_FAILURE",
+              "Capabilities": "CAPABILITY_IAM,CAPABILITY_NAMED_IAM",
+              "RoleArn": "arn:aws:iam::536560382233:role/CloudFormationServiceRole-jinghuan-040724",
+              "StackName": "mood-melody-frontend",
+              "TemplatePath": "SourceArtifact::cloudformation/ci-cd-frontend.yml"
+            },
+            "outputArtifacts": [],
+            "inputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "region": "eu-north-1"
+          }
+        ]
       }
     ],
-    "version": 2
+    "version": 12,
+    "executionMode": "SUPERSEDED",
+    "pipelineType": "V1"
   }
 }
