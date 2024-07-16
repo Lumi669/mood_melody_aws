@@ -62,26 +62,34 @@ jobs:
         run: |
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=frontend-${TIMESTAMP}
 
-      - name: Trigger CodePipeline Stage
-        env:
-          AWS_REGION: eu-north-1
-          LAMBDA_FUNCTION_NAME: TriggerSpecificStage
-          PIPELINE_NAME: mood-melody
-          STAGE_NAME: Deploy-frontend
+      - name: Signal Lambda to trigger next stage of stage Retrieve-bakendApiUrl-trigger-frontend-githubActions
         run: |
-          echo "Invoking Lambda function to trigger CodePipeline stage..."
-          echo "AWS Region: $AWS_REGION"
-          echo "Lambda Function Name: $LAMBDA_FUNCTION_NAME"
-          echo "Pipeline Name: $PIPELINE_NAME"
-          echo "Stage Name: $STAGE_NAME"
+          echo '{"signal": true}' > signal.json
+          aws s3 cp signal.json s3://mood-melody-signal-bucket/github-action-signal.json
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
 
+      # - name: Trigger CodePipeline Stage
+      #   env:
+      #     AWS_REGION: eu-north-1
+      #     LAMBDA_FUNCTION_NAME: TriggerSpecificStage
+      #     PIPELINE_NAME: mood-melody
+      #     STAGE_NAME: Deploy-frontend
+      #   run: |
+      #     echo "Invoking Lambda function to trigger CodePipeline stage..."
+      #     echo "AWS Region: $AWS_REGION"
+      #     echo "Lambda Function Name: $LAMBDA_FUNCTION_NAME"
+      #     echo "Pipeline Name: $PIPELINE_NAME"
+      #     echo "Stage Name: $STAGE_NAME"
 
-          aws lambda invoke \
-            --function-name TriggerSpecificStage \
-            --region eu-north-1 \
-            --cli-binary-format raw-in-base64-out \
-            --payload '{"pipeline_name":"mood-melody", "stage_name":"Deploy-frontend"}' \
-            response.json
+      #     aws lambda invoke \
+      #       --function-name TriggerSpecificStage \
+      #       --region eu-north-1 \
+      #       --cli-binary-format raw-in-base64-out \
+      #       --payload '{"pipeline_name":"mood-melody", "stage_name":"Deploy-frontend"}' \
+      #       response.json
 
-          echo "Lambda invocation response:"
-          cat response.json
+      #     echo "Lambda invocation response:"
+      #     cat response.json

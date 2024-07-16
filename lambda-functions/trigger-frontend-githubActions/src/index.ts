@@ -1,9 +1,13 @@
 import * as AWS from "aws-sdk";
 import axios from "axios";
 
+const s3 = new AWS.S3();
 const ssm = new AWS.SSM();
 const cloudformation = new AWS.CloudFormation();
 const codepipeline = new AWS.CodePipeline();
+
+const SIGNAL_BUCKET = "mood-melody-signal-bucket";
+const SIGNAL_KEY = "github-action-signal.json";
 
 export const handler = async (event: any) => {
   const jobId = event["CodePipeline.job"].id;
@@ -11,7 +15,7 @@ export const handler = async (event: any) => {
 
   try {
     // Step 1: Retrieve CloudFormation outputs
-    const stackName = "mood-melody-backend"; // Replace with your CloudFormation stack name
+    const stackName = "mood-melody-backend";
 
     const describeStacksResponse = await cloudformation
       .describeStacks({ StackName: stackName })
@@ -82,8 +86,23 @@ export const handler = async (event: any) => {
 
     await axios.post(url, data, { headers });
 
-    // Notify CodePipeline of success
-    await codepipeline.putJobSuccessResult({ jobId }).promise();
+    // // Notify CodePipeline of success
+    // await codepipeline.putJobSuccessResult({ jobId }).promise();
+
+    // return {
+    //   statusCode: 200,
+    //   body: JSON.stringify("Triggered GitHub Actions successfully"),
+    // };
+    // Check if the signal file exists in S3
+    try {
+      await s3.headObject({ Bucket: SIGNAL_BUCKET, Key: SIGNAL_KEY }).promise();
+
+      // Signal file exists, proceed to notify CodePipeline of success
+      await codepipeline.putJobSuccessResult({ jobId }).promise();
+    } catch (s3Error) {
+      // Signal file does not exist, keep the job waiting
+      throw new Error("Signal from GitHub Actions not received yet");
+    }
 
     return {
       statusCode: 200,
