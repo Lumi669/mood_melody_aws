@@ -16,7 +16,6 @@ jobs:
         env:
           BACKEND_API_URL: ${{ github.event.client_payload.BACKEND_API_URL }}
           UNIQUE_ID: ${{ github.event.client_payload.UNIQUE_ID }}
-
         run: |
           echo "BACKEND_API_URL=${BACKEND_API_URL}" >> $GITHUB_ENV
           echo "UNIQUE_ID=${UNIQUE_ID}" >> $GITHUB_ENV
@@ -43,7 +42,6 @@ jobs:
           TIMESTAMP: ${{ env.TIMESTAMP }}
           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws
           BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
-
         run: |
           echo "BACKEND_API_UR from build and push fronten image step ========= ${BACKEND_API_URL}"
           docker build \

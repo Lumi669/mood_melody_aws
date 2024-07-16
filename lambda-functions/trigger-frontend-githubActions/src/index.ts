@@ -80,7 +80,7 @@ export const handler = async (event: any) => {
       Authorization: `token ${githubToken}`,
       Accept: "application/vnd.github.v3+json",
     };
-    const uuid = require("uuid").v4();
+    console.log("uniqueId generated for dispatch: ", uniqueId);
     const data = {
       event_type: "build-frontend",
       client_payload: {
@@ -91,6 +91,8 @@ export const handler = async (event: any) => {
 
     await axios.post(url, data, { headers });
 
+    console.log("GitHub Actions workflow triggered with uniqueId: ", uniqueId);
+
     // Step 4: Wait for the signal file to appear in S3
     const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
     const waitForSignalFile = async () => {
@@ -100,8 +102,10 @@ export const handler = async (event: any) => {
           await s3
             .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
             .promise();
+          console.log("Signal file found in S3: ", signalKey);
           return true;
         } catch (error) {
+          console.log("Signal file not found yet, retrying...");
           await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         }
       }
@@ -112,6 +116,7 @@ export const handler = async (event: any) => {
 
     // Step 5: Notify CodePipeline of success
     await codepipeline.putJobSuccessResult({ jobId }).promise();
+    console.log("CodePipeline job succeeded for jobId: ", jobId);
 
     return {
       statusCode: 200,
@@ -125,6 +130,8 @@ export const handler = async (event: any) => {
     if (error instanceof Error) {
       errorMessage = error.message;
     }
+
+    console.error("Error occurred: ", errorMessage);
 
     // Notify CodePipeline of failure
     await codepipeline
