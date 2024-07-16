@@ -93,6 +93,7 @@ export const handler = async (event: any) => {
     //   statusCode: 200,
     //   body: JSON.stringify("Triggered GitHub Actions successfully"),
     // };
+
     // Check if the signal file exists in S3
     try {
       await s3.headObject({ Bucket: SIGNAL_BUCKET, Key: SIGNAL_KEY }).promise();
