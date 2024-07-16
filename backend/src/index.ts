@@ -196,7 +196,7 @@ app.post("/submit", (req, res) => {
 });
 
 app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Welcome to the Music Mood API!=====yy999okpp" });
+  res.json({ message: "Welcome to the Music Mood API!=====yy999okp=======p" });
 });
 
 // Start server locally if not in Lambda
