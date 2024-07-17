@@ -22,21 +22,21 @@ Resources:
                 - lambda.amazonaws.com
             Action:
               - sts:AssumeRole
-    Policies:
-      - PolicyName: LambdaExecutionPolicy
-        PolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - logs:CreateLogGroup
-                - logs:CreateLogStream
-                - logs:PutLogEvents
-              Resource: "arn:aws:logs:*:*:*"
-            - Effect: Allow
-              Action:
-                - lambda:InvokeFunction
-              Resource: !GetAtt FrontendLambdaFunction.Arn
+      Policies:
+        - PolicyName: LambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "arn:aws:logs:*:*:*"
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: "*"
 
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
