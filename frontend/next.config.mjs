@@ -8,6 +8,18 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL_2: process.env.NEXT_PUBLIC_API_URL_2,
     NEXT_PUBLIC_API_URL_3: process.env.NEXT_PUBLIC_API_URL_3,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/live",
+        destination: "/live",
+      },
+      {
+        source: "/allmusic",
+        destination: "/allmusic",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
