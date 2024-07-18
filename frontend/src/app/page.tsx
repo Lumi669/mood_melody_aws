@@ -2,7 +2,6 @@ import React from "react";
 
 import TestForm from "../../components/TestForm";
 import { fetchAllMusicWithImages } from "utils/fetchAllMusicWithImages";
-import { useMedia } from "context/MediaContext";
 import ClientContextUpdater from "../../components/ClientContextUpdater";
 
 import ClientWrapperForMusicPlayer from "../../components/client/ClientWrapperForMusicPlayer";
