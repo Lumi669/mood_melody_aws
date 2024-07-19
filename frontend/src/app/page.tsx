@@ -14,7 +14,7 @@ const Home: React.FC = async () => {
         <p>Provide name</p>
         <TestForm />
       </div>
-      <h1>Welcome to the New Mood Music App i have no idea</h1>
+      <h1>Welcome to my Mood Music App</h1>
       <ClientWrapperForMusicPlayer />
       <ClientContextUpdater initialData={matchedData} />
     </div>
