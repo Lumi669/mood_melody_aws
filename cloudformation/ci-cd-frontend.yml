@@ -61,7 +61,7 @@ Resources:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
-      HttpMethod: GET
+      HttpMethod: ANY
       ResourceId: !GetAtt ApiGatewayRestApi.RootResourceId
       RestApiId: !Ref ApiGatewayRestApi
       Integration:
@@ -73,13 +73,13 @@ Resources:
           ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: "'*'"
             method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
 
   ApiGatewayMethodLive:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
-      HttpMethod: GET
+      HttpMethod: ANY
       ResourceId: !Ref ApiGatewayResourceLive
       RestApiId: !Ref ApiGatewayRestApi
       Integration:
@@ -91,13 +91,13 @@ Resources:
           ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: "'*'"
             method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
 
   ApiGatewayMethodAllMusic:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
-      HttpMethod: GET
+      HttpMethod: ANY
       ResourceId: !Ref ApiGatewayResourceAllMusic
       RestApiId: !Ref ApiGatewayRestApi
       Integration:
@@ -109,7 +109,7 @@ Resources:
           ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: "'*'"
             method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
 
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
@@ -130,7 +130,7 @@ Resources:
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*"
 
 Outputs:
-  BackendApiUrl:
+  FrontendApiUrl:
     Description: "URL for the frontend API Gateway"
     Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
     Export:
