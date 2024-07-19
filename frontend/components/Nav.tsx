@@ -14,7 +14,7 @@ const Nav: React.FC = () => {
         <Link href="/mixtape" className="text-lg font-semibold">
           Mixtape
         </Link>
-        <Link href="/live" className="text-lg font-semibold">
+        <Link href="/prod/live" className="text-lg font-semibold">
           Live
         </Link>
       </div>
