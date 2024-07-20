@@ -74,12 +74,12 @@ export const handler = async (event: any) => {
 
     const uniqueId = new Date().toISOString().replace(/[-:.TZ]/g, "");
 
-    const url = `https://api.github.com/repos/${githubRepo}/dispatches`;
+    const dispatchUrl = `https://api.github.com/repos/${githubRepo}/dispatches`;
     const headers = {
       Authorization: `token ${githubToken}`,
       Accept: "application/vnd.github.v3+json",
     };
-    const data = {
+    const dispatchData = {
       event_type: "build-frontend",
       client_payload: {
         BACKEND_API_URL: backendApiUrl,
@@ -105,34 +105,9 @@ export const handler = async (event: any) => {
       console.log(`Processing new uniqueId: ${uniqueId}`);
     }
 
-    await axios.post(url, data, { headers });
+    await axios.post(dispatchUrl, dispatchData, { headers });
 
     console.log("GitHub Actions workflow triggered with uniqueId: ", uniqueId);
-
-    // Step 4: Wait for the signal file to appear in S3
-    const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
-    const waitForSignalFile = async () => {
-      for (let i = 0; i < 60; i++) {
-        // Wait for up to 10 minutes
-        try {
-          await s3
-            .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
-            .promise();
-          console.log("Signal file found in S3: ", signalKey);
-          return true;
-        } catch (error: any) {
-          if (error.code === "AccessDenied") {
-            console.error("Access Denied when trying to read the signal file.");
-            throw error;
-          }
-          console.log("Signal file not found yet, retrying...");
-          await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
-        }
-      }
-      throw new Error("Signal file not found in S3 within the timeout period.");
-    };
-
-    await waitForSignalFile();
 
     // Step 4: Poll GitHub Actions API for Workflow Status
     const workflowRunUrl = `https://api.github.com/repos/${githubRepo}/actions/runs`;
@@ -144,7 +119,9 @@ export const handler = async (event: any) => {
           const runs = response.data.workflow_runs;
 
           if (runs.length > 0) {
-            const run = runs.find((r: any) => r.head_branch === uniqueId);
+            const run = runs.find((r: any) =>
+              r.head_commit.message.includes(uniqueId),
+            );
             if (run) {
               if (run.status === "completed") {
                 return run.conclusion;
@@ -175,6 +152,31 @@ export const handler = async (event: any) => {
       throw new Error("GitHub Actions failed with conclusion: " + conclusion);
     }
 
+    // Step 5: Wait for the signal file to appear in S3
+    const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
+    const waitForSignalFile = async () => {
+      for (let i = 0; i < 60; i++) {
+        // Wait for up to 10 minutes
+        try {
+          await s3
+            .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
+            .promise();
+          console.log("Signal file found in S3: ", signalKey);
+          return true;
+        } catch (error: any) {
+          if (error.code === "AccessDenied") {
+            console.error("Access Denied when trying to read the signal file.");
+            throw error;
+          }
+          console.log("Signal file not found yet, retrying...");
+          await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
+        }
+      }
+      throw new Error("Signal file not found in S3 within the timeout period.");
+    };
+
+    await waitForSignalFile();
+
     // Mark this uniqueId as processed
     await s3
       .putObject({
@@ -185,7 +187,7 @@ export const handler = async (event: any) => {
       .promise();
     console.log(`Marked uniqueId ${uniqueId} as processed.`);
 
-    // Step 5: Notify CodePipeline of success
+    // Step 6: Notify CodePipeline of success
     await codepipeline.putJobSuccessResult({ jobId }).promise();
     console.log("CodePipeline job succeeded for jobId: ", jobId);
 
