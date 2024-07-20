@@ -9,6 +9,11 @@ Resources:
       Code:
         ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:frontend-latest"
       PackageType: Image
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          NODE_ENV: production
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -36,6 +41,11 @@ Resources:
               - Effect: Allow
                 Action:
                   - lambda:InvokeFunction
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - apigateway:Invoke
+                  - apigateway:ManageConnections
                 Resource: "*"
 
   ApiGatewayRestApi:
@@ -181,7 +191,7 @@ Resources:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
 
-  BackendLambdaInvokePermission:
+  FrontendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
