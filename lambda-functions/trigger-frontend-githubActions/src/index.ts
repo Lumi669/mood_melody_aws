@@ -110,8 +110,8 @@ export const handler = async (event: any) => {
     console.log("GitHub Actions workflow triggered with uniqueId: ", uniqueId);
 
     // Step 4: Poll GitHub Actions API for Workflow Status
-    const workflowRunUrl = `https://api.github.com/repos/${githubRepo}/actions/runs`;
     const pollGitHubActions = async () => {
+      const workflowRunUrl = `https://api.github.com/repos/${githubRepo}/actions/runs`;
       for (let i = 0; i < 60; i++) {
         // Wait for up to 10 minutes
         try {
