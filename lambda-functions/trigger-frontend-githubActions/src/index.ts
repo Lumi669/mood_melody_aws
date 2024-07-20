@@ -55,7 +55,6 @@ export const handler = async (event: any) => {
       .getParameter({ Name: parameterName, WithDecryption: true })
       .promise();
     let githubToken = ssmResponse.Parameter?.Value;
-    console.log("githubtoken ==== ", githubToken);
 
     if (!githubToken) {
       throw new Error("GitHub token not found in Parameter Store");
@@ -63,7 +62,6 @@ export const handler = async (event: any) => {
 
     // Clean the GitHub token
     githubToken = githubToken.trim();
-    console.log("githubToken (trimmed) ==== ", githubToken);
 
     // Check if the token contains invalid characters
     const invalidChars = /[^a-zA-Z0-9_-]/;
@@ -73,15 +71,14 @@ export const handler = async (event: any) => {
 
     // Step 3: Trigger GitHub Actions workflow via repository dispatch
     const githubRepo = "Lumi669/mood_melody_aws"; // Replace with your GitHub username and frontend repo
+
     const uniqueId = new Date().toISOString().replace(/[-:.TZ]/g, "");
 
     const url = `https://api.github.com/repos/${githubRepo}/dispatches`;
-    console.log("url of github ==== ", url);
     const headers = {
       Authorization: `token ${githubToken}`,
       Accept: "application/vnd.github.v3+json",
     };
-    console.log("uniqueId generated for dispatch: ", uniqueId);
     const data = {
       event_type: "build-frontend",
       client_payload: {
@@ -96,7 +93,6 @@ export const handler = async (event: any) => {
       await s3
         .headObject({ Bucket: SIGNAL_BUCKET, Key: processedKey })
         .promise();
-      console.log(`UniqueId ${uniqueId} has already been processed. Exiting.`);
       return {
         statusCode: 200,
         body: JSON.stringify("Already processed."),
