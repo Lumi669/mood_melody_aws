@@ -12,7 +12,7 @@ const Nav: React.FC = () => {
           All Music
         </Link>
         <Link href="/mixtape" className="text-lg font-semibold">
-          Mixtape
+          MixtapeY
         </Link>
         <Link href="/live" className="text-lg font-semibold">
           Live
