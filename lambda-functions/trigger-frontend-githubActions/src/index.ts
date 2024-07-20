@@ -134,6 +134,22 @@ export const handler = async (event: any) => {
 
     await waitForSignalFile();
 
+    // Read the content of the signal file to determine GitHub Actions result
+    const signalFile = await s3
+      .getObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
+      .promise();
+
+    if (!signalFile.Body) {
+      throw new Error("Signal file is empty or does not exist.");
+    }
+
+    const signalContent = JSON.parse(signalFile.Body.toString("utf-8"));
+
+    // Check for GitHub Actions failure
+    if (signalContent.status !== "success") {
+      throw new Error("GitHub Actions failed: " + signalContent.errorMessage);
+    }
+
     // Mark this uniqueId as processed
     await s3
       .putObject({
@@ -168,7 +184,7 @@ export const handler = async (event: any) => {
       .putJobFailureResult({
         jobId,
         failureDetails: {
-          message: errorMessage,
+          message: `GitHub Actions failed: ${errorMessage}`,
           type: "JobFailed",
           externalExecutionId: event["CodePipeline.job"].id,
         },
