@@ -60,14 +60,14 @@ Resources:
   ApiGatewayResourceAllMusic:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+      ParentId: !Ref ApiGatewayResourceRoot
       PathPart: allmusic
       RestApiId: !Ref ApiGatewayRestApi
 
   ApiGatewayResourceLive:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+      ParentId: !Ref ApiGatewayResourceRoot
       PathPart: live
       RestApiId: !Ref ApiGatewayRestApi
 
@@ -134,6 +134,7 @@ Resources:
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
+      Description: "Deployment for MoodMelodyBackendApi at !{timestamp}"
 
   FrontendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
