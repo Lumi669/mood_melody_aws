@@ -134,20 +134,45 @@ export const handler = async (event: any) => {
 
     await waitForSignalFile();
 
-    // Read the content of the signal file to determine GitHub Actions result
-    const signalFile = await s3
-      .getObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
-      .promise();
+    // Step 4: Poll GitHub Actions API for Workflow Status
+    const workflowRunUrl = `https://api.github.com/repos/${githubRepo}/actions/runs`;
+    const pollGitHubActions = async () => {
+      for (let i = 0; i < 60; i++) {
+        // Wait for up to 10 minutes
+        try {
+          const response = await axios.get(workflowRunUrl, { headers });
+          const runs = response.data.workflow_runs;
 
-    if (!signalFile.Body) {
-      throw new Error("Signal file is empty or does not exist.");
-    }
+          if (runs.length > 0) {
+            const run = runs.find((r: any) => r.head_branch === uniqueId);
+            if (run) {
+              if (run.status === "completed") {
+                return run.conclusion;
+              }
+            }
+          }
+          console.log(
+            "Workflow run not found or not completed yet, retrying...",
+          );
+          await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
+        } catch (error: any) {
+          console.error(
+            "Error checking GitHub Actions status: ",
+            error.message,
+          );
+          throw error;
+        }
+      }
+      throw new Error(
+        "GitHub Actions workflow not completed within the timeout period.",
+      );
+    };
 
-    const signalContent = JSON.parse(signalFile.Body.toString("utf-8"));
+    const conclusion = await pollGitHubActions();
 
     // Check for GitHub Actions failure
-    if (signalContent.status !== "success") {
-      throw new Error("GitHub Actions failed: " + signalContent.errorMessage);
+    if (conclusion !== "success") {
+      throw new Error("GitHub Actions failed with conclusion: " + conclusion);
     }
 
     // Mark this uniqueId as processed
