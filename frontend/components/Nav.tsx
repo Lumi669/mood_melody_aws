@@ -5,13 +5,13 @@ const Nav: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-4">
-        <Link href="/" className="text-lg font-semibold">
+        <Link href="/prod" className="text-lg font-semibold">
           Home
         </Link>
-        <Link href="/allmusic" className="text-lg font-semibold">
+        <Link href="/prod/allmusic" className="text-lg font-semibold">
           All Music
         </Link>
-        <Link href="/mixtape" className="text-lg font-semibold">
+        <Link href="/prod/mixtape" className="text-lg font-semibold">
           Mixtape
         </Link>
         <Link href="/prod/live" className="text-lg font-semibold">
