@@ -4,9 +4,9 @@ on:
   repository_dispatch:
     types: [build-frontend]
 
-permissions:
-  id-token: write
-  contents: read
+# permissions:
+#   id-token: write
+#   contents: read
 
 jobs:
   build:
@@ -67,6 +67,13 @@ jobs:
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=frontend-${TIMESTAMP}
 
       - name: Signal Lambda to trigger next stage of stage Retrieve-bakendApiUrl-trigger-frontend-githubActions
+        if: success()
         run: |
-          echo '{"signal": true, "unique_id": "'${UNIQUE_ID}'"}' > signal.json
+          echo '{"signal": true, "unique_id": "'${UNIQUE_ID}'", "status": "success"}' > signal.json
+          aws s3 cp signal.json s3://mood-melody-signal-bucket/github-action-signal-${UNIQUE_ID}.json
+
+      - name: Signal failure to S3
+        if: failure()
+        run: |
+          echo '{"signal": true, "unique_id": "'${UNIQUE_ID}'", "status": "failure"}' > signal.json
           aws s3 cp signal.json s3://mood-melody-signal-bucket/github-action-signal-${UNIQUE_ID}.json
