@@ -113,7 +113,7 @@ export const handler = async (event: any) => {
     const pollGitHubActions = async () => {
       const workflowRunUrl = `https://api.github.com/repos/${githubRepo}/actions/runs`;
       for (let i = 0; i < 60; i++) {
-        // Wait for up to 1 minutes
+        // Wait for up to 10 minutes
         try {
           const response = await axios.get(workflowRunUrl, { headers });
           const runs = response.data.workflow_runs;
@@ -131,7 +131,7 @@ export const handler = async (event: any) => {
           console.log(
             "Workflow run not found or not completed yet, retrying...",
           );
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 seconds before retrying
+          await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 10 seconds before retrying
         } catch (error: any) {
           console.error(
             "Error checking GitHub Actions status: ",
