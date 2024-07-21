@@ -129,9 +129,18 @@ export const handler = async (event: any) => {
               if (run.status === "completed") {
                 console.log("GitHub Actions run found:", run);
                 if (run.conclusion !== "success") {
-                  throw new Error(
-                    "GitHub Actions failed with conclusion: " + run.conclusion,
-                  );
+                  console.log("GitHub Actions failed:", run.conclusion);
+                  await codepipeline
+                    .putJobFailureResult({
+                      jobId,
+                      failureDetails: {
+                        message: `GitHub Actions failed with conclusion: ${run.conclusion}`,
+                        type: "JobFailed",
+                        externalExecutionId: jobId,
+                      },
+                    })
+                    .promise();
+                  return; // Exit polling loop
                 }
               }
             }
