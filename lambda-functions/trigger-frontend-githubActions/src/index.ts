@@ -124,6 +124,7 @@ export const handler = async (event: any) => {
             );
             if (run) {
               if (run.status === "completed") {
+                console.log("GitHub Actions run found:", run);
                 return run.conclusion;
               }
             }
@@ -131,7 +132,7 @@ export const handler = async (event: any) => {
           console.log(
             "Workflow run not found or not completed yet, retrying...",
           );
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 10 seconds before retrying
+          await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         } catch (error: any) {
           console.error(
             "Error checking GitHub Actions status: ",
