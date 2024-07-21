@@ -120,6 +120,8 @@ export const handler = async (event: any) => {
             .getObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
             .promise();
 
+          console.log("response ===== ", response);
+
           if (response.Body) {
             const signalData = JSON.parse(response.Body.toString("utf-8"));
             console.log("Signal data from S3 === ", signalData);
