@@ -113,7 +113,7 @@ export const handler = async (event: any) => {
     const pollS3ForSignal = async () => {
       const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
 
-      for (let i = 0; i < 120; i++) {
+      for (let i = 0; i < 60; i++) {
         console.log("Starting iteration i ====== ", i);
         try {
           const response = await s3
