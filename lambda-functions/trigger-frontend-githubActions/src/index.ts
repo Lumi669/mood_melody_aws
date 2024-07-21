@@ -115,7 +115,7 @@ export const handler = async (event: any) => {
       const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
 
       for (let i = 0; i < 60; i++) {
-        console.log("i ====== ", i);
+        console.log("Starting iteration i ====== ", i);
         // Wait for up to 10 minutes
         try {
           // Check GitHub Actions Workflow Status
@@ -164,9 +164,15 @@ export const handler = async (event: any) => {
             if (error.code !== "NotFound") {
               throw error;
             }
+            console.log(
+              "Starting iteration i in checking signal in s3 step ====== ",
+              i,
+            );
+
             console.log("Signal file not found yet, retrying...");
           }
 
+          console.log("Waiting for 10 seconds before next retry...");
           await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         } catch (error: any) {
           console.error(
@@ -190,7 +196,9 @@ export const handler = async (event: any) => {
       return false; // Indicate timeout failure
     };
 
+    console.log("before call pollGitHubActionsAndS3");
     const signalFound = await pollGitHubActionsAndS3();
+    console.log("signalFound ==== ", signalFound);
 
     if (!signalFound) {
       // Notify CodePipeline of failure
