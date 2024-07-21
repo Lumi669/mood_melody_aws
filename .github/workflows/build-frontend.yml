@@ -4,9 +4,9 @@ on:
   repository_dispatch:
     types: [build-frontend]
 
-# permissions:
-#   id-token: write
-#   contents: read
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build:
@@ -55,10 +55,10 @@ jobs:
             -t mood-melody-aws:frontend-latest \
             ./frontend
 
-          docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
-          docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
-          docker push ${REPO_URI}:frontend-${TIMESTAMP}
-          docker push ${REPO_URI}:frontend-latest
+          # docker tag mood-melody-aws:frontend-${TIMESTAMP} ${REPO_URI}:frontend-${TIMESTAMP}
+          # docker tag mood-melody-aws:frontend-latest ${REPO_URI}:frontend-latest
+          # docker push ${REPO_URI}:frontend-${TIMESTAMP}
+          # docker push ${REPO_URI}:frontend-latest
 
       - name: Verify frontend image exists
         env:
