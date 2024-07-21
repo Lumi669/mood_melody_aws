@@ -132,7 +132,10 @@ export const handler = async (event: any) => {
                 headers,
               });
               const runDetails = runDetailsResponse.data;
+              console.log("runDetails === ", runDetails);
+
               const logsUrl = runDetails.logs_url;
+              console.log("logsUrl ====== ", logsUrl);
 
               // Fetch logs and check for UNIQUE_ID
               const logsResponse = await axios.get(logsUrl, {
@@ -178,7 +181,7 @@ export const handler = async (event: any) => {
             await s3
               .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
               .promise();
-            console.log("Signal file found in S3: ", signalKey);
+            console.log("Signal file found in S3 === ", signalKey);
             return true; // Indicate success and exit
           } catch (error: any) {
             if (error.code !== "NotFound") {
@@ -196,14 +199,14 @@ export const handler = async (event: any) => {
           await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         } catch (error: any) {
           console.error(
-            "Error checking GitHub Actions status or S3 signal file: ",
+            "======= Error checking GitHub Actions status or S3 signal file: ",
             error.message,
           );
           await codepipeline
             .putJobFailureResult({
               jobId,
               failureDetails: {
-                message: `Error checking GitHub Actions status or S3 signal file: ${error.message}`,
+                message: `======= Error checking GitHub Actions status or S3 signal file: ${error.message}`,
                 type: "JobFailed",
                 externalExecutionId: jobId,
               },
