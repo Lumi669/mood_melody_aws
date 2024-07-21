@@ -136,9 +136,6 @@ export const handler = async (event: any) => {
           } else {
             console.log("Response Body is undefined.");
           }
-
-          console.log("Signal file not ready, retrying...");
-          await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         } catch (error: any) {
           if (error.code === "NoSuchKey") {
             console.log("Signal file not found, retrying...");
@@ -147,6 +144,8 @@ export const handler = async (event: any) => {
             throw error;
           }
         }
+        console.log("Signal file not ready, retrying...");
+        await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
       }
 
       return false; // Indicate timeout failure
