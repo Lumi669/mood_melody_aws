@@ -130,17 +130,7 @@ export const handler = async (event: any) => {
                 console.log("GitHub Actions run found:", run);
                 if (run.conclusion !== "success") {
                   console.log("GitHub Actions failed:", run.conclusion);
-                  await codepipeline
-                    .putJobFailureResult({
-                      jobId,
-                      failureDetails: {
-                        message: `GitHub Actions failed with conclusion: ${run.conclusion}`,
-                        type: "JobFailed",
-                        externalExecutionId: jobId,
-                      },
-                    })
-                    .promise();
-                  return; // Exit polling loop
+                  return false; // Indicate failure
                 }
               }
             }
@@ -156,7 +146,7 @@ export const handler = async (event: any) => {
               .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
               .promise();
             console.log("Signal file found in S3: ", signalKey);
-            return true; // Signal file found
+            return true; // Indicate success
           } catch (error: any) {
             if (error.code !== "NotFound") {
               throw error;
@@ -170,27 +160,35 @@ export const handler = async (event: any) => {
             "Error checking GitHub Actions status or S3 signal file: ",
             error.message,
           );
-          // Notify CodePipeline of failure
-          await codepipeline
-            .putJobFailureResult({
-              jobId,
-              failureDetails: {
-                message: `GitHub Actions failed: ${error.message}`,
-                type: "JobFailed",
-                externalExecutionId: jobId,
-              },
-            })
-            .promise();
-          throw error;
+          return false; // Indicate failure
         }
       }
 
-      throw new Error(
-        "GitHub Actions workflow or signal file not completed within the timeout period.",
-      );
+      return false; // Indicate timeout failure
     };
 
-    await pollGitHubActionsAndS3();
+    const signalFound = await pollGitHubActionsAndS3();
+
+    if (!signalFound) {
+      // Notify CodePipeline of failure
+      await codepipeline
+        .putJobFailureResult({
+          jobId,
+          failureDetails: {
+            message:
+              "GitHub Actions failed or signal file not found in S3 within the timeout period.",
+            type: "JobFailed",
+            externalExecutionId: jobId,
+          },
+        })
+        .promise();
+      return {
+        statusCode: 500,
+        body: JSON.stringify(
+          "GitHub Actions failed or signal file not found in S3 within the timeout period.",
+        ),
+      };
+    }
 
     // Mark this uniqueId as processed
     await s3
