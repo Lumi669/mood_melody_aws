@@ -130,12 +130,18 @@ export const handler = async (event: any) => {
               const runDetailsResponse = await axios.get(runDetailsUrl, {
                 headers,
               });
-              console.log("runDetailResponse === ", runDetailsResponse);
               const runDetails = runDetailsResponse.data;
-              console.log("runDetails === ", runDetails);
-              const payload = runDetails.inputs;
-              console.log("payload === ", payload);
-              if (payload && payload.UNIQUE_ID === uniqueId) {
+              console.log("runDetail === ", runDetails);
+              const logsUrl = runDetails.logs_url;
+              console.log("logsUrl === ", logsUrl);
+
+              // Fetch logs and check for UNIQUE_ID
+              const logsResponse = await axios.get(logsUrl, { headers });
+              console.log("logsResponse === ", logsResponse);
+              const logs = logsResponse.data;
+              console.log("logs ==== ", logs);
+
+              if (logs.includes(`UNIQUE_ID=${uniqueId}`)) {
                 if (runDetails.status === "completed") {
                   console.log("GitHub Actions run found:", runDetails);
                   if (runDetails.conclusion !== "success") {
@@ -155,8 +161,8 @@ export const handler = async (event: any) => {
                       .promise();
                     return false; // Indicate failure and exit
                   }
+                  break;
                 }
-                break;
               }
             }
           } else {
