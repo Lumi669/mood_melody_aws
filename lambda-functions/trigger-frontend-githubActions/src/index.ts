@@ -109,12 +109,15 @@ export const handler = async (event: any) => {
 
     console.log("GitHub Actions workflow triggered with uniqueId: ", uniqueId);
 
-    // Step 4: Poll GitHub Actions API for Workflow Status
-    const pollGitHubActions = async () => {
+    // Step 4: Poll GitHub Actions API for Workflow Status and Signal File in S3
+    const pollGitHubActionsAndS3 = async () => {
       const workflowRunUrl = `https://api.github.com/repos/${githubRepo}/actions/runs`;
+      const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
+
       for (let i = 0; i < 60; i++) {
         // Wait for up to 10 minutes
         try {
+          // Check GitHub Actions Workflow Status
           const response = await axios.get(workflowRunUrl, { headers });
           const runs = response.data.workflow_runs;
 
@@ -125,58 +128,49 @@ export const handler = async (event: any) => {
             if (run) {
               if (run.status === "completed") {
                 console.log("GitHub Actions run found:", run);
-                return run.conclusion;
+                if (run.conclusion !== "success") {
+                  throw new Error(
+                    "GitHub Actions failed with conclusion: " + run.conclusion,
+                  );
+                }
               }
             }
+          } else {
+            console.log(
+              "Workflow run not found or not completed yet, retrying...",
+            );
           }
-          console.log(
-            "Workflow run not found or not completed yet, retrying...",
-          );
+
+          // Check for Signal File in S3
+          try {
+            await s3
+              .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
+              .promise();
+            console.log("Signal file found in S3: ", signalKey);
+            return true; // Signal file found
+          } catch (error: any) {
+            if (error.code !== "NotFound") {
+              throw error;
+            }
+            console.log("Signal file not found yet, retrying...");
+          }
+
           await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         } catch (error: any) {
           console.error(
-            "Error checking GitHub Actions status: ",
+            "Error checking GitHub Actions status or S3 signal file: ",
             error.message,
           );
           throw error;
         }
       }
+
       throw new Error(
-        "GitHub Actions workflow not completed within the timeout period.",
+        "GitHub Actions workflow or signal file not completed within the timeout period.",
       );
     };
 
-    const conclusion = await pollGitHubActions();
-
-    // Check for GitHub Actions failure
-    if (conclusion !== "success") {
-      throw new Error("GitHub Actions failed with conclusion: " + conclusion);
-    }
-
-    // Step 5: Wait for the signal file to appear in S3
-    const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
-    const waitForSignalFile = async () => {
-      for (let i = 0; i < 60; i++) {
-        // Wait for up to 10 minutes
-        try {
-          await s3
-            .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
-            .promise();
-          console.log("Signal file found in S3: ", signalKey);
-          return true;
-        } catch (error: any) {
-          if (error.code === "AccessDenied") {
-            console.error("Access Denied when trying to read the signal file.");
-            throw error;
-          }
-          console.log("Signal file not found yet, retrying...");
-          await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
-        }
-      }
-      throw new Error("Signal file not found in S3 within the timeout period.");
-    };
-
-    await waitForSignalFile();
+    await pollGitHubActionsAndS3();
 
     // Mark this uniqueId as processed
     await s3
@@ -188,7 +182,7 @@ export const handler = async (event: any) => {
       .promise();
     console.log(`Marked uniqueId ${uniqueId} as processed.`);
 
-    // Step 6: Notify CodePipeline of success
+    // Step 5: Notify CodePipeline of success
     await codepipeline.putJobSuccessResult({ jobId }).promise();
     console.log("CodePipeline job succeeded for jobId: ", jobId);
 
