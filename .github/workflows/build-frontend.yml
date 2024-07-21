@@ -67,11 +67,6 @@ jobs:
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=frontend-${TIMESTAMP}
 
       - name: Signal Lambda to trigger next stage of stage Retrieve-bakendApiUrl-trigger-frontend-githubActions
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          UNIQUE_ID: ${{ env.UNIQUE_ID }}
         run: |
           echo '{"signal": true, "unique_id": "'${UNIQUE_ID}'"}' > signal.json
           aws s3 cp signal.json s3://mood-melody-signal-bucket/github-action-signal-${UNIQUE_ID}.json
