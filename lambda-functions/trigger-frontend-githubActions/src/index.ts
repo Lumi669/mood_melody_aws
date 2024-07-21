@@ -121,8 +121,8 @@ export const handler = async (event: any) => {
             .promise();
 
           if (response.Body) {
-            const signalData = JSON.parse(response.Body.toString());
-            console.log("Signal data from S3:", signalData);
+            const signalData = JSON.parse(response.Body.toString("utf-8"));
+            console.log("Signal data from S3 === ", signalData);
 
             if (signalData.unique_id === uniqueId) {
               if (signalData.status === "success") {
@@ -131,6 +131,8 @@ export const handler = async (event: any) => {
                 return false; // Indicate failure and exit
               }
             }
+          } else {
+            console.log("Response Body is undefined.");
           }
 
           console.log("Signal file not ready, retrying...");
@@ -139,6 +141,7 @@ export const handler = async (event: any) => {
           if (error.code === "NoSuchKey") {
             console.log("Signal file not found, retrying...");
           } else {
+            console.error("Error getting object from S3:", error);
             throw error;
           }
         }
