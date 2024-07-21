@@ -1,6 +1,5 @@
 import * as AWS from "aws-sdk";
 import axios from "axios";
-import zlib from "zlib"; // Built-in Node.js module
 
 const s3 = new AWS.S3();
 const ssm = new AWS.SSM();
@@ -110,125 +109,46 @@ export const handler = async (event: any) => {
 
     console.log("GitHub Actions workflow triggered with uniqueId: ", uniqueId);
 
-    // Step 4: Poll GitHub Actions API for Workflow Status and Signal File in S3
-    const pollGitHubActionsAndS3 = async () => {
-      const workflowRunUrl = `https://api.github.com/repos/${githubRepo}/actions/runs`;
+    // Step 4: Poll S3 for Signal File
+    const pollS3ForSignal = async () => {
       const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
 
       for (let i = 0; i < 60; i++) {
         console.log("Starting iteration i ====== ", i);
-        // Wait for up to 10 minutes
         try {
-          // Check GitHub Actions Workflow Status
-          const response = await axios.get(workflowRunUrl, { headers });
-          const runs = response.data.workflow_runs;
-          console.log("runs ==== ", runs);
+          const response = await s3
+            .getObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
+            .promise();
 
-          if (runs.length > 0) {
-            for (const run of runs) {
-              console.log(`Checking run with ID: ${run.id}`);
-              const runDetailsUrl = `https://api.github.com/repos/${githubRepo}/actions/runs/${run.id}`;
-              const runDetailsResponse = await axios.get(runDetailsUrl, {
-                headers,
-              });
-              const runDetails = runDetailsResponse.data;
-              console.log("runDetails === ", runDetails);
+          if (response.Body) {
+            const signalData = JSON.parse(response.Body.toString());
+            console.log("Signal data from S3:", signalData);
 
-              const logsUrl = runDetails.logs_url;
-              console.log("logsUrl ====== ", logsUrl);
-
-              // Fetch logs and check for UNIQUE_ID
-              const logsResponse = await axios.get(logsUrl, {
-                headers,
-                responseType: "arraybuffer",
-              });
-              const logsBuffer = Buffer.from(logsResponse.data);
-
-              let logs;
-              try {
-                logs = zlib.unzipSync(logsBuffer).toString();
-                console.log("logs after zlib unzip === ", logs);
-              } catch (e) {
-                console.log("Logs are not compressed, reading as plain text");
-                logs = logsBuffer.toString();
-                console.log("logs as plain text === ", logs);
-              }
-
-              if (logs.includes(`UNIQUE_ID=${uniqueId}`)) {
-                if (runDetails.status === "completed") {
-                  console.log("GitHub Actions run found:", runDetails);
-                  if (runDetails.conclusion !== "success") {
-                    console.log(
-                      "GitHub Actions failed:",
-                      runDetails.conclusion,
-                    );
-                    await codepipeline
-                      .putJobFailureResult({
-                        jobId,
-                        failureDetails: {
-                          message: `GitHub Actions failed with conclusion: ${runDetails.conclusion}`,
-                          type: "JobFailed",
-                          externalExecutionId: jobId,
-                        },
-                      })
-                      .promise();
-                    return false; // Indicate failure and exit
-                  }
-                  return true; // Indicate success and exit
-                }
+            if (signalData.unique_id === uniqueId) {
+              if (signalData.status === "success") {
+                return true; // Indicate success and exit
+              } else if (signalData.status === "failure") {
+                return false; // Indicate failure and exit
               }
             }
-          } else {
-            console.log(
-              "Workflow run not found or not completed yet, retrying...",
-            );
           }
 
-          // Check for Signal File in S3
-          try {
-            await s3
-              .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
-              .promise();
-            console.log("Signal file found in S3 === ", signalKey);
-            return true; // Indicate success and exit
-          } catch (error: any) {
-            if (error.code !== "NotFound") {
-              throw error;
-            }
-            console.log(
-              "Starting iteration i in checking signal in s3 step ====== ",
-              i,
-            );
-
-            console.log("Signal file not found yet, retrying...");
-          }
-
-          console.log("Waiting for 10 seconds before next retry...");
+          console.log("Signal file not ready, retrying...");
           await new Promise((resolve) => setTimeout(resolve, 10000)); // Wait for 10 seconds before retrying
         } catch (error: any) {
-          console.error(
-            "======= Error checking GitHub Actions status or S3 signal file: ",
-            error.message,
-          );
-          await codepipeline
-            .putJobFailureResult({
-              jobId,
-              failureDetails: {
-                message: `======= Error checking GitHub Actions status or S3 signal file: ${error.message}`,
-                type: "JobFailed",
-                externalExecutionId: jobId,
-              },
-            })
-            .promise();
-          throw error;
+          if (error.code === "NoSuchKey") {
+            console.log("Signal file not found, retrying...");
+          } else {
+            throw error;
+          }
         }
       }
 
       return false; // Indicate timeout failure
     };
 
-    console.log("before call pollGitHubActionsAndS3");
-    const signalFound = await pollGitHubActionsAndS3();
+    console.log("before call pollS3ForSignal");
+    const signalFound = await pollS3ForSignal();
     console.log("signalFound ==== ", signalFound);
 
     if (!signalFound) {
