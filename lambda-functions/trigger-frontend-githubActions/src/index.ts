@@ -1,5 +1,6 @@
 import * as AWS from "aws-sdk";
 import axios from "axios";
+import zlib from "zlib"; // Built-in Node.js module
 
 const s3 = new AWS.S3();
 const ssm = new AWS.SSM();
@@ -131,15 +132,16 @@ export const handler = async (event: any) => {
                 headers,
               });
               const runDetails = runDetailsResponse.data;
-              console.log("runDetail === ", runDetails);
               const logsUrl = runDetails.logs_url;
-              console.log("logsUrl === ", logsUrl);
 
               // Fetch logs and check for UNIQUE_ID
-              const logsResponse = await axios.get(logsUrl, { headers });
-              console.log("logsResponse === ", logsResponse);
-              const logs = logsResponse.data;
-              console.log("logs ==== ", logs);
+              const logsResponse = await axios.get(logsUrl, {
+                headers,
+                responseType: "arraybuffer",
+              });
+              const logsBuffer = Buffer.from(logsResponse.data);
+              const logs = zlib.unzipSync(logsBuffer).toString();
+              console.log("logs after zlib unzip === ", logs);
 
               if (logs.includes(`UNIQUE_ID=${uniqueId}`)) {
                 if (runDetails.status === "completed") {
