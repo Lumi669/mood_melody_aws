@@ -166,7 +166,7 @@ export const handler = async (event: any) => {
                       .promise();
                     return false; // Indicate failure and exit
                   }
-                  break;
+                  return true; // Indicate success and exit
                 }
               }
             }
