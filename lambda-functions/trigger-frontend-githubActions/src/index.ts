@@ -124,27 +124,39 @@ export const handler = async (event: any) => {
           console.log("runs ==== ", runs);
 
           if (runs.length > 0) {
-            const run = runs.find((r: any) =>
-              r.head_commit.message.includes(uniqueId),
-            );
-            console.log("run === ", run);
-            if (run) {
-              if (run.status === "completed") {
-                console.log("GitHub Actions run found:", run);
-                if (run.conclusion !== "success") {
-                  console.log("GitHub Actions failed:", run.conclusion);
-                  await codepipeline
-                    .putJobFailureResult({
-                      jobId,
-                      failureDetails: {
-                        message: `GitHub Actions failed with conclusion: ${run.conclusion}`,
-                        type: "JobFailed",
-                        externalExecutionId: jobId,
-                      },
-                    })
-                    .promise();
-                  return false; // Indicate failure and exit
+            for (const run of runs) {
+              console.log(`Checking run with ID: ${run.id}`);
+              const runDetailsUrl = `https://api.github.com/repos/${githubRepo}/actions/runs/${run.id}`;
+              const runDetailsResponse = await axios.get(runDetailsUrl, {
+                headers,
+              });
+              console.log("runDetailResponse === ", runDetailsResponse);
+              const runDetails = runDetailsResponse.data;
+              console.log("runDetails === ", runDetails);
+              const payload = runDetails.inputs;
+              console.log("payload === ", payload);
+              if (payload && payload.UNIQUE_ID === uniqueId) {
+                if (runDetails.status === "completed") {
+                  console.log("GitHub Actions run found:", runDetails);
+                  if (runDetails.conclusion !== "success") {
+                    console.log(
+                      "GitHub Actions failed:",
+                      runDetails.conclusion,
+                    );
+                    await codepipeline
+                      .putJobFailureResult({
+                        jobId,
+                        failureDetails: {
+                          message: `GitHub Actions failed with conclusion: ${runDetails.conclusion}`,
+                          type: "JobFailed",
+                          externalExecutionId: jobId,
+                        },
+                      })
+                      .promise();
+                    return false; // Indicate failure and exit
+                  }
                 }
+                break;
               }
             }
           } else {
