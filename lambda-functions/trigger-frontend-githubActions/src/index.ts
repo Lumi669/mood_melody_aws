@@ -115,22 +115,35 @@ export const handler = async (event: any) => {
       const signalKey = `${SIGNAL_KEY_PREFIX}${uniqueId}.json`;
 
       for (let i = 0; i < 60; i++) {
+        console.log("i ====== ", i);
         // Wait for up to 10 minutes
         try {
           // Check GitHub Actions Workflow Status
           const response = await axios.get(workflowRunUrl, { headers });
           const runs = response.data.workflow_runs;
+          console.log("runs ==== ", runs);
 
           if (runs.length > 0) {
             const run = runs.find((r: any) =>
               r.head_commit.message.includes(uniqueId),
             );
+            console.log("run === ", run);
             if (run) {
               if (run.status === "completed") {
                 console.log("GitHub Actions run found:", run);
                 if (run.conclusion !== "success") {
                   console.log("GitHub Actions failed:", run.conclusion);
-                  return false; // Indicate failure
+                  await codepipeline
+                    .putJobFailureResult({
+                      jobId,
+                      failureDetails: {
+                        message: `GitHub Actions failed with conclusion: ${run.conclusion}`,
+                        type: "JobFailed",
+                        externalExecutionId: jobId,
+                      },
+                    })
+                    .promise();
+                  return false; // Indicate failure and exit
                 }
               }
             }
@@ -146,7 +159,7 @@ export const handler = async (event: any) => {
               .headObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
               .promise();
             console.log("Signal file found in S3: ", signalKey);
-            return true; // Indicate success
+            return true; // Indicate success and exit
           } catch (error: any) {
             if (error.code !== "NotFound") {
               throw error;
@@ -160,7 +173,17 @@ export const handler = async (event: any) => {
             "Error checking GitHub Actions status or S3 signal file: ",
             error.message,
           );
-          return false; // Indicate failure
+          await codepipeline
+            .putJobFailureResult({
+              jobId,
+              failureDetails: {
+                message: `Error checking GitHub Actions status or S3 signal file: ${error.message}`,
+                type: "JobFailed",
+                externalExecutionId: jobId,
+              },
+            })
+            .promise();
+          throw error;
         }
       }
 
