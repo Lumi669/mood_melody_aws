@@ -143,8 +143,16 @@ export const handler = async (event: any) => {
                 responseType: "arraybuffer",
               });
               const logsBuffer = Buffer.from(logsResponse.data);
-              const logs = zlib.unzipSync(logsBuffer).toString();
-              console.log("logs after zlib unzip === ", logs);
+
+              let logs;
+              try {
+                logs = zlib.unzipSync(logsBuffer).toString();
+                console.log("logs after zlib unzip === ", logs);
+              } catch (e) {
+                console.log("Logs are not compressed, reading as plain text");
+                logs = logsBuffer.toString();
+                console.log("logs as plain text === ", logs);
+              }
 
               if (logs.includes(`UNIQUE_ID=${uniqueId}`)) {
                 if (runDetails.status === "completed") {
