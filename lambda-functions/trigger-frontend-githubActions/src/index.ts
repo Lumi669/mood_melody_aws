@@ -129,16 +129,6 @@ export const handler = async (event: any) => {
               if (run.status === "completed") {
                 console.log("GitHub Actions run found:", run);
                 if (run.conclusion !== "success") {
-                  await codepipeline
-                    .putJobFailureResult({
-                      jobId,
-                      failureDetails: {
-                        message: "GitHub Actions failed",
-                        type: "JobFailed",
-                        externalExecutionId: event["CodePipeline.job"].id,
-                      },
-                    })
-                    .promise();
                   throw new Error(
                     "GitHub Actions failed with conclusion: " + run.conclusion,
                   );
@@ -171,6 +161,17 @@ export const handler = async (event: any) => {
             "Error checking GitHub Actions status or S3 signal file: ",
             error.message,
           );
+          // Notify CodePipeline of failure
+          await codepipeline
+            .putJobFailureResult({
+              jobId,
+              failureDetails: {
+                message: `GitHub Actions failed: ${error.message}`,
+                type: "JobFailed",
+                externalExecutionId: jobId,
+              },
+            })
+            .promise();
           throw error;
         }
       }
