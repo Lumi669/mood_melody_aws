@@ -2,12 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
-  basePath: "/prod",
+  // basePath: "prod",
   env: {
     NEXT_PUBLIC_API_URL_0: process.env.NEXT_PUBLIC_API_URL_0,
     NEXT_PUBLIC_API_URL_1: process.env.NEXT_PUBLIC_API_URL_1,
-    // NEXT_PUBLIC_API_URL_2: process.env.NEXT_PUBLIC_API_URL_2,
-    // NEXT_PUBLIC_API_URL_3: process.env.NEXT_PUBLIC_API_URL_3,
+    NEXT_PUBLIC_API_URL_2: process.env.NEXT_PUBLIC_API_URL_2,
+    NEXT_PUBLIC_API_URL_3: process.env.NEXT_PUBLIC_API_URL_3,
   },
   async rewrites() {
     return [
