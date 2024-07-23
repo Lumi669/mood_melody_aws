@@ -74,17 +74,30 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+console.log("Preparing app...");
 app.prepare().then(() => {
+  console.log("App prepared, setting up server...");
   const server = express();
 
   server.get("*", (req, res) => {
+    console.log("Handling request:", req.url);
     const parsedUrl = parse(req.url, true);
     handle(req, res, parsedUrl);
   });
 
   const lambdaServer = awsServerlessExpress.createServer(server);
 
+  // Only for Lambda
   exports.handler = (event, context) => {
+    console.log("Received event:", JSON.stringify(event, null, 2));
     awsServerlessExpress.proxy(lambdaServer, event, context);
   };
+
+  // For local testing
+  if (process.env.NODE_ENV !== "production") {
+    server.listen(3000, (err) => {
+      if (err) throw err;
+      console.log("> Ready on http://localhost:3000");
+    });
+  }
 });
