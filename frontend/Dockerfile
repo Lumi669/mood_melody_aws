@@ -45,13 +45,15 @@ WORKDIR /app
 # Copy static files and images from build
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/run.sh ./run.sh
 COPY --from=builder /app/server.js ./server.js  
 
-# Copy node_modules from the builder stage to include all dependencies
-COPY --from=builder /app/node_modules ./node_modules
+# Install production dependencies
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN pnpm install --frozen-lockfile --production
 
 # Ensure the .next/cache directory is linked to /tmp/cache
 RUN ln -s /tmp/cache ./.next/cache
