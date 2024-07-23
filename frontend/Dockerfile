@@ -50,6 +50,9 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/run.sh ./run.sh
 COPY --from=builder /app/server.js ./server.js  
 
+# Copy node_modules from the builder stage to include all dependencies
+COPY --from=builder /app/node_modules ./node_modules
+
 # Ensure the .next/cache directory is linked to /tmp/cache
 RUN ln -s /tmp/cache ./.next/cache
 
