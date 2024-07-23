@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  aws-serverless-express:
+    specifier: ^3.4.0
+    version: 3.4.0
   axios:
     specifier: ^1.6.7
     version: 1.7.2
@@ -1908,6 +1911,17 @@ packages:
         integrity: sha512-4iri8i1AqYHJE2DstZYkyEprg6Pq6sKx3xn5FpySk9sNhH7qN2LLlHJCfDTZRILNwQNPD7mATWM0TBui7uC1pA==,
       }
     dev: true
+
+  /@codegenie/serverless-express@3.4.1:
+    resolution:
+      {
+        integrity: sha512-PQ3v/wDflxx168B4TwuxbbKjfmvLkyRBdvHRFS8s48hDS0Wnukm+5Dp+HiLvqwXOU7PP2+FyrK47WX4WL15Rrw==,
+      }
+    engines: { node: ">=6" }
+    dependencies:
+      binary-case: 1.1.4
+      type-is: 1.6.18
+    dev: false
 
   /@colors/colors@1.5.0:
     resolution:
@@ -5796,6 +5810,18 @@ packages:
       }
     dev: true
 
+  /@vendia/serverless-express@3.4.1:
+    resolution:
+      {
+        integrity: sha512-4dJJvr9vQlq9iUClpfm5iFL+neoSctUI6Zkh9F4wjk/tpcM7QVD6niJi4ptiIzyzJCWoN97ACQCXyE0O8MznLQ==,
+      }
+    engines: { node: ">=6" }
+    dependencies:
+      "@codegenie/serverless-express": 3.4.1
+      binary-case: 1.1.4
+      type-is: 1.6.18
+    dev: false
+
   /@vitest/expect@0.34.7:
     resolution:
       {
@@ -6586,6 +6612,18 @@ packages:
       possible-typed-array-names: 1.0.0
     dev: true
 
+  /aws-serverless-express@3.4.0:
+    resolution:
+      {
+        integrity: sha512-YG9ZjAOI9OpwqDDWzkRc3kKJYJuR7gTMjLa3kAWopO17myoprxskCUyCEee+RKe34tcR4UNrVtgAwW5yDe74bw==,
+      }
+    engines: { node: ">=6" }
+    dependencies:
+      "@vendia/serverless-express": 3.4.1
+      binary-case: 1.1.4
+      type-is: 1.6.18
+    dev: false
+
   /axe-core@4.7.0:
     resolution:
       {
@@ -6809,6 +6847,13 @@ packages:
         integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==,
       }
     dev: true
+
+  /binary-case@1.1.4:
+    resolution:
+      {
+        integrity: sha512-9Kq8m6NZTAgy05Ryuh7U3Qc4/ujLQU1AZ5vMw4cr3igTdi5itZC6kCNrRr2X8NzPiDn2oUIFTfa71DKMnue/Zg==,
+      }
+    dev: false
 
   /binary-extensions@2.3.0:
     resolution:
