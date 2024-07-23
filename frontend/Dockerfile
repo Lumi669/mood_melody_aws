@@ -53,7 +53,7 @@ COPY --from=builder /app/server.js ./server.js
 
 # Install production dependencies
 RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN pnpm install --frozen-lockfile --production
+RUN pnpm install --frozen-lockfile --prod
 
 # Ensure the .next/cache directory is linked to /tmp/cache
 RUN ln -s /tmp/cache ./.next/cache
