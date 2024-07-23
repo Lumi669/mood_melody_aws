@@ -48,8 +48,7 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/run.sh ./run.sh
-COPY --from=builder /app/server.js ./server.js  # Add the custom server file
-
+COPY --from=builder /app/server.js ./server.js  
 
 # Ensure the .next/cache directory is linked to /tmp/cache
 RUN ln -s /tmp/cache ./.next/cache

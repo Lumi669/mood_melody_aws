@@ -1,4 +1,3 @@
-
 #!/bin/bash -x
 
 # Check if /tmp/cache exists, if not, create it
