@@ -99,9 +99,11 @@ app.prepare().then(() => {
     server.listen(3000, (err) => {
       if (err) {
         console.error("Error starting server:", err);
-        return;
+        process.exit(1);
       }
       console.log("> Ready on http://localhost:3000");
     });
+  } else {
+    console.log("Server running in Lambda environment");
   }
 });
