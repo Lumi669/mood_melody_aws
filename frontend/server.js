@@ -74,9 +74,10 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-console.log("Preparing app...");
+console.log("Preparing Next.js application...");
 app.prepare().then(() => {
-  console.log("App prepared, setting up server...");
+  console.log("Next.js application prepared.");
+
   const server = express();
 
   server.get("*", (req, res) => {
@@ -94,9 +95,12 @@ app.prepare().then(() => {
   };
 
   // For local testing
-  if (process.env.NODE_ENV !== "production") {
+  if (dev) {
     server.listen(3000, (err) => {
-      if (err) throw err;
+      if (err) {
+        console.error("Error starting server:", err);
+        return;
+      }
       console.log("> Ready on http://localhost:3000");
     });
   }
