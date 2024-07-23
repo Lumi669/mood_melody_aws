@@ -47,7 +47,7 @@ jobs:
           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mood-melody-aws
           BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
         run: |
-          echo "BACKEND_API_UR from build and push fronten image step ========= ${BACKEND_API_URL}"
+          echo "BACKEND_API_URL from build and push frontend image step ========= ${BACKEND_API_URL}"
           docker build \
             --build-arg NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/ \
             --build-arg NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/images \
