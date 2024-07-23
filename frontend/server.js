@@ -36,7 +36,37 @@
 //     process.exit(1); // Exit the process if there's an error
 //   });
 
-const { createServer } = require("http");
+// const { createServer } = require("http");
+// const { parse } = require("url");
+// const next = require("next");
+
+// const dev = process.env.NODE_ENV !== "production";
+// const app = next({ dev });
+// const handle = app.getRequestHandler();
+
+// console.log("Starting app preparation...");
+// app
+//   .prepare()
+//   .then(() => {
+//     console.log("App prepared, creating server...");
+//     createServer((req, res) => {
+//       const parsedUrl = parse(req.url, true);
+//       handle(req, res, parsedUrl);
+//     }).listen(3000, (err) => {
+//       if (err) {
+//         console.error("Error starting server:", err);
+//         process.exit(1);
+//       }
+//       console.log("> Ready on http://localhost:3000");
+//     });
+//   })
+//   .catch((err) => {
+//     console.error("Error preparing app:", err);
+//     process.exit(1);
+//   });
+
+const awsServerlessExpress = require("aws-serverless-express");
+const express = require("express");
 const { parse } = require("url");
 const next = require("next");
 
@@ -44,23 +74,17 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-console.log("Starting app preparation...");
-app
-  .prepare()
-  .then(() => {
-    console.log("App prepared, creating server...");
-    createServer((req, res) => {
-      const parsedUrl = parse(req.url, true);
-      handle(req, res, parsedUrl);
-    }).listen(3000, (err) => {
-      if (err) {
-        console.error("Error starting server:", err);
-        process.exit(1);
-      }
-      console.log("> Ready on http://localhost:3000");
-    });
-  })
-  .catch((err) => {
-    console.error("Error preparing app:", err);
-    process.exit(1);
+app.prepare().then(() => {
+  const server = express();
+
+  server.get("*", (req, res) => {
+    const parsedUrl = parse(req.url, true);
+    handle(req, res, parsedUrl);
   });
+
+  const lambdaServer = awsServerlessExpress.createServer(server);
+
+  exports.handler = (event, context) => {
+    awsServerlessExpress.proxy(lambdaServer, event, context);
+  };
+});
