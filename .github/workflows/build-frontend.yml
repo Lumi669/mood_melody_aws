@@ -65,6 +65,7 @@ jobs:
           TIMESTAMP: ${{ env.TIMESTAMP }}
         run: |
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=frontend-${TIMESTAMP}
+          aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=frontend-latest
 
       - name: Signal Lambda to trigger next stage of stage Retrieve-bakendApiUrl-trigger-frontend-githubActions
         if: success()

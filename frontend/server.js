@@ -11,6 +11,8 @@ app
   .prepare()
   .then(() => {
     server.all("*", (req, res) => {
+      console.log("req.url from server.js === ", req.url);
+      console.log(`Handling request for ${req.url}`);
       return handle(req, res);
     });
 
