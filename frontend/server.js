@@ -80,6 +80,11 @@ app.prepare().then(() => {
 
   const server = express();
 
+  console.log("NEXT_PUBLIC_API_URL_0:", process.env.NEXT_PUBLIC_API_URL_0);
+  console.log("NEXT_PUBLIC_API_URL_1:", process.env.NEXT_PUBLIC_API_URL_1);
+  console.log("NEXT_PUBLIC_API_URL_2:", process.env.NEXT_PUBLIC_API_URL_2);
+  console.log("NEXT_PUBLIC_API_URL_3:", process.env.NEXT_PUBLIC_API_URL_3);
+
   server.get("*", (req, res) => {
     console.log("Handling request:", req.url);
     const parsedUrl = parse(req.url, true);
