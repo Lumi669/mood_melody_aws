@@ -2,7 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
-  // basePath: "prod",
+  // Uncomment this if you are using a base path
+  // basePath: "/prod",
   env: {
     NEXT_PUBLIC_API_URL_0: process.env.NEXT_PUBLIC_API_URL_0,
     NEXT_PUBLIC_API_URL_1: process.env.NEXT_PUBLIC_API_URL_1,
@@ -18,6 +19,11 @@ const nextConfig = {
       {
         source: "/allmusic",
         destination: "/allmusic",
+      },
+      {
+        // Catch-all route to handle any other requests
+        source: "/:path*",
+        destination: "/:path*",
       },
     ];
   },

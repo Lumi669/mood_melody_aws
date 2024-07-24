@@ -88,7 +88,7 @@ Resources:
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
-      Description: "Deployment for MoodMelodyBackendApi at !{timestamp}"
+      Description: "Deployment for MoodMelodyFrontendApi at !{timestamp}"
 
   FrontendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
