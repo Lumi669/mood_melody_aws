@@ -9,7 +9,7 @@ Resources:
       Code:
         ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:frontend-latest"
       PackageType: Image
-      MemorySize: 512
+      MemorySize: 1024
       Timeout: 300
       Environment:
         Variables:
