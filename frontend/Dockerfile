@@ -52,7 +52,7 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/run.sh ./run.sh
+# COPY --from=builder /app/run.sh ./run.sh
 COPY --from=builder /app/server.js ./server.js  
 
 # Install production dependencies
@@ -63,5 +63,6 @@ RUN pnpm install --frozen-lockfile --prod
 RUN ln -s /tmp/cache ./.next/cache
 
 # Configure the run command to start the server
-RUN ["chmod", "+x", "./run.sh"]
-CMD ["./run.sh"]
+# RUN ["chmod", "+x", "./run.sh"]
+# CMD ["./run.sh"]
+CMD ["node", "server.js"]

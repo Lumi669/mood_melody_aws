@@ -86,16 +86,8 @@ app.prepare().then(() => {
     handle(req, res, parsedUrl);
   });
 
-  const lambdaServer = awsServerlessExpress.createServer(server);
-
-  // Only for Lambda
-  exports.handler = (event, context) => {
-    console.log("Received event:", JSON.stringify(event, null, 2));
-    awsServerlessExpress.proxy(lambdaServer, event, context);
-  };
-
-  // For local testing
   if (dev) {
+    console.log("Starting server in development mode...");
     server.listen(3000, (err) => {
       if (err) {
         console.error("Error starting server:", err);
@@ -104,6 +96,12 @@ app.prepare().then(() => {
       console.log("> Ready on http://localhost:3000");
     });
   } else {
-    console.log("Server running in Lambda environment");
+    console.log("Starting server in Lambda environment...");
+    const lambdaServer = awsServerlessExpress.createServer(server);
+
+    exports.handler = (event, context) => {
+      console.log("Received event:", JSON.stringify(event, null, 2));
+      awsServerlessExpress.proxy(lambdaServer, event, context);
+    };
   }
 });
