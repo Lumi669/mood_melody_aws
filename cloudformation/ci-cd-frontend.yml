@@ -13,10 +13,10 @@ Resources:
       Timeout: 300
       Environment:
         Variables:
-          NEXT_PUBLIC_API_URL_0: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/
-          NEXT_PUBLIC_API_URL_1: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/images
-          NEXT_PUBLIC_API_URL_2: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/musics
-          NEXT_PUBLIC_API_URL_3: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/test
+          NEXT_PUBLIC_API_URL_0: https://wg538k1jw3.execute-api.eu-north-1.amazonaws.com/prod/
+          NEXT_PUBLIC_API_URL_1: https://wg538k1jw3.execute-api.eu-north-1.amazonaws.com/prod/api/images
+          NEXT_PUBLIC_API_URL_2: https://wg538k1jw3.execute-api.eu-north-1.amazonaws.com/prod/api/musics
+          NEXT_PUBLIC_API_URL_3: https://wg538k1jw3.execute-api.eu-north-1.amazonaws.com/prod/api/test
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -56,12 +56,37 @@ Resources:
     Properties:
       Name: MoodMelodyFrontendApi
 
+  ApiGatewayResourceRoot:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+      PathPart: ""
+      RestApiId: !Ref ApiGatewayRestApi
+
   ApiGatewayResourceProxy:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
       PathPart: "{proxy+}"
       RestApiId: !Ref ApiGatewayRestApi
+
+  ApiGatewayMethodRoot:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: ANY
+      ResourceId: !Ref ApiGatewayResourceRoot
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
+      MethodResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'"
+            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT,DELETE'"
 
   ApiGatewayMethodProxy:
     Type: AWS::ApiGateway::Method
@@ -84,6 +109,7 @@ Resources:
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
+      - ApiGatewayMethodRoot
       - ApiGatewayMethodProxy
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
