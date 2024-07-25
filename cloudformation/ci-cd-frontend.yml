@@ -75,7 +75,7 @@ Resources:
     Properties:
       AuthorizationType: NONE
       HttpMethod: ANY
-      ResourceId: !Ref ApiGatewayResourceRoot
+      ResourceId: !GetAtt ApiGatewayRestApi.RootResourceId
       RestApiId: !Ref ApiGatewayRestApi
       Integration:
         IntegrationHttpMethod: POST
