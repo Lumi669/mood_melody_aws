@@ -60,7 +60,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
-      PathPart: "{proxy+}"
+      PathPart: "{}"
       RestApiId: !Ref ApiGatewayRestApi
 
   ApiGatewayResourceProxy:
