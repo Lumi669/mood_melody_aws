@@ -12,7 +12,6 @@
     "export": "next export"
   },
   "dependencies": {
-    "aws-lambda-ric": "^3.2.0",
     "aws-serverless-express": "^3.4.0",
     "axios": "^1.6.7",
     "express": "^4.19.2",
