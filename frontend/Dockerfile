@@ -38,7 +38,7 @@ RUN pnpm run build
 FROM public.ecr.aws/docker/library/node:20.9.0-slim AS runner
 
 # Add the Lambda Runtime Interface Client
-RUN pnpm install -g aws-lambda-ric
+RUN pnpm install -g aws-lambda-ric --verbose
 
 # # Install aws-lambda-adapter
 # COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.2 /lambda-adapter /opt/extensions/lambda-adapter
