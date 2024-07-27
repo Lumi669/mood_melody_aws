@@ -37,12 +37,15 @@ RUN pnpm run build
 # Stage 2: Create the final image for AWS Lambda
 FROM public.ecr.aws/docker/library/node:20.9.0-slim AS runner
 
-# Install aws-lambda-adapter
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.2 /lambda-adapter /opt/extensions/lambda-adapter
+# Add the Lambda Runtime Interface Client
+RUN npm install -g aws-lambda-ric
+
+# # Install aws-lambda-adapter
+# COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.2 /lambda-adapter /opt/extensions/lambda-adapter
 
 # Expose port 3000 and set environment variables
 ENV PORT=3000 NODE_ENV=production
-ENV AWS_LWA_ENABLE_COMPRESSION=true
+# ENV AWS_LWA_ENABLE_COMPRESSION=true
 
 WORKDIR /app
 
@@ -53,7 +56,7 @@ COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/run.sh ./run.sh
-# COPY --from=builder /app/server.js ./server.js  
+COPY --from=builder /app/server.js ./server.js  
 
 # Install production dependencies
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -64,5 +67,7 @@ RUN ln -s /tmp/cache ./.next/cache
 
 # Configure the run command to start the server
 RUN ["chmod", "+x", "./run.sh"]
-CMD ["./run.sh"]
+CMD ["aws-lambda-ric", "./run.sh"]
+
+# CMD ["./run.sh"]
 # CMD ["node", "server.js"]

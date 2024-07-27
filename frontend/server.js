@@ -65,55 +65,72 @@
 //     process.exit(1);
 //   });
 
-const awsServerlessExpress = require("aws-serverless-express");
-const express = require("express");
-const { parse } = require("url");
+// const awsServerlessExpress = require("aws-serverless-express");
+// const express = require("express");
+// const { parse } = require("url");
+// const next = require("next");
+
+// const dev = process.env.NODE_ENV !== "production";
+// const app = next({ dev });
+// const handle = app.getRequestHandler();
+
+// console.log("Preparing Next.js application...");
+// app
+//   .prepare()
+//   .then(() => {
+//     console.log("Next.js application prepared.");
+
+//     const server = express();
+
+//     // Log environment variables to verify they are set correctly
+//     console.log("NEXT_PUBLIC_API_URL_0:", process.env.NEXT_PUBLIC_API_URL_0);
+//     console.log("NEXT_PUBLIC_API_URL_1:", process.env.NEXT_PUBLIC_API_URL_1);
+//     console.log("NEXT_PUBLIC_API_URL_2:", process.env.NEXT_PUBLIC_API_URL_2);
+//     console.log("NEXT_PUBLIC_API_URL_3:", process.env.NEXT_PUBLIC_API_URL_3);
+
+//     server.get("*", (req, res) => {
+//       console.log("Handling request:", req.url);
+//       const parsedUrl = parse(req.url, true);
+//       handle(req, res, parsedUrl);
+//     });
+
+//     if (dev) {
+//       console.log("Starting server in development mode...");
+//       server.listen(3000, (err) => {
+//         if (err) {
+//           console.error("Error starting server:", err);
+//           process.exit(1);
+//         }
+//         console.log("> Ready on http://localhost:3000");
+//       });
+//     } else {
+//       console.log("Starting server in Lambda environment...");
+//       const lambdaServer = awsServerlessExpress.createServer(server);
+
+//       exports.handler = (event, context) => {
+//         console.log("Received event:", JSON.stringify(event, null, 2));
+//         awsServerlessExpress.proxy(lambdaServer, event, context);
+//       };
+//     }
+//   })
+//   .catch((err) => {
+//     console.error("Error during app preparation:", err);
+//     process.exit(1);
+//   });
+
+const { createServer } = require("http");
 const next = require("next");
 
+const port = process.env.PORT || 8080;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-console.log("Preparing Next.js application...");
-app
-  .prepare()
-  .then(() => {
-    console.log("Next.js application prepared.");
-
-    const server = express();
-
-    // Log environment variables to verify they are set correctly
-    console.log("NEXT_PUBLIC_API_URL_0:", process.env.NEXT_PUBLIC_API_URL_0);
-    console.log("NEXT_PUBLIC_API_URL_1:", process.env.NEXT_PUBLIC_API_URL_1);
-    console.log("NEXT_PUBLIC_API_URL_2:", process.env.NEXT_PUBLIC_API_URL_2);
-    console.log("NEXT_PUBLIC_API_URL_3:", process.env.NEXT_PUBLIC_API_URL_3);
-
-    server.get("*", (req, res) => {
-      console.log("Handling request:", req.url);
-      const parsedUrl = parse(req.url, true);
-      handle(req, res, parsedUrl);
-    });
-
-    if (dev) {
-      console.log("Starting server in development mode...");
-      server.listen(3000, (err) => {
-        if (err) {
-          console.error("Error starting server:", err);
-          process.exit(1);
-        }
-        console.log("> Ready on http://localhost:3000");
-      });
-    } else {
-      console.log("Starting server in Lambda environment...");
-      const lambdaServer = awsServerlessExpress.createServer(server);
-
-      exports.handler = (event, context) => {
-        console.log("Received event:", JSON.stringify(event, null, 2));
-        awsServerlessExpress.proxy(lambdaServer, event, context);
-      };
-    }
-  })
-  .catch((err) => {
-    console.error("Error during app preparation:", err);
-    process.exit(1);
+app.prepare().then(() => {
+  createServer((req, res) => {
+    handle(req, res);
+  }).listen(port, (err) => {
+    if (err) throw err;
+    console.log(`> Ready on http://localhost:${port}`);
   });
+});
