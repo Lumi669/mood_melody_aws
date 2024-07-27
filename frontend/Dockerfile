@@ -37,6 +37,9 @@ RUN pnpm run build
 # Stage 2: Create the final image for AWS Lambda
 FROM public.ecr.aws/docker/library/node:20.9.0-slim AS runner
 
+# Enable corepack and prepare pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 # Add the Lambda Runtime Interface Client
 RUN pnpm install -g aws-lambda-ric --verbose
 
