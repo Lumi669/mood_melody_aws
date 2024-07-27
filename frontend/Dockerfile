@@ -37,12 +37,12 @@ RUN pnpm run build
 # Stage 2: Create the final image for AWS Lambda
 FROM public.ecr.aws/docker/library/node:20.9.0-slim AS runner
 
-# # Install aws-lambda-adapter
-# COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.2 /lambda-adapter /opt/extensions/lambda-adapter
+# Install aws-lambda-adapter
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.2 /lambda-adapter /opt/extensions/lambda-adapter
 
 # Expose port 3000 and set environment variables
 ENV PORT=3000 NODE_ENV=production
-# ENV AWS_LWA_ENABLE_COMPRESSION=true
+ENV AWS_LWA_ENABLE_COMPRESSION=true
 
 WORKDIR /app
 
@@ -64,7 +64,4 @@ RUN ln -s /tmp/cache ./.next/cache
 
 # Configure the run command to start the server
 RUN ["chmod", "+x", "./run.sh"]
-CMD ["aws-lambda-ric", "./run.sh"]
-
-# CMD ["./run.sh"]
-# CMD ["node", "server.js"]
+CMD ["./run.sh"]
