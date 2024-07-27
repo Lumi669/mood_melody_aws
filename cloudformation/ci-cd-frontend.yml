@@ -13,10 +13,10 @@ Resources:
       Timeout: 300
       Environment:
         Variables:
-          NEXT_PUBLIC_API_URL_0: https://wg538k1jw3.execute-api.eu-north-1.amazonaws.com/prod/
-          NEXT_PUBLIC_API_URL_1: https://wg538k1jw3.execute-api.eu-north-1.amazonaws.com/prod/api/images
-          NEXT_PUBLIC_API_URL_2: https://wg538k1jw3.execute-api.eu-north-1.amazonaws.com/prod/api/musics
-          NEXT_PUBLIC_API_URL_3: https://wg538k1jw3.execute-api.eu-north-1.amazonaws.com/prod/api/test
+          NEXT_PUBLIC_API_URL_0: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod
+          NEXT_PUBLIC_API_URL_1: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/prod/api/images
+          NEXT_PUBLIC_API_URL_2: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/musics
+          NEXT_PUBLIC_API_URL_3: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/test
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
