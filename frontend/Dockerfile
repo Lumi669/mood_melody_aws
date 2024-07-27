@@ -38,10 +38,10 @@ RUN pnpm run build
 FROM public.ecr.aws/docker/library/node:20.9.0-slim AS runner
 
 # Install aws-lambda-adapter
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.2 /lambda-adapter /opt/extensions/lambda-adapter
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3 /lambda-adapter /opt/extensions/lambda-adapter
 
-# Expose port 3000 and set environment variables
-ENV PORT=3000 NODE_ENV=production
+# Expose port 7000 and set environment variables
+ENV PORT=7000 NODE_ENV=production
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 
 WORKDIR /app
