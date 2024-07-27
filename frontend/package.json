@@ -9,8 +9,7 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "export": "next export",
-    "preinstall": "npx force-resolutions"
+    "export": "next export"
   },
   "dependencies": {
     "aws-serverless-express": "^3.4.0",
@@ -44,8 +43,5 @@
     "storybook": "^7.6.17",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
-  },
-  "engines": {
-    "node": "20.11.0"
   }
 }
