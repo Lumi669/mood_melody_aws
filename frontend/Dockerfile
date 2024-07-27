@@ -1,7 +1,5 @@
 # Stage 1: Build the application
-# FROM public.ecr.aws/docker/library/node:20.9.0-slim AS builder
-FROM public.ecr.aws/lambda/nodejs:20
-
+FROM public.ecr.aws/docker/library/node:20.9.0-slim AS builder
 
 WORKDIR /app
 
@@ -36,9 +34,8 @@ ENV NEXT_PUBLIC_API_URL_3=${NEXT_PUBLIC_API_URL_3}
 # Build the application
 RUN pnpm run build
 
-# # Stage 2: Create the final image for AWS Lambda
-# FROM public.ecr.aws/docker/library/node:20.9.0-slim AS runner
-FROM public.ecr.aws/lambda/nodejs:20
+# Stage 2: Create the final image for AWS Lambda
+FROM public.ecr.aws/docker/library/node:20.9.0-slim AS runner
 
 # Install aws-lambda-adapter
 COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3 /lambda-adapter /opt/extensions/lambda-adapter
