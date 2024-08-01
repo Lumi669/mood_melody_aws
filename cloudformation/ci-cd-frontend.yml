@@ -8,7 +8,7 @@ Resources:
       FunctionName: MoodMelodyFrontendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
       PackageType: Image
-      ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:frontend-latest"
+      ImageUri: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:frontend-latest
       MemorySize: 1024
       Timeout: 300
       Environment:
@@ -17,12 +17,11 @@ Resources:
           NEXT_PUBLIC_API_URL_1: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/images
           NEXT_PUBLIC_API_URL_2: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/musics
           NEXT_PUBLIC_API_URL_3: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/test
+      Architectures:
+        - x86_64
       Events:
-        HttpApiEvent:
+        HttpEvent:
           Type: HttpApi
-          Properties:
-            Path: /{proxy+}
-            Method: ANY
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -60,6 +59,6 @@ Resources:
 Outputs:
   FrontendApiUrl:
     Description: "URL for the frontend API Gateway"
-    Value: !Sub "https://${FrontendLambdaFunction.HttpApiEvent.ApiId}.execute-api.${AWS::Region}.amazonaws.com/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/"
     Export:
       Name: FrontendApiUrl
