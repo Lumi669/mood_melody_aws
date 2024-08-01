@@ -1,14 +1,14 @@
 AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
 
 Resources:
   FrontendLambdaFunction:
-    Type: AWS::Lambda::Function
+    Type: AWS::Serverless::Function
     Properties:
       FunctionName: MoodMelodyFrontendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:frontend-latest"
       PackageType: Image
+      ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:frontend-latest"
       MemorySize: 1024
       Timeout: 300
       Environment:
@@ -17,6 +17,12 @@ Resources:
           NEXT_PUBLIC_API_URL_1: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/images
           NEXT_PUBLIC_API_URL_2: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/musics
           NEXT_PUBLIC_API_URL_3: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/test
+      Events:
+        HttpApiEvent:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -51,65 +57,9 @@ Resources:
                   - apigateway:ManageConnections
                 Resource: "*"
 
-  ApiGatewayRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: apigateway.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: ApiGatewayInvokeLambdaPolicy
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - lambda:InvokeFunction
-                Resource: "*"
-
-  ApiGatewayHttpApi:
-    Type: AWS::ApiGatewayV2::Api
-    Properties:
-      Name: MoodMelodyFrontendApi
-      ProtocolType: HTTP
-
-  ApiGatewayHttpApiIntegration:
-    Type: AWS::ApiGatewayV2::Integration
-    Properties:
-      ApiId: !Ref ApiGatewayHttpApi
-      IntegrationType: AWS_PROXY
-      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
-      PayloadFormatVersion: "2.0"
-
-  ApiGatewayHttpApiRouteProxy:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref ApiGatewayHttpApi
-      RouteKey: "$default"
-      Target: !Sub "integrations/${ApiGatewayHttpApiIntegration}"
-
-  ApiGatewayHttpApiStage:
-    Type: AWS::ApiGatewayV2::Stage
-    Properties:
-      ApiId: !Ref ApiGatewayHttpApi
-      StageName: prod
-      AutoDeploy: true
-
-  FrontendLambdaInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !Ref FrontendLambdaFunction
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayHttpApi}/*"
-
 Outputs:
   FrontendApiUrl:
     Description: "URL for the frontend API Gateway"
-    Value: !Sub "https://${ApiGatewayHttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+    Value: !Sub "https://${FrontendLambdaFunction.HttpApiEvent.ApiId}.execute-api.${AWS::Region}.amazonaws.com/"
     Export:
       Name: FrontendApiUrl
