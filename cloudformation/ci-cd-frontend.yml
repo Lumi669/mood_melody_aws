@@ -71,115 +71,33 @@ Resources:
                   - lambda:InvokeFunction
                 Resource: "*"
 
-  ApiGatewayRestApi:
-    Type: AWS::ApiGateway::RestApi
+  ApiGatewayHttpApi:
+    Type: AWS::ApiGatewayV2::Api
     Properties:
       Name: MoodMelodyFrontendApi
+      ProtocolType: HTTP
 
-  ApiGatewayResourceProxy:
-    Type: AWS::ApiGateway::Resource
+  ApiGatewayHttpApiIntegration:
+    Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
-      PathPart: "{proxy+}"
-      RestApiId: !Ref ApiGatewayRestApi
+      ApiId: !Ref ApiGatewayHttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
+      PayloadFormatVersion: "2.0"
 
-  ApiGatewayMethodRoot:
-    Type: AWS::ApiGateway::Method
+  ApiGatewayHttpApiRouteProxy:
+    Type: AWS::ApiGatewayV2::Route
     Properties:
-      AuthorizationType: NONE
-      HttpMethod: ANY
-      ResourceId: !GetAtt ApiGatewayRestApi.RootResourceId
-      RestApiId: !Ref ApiGatewayRestApi
-      Integration:
-        Credentials: !GetAtt ApiGatewayRole.Arn
-        IntegrationHttpMethod: POST
-        Type: AWS_PROXY
-        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
-      MethodResponses:
-        - StatusCode: 200
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'"
-            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT,DELETE'"
+      ApiId: !Ref ApiGatewayHttpApi
+      RouteKey: "$default"
+      Target: !Sub "integrations/${ApiGatewayHttpApiIntegration}"
 
-  ApiGatewayOptionsMethodRoot:
-    Type: AWS::ApiGateway::Method
+  ApiGatewayHttpApiStage:
+    Type: AWS::ApiGatewayV2::Stage
     Properties:
-      AuthorizationType: NONE
-      HttpMethod: OPTIONS
-      ResourceId: !GetAtt ApiGatewayRestApi.RootResourceId
-      RestApiId: !Ref ApiGatewayRestApi
-      Integration:
-        IntegrationResponses:
-          - StatusCode: 200
-            ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT,DELETE'"
-        RequestTemplates:
-          application/json: '{"statusCode": 200}'
-        Type: MOCK
-      MethodResponses:
-        - StatusCode: 200
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'"
-            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT,DELETE'"
-
-  ApiGatewayMethodProxy:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      HttpMethod: ANY
-      ResourceId: !Ref ApiGatewayResourceProxy
-      RestApiId: !Ref ApiGatewayRestApi
-      Integration:
-        Credentials: !GetAtt ApiGatewayRole.Arn
-        IntegrationHttpMethod: POST
-        Type: AWS_PROXY
-        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
-      MethodResponses:
-        - StatusCode: 200
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'"
-            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT,DELETE'"
-
-  ApiGatewayOptionsMethodProxy:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      HttpMethod: OPTIONS
-      ResourceId: !Ref ApiGatewayResourceProxy
-      RestApiId: !Ref ApiGatewayRestApi
-      Integration:
-        IntegrationResponses:
-          - StatusCode: 200
-            ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT,DELETE'"
-        RequestTemplates:
-          application/json: '{"statusCode": 200}'
-        Type: MOCK
-      MethodResponses:
-        - StatusCode: 200
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'"
-            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT,DELETE'"
-
-  ApiGatewayDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
-      - ApiGatewayMethodRoot
-      - ApiGatewayMethodProxy
-      - ApiGatewayOptionsMethodRoot
-      - ApiGatewayOptionsMethodProxy
-    Properties:
-      RestApiId: !Ref ApiGatewayRestApi
+      ApiId: !Ref ApiGatewayHttpApi
       StageName: prod
-      Description: "Deployment for MoodMelodyFrontendApi at !{timestamp}"
+      AutoDeploy: true
 
   FrontendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
@@ -187,11 +105,11 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref FrontendLambdaFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayHttpApi.ApiId}/*"
 
 Outputs:
   FrontendApiUrl:
     Description: "URL for the frontend API Gateway"
-    Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+    Value: !Sub "https://${ApiGatewayHttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
     Export:
       Name: FrontendApiUrl
