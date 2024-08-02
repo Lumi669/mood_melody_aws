@@ -9,14 +9,9 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       PackageType: Image
       ImageUri: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:frontend-latest
-      MemorySize: 1024
+      MemorySize: 512
       Timeout: 300
-      Environment:
-        Variables:
-          NEXT_PUBLIC_API_URL_0: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod
-          NEXT_PUBLIC_API_URL_1: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/images
-          NEXT_PUBLIC_API_URL_2: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/musics
-          NEXT_PUBLIC_API_URL_3: https://pn39vm6kg3.execute-api.eu-north-1.amazonaws.com/prod/api/test
+
       Architectures:
         - x86_64
       Events:
