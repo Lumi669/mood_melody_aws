@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Resources:
+  UpdateTrigger:
+    Type: "AWS::CloudFormation::CustomResource"
+    Properties:
+      ServiceToken: "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:arn:aws:lambda:eu-north-1:536560382233:function:mood-melody-deploy-custom-resource-handler"
+      Version: !Sub "${AWS::StackName}-${AWS::Region}-${AWS::AccountId}-${AWS::StackId}"
+
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -9,9 +15,6 @@ Resources:
       Code:
         ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-latest"
       PackageType: Image
-      Tags:
-        - Key: Version
-          Value: !Ref Version
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
