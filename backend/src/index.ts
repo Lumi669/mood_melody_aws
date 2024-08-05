@@ -197,7 +197,8 @@ app.post("/submit", (req, res) => {
 
 app.get("/", (req: Request, res: Response) => {
   res.json({
-    message: "Welcome to the Music Mood API!=====yy99000ttp===888????????",
+    message:
+      "Welcome to the Music Mood API!=====yy99000ttp===888????????6666666",
   });
 });
 
