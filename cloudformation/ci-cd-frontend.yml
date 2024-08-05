@@ -11,6 +11,9 @@ Resources:
       ImageUri: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:frontend-latest
       MemorySize: 512
       Timeout: 300
+      Tags:
+        - Key: UpdateTimestamp
+          Value: !Sub "${AWS::Region}-${AWS::StackName}-${AWS::Timestamp}"
 
       Architectures:
         - x86_64

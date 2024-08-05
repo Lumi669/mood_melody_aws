@@ -9,6 +9,9 @@ Resources:
       Code:
         ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-latest"
       PackageType: Image
+      Tags:
+        - Key: UpdateTimestamp
+          Value: !Sub "${AWS::Region}-${AWS::StackName}-${AWS::Timestamp}"
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
