@@ -12,7 +12,7 @@ def send_response(event, context, response_status, response_data, physical_resou
 
     response_body = {
         'Status': response_status,
-        'Reason': 'See the details in CloudWatch Log Stream: ' + context.log_stream_name,
+        'Reason': f'See the details in CloudWatch Log Stream: {context.log_stream_name}',
         'PhysicalResourceId': physical_resource_id or context.log_stream_name,
         'StackId': event['StackId'],
         'RequestId': event['RequestId'],
@@ -41,6 +41,12 @@ def handler(event, context):
     print("Custom resource event: ", event)
     
     try:
+        # Validate required fields in the event
+        required_fields = ['ResponseURL', 'StackId', 'RequestId', 'LogicalResourceId']
+        for field in required_fields:
+            if field not in event:
+                raise KeyError(f"'{field}' not found in the event.")
+        
         # Generate a random string to force an update
         random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
         print(f"Generated random string: {random_string}")
@@ -54,5 +60,3 @@ def handler(event, context):
     except Exception as e:
         print("Exception: ", e)
         send_response(event, context, "FAILED", {'Message': str(e)})
-
-# Make sure to include cfnresponse.py in the same directory
