@@ -1,18 +1,50 @@
 import json
 import boto3
+import requests
+import random
+import string
+
+def send_response(event, context, response_status, response_data, physical_resource_id=None, no_echo=False):
+    response_url = event['ResponseURL']
+    
+    response_body = {
+        'Status': response_status,
+        'Reason': 'See the details in CloudWatch Log Stream: ' + context.log_stream_name,
+        'PhysicalResourceId': physical_resource_id or context.log_stream_name,
+        'StackId': event['StackId'],
+        'RequestId': event['RequestId'],
+        'LogicalResourceId': event['LogicalResourceId'],
+        'NoEcho': no_echo,
+        'Data': response_data
+    }
+
+    json_response_body = json.dumps(response_body)
+
+    print("Response body:\n", json_response_body)
+
+    headers = {
+        'content-type': '',
+        'content-length': str(len(json_response_body))
+    }
+
+    try:
+        response = requests.put(response_url, data=json_response_body, headers=headers)
+        print("Status code:", response.status_code)
+        print("Status message:", response.reason)
+    except Exception as e:
+        print("Failed to send response to CloudFormation:", e)
+
 
 def handler(event, context):
     print("Custom resource event: ", event)
     
-    response = {
-        'Status': 'SUCCESS',
-        'PhysicalResourceId': context.log_stream_name,
-        'StackId': event['StackId'],
-        'RequestId': event['RequestId'],
-        'LogicalResourceId': event['LogicalResourceId'],
-        'Data': {'Message': 'Triggered'}
-    }
-    
-    print("Response to CloudFormation: ", json.dumps(response))
-    
-    return response
+    try:
+        # Generate a random string to force an update
+        random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        print(f"Generated random string: {random_string}")
+
+        # If everything is successful
+        send_response(event, context, "SUCCESS", {'RandomString': random_string})
+    except Exception as e:
+        print("Exception: ", e)
+        send_response(event, context, "FAILED", {'Message': str(e)})
