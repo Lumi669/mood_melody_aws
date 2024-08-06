@@ -29,12 +29,15 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: custom-resource-handler
-      Role: !GetAtt LambdaExecutionRole.Arn
-
       Handler: custom-resource-handler.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: custom-resource-handle
+        S3Key: arn:aws:s3:::custom-resource-handler/custom-resource-handler.zip
       Runtime: python3.8
       Timeout: 300
 
+  # Define the custom resource
   UpdateTrigger:
     Type: "AWS::CloudFormation::CustomResource"
     Properties:
