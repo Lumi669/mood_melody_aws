@@ -5,8 +5,12 @@ import random
 import string
 
 def send_response(event, context, response_status, response_data, physical_resource_id=None, no_echo=False):
-    response_url = event['ResponseURL']
-    
+    try:
+        response_url = event['ResponseURL']
+    except KeyError:
+        print("ResponseURL not found in the event.")
+        return
+
     response_body = {
         'Status': response_status,
         'Reason': 'See the details in CloudWatch Log Stream: ' + context.log_stream_name,
@@ -33,7 +37,6 @@ def send_response(event, context, response_status, response_data, physical_resou
         print("Status message:", response.reason)
     except Exception as e:
         print("Failed to send response to CloudFormation:", e)
-
 
 def handler(event, context):
     print("Custom resource event: ", event)
