@@ -1,5 +1,4 @@
 import json
-import boto3
 import requests
 import random
 import string
@@ -46,8 +45,14 @@ def handler(event, context):
         random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
         print(f"Generated random string: {random_string}")
 
+        # Log the response data being sent
+        response_data = {'RandomString': random_string}
+        print("Response data being sent:", response_data)
+
         # If everything is successful
-        send_response(event, context, "SUCCESS", {'RandomString': random_string})
+        send_response(event, context, "SUCCESS", response_data)
     except Exception as e:
         print("Exception: ", e)
         send_response(event, context, "FAILED", {'Message': str(e)})
+
+# Make sure to include cfnresponse.py in the same directory
