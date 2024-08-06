@@ -132,3 +132,13 @@ six.py
 # Sam build
 
 .aws-sam
+
+
+
+# Ignore specific files and directories
+
+lambda-functions/update-stack/bin/normalizer
+lambda-functions/update-stack/certifi/
+lambda-functions/update-stack/charset_normalizer/
+lambda-functions/update-stack/idna/
+lambda-functions/update-stack/requests/
