@@ -137,9 +137,10 @@ six.py
 
 # Ignore specific files and directories
 
-lambda-functions/update-stack/bin/normalizer
+lambda-functions/update-stack/bin/
 lambda-functions/update-stack/certifi/
 lambda-functions/update-stack/charset_normalizer/
 lambda-functions/update-stack/idna/
 lambda-functions/update-stack/requests/
 lambda-functions/update-stack/package/
+lambda-functions/update-stack/chardet/
