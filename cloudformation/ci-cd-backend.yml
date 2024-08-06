@@ -31,7 +31,7 @@ Resources:
       FunctionName: custom-resource-handler
       Role: !GetAtt LambdaExecutionRole.Arn
 
-      Handler: index.handler
+      Handler: custom-resource-handler.handler
       Runtime: python3.8
       Timeout: 300
 
