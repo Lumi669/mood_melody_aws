@@ -40,7 +40,7 @@ Resources:
       Handler: custom-resource-handler.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        S3Bucket: custom-resource-handle
+        S3Bucket: custom-resource-handler
         S3Key: arn:aws:s3:::custom-resource-handler/custom-resource-handler.zip
       Runtime: python3.8
       Timeout: 300
