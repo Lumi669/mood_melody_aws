@@ -12,17 +12,17 @@ def handler(event, context):
         for field in required_fields:
             if field not in event:
                 raise KeyError(f"'{field}' not found in the event.")
-
+        
         # Handle the request type
         request_type = event.get('RequestType')
         if request_type in ['Create', 'Update']:
-            # Handle creation and update
+            # Generate a random string
             random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
             response_data = {'RandomString': random_string}
+            print(f"Generated RandomString: {random_string}")
             send(event, context, SUCCESS, response_data)
         
         elif request_type == 'Delete':
-            # Handle deletion
             response_data = {}
             send(event, context, SUCCESS, response_data)
         
@@ -32,3 +32,4 @@ def handler(event, context):
     except Exception as e:
         print("Exception: ", e)
         send(event, context, FAILED, {'Message': str(e)})
+

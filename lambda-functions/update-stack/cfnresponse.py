@@ -8,7 +8,6 @@ FAILED = "FAILED"
 
 def send(event, context, responseStatus, responseData, physicalResourceId=None, noEcho=False, reason=None):
     responseUrl = event['ResponseURL']
-
     responseBody = {
         'Status': responseStatus,
         'Reason': reason or 'See the details in CloudWatch Log Stream: ' + context.log_stream_name,
