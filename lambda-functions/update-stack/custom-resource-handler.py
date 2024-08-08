@@ -1,7 +1,7 @@
 import json
-import cfnresponse
 import random
 import string
+from cfnresponse import send, SUCCESS, FAILED
 
 def handler(event, context):
     print("Custom resource event: ", event)
@@ -12,17 +12,30 @@ def handler(event, context):
         for field in required_fields:
             if field not in event:
                 raise KeyError(f"'{field}' not found in the event.")
+
+        # Handle the request type
+        request_type = event.get('RequestType')
+        if request_type == 'Create':
+            # Handle creation
+            random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+            response_data = {'RandomString': random_string}
+            send(event, context, SUCCESS, response_data)
         
-        # Generate a random string to force an update
-        random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-        print(f"Generated random string: {random_string}")
-
-        # Log the response data being sent
-        response_data = {'RandomString': random_string}
-        print("Response data being sent:", response_data)
-
-        # If everything is successful
-        cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data)
+        elif request_type == 'Update':
+            # Handle updates
+            random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+            response_data = {'RandomString': random_string}
+            send(event, context, SUCCESS, response_data)
+        
+        elif request_type == 'Delete':
+            # Handle deletion
+            # Perform any cleanup required
+            response_data = {}
+            send(event, context, SUCCESS, response_data)
+        
+        else:
+            raise ValueError(f"Invalid request type: {request_type}")
+    
     except Exception as e:
         print("Exception: ", e)
-        cfnresponse.send(event, context, cfnresponse.FAILED, {'Message': str(e)})
+        send(event, context, FAILED, {'Message': str(e)})
