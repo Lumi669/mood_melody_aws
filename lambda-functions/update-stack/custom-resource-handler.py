@@ -15,21 +15,14 @@ def handler(event, context):
 
         # Handle the request type
         request_type = event.get('RequestType')
-        if request_type == 'Create':
-            # Handle creation
-            random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-            response_data = {'RandomString': random_string}
-            send(event, context, SUCCESS, response_data)
-        
-        elif request_type == 'Update':
-            # Handle updates
+        if request_type in ['Create', 'Update']:
+            # Handle creation and update
             random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
             response_data = {'RandomString': random_string}
             send(event, context, SUCCESS, response_data)
         
         elif request_type == 'Delete':
             # Handle deletion
-            # Perform any cleanup required
             response_data = {}
             send(event, context, SUCCESS, response_data)
         
