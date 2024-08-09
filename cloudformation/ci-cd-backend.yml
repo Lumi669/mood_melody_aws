@@ -134,7 +134,3 @@ Outputs:
     Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
     Export:
       Name: BackendApiUrl
-
-  UpdateTriggerDebug:
-    Description: "Debug Output for UpdateTrigger"
-    Value: !GetAtt UpdateTrigger.Data.RandomString
