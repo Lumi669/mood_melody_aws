@@ -31,8 +31,17 @@ Resources:
       FunctionName: MoodMelodyBackendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-${SSM:/mood-melody/timestamp}"
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-${TimestampValue}"
       PackageType: Image
+      Metadata:
+      Parameters:
+        TimestampValue: !Ref BackendTimestampParameter
+
+  BackendTimestampParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: "/mood-melody/backend-timestamp"
+      Type: String
 
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
