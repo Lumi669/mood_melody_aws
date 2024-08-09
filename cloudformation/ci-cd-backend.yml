@@ -24,32 +24,6 @@ Resources:
                 Action:
                   - execute-api:Invoke
                 Resource: "*"
-        - PolicyName: S3GetObject
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                Resource: "arn:aws:s3:::custom-resource-handler/*"
-
-  CustomResourceHandler:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: custom-resource-handler
-      Handler: custom-resource-handler.handler
-      Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        S3Bucket: custom-resource-handler
-        S3Key: custom-resource-handler.zip
-      Runtime: python3.8
-      Timeout: 300
-
-  UpdateTrigger:
-    Type: "AWS::CloudFormation::CustomResource"
-    Properties:
-      ServiceToken: !GetAtt CustomResourceHandler.Arn
-      GitSha: !Ref AWS::StackId
 
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
@@ -59,9 +33,6 @@ Resources:
       Code:
         ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-latest"
       PackageType: Image
-      Tags:
-        - Key: RandomString
-          Value: !GetAtt UpdateTrigger.Data.RandomString
 
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
