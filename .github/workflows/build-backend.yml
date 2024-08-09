@@ -44,7 +44,7 @@ jobs:
 
       - name: Store Timestamp in Parameter Store
         run: |
-          aws ssm put-parameter --name "/mood-melody/timestamp" --value ${{ env.TIMESTAMP }} --type String --overwrite --region ${{ secrets.AWS_REGION }}
+          aws ssm put-parameter --name "/mood-melody/backend-timestamp" --value ${{ env.TIMESTAMP }} --type String --overwrite --region ${{ secrets.AWS_REGION }}
 
       - name: List files in backend directory
         run: ls -la ./backend
