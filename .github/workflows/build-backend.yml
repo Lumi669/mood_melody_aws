@@ -65,7 +65,7 @@ jobs:
       - name: Update CloudFormation Stack
         run: |
           aws cloudformation update-stack --stack-name your-stack-name \
-            --template-body file://ci-cd-backend.yml \
+            --template-body ../../cloudformation/ci-cd-backend.yml/ci-cd-backend.yml \
             --parameters ParameterKey=BackendTimestamp,ParameterValue=${{ env.TIMESTAMP }} \
             --capabilities CAPABILITY_IAM
 
