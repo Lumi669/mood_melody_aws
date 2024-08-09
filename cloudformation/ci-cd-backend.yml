@@ -25,13 +25,35 @@ Resources:
                   - execute-api:Invoke
                 Resource: "*"
 
+  RetrieveTimestampFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import cfnresponse
+          def handler(event, context):
+            ssm = boto3.client('ssm')
+            parameter = ssm.get_parameter(Name='/mood-melody/backend-timestamp')
+            timestamp = parameter['Parameter']['Value']
+            response_data = {'Timestamp': timestamp}
+            cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data)
+      Runtime: python3.8
+
+  RetrieveTimestampCustomResource:
+    Type: Custom::SSMTimestamp
+    Properties:
+      ServiceToken: !GetAtt RetrieveTimestampFunction.Arn
+
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: MoodMelodyBackendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-${!ssm:/mood-melody/backend-timestamp}"
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-${RetrieveTimestampCustomResource.Timestamp}"
       PackageType: Image
 
   ApiGatewayRestApi:
