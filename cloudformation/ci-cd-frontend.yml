@@ -8,7 +8,8 @@ Resources:
       FunctionName: MoodMelodyFrontendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
       PackageType: Image
-      ImageUri: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:frontend-latest
+      ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:frontend-{{resolve:ssm:/mood-melody/frontend-timestamp}}"
+
       MemorySize: 512
       Timeout: 300
       Architectures:
