@@ -38,10 +38,6 @@ jobs:
         id: vars
         run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
-      # - name: Generate Git commit hash
-      #   id: vars
-      #   run: echo "GIT_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
       - name: Store Timestamp in Parameter Store
         run: |
           aws ssm put-parameter --name "/mood-melody/backend-timestamp" --value ${{ env.TIMESTAMP }} --type String --overwrite --region ${{ secrets.AWS_REGION }}
@@ -60,35 +56,20 @@ jobs:
           docker push ${REPO_URI}:backend-${TIMESTAMP}
           docker push ${REPO_URI}:backend-latest
 
-      # - name: Build and push backend Docker image
-      #   env:
-      #     GIT_COMMIT_HASH: ${{ env.GIT_COMMIT_HASH }}
-      #     REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mood-melody-aws
-      #   run: |
-      #     docker build -t mood-melody-aws:backend-${GIT_COMMIT_HASH} -t mood-melody-aws:backend-latest ./backend
-      #     docker tag mood-melody-aws:backend-${GIT_COMMIT_HASH} ${REPO_URI}:backend-${GIT_COMMIT_HASH}
-      #     docker tag mood-melody-aws:backend-latest ${REPO_URI}:backend-latest
-      #     docker push ${REPO_URI}:backend-${GIT_COMMIT_HASH}
-      #     docker push ${REPO_URI}:backend-latest
-
       - name: Verify backend image exists
         env:
           TIMESTAMP: ${{ env.TIMESTAMP }}
         run: |
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=backend-${TIMESTAMP}
 
-      # - name: Verify backend image exists
-      #   env:
-      #     GIT_COMMIT_HASH: ${{ env.GIT_COMMIT_HASH }}
-      #   run: |
-      #     aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=backend-${GIT_COMMIT_HASH}
+      - name: Update CloudFormation Stack
+        run: |
+          aws cloudformation update-stack --stack-name your-stack-name \
+            --template-body file://ci-cd-backend.yml \
+            --parameters ParameterKey=BackendTimestamp,ParameterValue=${{ env.TIMESTAMP }} \
+            --capabilities CAPABILITY_IAM
 
       - name: Trigger CodePipeline
         if: ${{ success() }}
         run: |
           aws codepipeline start-pipeline-execution --name mood-melody --region ${{ secrets.AWS_REGION }}
-
-      # - name: Trigger CodePipeline
-      #   if: ${{ success() }}
-      #   run: |
-      #     aws codepipeline start-pipeline-execution --name mood-melody --region ${{ secrets.AWS_REGION }} --parameter-overrides GitCommitHash=${{ env.GIT_COMMIT_HASH }}
