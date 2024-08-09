@@ -1,10 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
-Parameters:
-  GitCommitHash:
-    Type: String
-    Description: "Git commit hash used for the Docker image"
-
 Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -36,7 +31,7 @@ Resources:
       FunctionName: MoodMelodyBackendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-${GitCommitHash}"
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-${SSM:/mood-melody/timestamp}"
       PackageType: Image
 
   ApiGatewayRestApi:
