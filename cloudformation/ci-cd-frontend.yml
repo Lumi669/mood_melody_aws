@@ -11,9 +11,6 @@ Resources:
       ImageUri: 536560382233.dkr.ecr.eu-north-1.amazonaws.com/mood-melody-aws:frontend-latest
       MemorySize: 512
       Timeout: 300
-      Tags:
-        - Key: Version
-          Value: !Ref Version
       Architectures:
         - x86_64
       Events:
