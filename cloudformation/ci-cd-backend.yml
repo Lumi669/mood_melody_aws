@@ -1,10 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
-Parameters:
-  BackendTimestamp:
-    Type: String
-    Description: "Timestamp from GitHub Actions"
-
 Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -36,7 +31,7 @@ Resources:
       FunctionName: MoodMelodyBackendFunction
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-${BackendTimestamp}"
+        ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-{{resolve:ssm:/mood-melody/backend-timestamp}}"
       PackageType: Image
 
   ApiGatewayRestApi:

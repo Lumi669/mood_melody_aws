@@ -62,13 +62,6 @@ jobs:
         run: |
           aws ecr describe-images --repository-name mood-melody-aws --image-ids imageTag=backend-${TIMESTAMP}
 
-      - name: Update CloudFormation Stack
-        run: |
-          aws cloudformation update-stack --stack-name your-stack-name \
-            --template-body ../../cloudformation/ci-cd-backend.yml/ci-cd-backend.yml \
-            --parameters ParameterKey=BackendTimestamp,ParameterValue=${{ env.TIMESTAMP }} \
-            --capabilities CAPABILITY_IAM
-
       - name: Trigger CodePipeline
         if: ${{ success() }}
         run: |
