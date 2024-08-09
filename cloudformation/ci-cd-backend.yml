@@ -166,4 +166,4 @@ Outputs:
 
   UpdateTriggerDebug:
     Description: "Debug Output for UpdateTrigger"
-    Value: !GetAtt UpdateTrigger
+    Value: !GetAtt UpdateTrigger.Data.RandomString
