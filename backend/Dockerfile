@@ -49,7 +49,7 @@ COPY --from=build /app/package.json .
 
 
 # Copy the database file
-COPY moodmelodydatabase.db .
+COPY --from=build /app/moodmelodydatabase.db ./ 
 
 # Set the entrypoint and command
 ENTRYPOINT ["/lambda-entrypoint.sh"]
