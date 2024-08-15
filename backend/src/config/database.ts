@@ -14,14 +14,19 @@ const databaseUrl: string =
 
 // If running in Lambda, copy the database to the /tmp directory
 if (isLambda) {
-  const sourceFilePath = path.join(__dirname, "../../moodmelodydatabase.db");
+  // const sourceFilePath = path.join(__dirname, "../../moodmelodydatabase.db");
+  const sourceFilePath = path.join("/var/task", "moodmelodydatabase.db"); // Adjusted to match the Dockerfile copy destination
+
   const destFilePath = lambdaDatabasePath;
 
   if (!fs.existsSync(sourceFilePath)) {
+    console.error(`Source database file not found: ${sourceFilePath}`);
     throw new Error(`Source database file not found: ${sourceFilePath}`);
   }
 
+  // Copy the database to /tmp directory
   fs.copyFileSync(sourceFilePath, destFilePath);
+  console.log(`Database file copied to: ${destFilePath}`);
 }
 
 // Initialize Sequelize
