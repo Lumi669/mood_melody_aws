@@ -118,7 +118,7 @@ Resources:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
-      HttpMethod: GET
+      HttpMethod: POST
       ResourceId: !Ref ApiGatewayResourceSentimentanalysis
       RestApiId: !Ref ApiGatewayRestApi
       Integration:
