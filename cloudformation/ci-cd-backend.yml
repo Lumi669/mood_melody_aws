@@ -123,6 +123,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
+  ApiGatewayMethodImagesDelete:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: DELETE
+      ResourceId: !Ref ApiGatewayResourceImages
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+
   ApiGatewayMethodMusic:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -153,6 +165,7 @@ Resources:
       - ApiGatewayMethodTest
       - ApiGatewayMethodImages
       - ApiGatewayMethodImagesPost
+      - ApiGatewayMethodImagesDelete
       - ApiGatewayMethodMusic
       - ApiGatewayMethodSentimentanalysis
     Properties:
