@@ -6,8 +6,16 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   console.log(" backend Route hit ====");
-  console.log("req from backend routes/sentimentRoutes.ts === ", req);
+
+  // Parse the body manually if it is a string
+  const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
   const { text } = req.body;
+
+  if (!text) {
+    return res
+      .status(400)
+      .json({ error: "Text is required for sentiment analysis" });
+  }
 
   console.log("text from routes/sentimentRoutes.ts === ", text);
 
