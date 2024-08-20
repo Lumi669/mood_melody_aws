@@ -7,12 +7,16 @@ import testRoutes from "./routes/testRoutes";
 import imageRoutes from "./routes/imageRoutes";
 import musicRoutes from "./routes/musicRoutes";
 import rootRoutes from "./routes/rootRoutes";
+import sentimentRoutes from "./routes/sentimentRoutes";
 
 import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 // Register routes for images
 app.use("/api/images", imageRoutes);
@@ -23,6 +27,8 @@ app.use("/api/musics", musicRoutes);
 app.use("/", rootRoutes);
 
 app.use("/test", testRoutes);
+
+app.use("/api/sentimentanalysis", sentimentRoutes);
 
 // Register other routes...
 // app.use("/api/other", otherRoutes);

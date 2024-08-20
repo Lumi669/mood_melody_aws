@@ -20,6 +20,9 @@ const Nav: React.FC = () => {
         <Link href="/users" className="text-lg font-semibold">
           Users
         </Link>
+        <Link href="/sentimentanalysis" className="text-lg font-semibold">
+          Sentiment analysis
+        </Link>
       </div>
     </nav>
   );

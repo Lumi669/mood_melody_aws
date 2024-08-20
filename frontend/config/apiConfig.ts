@@ -4,6 +4,7 @@ interface ApiUrls {
   images: string;
   musics: string;
   test: string;
+  sentimentanalysis: string;
 }
 
 // process.env.NEXT_PUBLIC_API_URL_0 is how application reads
@@ -13,4 +14,5 @@ export const apiUrls: ApiUrls = {
   images: process.env.NEXT_PUBLIC_API_URL_1 || "",
   musics: process.env.NEXT_PUBLIC_API_URL_2 || "",
   test: process.env.NEXT_PUBLIC_API_URL_3 || "",
+  sentimentanalysis: process.env.NEXT_PUBLIC_API_URL_4 || "",
 };
