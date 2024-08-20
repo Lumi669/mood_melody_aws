@@ -8,7 +8,7 @@ export default function SentimentAnalysisPage() {
 
   // send to frontend serverside component
   const analyzeSentiment = async () => {
-    const response = await fetch("/api/analysesentiment", {
+    const response = await fetch("/api/sentimentanalysis", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

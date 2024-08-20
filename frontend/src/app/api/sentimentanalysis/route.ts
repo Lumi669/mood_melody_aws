@@ -7,8 +7,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { apiUrls } from "../../../../config/apiConfig";
 
 export async function POST(req: NextRequest) {
-  console.log("apiUrls from analysesentiment route ======== ", apiUrls);
-  console.log("req from frontend api/analysesentiment/route.ts ===  ", req);
+  console.log("apiUrls from sentimentanalysis route ======== ", apiUrls);
+  console.log("req from frontend api/sentimentanalysis/route.ts ===  ", req);
 
   const { text } = await req.json();
   console.log("text for analysing sentiment frontend ====== ", text);
