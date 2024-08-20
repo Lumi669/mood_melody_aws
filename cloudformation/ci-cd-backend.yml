@@ -168,10 +168,11 @@ Resources:
       - ApiGatewayMethodImagesDelete
       - ApiGatewayMethodMusic
       - ApiGatewayMethodSentimentanalysis
+      - BackendLambdaFunction
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
-      Description: "New Deployment for my MoodMelodyBackendApi at !{timestamp}"
+      Description: !Sub "Deployment for MoodMelodyBackendApi with new Lambda image at ${AWS::StackName}"
 
   BackendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
