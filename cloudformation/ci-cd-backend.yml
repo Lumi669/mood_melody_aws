@@ -146,7 +146,7 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
-  ApiGatewayDeployment:
+  ApiGatewayNewDeployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
       - ApiGatewayMethodRoot
@@ -158,7 +158,7 @@ Resources:
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
-      Description: "Deployment for my MoodMelodyBackendApi at !{timestamp}"
+      Description: "New Deployment for my MoodMelodyBackendApi at !{timestamp}"
 
   BackendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
