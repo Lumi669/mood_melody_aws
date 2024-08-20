@@ -172,7 +172,7 @@ Resources:
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
-      Description: !Sub "Deployment for MoodMelodyBackendApi with new Lambda image at ${AWS::StackName}"
+      Description: !Sub "Deployment for MoodMelodyBackendApi with Image ${BackendLambdaFunction.Properties.Code.ImageUri}"
 
   BackendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
