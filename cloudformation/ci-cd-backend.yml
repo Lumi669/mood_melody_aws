@@ -60,6 +60,13 @@ Resources:
       PathPart: musics
       RestApiId: !Ref ApiGatewayRestApi
 
+  ApiGatewayResourceSentimentanalysis:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ApiGatewayResourceRoot
+      PathPart: sentimentanalysis
+      RestApiId: !Ref ApiGatewayRestApi
+
   ApiGatewayMethodRoot:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -107,6 +114,17 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+  ApiGatewayMethodSentimentanalysis:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      ResourceId: !Ref ApiGatewayResourceSentimentanalysis
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
@@ -115,6 +133,7 @@ Resources:
       - ApiGatewayMethodTest
       - ApiGatewayMethodImages
       - ApiGatewayMethodMusic
+      - ApiGatewayMethodSentimentanalysis
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
