@@ -24,6 +24,14 @@ Resources:
                 Action:
                   - execute-api:Invoke
                 Resource: "*"
+        - PolicyName: ComprehendPermissions
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - comprehend:DetectSentiment
+                Resource: "*"
 
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
