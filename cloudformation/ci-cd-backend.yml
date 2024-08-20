@@ -158,7 +158,7 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
-  ApiGatewayNewDeployment:
+  ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
       - ApiGatewayMethodRoot
@@ -168,11 +168,10 @@ Resources:
       - ApiGatewayMethodImagesDelete
       - ApiGatewayMethodMusic
       - ApiGatewayMethodSentimentanalysis
-      - BackendLambdaFunction
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
-      Description: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-{{resolve:ssm:/mood-melody/backend-timestamp}}"
+      Description: "Deployment of backend apis"
 
   BackendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
