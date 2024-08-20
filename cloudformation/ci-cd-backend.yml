@@ -173,6 +173,7 @@ Resources:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
       Description: !Sub "Deployment for MoodMelodyBackendApi with Image ${BackendLambdaFunction.Properties.Code.ImageUri}"
+      Autotriggerofdeployofapis: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-{{resolve:ssm:/mood-melody/backend-timestamp}}"
 
   BackendLambdaInvokePermission:
     Type: AWS::Lambda::Permission
