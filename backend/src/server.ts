@@ -6,7 +6,7 @@ import serverless from "serverless-http";
 import testRoutes from "./routes/testRoutes";
 import imageRoutes from "./routes/imageRoutes";
 import musicRoutes from "./routes/musicRoutes";
-import rootRoutes from "./routes/rootRoutes";
+import rootRoutes from "./routes/rtRoutes";
 import sentimentRoutes from "./routes/sentimentRoutes";
 
 import { errorHandler } from "./middleware/errorHandler";
