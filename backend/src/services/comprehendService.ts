@@ -20,8 +20,12 @@ export async function analyzeSentiment(text: string): Promise<string> {
     const result = await client.send(command);
     console.log("result from aws comperehend analysis === ", result);
     return result.Sentiment || "NEUTRAL";
-  } catch (error) {
-    console.error("Error analyzing sentiment:", error);
-    throw error;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error analyzing sentiment", error.message);
+    } else {
+      console.error("Unknown error analyzing sentiment:", error);
+    }
+    throw new Error("Sentiment analysis failed");
   }
 }
