@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   console.log(" backend Route hit ====");
+  console.log("req from backend routes/sentimentRoutes.ts === ", req);
   const { text } = req.body;
 
   console.log("text from routes/sentimentRoutes.ts === ", text);

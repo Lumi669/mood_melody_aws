@@ -8,7 +8,7 @@ import { apiUrls } from "../../../../config/apiConfig";
 
 export async function POST(req: NextRequest) {
   console.log("apiUrls from analysesentiment route ======== ", apiUrls);
-  console.log("Requesting URL: ", apiUrls.sentimentanalysis);
+  console.log("req from frontend api/analysesentiment/route.ts ===  ", req);
 
   const { text } = await req.json();
   console.log("text for analysing sentiment frontend ====== ", text);
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text: text }),
   });
 
   console.log("response from backend ==== ", response);
