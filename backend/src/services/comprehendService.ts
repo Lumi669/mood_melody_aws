@@ -6,7 +6,7 @@ import {
   DetectSentimentCommandInput,
 } from "@aws-sdk/client-comprehend";
 
-const client = new ComprehendClient({ region: "eu-west-1" });
+const client = new ComprehendClient({ region: "eu-central-1" });
 
 export async function analyzeSentiment(text: string): Promise<string> {
   console.log("text from analyzeSentiment function ==== ", text);
