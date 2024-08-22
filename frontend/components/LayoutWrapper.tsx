@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useMedia } from "../context/MediaContext"; // Ensure this is the correct path to your MediaContext
+import { useMedia } from "../context/MediaContext";
 
 const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   const { isRed, isBlue } = useMedia();

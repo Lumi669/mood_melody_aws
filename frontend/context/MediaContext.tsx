@@ -54,17 +54,6 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     // Fetch music and image data and match them
-  //     const matchedData = await fetchAllMusicWithImages();
-  //     console.log("matchedData ===== ", matchedData);
-  //     setMediaData(matchedData);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   const playTrack = async (url: string) => {
     if (audio) {
       audio.pause();
@@ -108,14 +97,6 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
       setCurrentTrack(null);
     }
   };
-
-  // useEffect(() => {
-  //   return () => {
-  //     if (audio) {
-  //       audio.pause();
-  //     }
-  //   };
-  // }, [audio]);
 
   return (
     <MediaContext.Provider
