@@ -17,8 +17,13 @@ const config: Config = {
       fontFamily: {
         jersey: ['"Jersey 20 Charted"'], // fallback to sans-serif
       },
+      colors: {
+        "light-red": "#fdba74", // Customize light orange
+        "light-blue": "#93c5fd", // Customize light blue
+      },
     },
   },
   plugins: [],
+  safelist: ["bg-light-red", "bg-light-blue"],
 };
 export default config;

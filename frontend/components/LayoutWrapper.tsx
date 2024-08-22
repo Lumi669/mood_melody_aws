@@ -11,9 +11,9 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   let backgroundColor = "bg-white"; // Default to white
 
   if (isRed) {
-    backgroundColor = "bg-red-500";
+    backgroundColor = "bg-light-red";
   } else if (isBlue) {
-    backgroundColor = "bg-blue-500";
+    backgroundColor = "bg-light-blue";
   }
 
   return (
