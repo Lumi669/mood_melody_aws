@@ -4,7 +4,7 @@ import TestForm from "../../components/TestForm";
 import { fetchAllMusicWithImages } from "utils/fetchAllMusicWithImages";
 import ClientContextUpdater from "../../components/ClientContextUpdater";
 
-import ClientWrapperForMusicPlayer from "../../components/client/ClientWrapperForMusicPlayer";
+import ClientWrapperForMusicPlayer from "../../components/ClientWrapperForMusicPlayer";
 const Home: React.FC = async () => {
   const matchedData = await fetchAllMusicWithImages();
 

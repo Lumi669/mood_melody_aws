@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import { useMedia } from "../../context/MediaContext";
+import { useMedia } from "../context/MediaContext";
 
-import { addToPlaylist } from "../../utils/addToPlaylist";
-import CustomImage from "../CustomImage";
+import { addToPlaylist } from "../utils/addToPlaylist";
+import CustomImage from "./CustomImage";
 
 // import { MusicWithImage } from "../../types/type";
 
