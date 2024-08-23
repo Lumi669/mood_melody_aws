@@ -37,7 +37,6 @@
 //   );
 // }
 
-// allmusic/page.tsx
 import React from "react";
 import { MusicWithImage } from "types/type";
 import { fetchAllMusicWithImages } from "../../../utils/fetchAllMusicWithImages";

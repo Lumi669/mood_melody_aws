@@ -73,15 +73,21 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
   };
 
   const togglePlayPause = async (url: string) => {
+    console.log("Toggle Play/Pause called with URL:", url);
+    console.log("Current Track:", currentTrack);
+    console.log("Audio State:", audio);
+
     if (currentTrack === url) {
       if (audio) {
         if (audio.paused) {
           try {
+            console.log("Playing the audio");
             await audio.play();
           } catch (error) {
             console.error("Failed to play audio:", error);
           }
         } else {
+          console.log("Pausing the audio");
           audio.pause();
         }
       }
