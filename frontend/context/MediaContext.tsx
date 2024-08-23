@@ -145,7 +145,7 @@ interface MediaContextType {
   isBlue: boolean;
   audio: HTMLAudioElement | null;
   currentTrack: string | null;
-  isPlaying: boolean; // NEW: Track whether the music is playing or not
+  isPlaying: boolean;
   setIsRed: Dispatch<SetStateAction<boolean>>;
   setIsBlue: Dispatch<SetStateAction<boolean>>;
   setMediaData: Dispatch<SetStateAction<(Music & { imgUrl: string })[]>>;
@@ -241,4 +241,11 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   );
 };
 
-export const useMedia = () => useContext(MediaContext);
+export const useMedia = () => {
+  const context = useContext(MediaContext);
+  console.log("useMedia hook called:", context); // Add this log
+  if (!context) {
+    throw new Error("useMedia must be used within a MediaProvider");
+  }
+  return context;
+};
