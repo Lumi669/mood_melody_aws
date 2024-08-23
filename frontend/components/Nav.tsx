@@ -1,28 +1,16 @@
 import React from "react";
-import Link from "next/link";
+import NavLink from "./NavLink"; // Ensure the import path is correct
 
 const Nav: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto flex justify-start items-center space-x-6 p-4">
-        <Link href="/" className="text-lg font-semibold">
-          Home
-        </Link>
-        <Link href="/allmusic" className="text-lg font-semibold">
-          All Music
-        </Link>
-        <Link href="/mixtape" className="text-lg font-semibold">
-          MixtapeY
-        </Link>
-        <Link href="/live" className="text-lg font-semibold">
-          Live
-        </Link>
-        <Link href="/users" className="text-lg font-semibold">
-          Users
-        </Link>
-        <Link href="/sentimentanalysis" className="text-lg font-semibold">
-          Sentiment analysis
-        </Link>
+        <NavLink href="/">Home</NavLink>
+        <NavLink href="/allmusic">All Music</NavLink>
+        <NavLink href="/mixtape">MixtapeY</NavLink>
+        <NavLink href="/live">Live</NavLink>
+        <NavLink href="/users">Users</NavLink>
+        <NavLink href="/sentimentanalysis">Sentiment analysis</NavLink>
       </div>
     </nav>
   );
