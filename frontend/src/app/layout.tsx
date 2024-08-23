@@ -28,7 +28,9 @@ export default function RootLayout({
         <MediaProvider>
           <LayoutWrapper>
             <Nav />
-            <main>{children}</main>
+            <main>
+              <div>{children}</div>
+            </main>
           </LayoutWrapper>
         </MediaProvider>
       </body>
