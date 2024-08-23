@@ -21,6 +21,15 @@ const config: Config = {
         "light-red": "#fdba74", // Customize light orange
         "light-blue": "#93c5fd", // Customize light blue
       },
+      keyframes: {
+        "fly-in": {
+          "0%": { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "fly-in": "fly-in 0.5s ease-out forwards",
+      },
     },
   },
   plugins: [],
