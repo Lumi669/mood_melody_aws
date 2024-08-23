@@ -89,13 +89,46 @@
 // export default ClientInteractivityWrapper;
 
 // ClientInteractivityWrapper.tsx
+// "use client";
+
+// import React, { useEffect } from "react";
+// import { useMedia } from "../context/MediaContext";
+
+// const ClientInteractivityWrapper: React.FC = () => {
+//   const { togglePlayPause, stopMusic, currentTrack } = useMedia();
+
+//   useEffect(() => {
+//     const handleClick = (event: MouseEvent) => {
+//       const target = event.target as HTMLElement;
+//       const urlOfMusic = target.getAttribute("data-url");
+
+//       if (urlOfMusic) {
+//         if (urlOfMusic !== currentTrack) {
+//           stopMusic();
+//         }
+//         togglePlayPause(urlOfMusic);
+//       }
+//     };
+
+//     document.addEventListener("click", handleClick);
+
+//     return () => {
+//       document.removeEventListener("click", handleClick);
+//     };
+//   }, [togglePlayPause, stopMusic, currentTrack]);
+
+//   return null; // No need to render anything
+// };
+
+// export default ClientInteractivityWrapper;
+
 "use client";
 
 import React, { useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
 
 const ClientInteractivityWrapper: React.FC = () => {
-  const { togglePlayPause, stopMusic, currentTrack } = useMedia();
+  const { togglePlayPause, stopMusic, currentTrack, playTrack } = useMedia();
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
@@ -103,10 +136,14 @@ const ClientInteractivityWrapper: React.FC = () => {
       const urlOfMusic = target.getAttribute("data-url");
 
       if (urlOfMusic) {
+        console.log("Clicked URL:", urlOfMusic);
+        console.log("Current Track:", currentTrack);
+
         if (urlOfMusic !== currentTrack) {
-          stopMusic();
+          playTrack(urlOfMusic); // Play the new track
+        } else {
+          togglePlayPause(urlOfMusic); // Toggle play/pause if it's the same track
         }
-        togglePlayPause(urlOfMusic);
       }
     };
 
@@ -115,7 +152,7 @@ const ClientInteractivityWrapper: React.FC = () => {
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [togglePlayPause, stopMusic, currentTrack]);
+  }, [togglePlayPause, stopMusic, currentTrack, playTrack]);
 
   return null; // No need to render anything
 };
