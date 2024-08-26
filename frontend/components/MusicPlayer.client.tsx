@@ -99,7 +99,7 @@ const MusicPlayer: React.FC = () => {
             layout="responsive"
             width={800}
             height={800}
-            onClick={handleImageClick} // This now properly toggles play/pause
+            // onClick={handleImageClick} // This now properly toggles play/pause
             className="cursor-pointer"
           />
         )}
