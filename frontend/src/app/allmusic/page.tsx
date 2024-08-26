@@ -29,7 +29,7 @@ export default async function AllMusicPage() {
         ))}
       </ul>
       <ClientContextUpdater initialData={matchedData} />
-      <ClientInteractivityWrapper />
+      {/* <ClientInteractivityWrapper /> */}
     </div>
   );
 }
