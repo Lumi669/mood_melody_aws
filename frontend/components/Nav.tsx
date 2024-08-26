@@ -10,7 +10,6 @@ const Nav: React.FC = () => {
         <NavLink href="/mixtape">MixtapeY</NavLink>
         <NavLink href="/live">Live</NavLink>
         <NavLink href="/users">Users</NavLink>
-        <NavLink href="/sentimentanalysis">Sentiment analysis</NavLink>
       </div>
     </nav>
   );
