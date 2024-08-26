@@ -11,11 +11,7 @@ const Home: React.FC = async () => {
 
   return (
     <div>
-      <div>
-        <p>Provide name</p>
-        <TestForm />
-      </div>
-      <h1>Welcome to my Mood Music App</h1>
+      <h1 className="bg-slate-200">Welcome to my Mood Music App</h1>
       <ClientWrapperForMusicPlayer />
       <Sentimentanalysis />
       <ClientContextUpdater initialData={matchedData} />
