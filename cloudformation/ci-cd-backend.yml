@@ -146,6 +146,28 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+  ApiGatewayMethodMusicPost:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: POST
+      ResourceId: !Ref ApiGatewayResourceMusic
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+  ApiGatewayMethodMusicDelete:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: DELETE
+      ResourceId: !Ref ApiGatewayResourceMusic
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
   ApiGatewayMethodSentimentanalysis:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -158,7 +180,7 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
 
-  ApiGatewayDeployment:
+  ApiGatewayDeploymentNew:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
       - ApiGatewayMethodRoot
@@ -167,6 +189,8 @@ Resources:
       - ApiGatewayMethodImagesPost
       - ApiGatewayMethodImagesDelete
       - ApiGatewayMethodMusic
+      - ApiGatewayMethodMusicPost
+      - ApiGatewayMethodMusicDelete
       - ApiGatewayMethodSentimentanalysis
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
