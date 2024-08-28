@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
 import { addToPlaylist } from "../utils/addToPlaylist";
 import CustomImage from "./CustomImage";
+import SentimentAnalysisPage from "./Sentimentanalysis";
 
 const MusicPlayer: React.FC = () => {
   const {
@@ -80,14 +81,18 @@ const MusicPlayer: React.FC = () => {
 
   return (
     <>
-      <button onClick={() => playMusic("happy")} style={{ margin: "10px" }}>
+      {/* <button onClick={stopMusic} className="m-5">
+        Stop
+        </button> */}
+
+      <div>
+        <SentimentAnalysisPage />
+      </div>
+      <button onClick={() => playMusic("happy")} className="m-5">
         Happy
       </button>
-      <button onClick={() => playMusic("sad")} style={{ margin: "10px" }}>
+      <button onClick={() => playMusic("sad")} className="m-5">
         Sad
-      </button>
-      <button onClick={stopMusic} style={{ margin: "10px" }}>
-        Stop
       </button>
 
       <div>
