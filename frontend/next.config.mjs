@@ -19,6 +19,10 @@ const nextConfig = {
         destination: "/allmusic",
       },
       {
+        source: "/public/:path*", // Explicitly handle public assets if needed
+        destination: "/public/:path*",
+      },
+      {
         source: "/:path*",
         destination: "/:path*",
       },
