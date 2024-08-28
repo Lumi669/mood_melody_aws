@@ -10,7 +10,9 @@ const Home: React.FC = async () => {
 
   return (
     <div>
-      <h1 className="bg-slate-200">How do you feel today ?</h1>
+      <h1 className="m-20 p-20 bg-yellow-100 text-4xl font-mono text-green-500 font-bold tracking-wide text-center">
+        Hei, How do you feel today :) ?
+      </h1>
       <ClientWrapperForMusicPlayer />
       <ClientContextUpdater initialData={matchedData} />
     </div>
