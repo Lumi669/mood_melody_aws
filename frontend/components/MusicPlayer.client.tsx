@@ -90,7 +90,7 @@ const MusicPlayer: React.FC = () => {
         Stop
       </button>
 
-      <div className="w-[500px] h-[400px] bg-red-500 relative">
+      <div>
         {currentImageUrl && (
           <CustomImage
             src={currentImageUrl}
