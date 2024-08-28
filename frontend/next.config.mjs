@@ -19,6 +19,10 @@ const nextConfig = {
         destination: "/allmusic",
       },
       {
+        source: "/public/:path*",
+        destination: "/public/:path*",
+      },
+      {
         source: "/:path*",
         destination: "/:path*",
       },
