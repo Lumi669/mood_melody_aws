@@ -19,14 +19,13 @@ const nextConfig = {
         destination: "/allmusic",
       },
       {
-        source: "/public/:path*",
-        destination: "/public/:path*",
-      },
-      {
         source: "/:path*",
         destination: "/:path*",
       },
     ];
+  },
+  images: {
+    unoptimized: true, // Add this to disable image optimization if using serverless environments
   },
 };
 
