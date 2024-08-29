@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useMedia } from "../context/MediaContext";
 import { addToPlaylist } from "../utils/addToPlaylist";
 import CustomImage from "./CustomImage";
 import SentimentAnalysisPage from "./Sentimentanalysis";
+import Greeting from "./Greeting";
+import Image from "next/image";
 
 const MusicPlayer: React.FC = () => {
   const {
@@ -19,6 +21,9 @@ const MusicPlayer: React.FC = () => {
   } = useMedia();
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
+  const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
+  const [isAnimationActive, setAnimationActive] = useState(false);
+  const [isVideoVisible, setVideoVisible] = useState(false);
 
   const playMusic = (mood: "happy" | "sad") => {
     stopMusic(); // Stop any currently playing music
@@ -35,6 +40,15 @@ const MusicPlayer: React.FC = () => {
     setCurrentMusicName(randomSong.name);
 
     playTrack(randomSong.url); // Play the new track using the global context
+
+    // Trigger the animation sequence
+    setOriginalViewVisible(false);
+    setAnimationActive(true);
+
+    setTimeout(() => {
+      setAnimationActive(false);
+      setVideoVisible(true);
+    }, 1000); // Adjust to match the animation duration
   };
 
   const handleImageClick = () => {
@@ -43,19 +57,58 @@ const MusicPlayer: React.FC = () => {
     }
   };
 
+  const OrginalViewPart = () => {
+    return (
+      <>
+        <div>
+          <Greeting />
+        </div>
+        <div>
+          <SentimentAnalysisPage />
+        </div>
+      </>
+    );
+  };
+
   return (
     <>
-      <div>
-        <SentimentAnalysisPage />
-      </div>
-      <button onClick={() => playMusic("happy")} className="m-5">
-        Happy
-      </button>
-      <button onClick={() => playMusic("sad")} className="m-5">
-        Sad
-      </button>
+      <div className="relative min-h-screen p-4">
+        {/* Original Homepage View */}
+        {isOriginalViewVisible && <OrginalViewPart />}
+        <button onClick={() => playMusic("happy")} className="m-5">
+          Happy
+        </button>
+        <button onClick={() => playMusic("sad")} className="m-5">
+          Sad
+        </button>
 
-      <div>
+        {/* Animation from image to video */}
+        {isAnimationActive && (
+          <>
+            <Image
+              src="/dancing-girl-removebg.png"
+              alt="Animation"
+              width={100}
+              height={100}
+              className="fixed transition-all duration-1000 transform animate-fly-to-corner"
+            />
+          </>
+        )}
+
+        {/* Video in the bottom right corner */}
+        {isVideoVisible && (
+          <div className="fixed bottom-4 right-4 w-24 h-24">
+            <video
+              src="/animation-center-yellowbg-noblinking.mp4"
+              autoPlay
+              loop
+              muted
+              className="w-full h-full"
+            />
+          </div>
+        )}
+
+        {/* Display the current track image */}
         {currentImageUrl && (
           <CustomImage
             src={currentImageUrl}

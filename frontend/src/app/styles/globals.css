@@ -35,3 +35,21 @@ body {
     text-wrap: balance;
   }
 } */
+
+/* styles/globals.css */
+@keyframes fly-to-corner {
+  from {
+    transform: translate(0, 0) scale(1);
+    right: 50%;
+    bottom: 50%;
+  }
+  to {
+    transform: translate(0, 0) scale(0.375); /* Adjust scale to match the video size */
+    right: 1rem; /* Positioning for the bottom right corner */
+    bottom: 1rem;
+  }
+}
+
+.animate-fly-to-corner {
+  animation: fly-to-corner 1s forwards; /* Runs animation forwards */
+}
