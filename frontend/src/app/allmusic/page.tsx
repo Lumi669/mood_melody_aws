@@ -2,7 +2,6 @@ import React from "react";
 import { MusicWithImage } from "types/type";
 import { fetchAllMusicWithImages } from "../../../utils/fetchAllMusicWithImages";
 import ClientContextUpdater from "../../../components/ClientContextUpdater";
-import ClientInteractivityWrapper from "../../../components/ClientInteractivityWrapper";
 import CustomImage from "components/CustomImage";
 
 export default async function AllMusicPage() {
@@ -29,7 +28,6 @@ export default async function AllMusicPage() {
         ))}
       </ul>
       <ClientContextUpdater initialData={matchedData} />
-      {/* <ClientInteractivityWrapper /> */}
     </div>
   );
 }
