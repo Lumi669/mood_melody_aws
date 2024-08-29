@@ -51,12 +51,6 @@ const MusicPlayer: React.FC = () => {
     }, 1000); // Adjust to match the animation duration
   };
 
-  const handleImageClick = () => {
-    if (currentTrack) {
-      togglePlayPause(currentTrack); // Toggle play/pause using the context function
-    }
-  };
-
   const OrginalViewPart = () => {
     return (
       <>
