@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
 import { addToPlaylist } from "../utils/addToPlaylist";

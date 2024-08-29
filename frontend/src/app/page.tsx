@@ -3,8 +3,8 @@ import Image from "next/image";
 
 import { fetchAllMusicWithImages } from "utils/fetchAllMusicWithImages";
 import ClientContextUpdater from "../../components/ClientContextUpdater";
+import MusicPlayer from "../../components/MusicPlayer";
 
-import ClientWrapperForMusicPlayer from "../../components/ClientWrapperForMusicPlayer";
 const Home: React.FC = async () => {
   const matchedData = await fetchAllMusicWithImages();
 
@@ -32,7 +32,7 @@ const Home: React.FC = async () => {
           Hi there, How do you feel today :D ?
         </h1>
       </div>
-      <ClientWrapperForMusicPlayer />
+      <MusicPlayer />
       <ClientContextUpdater initialData={matchedData} />
     </div>
   );
