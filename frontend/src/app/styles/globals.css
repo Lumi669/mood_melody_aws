@@ -53,3 +53,13 @@ body {
 .animate-fly-to-corner {
   animation: fly-to-corner 1s forwards; /* Runs animation forwards */
 }
+
+/* Ensure video is on top */
+.video-on-top {
+  z-index: 50; /* High enough to be above other content */
+  position: fixed; /* Ensure it's positioned relative to the viewport */
+  bottom: 5rem; /* Positioning adjustments */
+  right: 5rem; /* Positioning adjustments */
+  width: 20rem; /* Adjust size as needed */
+  height: 20rem; /* Adjust size as needed */
+}

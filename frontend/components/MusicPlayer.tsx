@@ -75,6 +75,7 @@ const MusicPlayer: React.FC = () => {
       <div className="relative min-h-screen p-4">
         {/* Original Homepage View */}
         {isOriginalViewVisible && <OrginalViewPart />}
+
         <button onClick={() => playMusic("happy")} className="m-5">
           Happy
         </button>
@@ -84,20 +85,18 @@ const MusicPlayer: React.FC = () => {
 
         {/* Animation from image to video */}
         {isAnimationActive && (
-          <>
-            <Image
-              src="/dancing-girl-removebg.png"
-              alt="Animation"
-              width={100}
-              height={100}
-              className="fixed transition-all duration-1000 transform animate-fly-to-corner"
-            />
-          </>
+          <Image
+            src="/dancing-girl-removebg.png"
+            alt="Animation"
+            width={100}
+            height={100}
+            className="fixed transition-all duration-1000 transform animate-fly-to-corner"
+          />
         )}
 
         {/* Video in the bottom right corner */}
         {isVideoVisible && (
-          <div className="fixed bottom-4 right-4 w-24 h-24">
+          <div className="video-on-top">
             <video
               src="/animation-center-yellowbg-noblinking.mp4"
               autoPlay
