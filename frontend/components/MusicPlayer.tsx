@@ -51,6 +51,13 @@ const MusicPlayer: React.FC = () => {
     }, 1000); // Adjust to match the animation duration
   };
 
+  // Function to handle returning to the original view when the video is clicked
+  const handleVideoClick = () => {
+    setOriginalViewVisible(true); // Show the original view
+    setAnimationActive(false); // Stop any ongoing animation
+    setVideoVisible(false); // Hide the video
+  };
+
   const OrginalViewPart = () => {
     return (
       <>
@@ -90,7 +97,7 @@ const MusicPlayer: React.FC = () => {
 
         {/* Video in the bottom right corner */}
         {isVideoVisible && (
-          <div className="video-on-top">
+          <div className="video-on-top" onClick={handleVideoClick}>
             <video
               src="/animation-center-yellowbg-noblinking.mp4"
               autoPlay
