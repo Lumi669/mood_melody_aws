@@ -45,10 +45,6 @@ const MusicPlayer: React.FC = () => {
 
   return (
     <>
-      {/* <button onClick={stopMusic} className="m-5">
-        Stop
-        </button> */}
-
       <div>
         <SentimentAnalysisPage />
       </div>
@@ -68,7 +64,6 @@ const MusicPlayer: React.FC = () => {
             layout="responsive"
             width={800}
             height={800}
-            // onClick={handleImageClick} // This now properly toggles play/pause
             className="cursor-pointer"
           />
         )}
