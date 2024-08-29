@@ -56,6 +56,7 @@ const MusicPlayer: React.FC = () => {
     setOriginalViewVisible(true); // Show the original view
     setAnimationActive(false); // Stop any ongoing animation
     setVideoVisible(false); // Hide the video
+    setCurrentImageUrl(null); // Hide the music image
   };
 
   const OrginalViewPart = () => {
