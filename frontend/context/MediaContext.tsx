@@ -101,6 +101,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       audio.currentTime = 0; // Reset the audio
       setIsPlaying(false);
       setCurrentTrack(null);
+      setCurrentSong(null);
     }
   };
 
