@@ -1,12 +1,10 @@
-// src/components/GlobalControls.tsx
-
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
 
 const GlobalControls: React.FC = () => {
-  const { stopMusic, isPlaying } = useMedia();
+  const { stopMusic, isPlaying, currentSong } = useMedia();
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -21,12 +19,13 @@ const GlobalControls: React.FC = () => {
         animate ? "animate-fly-in" : ""
       }`}
     >
-      {isPlaying && (
+      {/* Show the Stop Music button only if there is a current song */}
+      {currentSong && (
         <button
           onClick={stopMusic}
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
         >
-          Stop Music
+          {isPlaying ? "Stop Music" : "Music Paused - Stop Music"}
         </button>
       )}
     </div>
