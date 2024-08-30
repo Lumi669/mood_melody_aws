@@ -4,7 +4,7 @@ import React from "react";
 import { useMedia } from "../context/MediaContext";
 
 const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
-  const { isRed, isBlue } = useMedia();
+  const { isRed, isBlue, isBrown } = useMedia();
   console.log("isRed === ", isRed);
   console.log("isBlue === ", isBlue);
 
@@ -14,6 +14,8 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     backgroundColor = "bg-light-red";
   } else if (isBlue) {
     backgroundColor = "bg-light-blue";
+  } else if (isBrown) {
+    backgroundColor = "bg-gray-400";
   }
 
   return (

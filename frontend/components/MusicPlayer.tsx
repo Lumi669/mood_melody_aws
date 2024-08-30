@@ -9,15 +9,22 @@ import Greeting from "./Greeting";
 import Image from "next/image";
 
 const MusicPlayer: React.FC = () => {
-  const { mediaData, setIsRed, setIsBlue, playTrack, stopMusic, currentTrack } =
-    useMedia();
+  const {
+    mediaData,
+    setIsRed,
+    setIsBlue,
+    setIsBrown,
+    playTrack,
+    stopMusic,
+    currentTrack,
+  } = useMedia();
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
   const [isAnimationActive, setAnimationActive] = useState(false);
   const [isVideoVisible, setVideoVisible] = useState(false);
 
-  const playMusic = (mood: "happy" | "sad") => {
+  const playMusic = (mood: "happy" | "sad" | "calm") => {
     stopMusic(); // Stop any currently playing music
 
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
@@ -27,6 +34,7 @@ const MusicPlayer: React.FC = () => {
 
     setIsRed(randomSong.mood === "happy");
     setIsBlue(randomSong.mood === "sad");
+    setIsBrown(randomSong.mood === "calm");
 
     setCurrentImageUrl(randomSong.imgUrl);
     setCurrentMusicName(randomSong.name);
@@ -75,6 +83,9 @@ const MusicPlayer: React.FC = () => {
         </button>
         <button onClick={() => playMusic("sad")} className="m-5">
           Sad
+        </button>
+        <button onClick={() => playMusic("calm")} className="m-5">
+          Calm
         </button>
 
         {/* Animation from image to video */}

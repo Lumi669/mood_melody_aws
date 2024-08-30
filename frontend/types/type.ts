@@ -3,7 +3,7 @@ export interface Music {
   name: string;
   url: string;
   ctg: string;
-  mood: "happy" | "sad";
+  mood: "happy" | "sad" | "calm";
 }
 
 export interface Image {
@@ -11,7 +11,7 @@ export interface Image {
   name: string;
   url: string;
   ctg: string;
-  mood: "happy" | "sad";
+  mood: "happy" | "sad" | "calm";
 }
 
 export type MusicWithImage = Music & { imgUrl: string };
