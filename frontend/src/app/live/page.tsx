@@ -8,7 +8,7 @@ import { extractMusicName } from "../../../utils/extractMusicInfo";
 
 const Liveplay = () => {
   const [hasImage, setHasImage] = useState(false);
-  const { currentTrack, currentSong } = useMedia();
+  const { currentTrack, currentSong, isPlaying } = useMedia();
   console.log("current song from live.tsx === ", currentSong);
   console.log("current track from live.tsx === ", currentTrack);
 
@@ -48,8 +48,10 @@ const Liveplay = () => {
           <div className="pl-4">
             <h1 className="text-xl font-bold">Music Name</h1>
             <div className="pb-8">{musicName}</div>
-            <h2 className="text-xl font-bold">Author Name</h2>
-            <div>{authorName}</div>
+            <h1 className="text-xl font-bold">Author Name</h1>
+            <div className="pb-8">{authorName}</div>
+            <h1 className="text-xl font-bold">Music Status</h1>
+            <div>{isPlaying ? "Playing" : "Paused"}</div>{" "}
           </div>
         </div>
       )}
