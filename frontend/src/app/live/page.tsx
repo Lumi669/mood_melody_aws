@@ -4,6 +4,7 @@ import React from "react";
 import { useMedia } from "../../../context/MediaContext";
 import CustomImage from "components/CustomImage";
 import { extractAuthorName } from "../../../utils/extractMusicInfo";
+import { extractMusicName } from "../../../utils/extractMusicInfo";
 
 const Liveplay = () => {
   const { currentTrack, currentSong } = useMedia();
@@ -11,11 +12,14 @@ const Liveplay = () => {
   console.log("current track from live.tsx === ", currentTrack);
 
   let authorName;
+  let musicName;
 
   if (currentSong && currentSong.name) {
     authorName = extractAuthorName(currentSong.name);
+    musicName = extractMusicName(currentSong.name);
   } else {
     authorName = "No author name specified";
+    musicName = "Oh oh ... No music is playing";
   }
 
   return (
@@ -35,7 +39,7 @@ const Liveplay = () => {
       )}
       <div className="w-1/2 pl-4 ">
         <h1 className="text-xl font-bold ">Music Name</h1>
-        <div>{currentSong?.name || "No song playing"}</div>
+        <div>{musicName}</div>
         <h2 className="text-xl font-bold">Author Name</h2>
         <div>{authorName}</div>
       </div>
