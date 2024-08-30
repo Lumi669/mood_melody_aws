@@ -16,6 +16,7 @@ const MusicPlayer: React.FC = () => {
     setIsBrown,
     playTrack,
     stopMusic,
+    setCurrentSong,
     currentTrack,
   } = useMedia();
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
@@ -30,7 +31,10 @@ const MusicPlayer: React.FC = () => {
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
     const randomSong =
       filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
+    setCurrentSong(randomSong);
     addToPlaylist(randomSong);
+
+    console.log("random song === ", randomSong);
 
     setIsRed(randomSong.mood === "happy");
     setIsBlue(randomSong.mood === "sad");

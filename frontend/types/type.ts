@@ -17,8 +17,8 @@ export interface Image {
 export type MusicWithImage = Music & { imgUrl: string };
 
 export interface CustomImageProps {
-  src: string;
-  alt: string;
+  src: string | null;
+  alt: string | "not specified";
   layout?: "fill" | "fixed" | "intrinsic" | "responsive" | undefined;
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down" | undefined;
   onClick?: (dataUrl: string) => void;
@@ -27,4 +27,10 @@ export interface CustomImageProps {
   width: number;
   height: number;
   className: string;
+}
+
+export interface MusicWithImageSimplified {
+  imgUrl: string | null;
+  url: string | null;
+  name: string | "not seen a name";
 }

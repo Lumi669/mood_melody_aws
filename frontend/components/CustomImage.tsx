@@ -5,6 +5,7 @@ import Image from "next/image";
 import { customLoader } from "../utils/customImageLoader";
 import { CustomImageProps } from "../types/type";
 import { useMedia } from "../context/MediaContext";
+// import MusicWithImageSimplified from "../types/type";
 
 const CustomImage: React.FC<CustomImageProps> = ({
   src,
@@ -17,10 +18,23 @@ const CustomImage: React.FC<CustomImageProps> = ({
   height,
   className,
 }) => {
-  const { currentTrack, isPlaying, playTrack, togglePlayPause } = useMedia();
+  const {
+    currentTrack,
+    isPlaying,
+    playTrack,
+    togglePlayPause,
+    setCurrentSong,
+  } = useMedia();
+
+  console.log("src from CustomImage.tsx === ", src);
+
+  const validSrc = src ?? ""; // Ensure src is a string
 
   const handleClick = () => {
     if (currentTrack !== dataUrl) {
+      const newSong = { imgUrl: validSrc, url: dataUrl, name: alt }; // Construct song details
+      setCurrentSong(newSong); // Set the current song in global context
+
       playTrack(dataUrl || ""); // Play the clicked track
     } else {
       togglePlayPause(dataUrl || ""); // Toggle play/pause if the same track is clicked again
@@ -35,7 +49,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
     <div className="relative inline-block cursor-pointer" onClick={handleClick}>
       <Image
         loader={() => customLoader({ srcOfImageUrl: src })}
-        src={src}
+        src={validSrc}
         alt={alt}
         layout={layout}
         objectFit={objectFit}

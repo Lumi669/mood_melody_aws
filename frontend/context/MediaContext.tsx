@@ -8,7 +8,7 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Music } from "../types/type";
+import { Music, MusicWithImageSimplified } from "../types/type";
 
 interface MediaContextType {
   mediaData: (Music & { imgUrl: string })[];
@@ -17,12 +17,14 @@ interface MediaContextType {
   isBrown: boolean;
   audio: HTMLAudioElement | null;
   currentTrack: string | null;
+  currentSong: MusicWithImageSimplified | null;
   isPlaying: boolean;
 
   setIsPlaying: Dispatch<SetStateAction<boolean>>;
   setIsRed: Dispatch<SetStateAction<boolean>>;
   setIsBlue: Dispatch<SetStateAction<boolean>>;
   setIsBrown: Dispatch<SetStateAction<boolean>>;
+  setCurrentSong: Dispatch<SetStateAction<MusicWithImageSimplified | null>>;
   setMediaData: Dispatch<SetStateAction<(Music & { imgUrl: string })[]>>;
   playTrack: (url: string) => void;
   togglePlayPause: (url: string) => void;
@@ -36,6 +38,8 @@ const MediaContext = createContext<MediaContextType>({
   isBrown: false,
   audio: null,
   currentTrack: null,
+  currentSong: null,
+  setCurrentSong: () => {},
   isPlaying: false, // NEW
   setIsPlaying: () => {},
   setIsRed: () => {},
@@ -58,6 +62,8 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   const [isBrown, setIsBrown] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
+  const [currentSong, setCurrentSong] =
+    useState<MusicWithImageSimplified | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false); // NEW
 
   const playTrack = (url: string) => {
@@ -111,6 +117,8 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
         setMediaData,
         audio,
         currentTrack,
+        currentSong,
+        setCurrentSong,
         isPlaying, // NEW
         setIsPlaying,
         playTrack,
