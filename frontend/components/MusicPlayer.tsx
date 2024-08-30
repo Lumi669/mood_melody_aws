@@ -9,16 +9,8 @@ import Greeting from "./Greeting";
 import Image from "next/image";
 
 const MusicPlayer: React.FC = () => {
-  const {
-    mediaData,
-    setIsRed,
-    setIsBlue,
-    playTrack,
-    togglePlayPause,
-    stopMusic,
-    currentTrack,
-    isPlaying,
-  } = useMedia();
+  const { mediaData, setIsRed, setIsBlue, playTrack, stopMusic, currentTrack } =
+    useMedia();
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
