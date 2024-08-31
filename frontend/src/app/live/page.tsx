@@ -33,25 +33,25 @@ const Liveplay = () => {
   }
 
   return (
-    <div className="flex items-center p-4 justify-center text-center">
+    <div className="flex items-center justify-center">
       {currentSong && (
-        <div className="w-1/2">
+        <div className="w-1/2 flex flex-col items-center">
           <CustomImage
             src={currentSong.imgUrl}
             alt={currentSong.name}
             dataUrl={currentTrack}
             layout="responsive"
-            width={800}
-            height={800}
-            className="cursor-pointer m-10"
+            width={1200}
+            height={600}
+            className="cursor-pointer mt-10"
           />
-          <div className="pl-4">
+          <div className="text-center">
             <h1 className="text-xl font-bold">Music Name</h1>
-            <div className="pb-8">{musicName}</div>
+            <div className="pb-5">{musicName}</div>
             <h1 className="text-xl font-bold">Author Name</h1>
-            <div className="pb-8">{authorName}</div>
+            <div className="pb-5">{authorName}</div>
             <h1 className="text-xl font-bold">Music Status</h1>
-            <div>{isPlaying ? "Playing" : "Paused"}</div>{" "}
+            <div>{isPlaying ? "Playing" : "Paused"}</div>
           </div>
         </div>
       )}
