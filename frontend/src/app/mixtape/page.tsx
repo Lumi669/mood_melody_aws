@@ -4,12 +4,6 @@ import React, { useEffect, useState } from "react";
 import CustomImage from "components/CustomImage";
 import { MusicWithImageSimplified } from "../../../types/type";
 
-type Music = {
-  id: string;
-  title: string;
-  artist: string;
-};
-
 const MixTape: React.FC = () => {
   const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]);
 
@@ -28,12 +22,17 @@ const MixTape: React.FC = () => {
         {playlist.map((item: MusicWithImageSimplified, index: number) => (
           <li
             key={item.ctg}
-            className="relative h-90 w-full max-w-xl mx-auto mb-10"
+            className="flex items-center w-full max-w-xl mx-auto mb-10"
           >
-            <span className="absolute top-0 left-0 text-2xl font-bold">
-              {index + 1}.
-            </span>
-            <h2 className="text-xl font-semibold mb-5 mx-10">{item.name}</h2>
+            {/* Left side: Number and name */}
+            <div className="flex items-center mr-4">
+              <span className="text-2xl font-bold mr-2">{index + 1}.</span>
+              <h2 className="text-xl font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-xs">
+                {item.name}
+              </h2>
+            </div>
+
+            {/* Right side: Image */}
             <CustomImage
               src={item.imgUrl}
               alt={item.name}
