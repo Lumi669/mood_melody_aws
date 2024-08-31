@@ -12,16 +12,19 @@ export default async function AllMusicPage() {
       <h1 className="text-2xl font-bold mb-4">All Music</h1>
       <ul>
         {matchedData.map((item: MusicWithImage) => (
-          <li key={item.id} className="relative h-96 w-full max-w-4xl mx-auto">
-            <h2 className="text-xl font-semibold">{item.name}</h2>
+          <li
+            key={item.id}
+            className="relative h-90 w-full max-w-4xl mx-auto mb-10"
+          >
+            <h2 className="text-xl font-semibold mb-5">{item.name}</h2>
             <CustomImage
               src={item.imgUrl}
               alt={item.name}
               layout="responsive"
               objectFit="cover"
               dataUrl={item.url}
-              className="cursor-pointer rounded-lg transition-all duration-300"
-              width={500}
+              className="cursor-pointer rounded-lg transition-all"
+              width={1000}
               height={500}
             />
           </li>
