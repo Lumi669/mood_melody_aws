@@ -24,13 +24,13 @@ const MixTape: React.FC = () => {
             key={item.ctg}
             className="flex items-center w-full max-w-xl mx-auto mb-10"
           >
-            {/* Number */}
-            <span className="text-2xl font-bold mr-4 w-8 text-right">
+            {/* Number with Fixed Width */}
+            <span className="text-2xl font-bold w-8 text-right mr-16">
               {index + 1}.
             </span>
 
             {/* Image with Fixed Size */}
-            <div className="flex-shrink-0 mr-4">
+            <div className="flex-shrink-0 mr-8">
               <CustomImage
                 src={item.imgUrl}
                 alt={item.name}
@@ -38,16 +38,14 @@ const MixTape: React.FC = () => {
                 objectFit="cover"
                 dataUrl={item.url}
                 className="cursor-pointer rounded-lg transition-all"
-                width={200}
-                height={100} // Correctly set the height and width to maintain aspect ratio
+                width={260}
+                height={130}
                 ctg={item.ctg}
               />
             </div>
 
             {/* Name */}
-            <h2 className="text-xl font-semibold whitespace-nowrap overflow-hidden text-ellipsis flex-grow">
-              {item.name}
-            </h2>
+            <h2 className="text-xl font-semibold ml-4">{item.name}</h2>
           </li>
         ))}
       </ul>
