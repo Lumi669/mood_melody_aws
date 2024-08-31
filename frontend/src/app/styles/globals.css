@@ -38,3 +38,11 @@
   width: 20rem; /* Adjust size as needed */
   height: 20rem; /* Adjust size as needed */
 }
+
+html,
+body {
+  height: auto; /* Do not constrain height to 100% */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  overflow: hidden; /* Prevents any scrolling */
+}
