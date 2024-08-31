@@ -8,7 +8,8 @@ export default async function AllMusicPage() {
   const matchedData = await fetchAllMusicWithImages();
 
   return (
-    <div className="h-screen overflow-y-scroll p-4">
+    <div className="h-screen overflow-y-scroll p-4 pb-40">
+      {/* Adds padding bottom i.e pb-40 to create space */}
       <ul>
         {matchedData.map((item: MusicWithImage) => (
           <li
