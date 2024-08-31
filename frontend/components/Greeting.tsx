@@ -15,7 +15,7 @@ const Greeting = () => {
 
         {/* Use the Next.js Image component for optimized images */}
         <Image
-          src="/dancing-girl-removebg.png"
+          src="/dancing-girl-removebg.webp"
           alt="Description of the image"
           width={300}
           height={300}

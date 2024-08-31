@@ -95,7 +95,7 @@ const MusicPlayer: React.FC = () => {
         {/* Animation from image to video */}
         {isAnimationActive && (
           <Image
-            src="/dancing-girl-removebg.png"
+            src="/dancing-girl-removebg.webp"
             alt="Animation"
             width={100}
             height={100}

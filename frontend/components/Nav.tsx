@@ -10,7 +10,7 @@ const Nav: React.FC = () => {
         {/* Logo */}
         <Link href="/">
           <Image
-            src="/logo.png"
+            src="/logo.webp"
             alt="Logo"
             width={60}
             height={60}
