@@ -27,10 +27,12 @@ export interface CustomImageProps {
   width: number;
   height: number;
   className: string;
+  ctg: string | null;
 }
 
 export interface MusicWithImageSimplified {
   imgUrl: string | null;
   url: string | null;
   name: string | "not seen a name";
+  ctg: string | null;
 }

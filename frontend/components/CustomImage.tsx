@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { customLoader } from "../utils/customImageLoader";
+import { addToPlaylist } from "../utils/addToPlaylist";
 import { CustomImageProps } from "../types/type";
 import { useMedia } from "../context/MediaContext";
 // import MusicWithImageSimplified from "../types/type";
@@ -17,6 +18,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
   width,
   height,
   className,
+  ctg,
 }) => {
   const {
     currentTrack,
@@ -32,8 +34,9 @@ const CustomImage: React.FC<CustomImageProps> = ({
 
   const handleClick = () => {
     if (currentTrack !== dataUrl) {
-      const newSong = { imgUrl: validSrc, url: dataUrl, name: alt }; // Construct song details
+      const newSong = { imgUrl: validSrc, url: dataUrl, name: alt, ctg: ctg }; // Construct song details
       setCurrentSong(newSong); // Set the current song in global context
+      addToPlaylist(newSong);
 
       playTrack(dataUrl || ""); // Play the clicked track
     } else {

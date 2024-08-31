@@ -1,5 +1,5 @@
-import { MusicWithImage } from "../types/type";
-export const addToPlaylist = (currentMusic: MusicWithImage) => {
+import { MusicWithImageSimplified } from "../types/type";
+export const addToPlaylist = (currentMusic: MusicWithImageSimplified) => {
   // Get existing playlist from local storage
   const existingPlaylist = localStorage.getItem("playlist");
 
@@ -10,7 +10,7 @@ export const addToPlaylist = (currentMusic: MusicWithImage) => {
   console.log("playlist === ", playlist);
 
   const isMusicInPlaylist = playlist.some(
-    (music: MusicWithImage) => music.id === currentMusic.id,
+    (music: MusicWithImageSimplified) => music.ctg === currentMusic.ctg,
   );
 
   if (currentMusic && !isMusicInPlaylist) {

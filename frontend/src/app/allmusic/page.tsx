@@ -26,6 +26,7 @@ export default async function AllMusicPage() {
               className="cursor-pointer rounded-lg transition-all"
               width={900}
               height={450}
+              ctg={item.ctg}
             />
           </li>
         ))}

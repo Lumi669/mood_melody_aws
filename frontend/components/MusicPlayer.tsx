@@ -24,6 +24,7 @@ const MusicPlayer: React.FC = () => {
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
   const [isAnimationActive, setAnimationActive] = useState(false);
   const [isVideoVisible, setVideoVisible] = useState(false);
+  const [currentMusicCtg, setCurrentMusicCtg] = useState<string | null>(null);
 
   const playMusic = (mood: "happy" | "sad" | "calm") => {
     stopMusic(); // Stop any currently playing music
@@ -42,6 +43,7 @@ const MusicPlayer: React.FC = () => {
 
     setCurrentImageUrl(randomSong.imgUrl);
     setCurrentMusicName(randomSong.name);
+    setCurrentMusicCtg(randomSong.ctg);
 
     playTrack(randomSong.url); // Play the new track using the global context
 
@@ -123,6 +125,7 @@ const MusicPlayer: React.FC = () => {
               width={1400}
               height={700}
               className="cursor-pointer w-full max-w-full lg:max-w-[1400px]"
+              ctg={currentMusicCtg}
             />
           </div>
         )}
