@@ -19,7 +19,7 @@ const Nav: React.FC = () => {
         </Link>
         <NavLink href="/">Home</NavLink>
         <NavLink href="/allmusic">All Music</NavLink>
-        <NavLink href="/mixtape">MixtapeY</NavLink>
+        <NavLink href="/mixtape">My Playlist</NavLink>
         <NavLink href="/live">Live</NavLink>
         <NavLink href="/users">Users</NavLink>
       </div>
