@@ -25,7 +25,9 @@ const MixTape: React.FC = () => {
             className="flex items-center w-full max-w-xl mx-auto mb-10"
           >
             {/* Number */}
-            <span className="text-2xl font-bold mr-9">{index + 1}.</span>
+            <span className="text-2xl font-bold mr-4 w-8 text-right">
+              {index + 1}.
+            </span>
 
             {/* Image with Fixed Size */}
             <div className="flex-shrink-0 mr-4">
