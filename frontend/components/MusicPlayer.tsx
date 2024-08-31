@@ -120,9 +120,9 @@ const MusicPlayer: React.FC = () => {
               alt={currentMusicName || "an image associated with the music"}
               dataUrl={currentTrack}
               layout="responsive"
-              width={1600}
-              height={800}
-              className="cursor-pointer"
+              width={1400}
+              height={700}
+              className="cursor-pointer w-full max-w-full lg:max-w-[1400px]"
             />
           </div>
         )}
