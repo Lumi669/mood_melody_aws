@@ -24,8 +24,8 @@ export default async function AllMusicPage() {
               objectFit="cover"
               dataUrl={item.url}
               className="cursor-pointer rounded-lg transition-all"
-              width={1000}
-              height={500}
+              width={900}
+              height={450}
             />
           </li>
         ))}
