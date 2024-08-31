@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import CustomImage from "components/CustomImage";
-import MusicWithImageSimplified from "../../../types/type";
+import { MusicWithImageSimplified } from "../../../types/type";
 
 type Music = {
   id: string;
@@ -11,7 +11,7 @@ type Music = {
 };
 
 const MixTape: React.FC = () => {
-  const [playlist, setPlaylist] = useState<Music[]>([]);
+  const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]);
 
   useEffect(() => {
     const storedPlaylist = localStorage.getItem("playlist");
