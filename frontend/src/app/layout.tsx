@@ -56,6 +56,8 @@ export default function RootLayout({
               <div>{children}</div>
             </main>
             <GlobalControls />
+            {/* Add the global audio element for playback control */}
+            <audio id="audio" />
           </LayoutWrapper>
         </MediaProvider>
       </body>
