@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
+import { MusicWithImageSimplified } from "../types/type";
 
 const GlobalControls: React.FC = () => {
   const {
@@ -43,6 +44,25 @@ const GlobalControls: React.FC = () => {
     togglePlayPause(); // Use togglePlayPause instead of pauseTrack
   };
 
+  // Function to update playlist in localStorage and dispatch custom event
+  const updatePlaylist = (newPlaylist: MusicWithImageSimplified[]) => {
+    localStorage.setItem("playlist", JSON.stringify(newPlaylist));
+    window.dispatchEvent(new Event("playlistUpdated")); // Dispatch the custom event
+  };
+
+  const handleSkipTrack = (direction: "next" | "previous") => {
+    // Call skipTrack and get the updated playlist
+    const updatedPlaylist = skipTrack(direction);
+
+    console.log(
+      "updatedPlaylist from handleSkipTrack of globalControl === ",
+      updatedPlaylist,
+    );
+
+    // Update the local state and notify other components of the change
+    updatePlaylist(updatedPlaylist); // Update localStorage and dispatch event
+  };
+
   return (
     <div
       className={`fixed bottom-0 left-0 w-full p-4 bg-gray-800 text-white flex flex-col items-center justify-center z-50 transition-all duration-500 ${
@@ -70,13 +90,13 @@ const GlobalControls: React.FC = () => {
 
           {/* Skip Controls */}
           <button
-            onClick={() => skipTrack("previous")}
+            onClick={() => handleSkipTrack("previous")}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
             Previous
           </button>
           <button
-            onClick={() => skipTrack("next")}
+            onClick={() => handleSkipTrack("next")}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
             Next

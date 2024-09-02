@@ -30,7 +30,7 @@ interface MediaContextType {
   pauseTrack: () => void;
   togglePlayPause: () => void;
   stopMusic: () => void;
-  skipTrack: (direction: "next" | "previous") => void;
+  skipTrack: (direction: "next" | "previous") => MusicWithImageSimplified[]; // Updated to return the correct type
   addToPlaylist: (song: MusicWithImageSimplified) => void;
 }
 
@@ -53,7 +53,7 @@ const MediaContext = createContext<MediaContextType>({
   pauseTrack: () => {},
   togglePlayPause: () => {},
   stopMusic: () => {},
-  skipTrack: () => {},
+  skipTrack: () => [],
   addToPlaylist: () => {},
 });
 
@@ -160,14 +160,18 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
     }
   };
 
-  const skipTrack = (direction: "next" | "previous") => {
-    if (!mediaData.length) return;
+  const skipTrack = (
+    direction: "next" | "previous",
+  ): MusicWithImageSimplified[] => {
+    // Assuming mediaData is available and is of type MusicWithImageSimplified[]
+    if (!mediaData.length) return []; // Return an empty array if no songs are available
 
     const currentIndex = mediaData.findIndex(
-      (track) => track.url === currentTrack,
+      (track) => track.url === currentSong?.url,
     );
     let newIndex;
 
+    // Calculate the new index based on the direction
     if (direction === "next") {
       newIndex = (currentIndex + 1) % mediaData.length;
     } else {
@@ -176,8 +180,26 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
 
     const nextSong = mediaData[newIndex];
     if (nextSong) {
-      playTrack(nextSong.url, nextSong); // Pass the next song to playTrack to add it to the playlist
+      playTrack(nextSong.url, nextSong); // Play the next song
     }
+
+    // Retrieve the current playlist from localStorage
+    const storedPlaylist = localStorage.getItem("playlist");
+    let updatedPlaylist: MusicWithImageSimplified[] = storedPlaylist
+      ? JSON.parse(storedPlaylist)
+      : [];
+
+    // Check if the next song is already in the playlist; if not, add it
+    // This is critical code for real time updating the play list when clicking next or previous button !!
+    if (!updatedPlaylist.find((song) => song.url === nextSong.url)) {
+      updatedPlaylist.push(nextSong); // Add the new song if it isn't already in the playlist
+    }
+
+    // Update the playlist in localStorage to ensure synchronization
+    localStorage.setItem("playlist", JSON.stringify(updatedPlaylist));
+
+    // Return the updated playlist
+    return updatedPlaylist;
   };
 
   return (

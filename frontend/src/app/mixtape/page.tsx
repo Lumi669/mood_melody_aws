@@ -7,11 +7,30 @@ import { MusicWithImageSimplified } from "../../../types/type";
 const MixTape: React.FC = () => {
   const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]);
 
-  useEffect(() => {
+  // Function to load the playlist from localStorage
+  const loadPlaylistFromLocalStorage = () => {
     const storedPlaylist = localStorage.getItem("playlist");
     if (storedPlaylist) {
       setPlaylist(JSON.parse(storedPlaylist));
     }
+  };
+
+  useEffect(() => {
+    // Load the playlist initially
+    loadPlaylistFromLocalStorage();
+
+    // Event listener for custom 'playlistUpdated' event
+    const handlePlaylistUpdate = () => {
+      loadPlaylistFromLocalStorage();
+    };
+
+    // Listen for the custom 'playlistUpdated' event dispatched in function updatePlaylist of GlobalControll.tsx
+    window.addEventListener("playlistUpdated", handlePlaylistUpdate);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("playlistUpdated", handlePlaylistUpdate);
+    };
   }, []);
 
   console.log("playlist from mixtape page === ", playlist);
