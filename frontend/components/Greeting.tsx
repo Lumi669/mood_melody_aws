@@ -5,15 +5,6 @@ const Greeting = () => {
   return (
     <div>
       <div className="flex justify-center">
-        {/* <video
-          src="/animation-center-yellowbg-noblinking.mp4"
-          autoPlay
-          loop
-          muted
-          className="w-1/4 h-auto" // Adjust size and classes as needed
-        /> */}
-
-        {/* Use the Next.js Image component for optimized images */}
         <Image
           src="/dancing-girl-removebg.webp"
           alt="Description of the image"
