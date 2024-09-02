@@ -18,6 +18,7 @@ const MusicPlayer: React.FC = () => {
     stopMusic,
     setCurrentSong,
     currentTrack,
+    currentSong,
   } = useMedia();
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
@@ -115,10 +116,10 @@ const MusicPlayer: React.FC = () => {
           </div>
         )}
         {/* Display the current track image */}
-        {currentImageUrl && (
+        {currentSong && currentSong.imgUrl && (
           <div className="flex items-center justify-center h-full">
             <CustomImage
-              src={currentImageUrl}
+              src={currentSong.imgUrl}
               alt={currentMusicName || "an image associated with the music"}
               dataUrl={currentTrack}
               layout="responsive"
