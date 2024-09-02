@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from "react";
 import CustomImage from "components/CustomImage";
 import { MusicWithImageSimplified } from "../../../types/type";
+import { useMedia } from "../../../context/MediaContext";
 
 const MixTape: React.FC = () => {
   const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]);
+  const { currentTrack, playTrack, togglePlayPause, isPlaying } = useMedia(); // Include togglePlayPause from context
 
   useEffect(() => {
     const storedPlaylist = localStorage.getItem("playlist");
@@ -36,7 +38,7 @@ const MixTape: React.FC = () => {
                 alt={item.name}
                 layout="fixed"
                 objectFit="cover"
-                dataUrl={item.url}
+                dataUrl={item.url ?? ""} // Ensure dataUrl is always a string
                 className="cursor-pointer rounded-lg transition-all"
                 width={260}
                 height={130}
@@ -45,7 +47,7 @@ const MixTape: React.FC = () => {
             </div>
 
             {/* Name with more space */}
-            <h2 className="text-xl font-semibold ml-4 flex-grow basis-3/4 whitespace-nowrap verflow-hidden">
+            <h2 className="text-xl font-semibold ml-4 flex-grow basis-3/4 whitespace-nowrap overflow-hidden">
               {item.name}
             </h2>
           </li>
