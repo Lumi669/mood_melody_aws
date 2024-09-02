@@ -83,16 +83,6 @@ const GlobalControls: React.FC = () => {
           </button>
         </div>
       )}
-
-      {/* Progress bar */}
-      {currentSong && (
-        <div className="w-full bg-gray-300 h-1 mt-2 rounded-full overflow-hidden">
-          <div
-            className="bg-blue-500 h-1"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-      )}
     </div>
   );
 };

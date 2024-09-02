@@ -112,8 +112,8 @@ const CustomImage: React.FC<CustomImageProps> = ({
       </div>
 
       {currentTrack === dataUrl && (
-        <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-200">
-          <div className="h-1 bg-blue-500" style={{ width: `${progress}%` }} />
+        <div className="absolute bottom-0 left-0 w-full h-3 bg-gray-200">
+          <div className="h-3 bg-blue-500" style={{ width: `${progress}%` }} />
         </div>
       )}
     </div>
