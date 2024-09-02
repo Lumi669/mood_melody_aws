@@ -1,16 +1,18 @@
 {
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.10",
     "lint-staged": "^15.2.2",
+    "next": "14.1.0",
     "prettier": "3.2.5",
-    "typescript": "^5.3.3",
-    "next": "14.1.0"
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "fix-prettier": "pnpx prettier --write .",
     "check-prettier": "pnpx prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev": "concurrently \"pnpm --prefix ./frontend run dev\" \"pnpm --prefix ./backend run start\""
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
