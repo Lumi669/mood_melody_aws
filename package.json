@@ -14,6 +14,7 @@
     "prepare": "husky",
     "start-backend": "cd backend && pnpm run build && NODE_ENV=production pnpm run start",
     "build-frontend": "cd frontend && pnpm run build && pnpm run start",
+    "dev": "concurrently \"pnpm --prefix ./frontend run dev\" \"pnpm --prefix ./backend run start\"",
     "prod": "concurrently --kill-others-on-fail \"pnpm run start-backend\" \"pnpm run build-frontend\""
   },
   "lint-staged": {
