@@ -13,6 +13,7 @@ import React, {
 import { Music, MusicWithImageSimplified } from "../types/type";
 
 import { addToPlaylist22 } from "utils/addToPlaylist";
+import { fetchAllMusicWithImages } from "../utils/fetchAllMusicWithImages"; // Import the utility function
 
 interface MediaContextType {
   mediaData: (Music & { imgUrl: string })[];
@@ -77,6 +78,20 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
 
   const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]); // State to manage playlist
 
+  // Fetch mediaData when the component mounts
+  useEffect(() => {
+    const fetchMediaData = async () => {
+      try {
+        const data = await fetchAllMusicWithImages(); // Use the utility function to fetch data
+        setMediaData(data); // Set the fetched data to mediaData
+      } catch (error) {
+        console.error("Failed to fetch media data:", error);
+      }
+    };
+
+    fetchMediaData();
+  }, []);
+
   // Initialize the audio element on mount
   useEffect(() => {
     const newAudio = new Audio();
@@ -92,22 +107,6 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       newAudio.src = "";
     };
   }, []);
-
-  // useEffect(() => {
-  //   // Synchronize playlist with localStorage
-  //   localStorage.setItem("playlist", JSON.stringify(playlist));
-  // }, [playlist]);
-
-  // const addToPlaylist = (song: MusicWithImageSimplified) => {
-  //   setPlaylist((prevPlaylist) => {
-  //     // Only add the song if it is not already in the playlist
-  //     const exists = prevPlaylist.find((item) => item.url === song.url);
-  //     if (!exists) {
-  //       return [...prevPlaylist, song];
-  //     }
-  //     return prevPlaylist;
-  //   });
-  // };
 
   const playTrack = (url: string, song?: MusicWithImageSimplified) => {
     console.log("playTrack get called ...");
@@ -178,6 +177,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
     direction: "next" | "previous",
   ): MusicWithImageSimplified[] => {
     // Assuming mediaData is available and is of type MusicWithImageSimplified[]
+    console.log("mediaData from skipTrack ==== ", mediaData);
     if (!mediaData.length) return []; // Return an empty array if no songs are available
 
     const currentIndex = mediaData.findIndex(
