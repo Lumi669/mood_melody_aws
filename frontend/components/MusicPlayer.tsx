@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
 import { addToPlaylist22 } from "../utils/addToPlaylist";
 import CustomImage from "./CustomImage";
@@ -25,6 +25,14 @@ const MusicPlayer: React.FC = () => {
   const [isAnimationActive, setAnimationActive] = useState(false);
   const [isVideoVisible, setVideoVisible] = useState(false);
   const [currentMusicCtg, setCurrentMusicCtg] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Check if music is playing when the component mounts
+    if (currentSong) {
+      setOriginalViewVisible(false);
+      setVideoVisible(true);
+    }
+  }, [currentSong]);
 
   const playMusic = (mood: "happy" | "sad" | "calm") => {
     stopMusic(); // Stop any currently playing music
@@ -61,6 +69,7 @@ const MusicPlayer: React.FC = () => {
     setOriginalViewVisible(true); // Show the original view
     setAnimationActive(false); // Stop any ongoing animation
     setVideoVisible(false); // Hide the video
+    stopMusic(); // Stop the music when returning to the original view
   };
 
   const OrginalViewPart = () => {
@@ -81,6 +90,8 @@ const MusicPlayer: React.FC = () => {
       <div className="relative min-h-screen px-4">
         {/* Original Homepage View */}
         {isOriginalViewVisible && <OrginalViewPart />}
+
+        {/* Buttons for mood selection */}
         <button onClick={() => playMusic("happy")} className="m-5">
           Happy
         </button>
@@ -90,6 +101,7 @@ const MusicPlayer: React.FC = () => {
         <button onClick={() => playMusic("calm")} className="m-5">
           Calm
         </button>
+
         {/* Animation from image to video */}
         {isAnimationActive && (
           <Image
@@ -100,6 +112,7 @@ const MusicPlayer: React.FC = () => {
             className="fixed transition-all duration-1000 transform animate-fly-to-corner"
           />
         )}
+
         {/* Video in the bottom right corner */}
         {isVideoVisible && (
           <div className="video-on-top" onClick={handleVideoClick}>
@@ -112,6 +125,7 @@ const MusicPlayer: React.FC = () => {
             />
           </div>
         )}
+
         {/* Display the current track image */}
         {currentSong && currentSong.imgUrl && (
           <div className="flex items-center justify-center h-full">
