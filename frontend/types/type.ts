@@ -1,3 +1,5 @@
+import React, { Dispatch, SetStateAction } from "react";
+
 export interface Music {
   id: string;
   name: string;
@@ -28,6 +30,28 @@ export interface CustomImageProps {
   height: number;
   className: string;
   ctg: string | null;
+}
+
+export interface MediaContextType {
+  mediaData: (Music & { imgUrl: string })[];
+  isRed: boolean;
+  isBlue: boolean;
+  isBrown: boolean;
+  audio: HTMLAudioElement | null;
+  currentTrack: string | null;
+  currentSong: MusicWithImageSimplified | null;
+  isPlaying: boolean;
+  setIsPlaying: Dispatch<SetStateAction<boolean>>;
+  setIsRed: Dispatch<SetStateAction<boolean>>;
+  setIsBlue: Dispatch<SetStateAction<boolean>>;
+  setIsBrown: Dispatch<SetStateAction<boolean>>;
+  setCurrentSong: Dispatch<SetStateAction<MusicWithImageSimplified | null>>;
+  setMediaData: Dispatch<SetStateAction<(Music & { imgUrl: string })[]>>;
+  playTrack: (url: string, song?: MusicWithImageSimplified) => void; // Updated to include song
+  pauseTrack: () => void;
+  togglePlayPause: () => void;
+  stopMusic: () => void;
+  skipTrack: (direction: "next" | "previous") => MusicWithImageSimplified[]; // Updated to return the correct type
 }
 
 export interface MusicWithImageSimplified {

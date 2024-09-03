@@ -5,38 +5,12 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  Dispatch,
-  SetStateAction,
   useEffect,
-  useRef,
 } from "react";
-import { Music, MusicWithImageSimplified } from "../types/type";
+import { MusicWithImageSimplified, MediaContextType } from "../types/type";
 
 import { addToPlaylist22 } from "utils/addToPlaylist";
 import { fetchAllMusicWithImages } from "../utils/fetchAllMusicWithImages"; // Import the utility function
-
-interface MediaContextType {
-  mediaData: (Music & { imgUrl: string })[];
-  isRed: boolean;
-  isBlue: boolean;
-  isBrown: boolean;
-  audio: HTMLAudioElement | null;
-  currentTrack: string | null;
-  currentSong: MusicWithImageSimplified | null;
-  isPlaying: boolean;
-  setIsPlaying: Dispatch<SetStateAction<boolean>>;
-  setIsRed: Dispatch<SetStateAction<boolean>>;
-  setIsBlue: Dispatch<SetStateAction<boolean>>;
-  setIsBrown: Dispatch<SetStateAction<boolean>>;
-  setCurrentSong: Dispatch<SetStateAction<MusicWithImageSimplified | null>>;
-  setMediaData: Dispatch<SetStateAction<(Music & { imgUrl: string })[]>>;
-  playTrack: (url: string, song?: MusicWithImageSimplified) => void; // Updated to include song
-  pauseTrack: () => void;
-  togglePlayPause: () => void;
-  stopMusic: () => void;
-  skipTrack: (direction: "next" | "previous") => MusicWithImageSimplified[]; // Updated to return the correct type
-  // addToPlaylist: (song: MusicWithImageSimplified) => void;
-}
 
 const MediaContext = createContext<MediaContextType>({
   mediaData: [],
@@ -58,7 +32,6 @@ const MediaContext = createContext<MediaContextType>({
   togglePlayPause: () => {},
   stopMusic: () => {},
   skipTrack: () => [],
-  // addToPlaylist: () => {},
 });
 
 interface MediaProviderProps {

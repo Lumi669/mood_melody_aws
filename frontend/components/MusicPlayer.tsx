@@ -20,7 +20,6 @@ const MusicPlayer: React.FC = () => {
     currentTrack,
     currentSong,
   } = useMedia();
-  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
   const [isAnimationActive, setAnimationActive] = useState(false);
@@ -42,7 +41,6 @@ const MusicPlayer: React.FC = () => {
     setIsBlue(randomSong.mood === "sad");
     setIsBrown(randomSong.mood === "calm");
 
-    setCurrentImageUrl(randomSong.imgUrl);
     setCurrentMusicName(randomSong.name);
     setCurrentMusicCtg(randomSong.ctg);
 
@@ -63,7 +61,6 @@ const MusicPlayer: React.FC = () => {
     setOriginalViewVisible(true); // Show the original view
     setAnimationActive(false); // Stop any ongoing animation
     setVideoVisible(false); // Hide the video
-    setCurrentImageUrl(null); // Hide the music image
   };
 
   const OrginalViewPart = () => {
