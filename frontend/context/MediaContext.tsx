@@ -90,10 +90,10 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
     };
   }, []);
 
-  useEffect(() => {
-    // Synchronize playlist with localStorage
-    localStorage.setItem("playlist", JSON.stringify(playlist));
-  }, [playlist]);
+  // useEffect(() => {
+  //   // Synchronize playlist with localStorage
+  //   localStorage.setItem("playlist", JSON.stringify(playlist));
+  // }, [playlist]);
 
   const addToPlaylist = (song: MusicWithImageSimplified) => {
     setPlaylist((prevPlaylist) => {
@@ -185,16 +185,26 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
 
     // Retrieve the current playlist from localStorage
     const storedPlaylist = localStorage.getItem("playlist");
+    console.log(
+      "storedPlaylist from skipTrack of MediaContext === ",
+      storedPlaylist,
+    );
     let updatedPlaylist: MusicWithImageSimplified[] = storedPlaylist
       ? JSON.parse(storedPlaylist)
       : [];
-
+    console.log(
+      "updatedPlaylist before push next song from skipTrack of MediaContext === ",
+      updatedPlaylist,
+    );
     // Check if the next song is already in the playlist; if not, add it
     // This is critical code for real time updating the play list when clicking next or previous button !!
     if (!updatedPlaylist.find((song) => song.url === nextSong.url)) {
       updatedPlaylist.push(nextSong); // Add the new song if it isn't already in the playlist
     }
-
+    console.log(
+      "updatedPlaylist after push next song from skipTrack of MediaContext === ",
+      updatedPlaylist,
+    );
     // Update the playlist in localStorage to ensure synchronization
     localStorage.setItem("playlist", JSON.stringify(updatedPlaylist));
 

@@ -46,6 +46,10 @@ const GlobalControls: React.FC = () => {
 
   // Function to update playlist in localStorage and dispatch custom event
   const updatePlaylist = (newPlaylist: MusicWithImageSimplified[]) => {
+    console.log(
+      "newPlaylist inside updatePlaylist of MediaContext ==== ",
+      newPlaylist,
+    );
     localStorage.setItem("playlist", JSON.stringify(newPlaylist));
     window.dispatchEvent(new Event("playlistUpdated")); // Dispatch the custom event
   };
@@ -55,7 +59,7 @@ const GlobalControls: React.FC = () => {
     const updatedPlaylist = skipTrack(direction);
 
     console.log(
-      "updatedPlaylist from handleSkipTrack of globalControl === ",
+      "uuuuuupdatedPlaylist from handleSkipTrack of globalControl returned by skipTrack === ",
       updatedPlaylist,
     );
 

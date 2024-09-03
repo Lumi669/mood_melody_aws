@@ -7,7 +7,7 @@ export const addToPlaylist = (currentMusic: MusicWithImageSimplified) => {
 
   const playlist = existingPlaylist ? JSON.parse(existingPlaylist) : [];
 
-  console.log("playlist === ", playlist);
+  console.log("playlist from addToPlaylist === ", playlist);
 
   const isMusicInPlaylist = playlist.some(
     (music: MusicWithImageSimplified) => music.ctg === currentMusic.ctg,
