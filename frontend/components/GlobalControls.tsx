@@ -1,63 +1,28 @@
 // export default GlobalControls;
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
 import { MusicWithImageSimplified } from "../types/type";
 
 const GlobalControls: React.FC = () => {
-  const {
-    stopMusic,
-    playTrack,
-    togglePlayPause,
-    isPlaying,
-    currentSong,
-    skipTrack,
-  } = useMedia();
+  const { stopMusic, togglePlayPause, isPlaying, currentSong, skipTrack } =
+    useMedia();
 
   const [animate, setAnimate] = useState(false);
-  const [progress, setProgress] = useState(0); // State to track the progress of the audio
-
-  // Use useRef to keep a stable reference to the playlist
-  const playlistRef = useRef<MusicWithImageSimplified[]>([]);
 
   useEffect(() => {
     if (isPlaying) {
       setAnimate(true);
     }
-
-    // Update progress bar as the song plays
-    const audio = document.getElementById("audio") as HTMLAudioElement | null;
-    if (!audio) return;
-
-    const updateProgress = () => {
-      if (audio && currentSong?.url) {
-        console.log("audio.duration === ", audio.duration);
-        const percentage = (audio.currentTime / audio.duration) * 100;
-        setProgress(percentage || 0);
-      }
-    };
-
-    audio.addEventListener("timeupdate", updateProgress);
-    return () => {
-      audio.removeEventListener("timeupdate", updateProgress);
-    };
   }, [isPlaying, currentSong]);
 
   const handlePlayPause = () => {
-    togglePlayPause(); // Use togglePlayPause instead of pauseTrack
+    togglePlayPause();
   };
 
   // Function to update playlist in localStorage and dispatch custom event
   const updatePlaylist = (newPlaylist: MusicWithImageSimplified[]) => {
-    console.log(
-      "newPlaylist inside updatePlaylist of MediaContext ==== ",
-      newPlaylist,
-    );
-
-    // Update the ref with the new playlist
-    playlistRef.current = newPlaylist;
-
     // Persist the playlist in localStorage
     localStorage.setItem("playlist", JSON.stringify(newPlaylist));
 
@@ -68,11 +33,6 @@ const GlobalControls: React.FC = () => {
   const handleSkipTrack = (direction: "next" | "previous") => {
     // Call skipTrack and get the updated playlist
     const updatedPlaylist = skipTrack(direction);
-
-    console.log(
-      "uuuuuupdatedPlaylist from handleSkipTrack of globalControl returned by skipTrack === ",
-      updatedPlaylist,
-    );
 
     // Update the local state and notify other components of the change
     updatePlaylist(updatedPlaylist); // Update localStorage and dispatch event
