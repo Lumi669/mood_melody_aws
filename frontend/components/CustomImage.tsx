@@ -26,6 +26,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
     togglePlayPause,
     setCurrentSong,
     audio,
+    setIsPlaying,
   } = useMedia();
   const [progress, setProgress] = useState<number>(0);
 
@@ -36,24 +37,33 @@ const CustomImage: React.FC<CustomImageProps> = ({
 
     const updateProgress = () => {
       if (audio && currentTrack === dataUrl) {
-        const percentage = (audio.currentTime / audio.duration) * 100; // Calculate the progress percentage
+        const percentage = (audio.currentTime / audio.duration) * 100;
         setProgress(percentage || 0);
       }
     };
 
+    const handleEnded = () => {
+      //to ensure that only the instance representing the currently playing track reacts to the ended event.
+      if (currentTrack === dataUrl) {
+        setIsPlaying(false); // Set isPlaying to false when the track ends
+      }
+    };
+
     audio.addEventListener("timeupdate", updateProgress);
+    audio.addEventListener("ended", handleEnded); // Add event listener for track end
 
     return () => {
       audio.removeEventListener("timeupdate", updateProgress);
+      audio.removeEventListener("ended", handleEnded); // Clean up event listener
     };
-  }, [audio, currentTrack, dataUrl]); // Include audio in the dependency array
+  }, [audio, currentTrack, dataUrl, setIsPlaying]); // Include dependencies
 
   const handleClick = () => {
     console.log(
-      "currentTrack from handleClick of CustomImge.tsx === ",
+      "currentTrack from handleClick of CustomImage.tsx === ",
       currentTrack,
     );
-    console.log("dataUrl from handleClick of CustomImge.tsx === ", dataUrl);
+    console.log("dataUrl from handleClick of CustomImage.tsx === ", dataUrl);
     console.log("currentTrack !== dataUrl === ", currentTrack !== dataUrl);
     if (currentTrack !== dataUrl) {
       const newSong = { imgUrl: validSrc, url: dataUrl, name: alt, ctg: ctg };
