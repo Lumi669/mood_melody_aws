@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CustomImage from "components/CustomImage";
 import { MusicWithImageSimplified } from "../../../types/type";
 

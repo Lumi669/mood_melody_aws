@@ -49,6 +49,12 @@ const CustomImage: React.FC<CustomImageProps> = ({
   }, [audio, currentTrack, dataUrl]); // Include audio in the dependency array
 
   const handleClick = () => {
+    console.log(
+      "currentTrack from handleClick of CustomImge.tsx === ",
+      currentTrack,
+    );
+    console.log("dataUrl from handleClick of CustomImge.tsx === ", dataUrl);
+    console.log("currentTrack !== dataUrl === ", currentTrack !== dataUrl);
     if (currentTrack !== dataUrl) {
       const newSong = { imgUrl: validSrc, url: dataUrl, name: alt, ctg: ctg };
       setCurrentSong(newSong);

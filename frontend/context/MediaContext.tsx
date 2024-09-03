@@ -8,8 +8,11 @@ import React, {
   Dispatch,
   SetStateAction,
   useEffect,
+  useRef,
 } from "react";
 import { Music, MusicWithImageSimplified } from "../types/type";
+
+import { addToPlaylist22 } from "utils/addToPlaylist";
 
 interface MediaContextType {
   mediaData: (Music & { imgUrl: string })[];
@@ -31,7 +34,7 @@ interface MediaContextType {
   togglePlayPause: () => void;
   stopMusic: () => void;
   skipTrack: (direction: "next" | "previous") => MusicWithImageSimplified[]; // Updated to return the correct type
-  addToPlaylist: (song: MusicWithImageSimplified) => void;
+  // addToPlaylist: (song: MusicWithImageSimplified) => void;
 }
 
 const MediaContext = createContext<MediaContextType>({
@@ -54,7 +57,7 @@ const MediaContext = createContext<MediaContextType>({
   togglePlayPause: () => {},
   stopMusic: () => {},
   skipTrack: () => [],
-  addToPlaylist: () => {},
+  // addToPlaylist: () => {},
 });
 
 interface MediaProviderProps {
@@ -95,18 +98,20 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   //   localStorage.setItem("playlist", JSON.stringify(playlist));
   // }, [playlist]);
 
-  const addToPlaylist = (song: MusicWithImageSimplified) => {
-    setPlaylist((prevPlaylist) => {
-      // Only add the song if it is not already in the playlist
-      const exists = prevPlaylist.find((item) => item.url === song.url);
-      if (!exists) {
-        return [...prevPlaylist, song];
-      }
-      return prevPlaylist;
-    });
-  };
+  // const addToPlaylist = (song: MusicWithImageSimplified) => {
+  //   setPlaylist((prevPlaylist) => {
+  //     // Only add the song if it is not already in the playlist
+  //     const exists = prevPlaylist.find((item) => item.url === song.url);
+  //     if (!exists) {
+  //       return [...prevPlaylist, song];
+  //     }
+  //     return prevPlaylist;
+  //   });
+  // };
 
   const playTrack = (url: string, song?: MusicWithImageSimplified) => {
+    console.log("playTrack get called ...");
+    console.log("audio === ", audio);
     if (!audio) return;
 
     // If the same track is clicked again, toggle play/pause
@@ -115,18 +120,27 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       return;
     }
 
+    console.log("111111");
+
     audio.src = url;
     audio
       .play()
       .then(() => setIsPlaying(true))
       .catch((error) => console.error("Failed to play audio:", error));
 
+    console.log("2222222");
+
     setCurrentTrack(url);
     setIsPlaying(true);
 
+    console.log("33333");
+
     if (song) {
+      console.log("song at 44444 === ", song);
+      console.log("4444");
+
       setCurrentSong(song);
-      addToPlaylist(song); // Add the song to the playlist whenever a new song is played
+      addToPlaylist22(song); // Add the song to the playlist whenever a new song is played
     }
   };
 
@@ -234,7 +248,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
         togglePlayPause,
         stopMusic,
         skipTrack,
-        addToPlaylist,
+        // addToPlaylist,
       }}
     >
       {children}

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useMedia } from "../context/MediaContext";
-import { addToPlaylist } from "../utils/addToPlaylist";
+import { addToPlaylist22 } from "../utils/addToPlaylist";
 import CustomImage from "./CustomImage";
 import SentimentAnalysisPage from "./Sentimentanalysis";
 import Greeting from "./Greeting";
@@ -34,7 +34,7 @@ const MusicPlayer: React.FC = () => {
     const randomSong =
       filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
     setCurrentSong(randomSong);
-    addToPlaylist(randomSong);
+    addToPlaylist22(randomSong);
 
     console.log("random song === ", randomSong);
 
