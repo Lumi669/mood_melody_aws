@@ -34,6 +34,18 @@ export default function SentimentAnalysisPage() {
     }
   };
 
+  let message;
+
+  if (sentiment === "POSITIVE") {
+    message = "You seems happy, a happy song and image for you";
+  } else if (sentiment === "NEGATIVE") {
+    message =
+      "It seems you are not happy, a sad song and image matching your feelings  ";
+  } else if (sentiment === "MIX" || "NETRAL") {
+    message =
+      "It is hard to tell clearly, maybe you feel peacful, check the music and image for you";
+  }
+
   return (
     <div className="p-5 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Sentiment Analysis</h1>
@@ -58,7 +70,7 @@ export default function SentimentAnalysisPage() {
       {sentiment && (
         <div className="mt-5">
           <h2 className="text-xl font-semibold">Sentiment Result:</h2>
-          <p className="text-lg mt-2">{sentiment}</p>
+          <p className="text-lg mt-2">{message}</p>
         </div>
       )}
     </div>
