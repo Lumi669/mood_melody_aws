@@ -8,6 +8,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const Nav: React.FC = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isTechDropdownOpen, setTechDropdownOpen] = useState(false);
+  const handleTechMouseEnter = () => setTechDropdownOpen(true);
+  const handleTechMouseLeave = () => setTechDropdownOpen(false);
 
   const handleMouseEnter = () => {
     setDropdownOpen(true);
@@ -42,7 +45,7 @@ const Nav: React.FC = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <NavLink href="/About">About</NavLink>
+          <NavLink href="#">About</NavLink>
           <AnimatePresence>
             {isDropdownOpen && (
               <motion.ul
@@ -52,22 +55,52 @@ const Nav: React.FC = () => {
                 transition={{ duration: 0.2 }}
                 className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-md"
               >
-                <li className="px-4 py-2 hover:bg-gray-100">
-                  <Link href="/About/Contact">Contact</Link>
+                {/* Tech Dropdown */}
+                <li
+                  className="relative px-4 py-2 hover:bg-gray-100"
+                  onMouseEnter={handleTechMouseEnter}
+                  onMouseLeave={handleTechMouseLeave}
+                >
+                  <span className="cursor-pointer">Tech</span>
+                  <AnimatePresence>
+                    {isTechDropdownOpen && (
+                      <motion.ul
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute left-full top-0 mt-0 w-40 bg-white shadow-lg rounded-md"
+                      >
+                        <li className="px-4 py-2 hover:bg-gray-100">
+                          <Link href="/About/Tech/Architecture">
+                            Architecture
+                          </Link>
+                        </li>
+                        <li className="px-4 py-2 hover:bg-gray-100">
+                          <Link href="/About/Tech/CICD">CI/CD</Link>
+                        </li>
+                        <li className="px-4 py-2 hover:bg-gray-100">
+                          <Link href="/About/Tech/TechStack">Tech Stack</Link>
+                        </li>
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
                 </li>
                 <li className="px-4 py-2 hover:bg-gray-100">
-                  <Link href="/About/Tech">Tech</Link>
+                  <Link href="/About/Privacy">Privacy</Link>
                 </li>
                 <li className="px-4 py-2 hover:bg-gray-100">
                   <Link href="/About/Testimonials">Testimonials</Link>
                 </li>
                 <li className="px-4 py-2 hover:bg-gray-100">
-                  <Link href="/About/Privacy">Privacy Policy</Link>
+                  <Link href="/About/Analytics">Analytics</Link>
                 </li>
               </motion.ul>
             )}
           </AnimatePresence>
         </div>
+
+        <NavLink href="/contact">Contact</NavLink>
       </div>
     </nav>
   );
