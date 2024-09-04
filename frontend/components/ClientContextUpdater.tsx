@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useMedia } from "../context/MediaContext";
+import { useMedia } from "@context/MediaContext";
 
 const ClientContextUpdater: React.FC<{ initialData: any[] }> = ({
   initialData,

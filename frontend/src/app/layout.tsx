@@ -1,9 +1,9 @@
 import React from "react";
 
-import Nav from "../../components/Nav";
-import { MediaProvider } from "../../context/MediaContext";
-import LayoutWrapper from "../../components/LayoutWrapper";
-import GlobalControls from "../../components/GlobalControls";
+import Nav from "@components/Nav";
+import { MediaProvider } from "@context/MediaContext";
+import LayoutWrapper from "@components/LayoutWrapper";
+import GlobalControls from "@components/GlobalControls";
 import "./styles/globals.css";
 
 export const metadata = {

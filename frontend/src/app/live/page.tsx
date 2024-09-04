@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useMedia } from "../../../context/MediaContext";
+import { useMedia } from "@context/MediaContext";
 import CustomImage from "components/CustomImage";
-import { extractAuthorName } from "../../../utils/extractMusicInfo";
-import { extractMusicName } from "../../../utils/extractMusicInfo";
+import { extractAuthorName, extractMusicName } from "@utils/extractMusicInfo";
 
 const Liveplay = () => {
   const [hasImage, setHasImage] = useState(false);

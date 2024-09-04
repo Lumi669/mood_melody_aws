@@ -1,7 +1,7 @@
 import React from "react";
-import { fetchAllMusicWithImages } from "../../../utils/fetchAllMusicWithImages";
-import ClientContextUpdater from "../../../components/ClientContextUpdater";
-import MusicList from "../../../components/MusicList"; // Client-side component
+import { fetchAllMusicWithImages } from "@utils/fetchAllMusicWithImages";
+import ClientContextUpdater from "@components/ClientContextUpdater";
+import MusicList from "@components/MusicList"; // Client-side component
 
 export default async function AllMusicPage() {
   const matchedData = await fetchAllMusicWithImages(); // Fetch data server-side

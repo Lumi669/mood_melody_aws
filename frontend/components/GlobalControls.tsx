@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useMedia } from "../context/MediaContext";
+import { useMedia } from "@context/MediaContext";
 import { MusicWithImageSimplified } from "../types/type";
 
 const GlobalControls: React.FC = () => {

@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 import { MusicWithImage, MusicWithImageSimplified } from "types/type";
-import CustomImage from "components/CustomImage";
-import { useMedia } from "../context/MediaContext";
+import CustomImage from "@components/CustomImage";
+import { useMedia } from "@context/MediaContext";
 
 interface MusicListProps {
   matchedData: MusicWithImage[];

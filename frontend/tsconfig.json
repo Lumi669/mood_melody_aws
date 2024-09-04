@@ -14,8 +14,14 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@components/*": ["components/*"],
+      "@config/*": ["config/*"],
+      "@context/*": ["context/*"],
+      "@utils/*": ["utils/*"],
+      "@src/*": ["src/*"],
+      "@types/*": ["types/*"]
     },
+
     "plugins": [
       {
         "name": "next"

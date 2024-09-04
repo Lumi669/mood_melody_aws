@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { apiUrls } from "../../../../config/apiConfig";
+import { apiUrls } from "@config/apiConfig";
 
 export async function POST(req: NextRequest) {
   console.log("apiUrls from sentimentanalysis route ======== ", apiUrls);

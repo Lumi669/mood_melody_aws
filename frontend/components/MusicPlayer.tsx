@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useMedia } from "../context/MediaContext";
-import { addToPlaylist22 } from "../utils/addToPlaylist";
-import CustomImage from "./CustomImage";
-import SentimentAnalysisPage from "./Sentimentanalysis";
+import { useMedia } from "@context/MediaContext";
+import { addToPlaylist22 } from "@utils/addToPlaylist";
+import CustomImage from "@components/CustomImage";
+import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
 import Image from "next/image";
 
