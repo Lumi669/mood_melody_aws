@@ -27,7 +27,7 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
         const element = listRefs.current[currentSong.url]; // Use the song's URL as the key
         if (element) {
           element.scrollIntoView({
-            behavior: "smooth", // Smooth scrolling effect
+            // behavior: "smooth", // Smooth scrolling effect
             block: "center", // Align to the center of the viewport
           });
         }
