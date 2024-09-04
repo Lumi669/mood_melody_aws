@@ -1,20 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import CustomImage from "./CustomImage"; // Import your CustomImage component
-import { useMedia } from "@context/MediaContext"; // Import the media context
+import CustomImage from "./CustomImage";
+import { useMedia } from "@context/MediaContext";
 
 export default function SentimentAnalysisPage() {
   const [text, setText] = useState("");
   const [sentiment, setSentiment] = useState<string | null>(null);
-  const [imageSrc, setImageSrc] = useState<string>(""); // State for image source
-  const [audioUrl, setAudioUrl] = useState<string>(""); // State for audio URL
-  const [message, setMessage] = useState<string>(""); // State for message
+  const [imageSrc, setImageSrc] = useState<string>("");
+  const [audioUrl, setAudioUrl] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const [ctg, setCtg] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false); // State to manage loading
+  const [shouldPlay, setShouldPlay] = useState<boolean>(false); // State to manage delayed playback
   const maxChars = 90;
 
-  // Use MediaContext to access media data and play controls
   const {
     mediaData,
     playTrack,
@@ -35,8 +35,9 @@ export default function SentimentAnalysisPage() {
   const analyzeSentiment = async () => {
     setIsLoading(true); // Start loading
     setMessage(""); // Clear message initially
-    setImageSrc(""); // Clear image initially
-    setAudioUrl(""); // Clear audio initially
+    setImageSrc("");
+    setAudioUrl("");
+    setShouldPlay(false); // Ensure we do not play audio immediately
 
     const response = await fetch("/api/sentimentanalysis", {
       method: "POST",
@@ -56,17 +57,17 @@ export default function SentimentAnalysisPage() {
     setIsLoading(false); // End loading
   };
 
-  // Function to play music automatically after sentiment analysis
+  // Function to play music after sentiment analysis
   const playMusic = (mood: "happy" | "sad" | "calm") => {
     stopMusic(); // Stop any currently playing music
 
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
     const randomSong =
       filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
-    setCurrentSong(randomSong); // Set the current song
-    setAudioUrl(randomSong.url); // Set audio URL for playback
-    setImageSrc(randomSong.imgUrl); // Set image source for display
-    setCtg(randomSong.ctg); // Set category
+    setCurrentSong(randomSong);
+    setAudioUrl(randomSong.url);
+    setImageSrc(randomSong.imgUrl);
+    setCtg(randomSong.ctg);
 
     setIsRed(randomSong.mood === "happy");
     setIsBlue(randomSong.mood === "sad");
@@ -81,20 +82,36 @@ export default function SentimentAnalysisPage() {
 
       if (sentiment === "POSITIVE") {
         setMessage("You seem happy; here's a happy song and image for you.");
-        playMusic("happy");
+        setShouldPlay(true); // Indicate that we should play after a delay
       } else if (sentiment === "NEGATIVE") {
         setMessage(
           "It seems you are not happy; here's a sad song and image matching your feelings.",
         );
-        playMusic("sad");
+        setShouldPlay(true);
       } else if (sentiment === "MIX" || sentiment === "NEUTRAL") {
         setMessage(
           "It is hard to tell clearly; maybe you feel peaceful. Check the music and image for you.",
         );
-        playMusic("calm");
+        setShouldPlay(true);
       }
     }
   }, [sentiment]); // Trigger when sentiment is updated
+
+  useEffect(() => {
+    if (shouldPlay) {
+      const delayTimer = setTimeout(() => {
+        if (sentiment === "POSITIVE") {
+          playMusic("happy");
+        } else if (sentiment === "NEGATIVE") {
+          playMusic("sad");
+        } else if (sentiment === "MIX" || sentiment === "NEUTRAL") {
+          playMusic("calm");
+        }
+      }, 2500); // 2.5second delay to allow reading the message
+
+      return () => clearTimeout(delayTimer); // Cleanup the timer if the component is unmounted or if dependencies change
+    }
+  }, [shouldPlay, sentiment]); // Trigger playback after delay
 
   return (
     <div className="p-5 max-w-xl mx-auto">
