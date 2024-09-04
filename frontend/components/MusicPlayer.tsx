@@ -19,6 +19,7 @@ const MusicPlayer: React.FC = () => {
     setCurrentSong,
     currentTrack,
     currentSong,
+    isPlaying,
   } = useMedia();
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
@@ -27,10 +28,15 @@ const MusicPlayer: React.FC = () => {
   const [currentMusicCtg, setCurrentMusicCtg] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if music is playing when the component mounts
+    //Check if music is playing when the component mounts
     if (currentSong) {
+      console.log("current sssssong ==== ", currentSong);
+
       setOriginalViewVisible(false);
       setVideoVisible(true);
+    } else {
+      setOriginalViewVisible(true); // Ensure the original view is visible when there's no current song
+      setVideoVisible(false);
     }
   }, [currentSong]);
 
