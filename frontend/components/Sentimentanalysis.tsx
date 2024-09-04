@@ -73,7 +73,7 @@ export default function SentimentAnalysisPage() {
     setIsBlue(randomSong.mood === "sad");
     setIsBrown(randomSong.mood === "calm");
 
-    playTrack(randomSong.url); // Play the new track using the global context
+    playTrack(randomSong.url, randomSong); // Play the new track using the global context
   };
 
   useEffect(() => {
