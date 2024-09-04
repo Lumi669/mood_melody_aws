@@ -68,8 +68,6 @@ const Nav: React.FC = () => {
             )}
           </AnimatePresence>
         </div>
-
-        <NavLink href="/users">Users</NavLink>
       </div>
     </nav>
   );
