@@ -1,6 +1,6 @@
 "use client"; // Indicate that this is a client-side component
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MusicWithImage, MusicWithImageSimplified } from "types/type";
 import CustomImage from "@components/CustomImage";
 import { useMedia } from "@context/MediaContext";
@@ -15,44 +15,62 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
   // Refs to store references to list items
   const listRefs = useRef<{ [key: string]: HTMLLIElement | null }>({});
 
+  // Ref for the container element
+  const containerRef = useRef<HTMLUListElement | null>(null);
+
   // Ref to keep track of the previous currentSong
   const previousSongRef = useRef<MusicWithImageSimplified | null>(null);
 
-  // Ref for the container element
-  const containerRef = useRef<HTMLUListElement | null>(null);
+  // State to check if the component has been initially loaded
+  const [initialLoad, setInitialLoad] = useState(true);
 
   // Scroll to the specific music image whenever currentSong changes
   useEffect(() => {
     if (currentSong?.url) {
-      // Ensure currentSong is not null and has a valid URL
-      // Check if the current song has changed
-      if (previousSongRef.current?.url !== currentSong.url) {
-        const element = listRefs.current[currentSong.url]; // Use the song's URL as the key
-        if (element && containerRef.current) {
-          // Delay scroll to allow for layout changes
-          setTimeout(() => {
-            element.scrollIntoView({
-              behavior: "smooth", // Smooth scrolling effect
-              block: "center", // Align to the center of the viewport
-            });
+      const element = listRefs.current[currentSong.url]; // Use the song's URL as the key
 
-            // Manual adjustment for centering
-            const containerHeight = containerRef.current!.clientHeight;
-            const elementOffset = element.offsetTop;
-            const elementHeight = element.clientHeight;
-            const scrollTo =
-              elementOffset - containerHeight / 2 + elementHeight / 2;
-            containerRef.current!.scrollTo({
-              top: scrollTo,
-              behavior: "smooth",
-            });
-          }, 50); // Delay for 50ms to ensure layout updates settle
-        }
+      // Check if scrolling is needed based on previous song or initial load
+      if (
+        (previousSongRef.current?.url !== currentSong.url || initialLoad) &&
+        element &&
+        containerRef.current
+      ) {
+        // Calculate the scroll position
+        const containerHeight = containerRef.current.clientHeight;
+        const elementOffset = element.offsetTop;
+        const elementHeight = element.clientHeight;
+        const scrollTo =
+          elementOffset - containerHeight / 2 + elementHeight / 2;
+
+        // Scroll to the correct position
+        containerRef.current.scrollTo({
+          top: scrollTo,
+          behavior: "smooth",
+        });
+
+        // Store scroll position in sessionStorage
+        sessionStorage.setItem("scrollPosition", String(scrollTo));
+
         // Update the previous song ref to the current song
         previousSongRef.current = currentSong;
+
+        // Mark the initial load as complete
+        setInitialLoad(false);
       }
     }
-  }, [currentSong]);
+  }, [currentSong, initialLoad]);
+
+  // Restore scroll position on component mount
+  useEffect(() => {
+    const savedScrollPosition = sessionStorage.getItem("scrollPosition");
+
+    if (savedScrollPosition && containerRef.current) {
+      containerRef.current.scrollTo({
+        top: Number(savedScrollPosition),
+        behavior: "auto", // Instantly set to the saved position
+      });
+    }
+  }, []);
 
   return (
     <>
