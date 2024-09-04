@@ -20,6 +20,9 @@ const MusicPlayer: React.FC = () => {
     currentTrack,
     currentSong,
     isPlaying,
+    isRed,
+    isBlue,
+    isBrown,
   } = useMedia();
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
@@ -91,6 +94,13 @@ const MusicPlayer: React.FC = () => {
     );
   };
 
+  const getMoodMessage = () => {
+    if (isRed) return "You seem happy";
+    if (isBlue) return "You seem sad";
+    if (isBrown) return "You seem peaceful";
+    return "You have no emotion at the moment";
+  };
+
   return (
     <>
       <div className="relative min-h-screen px-4">
@@ -129,6 +139,10 @@ const MusicPlayer: React.FC = () => {
               muted
               className="w-full h-full"
             />
+            {/* Display mood message */}
+            <div className="absolute top-0 left-0 right-0 text-center p-4 bg-opacity-75 bg-black text-white font-bold">
+              {getMoodMessage()}
+            </div>
           </div>
         )}
 
