@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Indicate that this is a client-side component
 
 import React, { useEffect, useRef } from "react";
 import { MusicWithImage, MusicWithImageSimplified } from "types/type";
@@ -18,6 +18,9 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
   // Ref to keep track of the previous currentSong
   const previousSongRef = useRef<MusicWithImageSimplified | null>(null);
 
+  // Ref for the container element
+  const containerRef = useRef<HTMLUListElement | null>(null);
+
   // Scroll to the specific music image whenever currentSong changes
   useEffect(() => {
     if (currentSong?.url) {
@@ -25,11 +28,25 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
       // Check if the current song has changed
       if (previousSongRef.current?.url !== currentSong.url) {
         const element = listRefs.current[currentSong.url]; // Use the song's URL as the key
-        if (element) {
-          element.scrollIntoView({
-            // behavior: "smooth", // Smooth scrolling effect
-            block: "center", // Align to the center of the viewport
-          });
+        if (element && containerRef.current) {
+          // Delay scroll to allow for layout changes
+          setTimeout(() => {
+            element.scrollIntoView({
+              behavior: "smooth", // Smooth scrolling effect
+              block: "center", // Align to the center of the viewport
+            });
+
+            // Manual adjustment for centering
+            const containerHeight = containerRef.current!.clientHeight;
+            const elementOffset = element.offsetTop;
+            const elementHeight = element.clientHeight;
+            const scrollTo =
+              elementOffset - containerHeight / 2 + elementHeight / 2;
+            containerRef.current!.scrollTo({
+              top: scrollTo,
+              behavior: "smooth",
+            });
+          }, 50); // Delay for 50ms to ensure layout updates settle
         }
         // Update the previous song ref to the current song
         previousSongRef.current = currentSong;
@@ -39,7 +56,7 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
 
   return (
     <>
-      <ul className="overflow-y-scroll h-full">
+      <ul ref={containerRef} className="overflow-y-scroll h-full">
         {matchedData.map((item: MusicWithImage) => (
           <li
             key={item.url} // Use URL as a unique key
