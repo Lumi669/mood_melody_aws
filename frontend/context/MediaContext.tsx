@@ -172,10 +172,10 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
 
     // Retrieve the current playlist from localStorage
     const storedPlaylist = localStorage.getItem("playlist");
-    console.log(
-      "storedPlaylist from skipTrack of MediaContext === ",
-      storedPlaylist,
-    );
+    // console.log(
+    //   "storedPlaylist from skipTrack of MediaContext === ",
+    //   storedPlaylist,
+    // );
     let updatedPlaylist: MusicWithImageSimplified[] = storedPlaylist
       ? JSON.parse(storedPlaylist)
       : [];

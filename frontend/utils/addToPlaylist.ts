@@ -5,7 +5,7 @@ export const addToPlaylist22 = (currentMusic: MusicWithImageSimplified) => {
   // Get existing playlist from local storage
   const existingPlaylist = localStorage.getItem("playlist");
 
-  console.log("existingPlaylist from addToPlaylist22 ==== ", existingPlaylist);
+  // console.log("existingPlaylist from addToPlaylist22 ==== ", existingPlaylist);
   console.log("555555");
 
   const playlist = existingPlaylist ? JSON.parse(existingPlaylist) : [];
