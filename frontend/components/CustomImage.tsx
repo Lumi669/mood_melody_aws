@@ -35,12 +35,16 @@ const CustomImage: React.FC<CustomImageProps> = ({
   useEffect(() => {
     if (!audio) return; // Ensure the audio element is available
 
-    const updateProgress = () => {
+    // Sync progress with the audio element
+    const syncProgress = () => {
       if (audio && currentTrack === dataUrl) {
         const percentage = (audio.currentTime / audio.duration) * 100;
         setProgress(percentage || 0);
       }
     };
+
+    // Restore progress on mount
+    syncProgress();
 
     const handleEnded = () => {
       //to ensure that only the instance representing the currently playing track reacts to the ended event.
@@ -49,11 +53,11 @@ const CustomImage: React.FC<CustomImageProps> = ({
       }
     };
 
-    audio.addEventListener("timeupdate", updateProgress);
+    audio.addEventListener("timeupdate", syncProgress);
     audio.addEventListener("ended", handleEnded); // Add event listener for track end
 
     return () => {
-      audio.removeEventListener("timeupdate", updateProgress);
+      audio.removeEventListener("timeupdate", syncProgress);
       audio.removeEventListener("ended", handleEnded); // Clean up event listener
     };
   }, [audio, currentTrack, dataUrl, setIsPlaying]); // Include dependencies
