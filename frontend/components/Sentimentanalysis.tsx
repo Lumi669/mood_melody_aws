@@ -1,29 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import CustomImage from "./CustomImage";
-import { useMedia } from "@context/MediaContext";
 
-export default function SentimentAnalysisPage() {
+interface SentimentAnalysisPageProps {
+  onSentimentAnalyzed: (message: string) => void;
+  playMusic: (
+    mood: "happy" | "sad" | "calm",
+    source: "button" | "analysis",
+  ) => void;
+}
+
+export default function SentimentAnalysisPage({
+  onSentimentAnalyzed,
+  playMusic,
+}: SentimentAnalysisPageProps) {
   const [text, setText] = useState("");
   const [sentiment, setSentiment] = useState<string | null>(null);
-  const [imageSrc, setImageSrc] = useState<string>("");
-  const [audioUrl, setAudioUrl] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
-  const [ctg, setCtg] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false); // State to manage loading
-  const [shouldPlay, setShouldPlay] = useState<boolean>(false); // State to manage delayed playback
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const maxChars = 90;
-
-  const {
-    mediaData,
-    playTrack,
-    setCurrentSong,
-    stopMusic,
-    setIsRed,
-    setIsBlue,
-    setIsBrown,
-  } = useMedia();
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -34,84 +28,53 @@ export default function SentimentAnalysisPage() {
 
   const analyzeSentiment = async () => {
     setIsLoading(true); // Start loading
-    setMessage(""); // Clear message initially
-    setImageSrc("");
-    setAudioUrl("");
-    setShouldPlay(false); // Ensure we do not play audio immediately
 
-    const response = await fetch("/api/sentimentanalysis", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text }),
-    });
+    try {
+      const response = await fetch("/api/sentimentanalysis", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Sentiment analysis result:", data);
-      setSentiment(data.sentiment);
-    } else {
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Sentiment analysis result:", data.sentiment);
+        setSentiment(data.sentiment);
+      } else {
+        setSentiment("Error analyzing sentiment");
+      }
+    } catch (error) {
+      console.error("Error fetching sentiment analysis:", error);
       setSentiment("Error analyzing sentiment");
+    } finally {
+      setIsLoading(false); // End loading
     }
-    setIsLoading(false); // End loading
-  };
-
-  // Function to play music after sentiment analysis
-  const playMusic = (mood: "happy" | "sad" | "calm") => {
-    stopMusic(); // Stop any currently playing music
-
-    const filteredSongs = mediaData.filter((song) => song.mood === mood);
-    const randomSong =
-      filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
-    setCurrentSong(randomSong);
-    setAudioUrl(randomSong.url);
-    setImageSrc(randomSong.imgUrl);
-    setCtg(randomSong.ctg);
-
-    setIsRed(randomSong.mood === "happy");
-    setIsBlue(randomSong.mood === "sad");
-    setIsBrown(randomSong.mood === "calm");
-
-    playTrack(randomSong.url, randomSong); // Play the new track using the global context
   };
 
   useEffect(() => {
     if (sentiment) {
-      console.log("Sentiment detected:", sentiment);
+      // Only trigger this effect when sentiment is updated
+      let sentimentMessage = "";
 
       if (sentiment === "POSITIVE") {
-        setMessage("You seem happy; here's a happy song and image for you.");
-        setShouldPlay(true); // Indicate that we should play after a delay
+        sentimentMessage =
+          "You seem happy; here's a happy song and image for you.";
+        playMusic("happy", "analysis"); // Play music directly
       } else if (sentiment === "NEGATIVE") {
-        setMessage(
-          "It seems you are not happy; here's a sad song and image matching your feelings.",
-        );
-        setShouldPlay(true);
+        sentimentMessage =
+          "It seems you are not happy; here's a sad song and image matching your feelings.";
+        playMusic("sad", "analysis");
       } else if (sentiment === "MIX" || sentiment === "NEUTRAL") {
-        setMessage(
-          "It is hard to tell clearly; maybe you feel peaceful. Check the music and image for you.",
-        );
-        setShouldPlay(true);
+        sentimentMessage =
+          "It is hard to tell clearly; maybe you feel peaceful. Check the music and image for you.";
+        playMusic("calm", "analysis");
       }
-    }
-  }, [sentiment]); // Trigger when sentiment is updated
 
-  useEffect(() => {
-    if (shouldPlay) {
-      const delayTimer = setTimeout(() => {
-        if (sentiment === "POSITIVE") {
-          playMusic("happy");
-        } else if (sentiment === "NEGATIVE") {
-          playMusic("sad");
-        } else if (sentiment === "MIX" || sentiment === "NEUTRAL") {
-          playMusic("calm");
-        }
-      }, 2500); // 2.5second delay to allow reading the message
-
-      return () => clearTimeout(delayTimer); // Cleanup the timer if the component is unmounted or if dependencies change
+      onSentimentAnalyzed(sentimentMessage); // Set message only once after sentiment is analyzed
     }
-  }, [shouldPlay, sentiment]); // Trigger playback after delay
+  }, [sentiment, playMusic, onSentimentAnalyzed]); // Trigger effect when sentiment is updated
 
   return (
     <div className="p-5 max-w-xl mx-auto">
@@ -120,7 +83,7 @@ export default function SentimentAnalysisPage() {
         <textarea
           value={text}
           onChange={handleTextChange}
-          placeholder="Enter text to analyze sentiment"
+          placeholder="Enter text to analyze your sentiment"
           rows={4}
           className="w-full p-3 border border-gray-300 rounded mb-4"
         />
@@ -135,24 +98,6 @@ export default function SentimentAnalysisPage() {
       >
         {isLoading ? "Analyzing..." : "Analyze Sentiment"}
       </button>
-      {message && (
-        <div className="mt-5">
-          <h2 className="text-xl font-semibold">Sentiment Result:</h2>
-          <p className="text-lg mt-2">{message}</p>
-        </div>
-      )}
-      {imageSrc && (
-        <CustomImage
-          src={imageSrc}
-          alt="Sentiment Image"
-          dataUrl={audioUrl}
-          layout="responsive"
-          width={1400}
-          height={700}
-          className="mt-4"
-          ctg={ctg}
-        />
-      )}
     </div>
   );
 }

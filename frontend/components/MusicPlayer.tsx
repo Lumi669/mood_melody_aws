@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useMedia } from "@context/MediaContext";
 import { addToPlaylist22 } from "@utils/addToPlaylist";
 import CustomImage from "@components/CustomImage";
@@ -9,6 +9,7 @@ import Greeting from "./Greeting";
 import Image from "next/image";
 
 const MusicPlayer: React.FC = () => {
+  console.log("MusicPlayer   ggggg get called ...");
   const {
     mediaData,
     setIsRed,
@@ -29,21 +30,39 @@ const MusicPlayer: React.FC = () => {
   const [isAnimationActive, setAnimationActive] = useState(false);
   const [isVideoVisible, setVideoVisible] = useState(false);
   const [currentMusicCtg, setCurrentMusicCtg] = useState<string | null>(null);
+  const [moodSource, setMoodSource] = useState<"button" | "analysis" | null>(
+    null,
+  );
+  const [sentimentMessage, setSentimentMessage] = useState<string>("");
+
+  console.log("=======1111111");
 
   useEffect(() => {
-    //Check if music is playing when the component mounts
-    if (currentSong) {
-      console.log("current sssssong ==== ", currentSong);
+    console.log("=======2222222");
+    // Retrieve state from localStorage when the component mounts
+    const storedMoodSource = localStorage.getItem("moodSource");
+    const storedSentimentMessage = localStorage.getItem("sentimentMessage");
 
-      setOriginalViewVisible(false);
-      setVideoVisible(true);
-    } else {
-      setOriginalViewVisible(true); // Ensure the original view is visible when there's no current song
-      setVideoVisible(false);
+    if (storedMoodSource) {
+      console.log("=======3333333");
+
+      setMoodSource(storedMoodSource as "button" | "analysis");
     }
-  }, [currentSong]);
 
-  const playMusic = (mood: "happy" | "sad" | "calm") => {
+    if (storedSentimentMessage) {
+      console.log("=======44444444");
+
+      console.log("ssss storedSentimentMessage === ", storedSentimentMessage);
+      setSentimentMessage(storedSentimentMessage);
+    }
+  }, []);
+
+  console.log("=======??????");
+
+  const playMusic = (
+    mood: "happy" | "sad" | "calm",
+    source: "button" | "analysis",
+  ) => {
     stopMusic(); // Stop any currently playing music
 
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
@@ -73,7 +92,17 @@ const MusicPlayer: React.FC = () => {
     }, 1000); // Adjust to match the animation duration
   };
 
-  // Function to handle returning to the original view when the video is clicked
+  useEffect(() => {
+    // Check if music is playing when the component mounts
+    if (currentSong) {
+      setOriginalViewVisible(false);
+      setVideoVisible(true);
+    } else {
+      setOriginalViewVisible(true); // Ensure the original view is visible when there's no current song
+      setVideoVisible(false);
+    }
+  }, [currentSong]);
+
   const handleVideoClick = () => {
     setOriginalViewVisible(true); // Show the original view
     setAnimationActive(false); // Stop any ongoing animation
@@ -88,18 +117,53 @@ const MusicPlayer: React.FC = () => {
           <Greeting />
         </div>
         <div>
-          <SentimentAnalysisPage />
+          <SentimentAnalysisPage
+            onSentimentAnalyzed={handleSentimentAnalysis}
+            playMusic={playMusic} // Pass playMusic as a prop
+          />
         </div>
       </>
     );
   };
 
+  const handleSentimentAnalysis = useCallback((message: string) => {
+    console.log("hanleSentimentAnalysis get called ...");
+    console.log("mmmmmmm essage from hanleSentimentAnalysis === ", message); //new / updated message
+    console.log(
+      "sentiment message from handleSentimentAnalysis === ",
+      sentimentMessage, //old message
+    );
+
+    setSentimentMessage(message);
+    setMoodSource("analysis");
+
+    localStorage.setItem("moodSource", "analysis");
+    console.log(
+      "bbbbbb    sentiment message from handleSentimentAnalysis === ",
+      sentimentMessage, //old message
+    );
+    localStorage.setItem("sentimentMessage", message);
+  }, []);
+
   const getMoodMessage = () => {
-    if (isRed) return "You seem happy";
-    if (isBlue) return "You seem sad";
-    if (isBrown) return "You seem peaceful";
+    if (moodSource === "analysis") {
+      return sentimentMessage;
+    } else if (moodSource === "button") {
+      if (isRed) return "You seem happy";
+      if (isBlue) return "You seem sad";
+      if (isBrown) return "You seem peaceful";
+    }
+
     return "You have no emotion at the moment";
   };
+
+  console.log("getMoodMessage() ===== ", getMoodMessage());
+
+  console.log("isVideoVisible === ", isVideoVisible);
+  console.log(
+    "ccccccc    sentiment message from handleSentimentAnalysis === ",
+    sentimentMessage, //old message
+  );
 
   return (
     <>
@@ -108,13 +172,13 @@ const MusicPlayer: React.FC = () => {
         {isOriginalViewVisible && <OrginalViewPart />}
 
         {/* Buttons for mood selection */}
-        <button onClick={() => playMusic("happy")} className="m-5">
+        <button onClick={() => playMusic("happy", "button")} className="m-5">
           Happy
         </button>
-        <button onClick={() => playMusic("sad")} className="m-5">
+        <button onClick={() => playMusic("sad", "button")} className="m-5">
           Sad
         </button>
-        <button onClick={() => playMusic("calm")} className="m-5">
+        <button onClick={() => playMusic("calm", "button")} className="m-5">
           Calm
         </button>
 
