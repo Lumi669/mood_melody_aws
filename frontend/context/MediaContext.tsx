@@ -38,6 +38,11 @@ interface MediaProviderProps {
   children: ReactNode;
 }
 
+interface skipTrackProps {
+  direction: "next" | "previous";
+  isHomePage: boolean;
+}
+
 export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   const [mediaData, setMediaData] = useState<MediaContextType["mediaData"]>([]);
   const [isRed, setIsRed] = useState(false);
@@ -148,54 +153,45 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
 
   const skipTrack = (
     direction: "next" | "previous",
+    isHomePage: boolean, // Add isHomePage parameter
   ): MusicWithImageSimplified[] => {
-    // Assuming mediaData is available and is of type MusicWithImageSimplified[]
-    console.log("mediaData from skipTrack ==== ", mediaData);
     if (!mediaData.length) return []; // Return an empty array if no songs are available
 
-    const currentIndex = mediaData.findIndex(
+    // Determine if the current page is the homepage
+    const currentMood = currentSong?.mood;
+    const filteredSongs =
+      isHomePage && currentMood
+        ? mediaData.filter((song) => song.mood === currentMood)
+        : mediaData; // If not on the homepage, use all songs
+
+    const currentIndex = filteredSongs.findIndex(
       (track) => track.url === currentSong?.url,
     );
     let newIndex;
 
-    // Calculate the new index based on the direction
     if (direction === "next") {
-      newIndex = (currentIndex + 1) % mediaData.length;
+      newIndex = (currentIndex + 1) % filteredSongs.length;
     } else {
-      newIndex = (currentIndex - 1 + mediaData.length) % mediaData.length;
+      newIndex =
+        (currentIndex - 1 + filteredSongs.length) % filteredSongs.length;
     }
 
-    const nextSong = mediaData[newIndex];
+    const nextSong = filteredSongs[newIndex];
     if (nextSong) {
-      playTrack(nextSong.url, nextSong); // Play the next song
+      playTrack(nextSong.url, nextSong);
     }
 
-    // Retrieve the current playlist from localStorage
     const storedPlaylist = localStorage.getItem("playlist");
-    // console.log(
-    //   "storedPlaylist from skipTrack of MediaContext === ",
-    //   storedPlaylist,
-    // );
     let updatedPlaylist: MusicWithImageSimplified[] = storedPlaylist
       ? JSON.parse(storedPlaylist)
       : [];
-    console.log(
-      "updatedPlaylist before push next song from skipTrack of MediaContext === ",
-      updatedPlaylist,
-    );
-    // Check if the next song is already in the playlist; if not, add it
-    // This is critical code for real time updating the play list when clicking next or previous button !!
+
     if (!updatedPlaylist.find((song) => song.url === nextSong.url)) {
-      updatedPlaylist.push(nextSong); // Add the new song if it isn't already in the playlist
+      updatedPlaylist.push(nextSong);
     }
-    console.log(
-      "updatedPlaylist after push next song from skipTrack of MediaContext === ",
-      updatedPlaylist,
-    );
-    // Update the playlist in localStorage to ensure synchronization
+
     localStorage.setItem("playlist", JSON.stringify(updatedPlaylist));
 
-    // Return the updated playlist
     return updatedPlaylist;
   };
 

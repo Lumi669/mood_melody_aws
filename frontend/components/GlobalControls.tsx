@@ -1,14 +1,14 @@
-// export default GlobalControls;
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { useMedia } from "@context/MediaContext";
 import { MusicWithImageSimplified } from "../types/type";
+import { usePathname } from "next/navigation"; // Import usePathname from next/navigation
 
 const GlobalControls: React.FC = () => {
   const { stopMusic, togglePlayPause, isPlaying, currentSong, skipTrack } =
     useMedia();
-
+  const pathname = usePathname(); // Initialize usePathname
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -21,21 +21,17 @@ const GlobalControls: React.FC = () => {
     togglePlayPause();
   };
 
-  // Function to update playlist in localStorage and dispatch custom event
   const updatePlaylist = (newPlaylist: MusicWithImageSimplified[]) => {
-    // Persist the playlist in localStorage
     localStorage.setItem("playlist", JSON.stringify(newPlaylist));
-
-    // Dispatch the custom event
     window.dispatchEvent(new Event("playlistUpdated"));
   };
 
   const handleSkipTrack = (direction: "next" | "previous") => {
-    // Call skipTrack and get the updated playlist
-    const updatedPlaylist = skipTrack(direction);
+    // Use pathname to check if the current page is the homepage
+    const isHomePage = pathname === "/"; // Adjust the path to match your homepage
+    const updatedPlaylist = skipTrack(direction, isHomePage); // Pass both direction and isHomePage
 
-    // Update the local state and notify other components of the change
-    updatePlaylist(updatedPlaylist); // Update localStorage and dispatch event
+    updatePlaylist(updatedPlaylist);
   };
 
   return (
@@ -44,26 +40,20 @@ const GlobalControls: React.FC = () => {
         animate ? "animate-fly-in" : ""
       }`}
     >
-      {/* Show controls only if there is a current song */}
       {currentSong && (
         <div className="flex items-center space-x-4">
-          {/* Play/Pause Button */}
           <button
             onClick={handlePlayPause}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-24 text-center"
           >
             {isPlaying ? "Pause" : "Play "}
           </button>
-
-          {/* Stop Button */}
           <button
             onClick={stopMusic}
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           >
             Stop Music
           </button>
-
-          {/* Skip Controls */}
           <button
             onClick={() => handleSkipTrack("previous")}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"

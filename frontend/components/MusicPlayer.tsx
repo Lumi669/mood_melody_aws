@@ -217,6 +217,7 @@ const MusicPlayer: React.FC = () => {
               height={700}
               className="cursor-pointer w-full max-w-full lg:max-w-[1400px]"
               ctg={currentMusicCtg}
+              mood={currentSong.mood}
             />
           </div>
         )}

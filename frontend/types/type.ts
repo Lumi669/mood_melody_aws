@@ -30,6 +30,7 @@ export interface CustomImageProps {
   height: number;
   className: string;
   ctg: string | null;
+  mood: "happy" | "sad" | "calm";
 }
 
 export interface MediaContextType {
@@ -51,7 +52,10 @@ export interface MediaContextType {
   pauseTrack: () => void;
   togglePlayPause: () => void;
   stopMusic: () => void;
-  skipTrack: (direction: "next" | "previous") => MusicWithImageSimplified[]; // Updated to return the correct type
+  skipTrack: (
+    direction: "next" | "previous",
+    isHomePage: boolean,
+  ) => MusicWithImageSimplified[];
 }
 
 export interface MusicWithImageSimplified {
@@ -59,4 +63,6 @@ export interface MusicWithImageSimplified {
   url: string | null;
   name: string | "not seen a name";
   ctg: string | null;
+
+  mood: "happy" | "sad" | "calm";
 }

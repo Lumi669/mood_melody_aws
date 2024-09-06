@@ -17,6 +17,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
   height,
   className,
   ctg,
+  mood,
 }) => {
   // Access audio from MediaContext using useMedia hook
   const {
@@ -70,7 +71,13 @@ const CustomImage: React.FC<CustomImageProps> = ({
     console.log("dataUrl from handleClick of CustomImage.tsx === ", dataUrl);
     console.log("currentTrack !== dataUrl === ", currentTrack !== dataUrl);
     if (currentTrack !== dataUrl) {
-      const newSong = { imgUrl: validSrc, url: dataUrl, name: alt, ctg: ctg };
+      const newSong = {
+        imgUrl: validSrc,
+        url: dataUrl,
+        name: alt,
+        ctg: ctg,
+        mood: mood,
+      };
       setCurrentSong(newSong);
       playTrack(dataUrl || "", newSong);
     } else {

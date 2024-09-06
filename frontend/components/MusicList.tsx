@@ -81,6 +81,7 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
               width={900}
               height={450}
               ctg={item.ctg}
+              mood={item.mood}
             />
           </li>
         ))}
