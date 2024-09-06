@@ -46,7 +46,7 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
               top: scrollTo,
               behavior: "smooth",
             });
-          }, 50); // Delay for 50ms to ensure layout updates settle
+          }, 80); // Delay for 50ms to ensure layout updates settle
         }
         // Update the previous song ref to the current song
         previousSongRef.current = currentSong;
