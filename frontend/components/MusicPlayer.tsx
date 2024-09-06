@@ -64,6 +64,7 @@ const MusicPlayer: React.FC = () => {
     source: "button" | "analysis",
   ) => {
     stopMusic(); // Stop any currently playing music
+    setMoodSource(source);
 
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
     const randomSong =
@@ -158,12 +159,6 @@ const MusicPlayer: React.FC = () => {
   };
 
   console.log("getMoodMessage() ===== ", getMoodMessage());
-
-  console.log("isVideoVisible === ", isVideoVisible);
-  console.log(
-    "ccccccc    sentiment message from handleSentimentAnalysis === ",
-    sentimentMessage, //old message
-  );
 
   return (
     <>
