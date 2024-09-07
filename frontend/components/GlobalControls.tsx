@@ -161,6 +161,7 @@ import React, { useState, useEffect } from "react";
 import { useMedia } from "@context/MediaContext";
 import { MusicWithImageSimplified } from "../types/type";
 import { usePathname } from "next/navigation"; // Import usePathname from next/navigation
+import path from "path";
 
 const GlobalControls: React.FC = () => {
   const { stopMusic, togglePlayPause, isPlaying, currentSong, skipTrack } =
@@ -173,6 +174,8 @@ const GlobalControls: React.FC = () => {
       setAnimate(true);
     }
   }, [isPlaying, currentSong]);
+
+  const isLivePage = pathname === "/live";
 
   // Use useEffect to update localStorage whenever currentSong changes and is on the homepage
   useEffect(() => {
@@ -207,7 +210,7 @@ const GlobalControls: React.FC = () => {
     <div
       className={`fixed bottom-0 left-0 w-full p-4 bg-gray-800 text-white flex flex-col items-center justify-center z-50 transition-all duration-500 ${animate ? "animate-fly-in" : ""}`}
     >
-      {currentSong && (
+      {currentSong && !isLivePage && (
         <div className="flex items-center space-x-4">
           <button
             onClick={handlePlayPause}
