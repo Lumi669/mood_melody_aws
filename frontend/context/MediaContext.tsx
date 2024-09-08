@@ -284,7 +284,11 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { MusicWithImageSimplified, MediaContextType } from "../types/type";
+import {
+  MusicWithImageSimplified,
+  MediaContextType,
+  MusicWithImage,
+} from "../types/type";
 import { addToPlaylist22 } from "utils/addToPlaylist";
 import { fetchAllMusicWithImages } from "../utils/fetchAllMusicWithImages";
 
@@ -315,7 +319,7 @@ interface MediaProviderProps {
 }
 
 export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
-  const [mediaData, setMediaData] = useState<MusicWithImageSimplified[]>([]);
+  const [mediaData, setMediaData] = useState<MusicWithImage[]>([]);
   const [isRed, setIsRed] = useState(false);
   const [isBlue, setIsBlue] = useState(false);
   const [isBrown, setIsBrown] = useState(false);

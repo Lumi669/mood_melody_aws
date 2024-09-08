@@ -60,6 +60,7 @@ const MixTape: React.FC = () => {
                 width={260}
                 height={130}
                 ctg={item.ctg}
+                mood={item.mood}
               />
             </div>
 

@@ -44,6 +44,7 @@ const Liveplay = () => {
             height={600}
             className="cursor-pointer mt-10 mb-5"
             ctg={currentSong.ctg}
+            mood={currentSong.mood}
           />
           <div className="text-center">
             <h1 className="text-xl font-bold">Music Name</h1>
