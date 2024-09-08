@@ -100,7 +100,7 @@ const Nav: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        <NavLink href="/contact">Contact</NavLink>
+        <NavLink href="/Contact">Contact</NavLink>
       </div>
     </nav>
   );
