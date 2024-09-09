@@ -45,6 +45,8 @@ const Privacy = () => {
         This app includes images sourced from{" "}
         <a
           href="https://www.freepik.com"
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-blue-500 hover:underline"
         >
           Freepik
