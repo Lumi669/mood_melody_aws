@@ -17,6 +17,10 @@ Resources:
       Events:
         HttpEvent:
           Type: HttpApi
+          Properties:
+            Path: /{proxy+} # Catch-all route
+            Method: ANY
+            ApiId: !Ref ServerlessHttpApi
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -50,6 +54,15 @@ Resources:
                   - apigateway:Invoke
                   - apigateway:ManageConnections
                 Resource: "*"
+  ServerlessHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowMethods: "'GET,OPTIONS,POST'"
+        AllowOrigins: "'*'"
+      DefaultRouteSettings:
+        DetailedMetricsEnabled: True
 
 Outputs:
   FrontendApiUrl:
