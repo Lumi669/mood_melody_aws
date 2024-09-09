@@ -47,7 +47,7 @@ const Nav: React.FC = () => {
           onMouseEnter={() => handleMouseEnter(setDropdownOpen)}
           onMouseLeave={() => handleMouseLeave(setDropdownOpen)}
         >
-          <NavLink href="/about">About</NavLink>
+          <NavLink href="/about_temp">About</NavLink>
           <AnimatePresence>
             {isDropdownOpen && (
               <motion.ul
@@ -79,7 +79,7 @@ const Nav: React.FC = () => {
                             className="px-4 py-2 hover:bg-gray-100"
                           >
                             <Link
-                              href={`/about/tech/${item.replace(" ", "").toLowerCase()}`}
+                              href={`/about_temp/tech/${item.replace(" ", "").toLowerCase()}`}
                             >
                               {item}
                             </Link>
@@ -91,7 +91,9 @@ const Nav: React.FC = () => {
                 </li>
                 {["Privacy", "Testimonials", "Analytics"].map((item) => (
                   <li key={item} className="px-4 py-2 hover:bg-gray-100">
-                    <Link href={`/about/${item.toLowerCase()}`}>{item}</Link>
+                    <Link href={`/about_temp/${item.toLowerCase()}`}>
+                      {item}
+                    </Link>
                   </li>
                 ))}
               </motion.ul>
@@ -99,7 +101,7 @@ const Nav: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        <NavLink href="/contact">Contact</NavLink>
+        <NavLink href="/contact_temp">Contact</NavLink>
       </div>
     </nav>
   );
