@@ -77,27 +77,26 @@ export default function SentimentAnalysisPage({
   }, [sentiment, playMusic, onSentimentAnalyzed]); // Trigger effect when sentiment is updated
 
   return (
-    <div className="p-5 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Sentiment Analysis</h1>
-      <div className="relative">
+    <div className="p-5 max-w-3xl mx-auto grid justify-items-stretch ">
+      <div className="relative flex items-start">
         <textarea
           value={text}
           onChange={handleTextChange}
           placeholder="Enter text to analyze your sentiment"
           rows={4}
-          className="w-full p-3 border border-gray-300 rounded mb-4"
+          className="flex-grow tracking-wide p-3 border border-gray-300 rounded mb-4 ml-6 resize-none w-full" // Make textarea take full width
         />
         <div className="absolute bottom-1 right-2 text-gray-500 text-sm">
           {maxChars - text.length}
         </div>
+        <button
+          onClick={analyzeSentiment}
+          className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors ml-8"
+          disabled={isLoading}
+        >
+          {isLoading ? "Checking..." : "Check My Mood"}
+        </button>
       </div>
-      <button
-        onClick={analyzeSentiment}
-        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
-        disabled={isLoading} // Disable button while loading
-      >
-        {isLoading ? "Analyzing..." : "Analyze Sentiment"}
-      </button>
     </div>
   );
 }
