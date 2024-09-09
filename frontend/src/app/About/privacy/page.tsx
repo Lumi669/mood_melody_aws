@@ -56,6 +56,8 @@ const Privacy = () => {
         <li>
           <a
             href="https://www.freepik.com/free-photo/adorable-little-poodle-with-cute-bunny-ears-beige-surface_15672270.htm"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
           >
             Image by wirestock on Freepik
@@ -64,6 +66,8 @@ const Privacy = () => {
         <li>
           <a
             href="https://www.freepik.com/free-photo/happy-beagle-with-droopy-ears-blue-background_135010608.htm"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
           >
             Image by rorozoa on Freepik
@@ -72,6 +76,8 @@ const Privacy = () => {
         <li>
           <a
             href="https://www.freepik.com/free-photo/medium-shot-friends-eating-pizza_138239739.htm"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
           >
             Image by Drazen Zigic on Freepik
@@ -80,6 +86,8 @@ const Privacy = () => {
         <li>
           <a
             href="https://www.freepik.com/free-photo/cute-puppy-sitting-grass-enjoying-nature-playful-beauty-generated-by-artificial-intelligence_79687547.htm"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
           >
             Image by upklyak on Freepik
@@ -88,6 +96,8 @@ const Privacy = () => {
         <li>
           <a
             href="https://www.freepik.com/free-photo/close-up-adorable-dog-laying-blanket_10422541.htm"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
           >
             Image by Freepik
@@ -96,6 +106,8 @@ const Privacy = () => {
         <li>
           <a
             href="https://www.freepik.com/free-photo/small-pug-sofa_11043847.htm"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
           >
             Image by Freepik
@@ -105,6 +117,8 @@ const Privacy = () => {
         <li>
           <a
             href="https://www.freepik.com/free-ai-image/cute-puppy-sitting-grass-enjoying-nature-playful-beauty-generated-by-artificial-intelligence_79687547.htm"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
           >
             Image by vecstock on Freepik
