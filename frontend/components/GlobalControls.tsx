@@ -63,7 +63,7 @@ const GlobalControls: React.FC = () => {
     <div
       className={`fixed bottom-0 left-0 w-full p-4 bg-gray-800 text-white flex flex-col items-center justify-center z-50 transition-all duration-500 ${animate ? "animate-fly-in" : ""}`}
     >
-      {currentSong && !isLivePage && (
+      {currentSong && (
         <div className="flex items-center space-x-4">
           <button
             onClick={handlePlayPause}
@@ -77,18 +77,23 @@ const GlobalControls: React.FC = () => {
           >
             Stop Music
           </button>
-          <button
-            onClick={() => handleSkipTrack("previous")}
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => handleSkipTrack("next")}
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Next
-          </button>
+
+          {!isLivePage && (
+            <>
+              <button
+                onClick={() => handleSkipTrack("previous")}
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => handleSkipTrack("next")}
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Next
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>
