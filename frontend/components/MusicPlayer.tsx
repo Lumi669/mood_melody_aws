@@ -146,15 +146,28 @@ const MusicPlayer: React.FC = () => {
         {isOriginalViewVisible && <OriginalViewPart />}
 
         {/* Buttons for mood selection */}
-        <button onClick={() => playMusic("happy", "button")} className="m-5">
-          Happy
-        </button>
-        <button onClick={() => playMusic("sad", "button")} className="m-5">
-          Sad
-        </button>
-        <button onClick={() => playMusic("calm", "button")} className="m-5">
-          Calm
-        </button>
+        <div className="flex justify-center space-x-8 m-3">
+          <button
+            onClick={() => playMusic("happy", "button")}
+            className={isRed ? "active-button-style" : "inactive-button-style"}
+          >
+            Happy
+          </button>
+          <button
+            onClick={() => playMusic("sad", "button")}
+            className={isBlue ? "active-button-style" : "inactive-button-style"}
+          >
+            Sad
+          </button>
+          <button
+            onClick={() => playMusic("calm", "button")}
+            className={
+              isBrown ? "active-button-style" : "inactive-button-style"
+            }
+          >
+            Calm
+          </button>
+        </div>
 
         {/* Animation from image to video */}
         {isAnimationActive && (
