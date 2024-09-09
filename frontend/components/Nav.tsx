@@ -9,15 +9,17 @@ import { motion, AnimatePresence } from "framer-motion";
 const Nav: React.FC = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isTechDropdownOpen, setTechDropdownOpen] = useState(false);
-  const handleTechMouseEnter = () => setTechDropdownOpen(true);
-  const handleTechMouseLeave = () => setTechDropdownOpen(false);
 
-  const handleMouseEnter = () => {
-    setDropdownOpen(true);
+  const handleMouseEnter = (
+    setter: React.Dispatch<React.SetStateAction<boolean>>,
+  ) => {
+    setter(true);
   };
 
-  const handleMouseLeave = () => {
-    setDropdownOpen(false);
+  const handleMouseLeave = (
+    setter: React.Dispatch<React.SetStateAction<boolean>>,
+  ) => {
+    setter(false);
   };
 
   return (
@@ -42,10 +44,10 @@ const Nav: React.FC = () => {
         {/* About Dropdown */}
         <div
           className="relative"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onMouseEnter={() => handleMouseEnter(setDropdownOpen)}
+          onMouseLeave={() => handleMouseLeave(setDropdownOpen)}
         >
-          <NavLink href="#">About</NavLink>
+          <NavLink href="/about">About</NavLink>
           <AnimatePresence>
             {isDropdownOpen && (
               <motion.ul
@@ -58,8 +60,8 @@ const Nav: React.FC = () => {
                 {/* Tech Dropdown */}
                 <li
                   className="relative px-4 py-2 hover:bg-gray-100"
-                  onMouseEnter={handleTechMouseEnter}
-                  onMouseLeave={handleTechMouseLeave}
+                  onMouseEnter={() => handleMouseEnter(setTechDropdownOpen)}
+                  onMouseLeave={() => handleMouseLeave(setTechDropdownOpen)}
                 >
                   <span className="cursor-pointer">Tech</span>
                   <AnimatePresence>
@@ -71,30 +73,27 @@ const Nav: React.FC = () => {
                         transition={{ duration: 0.2 }}
                         className="absolute left-full top-0 mt-0 w-40 bg-white shadow-lg rounded-md"
                       >
-                        <li className="px-4 py-2 hover:bg-gray-100">
-                          <Link href="/About/Tech/Architecture">
-                            Architecture
-                          </Link>
-                        </li>
-                        <li className="px-4 py-2 hover:bg-gray-100">
-                          <Link href="/About/Tech/CICD">CI/CD</Link>
-                        </li>
-                        <li className="px-4 py-2 hover:bg-gray-100">
-                          <Link href="/About/Tech/TechStack">Tech Stack</Link>
-                        </li>
+                        {["Architecture", "CICD", "Tech Stack"].map((item) => (
+                          <li
+                            key={item}
+                            className="px-4 py-2 hover:bg-gray-100"
+                          >
+                            <Link
+                              href={`/about/tech/${item.replace(" ", "").toLowerCase()}`}
+                            >
+                              {item}
+                            </Link>
+                          </li>
+                        ))}
                       </motion.ul>
                     )}
                   </AnimatePresence>
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100">
-                  <Link href="/About/Privacy">Privacy</Link>
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-100">
-                  <Link href="/About/Testimonials">Testimonials</Link>
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-100">
-                  <Link href="/About/Analytics">Analytics</Link>
-                </li>
+                {["Privacy", "Testimonials", "Analytics"].map((item) => (
+                  <li key={item} className="px-4 py-2 hover:bg-gray-100">
+                    <Link href={`/about/${item.toLowerCase()}`}>{item}</Link>
+                  </li>
+                ))}
               </motion.ul>
             )}
           </AnimatePresence>
