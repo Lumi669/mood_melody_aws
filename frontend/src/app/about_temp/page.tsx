@@ -1,6 +1,6 @@
 import React from "react";
 
-const About = () => {
+const Aboutpage = () => {
   return (
     <div>
       <h1 className="text-center mt-10 text-6xl">About This App</h1>
@@ -13,4 +13,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Aboutpage;
