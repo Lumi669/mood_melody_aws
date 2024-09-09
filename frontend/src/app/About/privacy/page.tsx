@@ -51,7 +51,7 @@ const Privacy = () => {
         >
           Freepik
         </a>
-        . These images are used under Freepik's free license with proper
+        . These images are used under Freepik&apos;s free license with proper
         attribution to the original authors:
       </p>
       <ul className="list-disc pl-6 mb-4">
@@ -170,7 +170,7 @@ const Privacy = () => {
       <p className="text-gray-700 mb-4">
         Any data collected is used solely for demonstrating app functionality
         and is not shared with third parties. It helps in understanding user
-        behavior and improving the app's features.
+        behavior and improving the app&apos;s features.
       </p>
 
       <h2 className="text-xl font-semibold mb-2">
