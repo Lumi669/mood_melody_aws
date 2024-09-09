@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useMedia } from "@context/MediaContext";
 import { MusicWithImageSimplified } from "../types/type";
 import { usePathname } from "next/navigation"; // Import usePathname from next/navigation
@@ -11,6 +11,9 @@ const GlobalControls: React.FC = () => {
     useMedia();
   const pathname = usePathname(); // Initialize usePathname
   const [animate, setAnimate] = useState(false);
+
+  // Use useRef to keep a stable reference to the playlist
+  const playlistRef = useRef<MusicWithImageSimplified[]>([]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -38,6 +41,9 @@ const GlobalControls: React.FC = () => {
   };
 
   const updatePlaylist = (newPlaylist: MusicWithImageSimplified[]) => {
+    // Update the ref with the new playlist
+    playlistRef.current = newPlaylist;
+
     localStorage.setItem("playlist", JSON.stringify(newPlaylist));
     window.dispatchEvent(new Event("playlistUpdated"));
   };
@@ -45,6 +51,10 @@ const GlobalControls: React.FC = () => {
   const handleSkipTrack = (direction: "next" | "previous") => {
     const isHomePage = pathname === "/"; // Check if the current page is the homepage
     const updatedPlaylist = skipTrack(direction, isHomePage); // Pass both direction and isHomePage
+    console.log(
+      "uuuuuuu updatedPlaylist from GlobalControls.tsx === ",
+      updatedPlaylist,
+    );
 
     updatePlaylist(updatedPlaylist);
   };

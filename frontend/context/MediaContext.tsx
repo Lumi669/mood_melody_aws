@@ -329,9 +329,30 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
     useState<MusicWithImageSimplified | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
+  const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]); // State to manage playlist
+
+  // Fetch mediaData when the component mounts
+  useEffect(() => {
+    const fetchMediaData = async () => {
+      try {
+        const data = await fetchAllMusicWithImages(); // Use the utility function to fetch data
+        setMediaData(data); // Set the fetched data to mediaData
+      } catch (error) {
+        console.error("Failed to fetch media data:", error);
+      }
+    };
+
+    fetchMediaData();
+  }, []);
+
   // Initialize the audio element on component mount
   useEffect(() => {
     audioRef.current = new Audio();
+
+    // const storedPlaylist = localStorage.getItem("playlist");
+    // if (storedPlaylist) {
+    //   setPlaylist(JSON.parse(storedPlaylist));
+    // }
 
     return () => {
       if (audioRef.current) {
@@ -400,6 +421,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
     direction: "next" | "previous",
     isHomePage: boolean,
   ): MusicWithImageSimplified[] => {
+    console.log();
     if (!mediaData.length) return [];
 
     const currentMood = currentSong?.mood;
@@ -407,6 +429,8 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       isHomePage && currentMood
         ? mediaData.filter((song) => song.mood === currentMood)
         : mediaData;
+
+    console.log("fffff filsteredSong from skipTrack === ", filteredSongs);
 
     const currentIndex = filteredSongs.findIndex(
       (track) => track.url === currentSong?.url,
@@ -421,11 +445,36 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
     }
 
     const nextSong = filteredSongs[newIndex];
+    console.log("nnnnnn nextSong from skipTrack === ", nextSong);
+
     if (nextSong) {
       playTrack(nextSong.url, nextSong);
     }
 
-    return filteredSongs;
+    const storedPlaylist = localStorage.getItem("playlist");
+    console.log("sssss storedPlaylist from skitTrack === ", storedPlaylist);
+
+    let updatedPlaylist: MusicWithImageSimplified[] = storedPlaylist
+      ? JSON.parse(storedPlaylist)
+      : [];
+
+    console.log(
+      "updatedPlaylist before add new music from skipTrack ==== ",
+      updatedPlaylist,
+    );
+
+    if (!updatedPlaylist.find((song) => song.url === nextSong.url)) {
+      updatedPlaylist.push(nextSong);
+    }
+
+    console.log(
+      "updatedPlaylist after add new music from skipTrack ==== ",
+      updatedPlaylist,
+    );
+
+    localStorage.setItem("playlist", JSON.stringify(updatedPlaylist));
+
+    return updatedPlaylist;
   };
 
   return (
