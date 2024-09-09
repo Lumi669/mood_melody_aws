@@ -1,9 +1,7 @@
-"use client";
-
 import React from "react";
 
-const Architecture = () => {
+const Architecturepage = () => {
   return <div>This is Architecture page</div>;
 };
 
-export default Architecture;
+export default Architecturepage;
