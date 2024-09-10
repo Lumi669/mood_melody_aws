@@ -40,6 +40,7 @@ const Nav: React.FC = () => {
         <NavLink href="/allmusic">All Music</NavLink>
         <NavLink href="/mixtape">My Playlist</NavLink>
         <NavLink href="/live">Live</NavLink>
+        <NavLink href="/test">Test</NavLink>
 
         {/* About Dropdown */}
         <div
