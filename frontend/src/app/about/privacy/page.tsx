@@ -24,6 +24,7 @@ const Privacypage = () => {
           <a
             href="https://www.veed.io/"
             className="text-blue-500 hover:underline"
+            target="_blank"
           >
             Veed.io
           </a>
@@ -34,6 +35,7 @@ const Privacypage = () => {
           <a
             href="https://pixabay.com/"
             className="text-blue-500 hover:underline"
+            target="_blank"
           >
             Pixabay
           </a>
