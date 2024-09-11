@@ -42,7 +42,9 @@ export interface MediaContextType {
   currentTrack: string | null;
   currentSong: MusicWithImageSimplified | null;
   isPlaying: boolean;
+  wasPlaying: boolean;
   setIsPlaying: Dispatch<SetStateAction<boolean>>;
+  setWasPlaying: Dispatch<SetStateAction<boolean>>;
   setIsRed: Dispatch<SetStateAction<boolean>>;
   setIsBlue: Dispatch<SetStateAction<boolean>>;
   setIsBrown: Dispatch<SetStateAction<boolean>>;
