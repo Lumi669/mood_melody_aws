@@ -138,6 +138,8 @@ const MusicPlayer: React.FC = () => {
     return "You have no emotion at the moment";
   };
 
+  console.log("ccccc curentSong from MusicPlayer.tsx === ", currentSong);
+
   return (
     <div className="relative min-h-screen px-4">
       {isOriginalViewVisible && <OriginalViewPart />}

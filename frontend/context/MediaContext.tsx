@@ -140,6 +140,10 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
         if (song) {
           setCurrentSong(song);
           addToPlaylist22(song);
+          if (isHomePage()) {
+            // Update the session storage with the last played song
+            sessionStorage.setItem("lastPlayedSong", JSON.stringify(song));
+          }
         }
       })
       .catch((error) => console.error("Failed to play audio:", error));
@@ -177,6 +181,8 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       // Only set wasPlayingOnHomePage if on the homepage
       if (isHomePage()) {
         sessionStorage.setItem("wasPlayingOnHomePage", "false");
+        // Clear the last played song when music is stopped
+        sessionStorage.removeItem("lastPlayedSong");
       }
     }
   };
