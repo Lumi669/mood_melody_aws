@@ -35,7 +35,7 @@ const SongsDropdown: React.FC = () => {
       onMouseLeave={handleSongsMouseLeave}
     >
       <Link
-        href="/allmusic"
+        href="/songs"
         className={`text-lg font-semibold ${isActive ? "text-blue-500" : "text-gray-800"}`}
       >
         Songs
