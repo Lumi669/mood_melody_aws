@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 const AboutDropdown: React.FC = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isTechDropdownOpen, setTechDropdownOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleAboutMouseEnter = () => {
     setDropdownOpen(true);
@@ -29,13 +31,20 @@ const AboutDropdown: React.FC = () => {
     setTechDropdownOpen(false);
   };
 
+  // Determine if the dropdown or any of its links are active
+  const isActive =
+    pathname.startsWith("/about") || pathname.startsWith("/about/tech");
+
   return (
     <div
       className="relative"
       onMouseEnter={handleAboutMouseEnter}
       onMouseLeave={handleAboutMouseLeave}
     >
-      <Link href="/about" className="block">
+      <Link
+        href="/about"
+        className={`text-lg font-semibold ${isActive ? "text-blue-500" : "text-gray-800"}`}
+      >
         About
       </Link>
       <AnimatePresence>

@@ -3,9 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 const SongsDropdown: React.FC = () => {
   const [isSongsDropdownOpen, setSongsDropdownOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleSongsMouseEnter = () => {
     setSongsDropdownOpen(true);
@@ -24,13 +26,18 @@ const SongsDropdown: React.FC = () => {
     "My Playlist": "mixtape",
   };
 
+  const isActive = pathname.startsWith("/songs/") || pathname === "/allmusic";
+
   return (
     <div
       className="relative"
       onMouseEnter={handleSongsMouseEnter}
       onMouseLeave={handleSongsMouseLeave}
     >
-      <Link href="/allmusic" className="block">
+      <Link
+        href="/allmusic"
+        className={`text-lg font-semibold ${isActive ? "text-blue-500" : "text-gray-800"}`}
+      >
         Songs
       </Link>
       <AnimatePresence>
