@@ -60,11 +60,13 @@ const Nav: React.FC = () => {
               >
                 {/* Tech Dropdown */}
                 <li
-                  className="relative px-4 py-2 hover:bg-gray-100"
+                  className="relative"
                   onMouseEnter={() => handleMouseEnter(setTechDropdownOpen)}
                   onMouseLeave={() => handleMouseLeave(setTechDropdownOpen)}
                 >
-                  <span className="cursor-pointer">Tech</span>
+                  <span className="block px-4 py-2 cursor-pointer hover:bg-gray-100">
+                    Tech
+                  </span>
                   <AnimatePresence>
                     {isTechDropdownOpen && (
                       <motion.ul
@@ -75,12 +77,10 @@ const Nav: React.FC = () => {
                         className="absolute left-full top-0 mt-0 w-40 bg-white shadow-lg rounded-md"
                       >
                         {["Architecture", "CICD", "Tech Stack"].map((item) => (
-                          <li
-                            key={item}
-                            className="px-4 py-2 hover:bg-gray-100"
-                          >
+                          <li key={item}>
                             <Link
                               href={`/about/tech/${item.replace(" ", "").toLowerCase()}`}
+                              className="block px-4 py-2 hover:bg-gray-100"
                             >
                               {item}
                             </Link>
@@ -91,8 +91,13 @@ const Nav: React.FC = () => {
                   </AnimatePresence>
                 </li>
                 {["Privacy", "Testimonials", "Analytics"].map((item) => (
-                  <li key={item} className="px-4 py-2 hover:bg-gray-100">
-                    <Link href={`/about/${item.toLowerCase()}`}>{item}</Link>
+                  <li key={item}>
+                    <Link
+                      href={`/about/${item.toLowerCase()}`}
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
+                      {item}
+                    </Link>
                   </li>
                 ))}
               </motion.ul>
