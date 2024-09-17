@@ -22,6 +22,12 @@ const Nav: React.FC = () => {
     setter(false);
   };
 
+  const handleLinkClick = () => {
+    // Close all dropdowns when a link is clicked
+    setDropdownOpen(false);
+    setTechDropdownOpen(false);
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto flex justify-start items-center space-x-6 p-4">
@@ -81,6 +87,7 @@ const Nav: React.FC = () => {
                             <Link
                               href={`/about/tech/${item.replace(" ", "").toLowerCase()}`}
                               className="block px-4 py-2 hover:bg-gray-100"
+                              onClick={handleLinkClick}
                             >
                               {item}
                             </Link>
@@ -95,6 +102,7 @@ const Nav: React.FC = () => {
                     <Link
                       href={`/about/${item.toLowerCase()}`}
                       className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={handleLinkClick}
                     >
                       {item}
                     </Link>
