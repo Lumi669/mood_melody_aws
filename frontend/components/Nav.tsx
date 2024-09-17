@@ -38,6 +38,7 @@ const Nav: React.FC = () => {
     // Close all dropdowns when a link is clicked
     setDropdownOpen(false);
     setTechDropdownOpen(false);
+    setSongsDropdownOpen(false);
   };
 
   // Define a union type for the allowed keys
