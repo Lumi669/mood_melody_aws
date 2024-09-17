@@ -1,5 +1,5 @@
 import React from "react";
-import Nav from "@components/Nav";
+import Nav from "@components/NavComponents/Nav";
 import { MediaProvider } from "@context/MediaContext";
 import { RouteProvider } from "@context/RouteContext"; // Import RouteProvider
 import LayoutWrapper from "@components/LayoutWrapper";
