@@ -24,6 +24,7 @@ const MusicPlayer: React.FC = () => {
     isRed,
     isBlue,
     isBrown,
+    audio,
   } = useMedia();
 
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
@@ -36,22 +37,46 @@ const MusicPlayer: React.FC = () => {
   );
   const [sentimentMessage, setSentimentMessage] = useState<string>("");
 
-  // Restore the last played song or state when navigating back to homepage
   useEffect(() => {
     const currentMood = sessionStorage.getItem("currentMood");
     const lastPlayedSong = sessionStorage.getItem("lastPlayedSong");
     const wasPlayingOnHomePage =
       sessionStorage.getItem("wasPlayingOnHomePage") === "true";
+    const wasPausedOnHomePage =
+      sessionStorage.getItem("wasPausedOnHomePage") === "true";
+    const timePoint = sessionStorage.getItem("timePointOfHomePage");
 
-    if (currentMood && lastPlayedSong && wasPlayingOnHomePage) {
+    if (lastPlayedSong) {
       const song = JSON.parse(lastPlayedSong);
-      setCurrentSong(song);
-      playTrack(song.url, song);
-      setIsPlaying(true);
+
+      // Stop any other music playing from other pages
+      if (audio) {
+        audio.pause(); // Stop any other playing audio
+      }
+
+      if (wasPlayingOnHomePage) {
+        setCurrentSong(song);
+        playTrack(song.url, song); // Play the song if it was playing before
+        setIsPlaying(true);
+        setVideoVisible(true);
+        setOriginalViewVisible(false); // Hide the original view when music is playing
+      } else if (wasPausedOnHomePage && timePoint) {
+        setCurrentSong(song);
+        setIsPlaying(false);
+        setVideoVisible(true);
+        setOriginalViewVisible(false); // Restore the paused state
+
+        if (audio) {
+          audio.src = song.url;
+          audio.currentTime = parseFloat(timePoint);
+          audio.pause(); // Keep it paused
+        }
+      }
     } else {
       stopMusic();
+      setOriginalViewVisible(true);
     }
-  }, []);
+  }, [audio]);
 
   const playMusic = (
     mood: "happy" | "sad" | "calm",
@@ -87,22 +112,13 @@ const MusicPlayer: React.FC = () => {
     }, 1000);
   };
 
-  useEffect(() => {
-    if (currentSong) {
-      setOriginalViewVisible(false);
-      setVideoVisible(true);
-    } else {
-      setOriginalViewVisible(true);
-      setVideoVisible(false);
-    }
-  }, [currentSong]);
-
   const handleVideoClick = () => {
     setOriginalViewVisible(true);
     setAnimationActive(false);
     setVideoVisible(false);
     stopMusic();
     sessionStorage.setItem("wasPlayingOnHomePage", "false");
+    sessionStorage.setItem("wasPausedOnHomePage", "true"); // Set it as paused
   };
 
   const OriginalViewPart = () => (
@@ -137,8 +153,6 @@ const MusicPlayer: React.FC = () => {
 
     return "You have no emotion at the moment";
   };
-
-  console.log("ccccc curentSong from MusicPlayer.tsx === ", currentSong);
 
   return (
     <div className="relative min-h-screen px-4">

@@ -57,7 +57,6 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
 
   const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]); // State to manage playlist
 
-  // Function to check if the user is currently on the homepage
   const isHomePage = () => window.location.pathname === "/";
 
   // Fetch mediaData when the component mounts
@@ -74,24 +73,60 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
     fetchMediaData();
   }, []);
 
-  // Initialize the audio element on component mount
   useEffect(() => {
-    audioRef.current = new Audio();
-    const wasPlayingOnHomePage = sessionStorage.getItem("wasPlayingOnHomePage");
+    audioRef.current = new Audio(); // Create a new audio element
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
+  useEffect(() => {
+    const wasPlayingOnHomePage = sessionStorage.getItem("wasPlayingOnHomePage");
+    const wasPausedOnHomePage = sessionStorage.getItem("wasPausedOnHomePage");
+    const timePoint = sessionStorage.getItem("timePointOfHomePage");
+
+    // Check if music was previously playing or paused on the homepage
     if (wasPlayingOnHomePage === "true") {
       const lastPlayedSong = sessionStorage.getItem("lastPlayedSong");
       if (lastPlayedSong) {
         const song = JSON.parse(lastPlayedSong);
-        playTrack(song.url, song);
+        setCurrentSong(song);
+
+        // Stop any other music playing on the other pages
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+
+        playTrack(song.url, song); // Play the homepage music
+        setIsPlaying(true);
+      }
+    } else if (wasPausedOnHomePage === "true" && timePoint) {
+      const lastPlayedSong = sessionStorage.getItem("lastPlayedSong");
+      if (lastPlayedSong) {
+        const song = JSON.parse(lastPlayedSong);
+        setCurrentSong(song);
+
+        // Stop any other music playing from other pages
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+
+        // Restore the paused state
+        if (audioRef.current) {
+          audioRef.current.src = song.url;
+          audioRef.current.currentTime = parseFloat(timePoint);
+        }
+        setIsPlaying(false); // Keep it paused
       }
     }
 
+    // Cleanup: Ensure music stops when leaving the homepage
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
-        audioRef.current.src = "";
-        audioRef.current = null;
       }
     };
   }, []);
@@ -100,10 +135,18 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden" && isHomePage()) {
-        // User is leaving the homepage
+        // Save the homepage's music state
         sessionStorage.setItem(
           "wasPlayingOnHomePage",
           isPlaying ? "true" : "false",
+        );
+        sessionStorage.setItem(
+          "wasPausedOnHomePage",
+          !isPlaying ? "true" : "false",
+        );
+        sessionStorage.setItem(
+          "timePointOfHomePage",
+          audioRef.current?.currentTime.toString() || "0",
         );
       }
     };
@@ -118,55 +161,45 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   const playTrack = (url: string, song?: MusicWithImageSimplified) => {
     if (!audioRef.current) return;
 
-    if (currentTrack === url && isPlaying) {
-      return;
-    } else if (currentTrack === url && !isPlaying) {
-      togglePlayPause();
-      return;
-    }
-
-    audioRef.current.src = url;
-    audioRef.current
-      .play()
-      .then(() => {
-        setIsPlaying(true);
-        setCurrentTrack(url);
-
-        // Only set wasPlayingOnHomePage if on the homepage
-        if (isHomePage()) {
-          sessionStorage.setItem("wasPlayingOnHomePage", "true");
-        }
-
-        if (song) {
-          setCurrentSong(song);
-          addToPlaylist22(song);
+    // Only play the track if it's not the current track or if the track is paused
+    if (audioRef.current.src !== url || audioRef.current.paused) {
+      audioRef.current.src = url;
+      audioRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+          setCurrentTrack(url);
           if (isHomePage()) {
-            // Update the session storage with the last played song
-            sessionStorage.setItem("lastPlayedSong", JSON.stringify(song));
+            sessionStorage.setItem("wasPlayingOnHomePage", "true");
+            sessionStorage.setItem("wasPausedOnHomePage", "false");
           }
-        }
-      })
-      .catch((error) => console.error("Failed to play audio:", error));
+
+          if (song) {
+            setCurrentSong(song);
+            addToPlaylist22(song);
+            if (isHomePage()) {
+              sessionStorage.setItem("lastPlayedSong", JSON.stringify(song));
+            }
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to play audio:", error);
+        });
+    }
   };
 
   const pauseTrack = () => {
     if (audioRef.current) {
       audioRef.current.pause();
       setIsPlaying(false);
-    }
-  };
 
-  const togglePlayPause = () => {
-    if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current
-          .play()
-          .then(() => {
-            setIsPlaying(true);
-          })
-          .catch((error) => console.error("Failed to play audio:", error));
-      } else {
-        pauseTrack();
+      if (isHomePage()) {
+        sessionStorage.setItem("wasPausedOnHomePage", "true");
+        sessionStorage.setItem(
+          "timePointOfHomePage",
+          audioRef.current.currentTime.toString(),
+        );
+        sessionStorage.setItem("wasPlayingOnHomePage", "false");
       }
     }
   };
@@ -178,11 +211,30 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       setIsPlaying(false);
       setCurrentTrack(null);
       setCurrentSong(null);
-      // Only set wasPlayingOnHomePage if on the homepage
+
       if (isHomePage()) {
         sessionStorage.setItem("wasPlayingOnHomePage", "false");
-        // Clear the last played song when music is stopped
+        sessionStorage.setItem("wasPausedOnHomePage", "false");
+
         sessionStorage.removeItem("lastPlayedSong");
+        sessionStorage.removeItem("timePointOfHomePage");
+      }
+    }
+  };
+
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+            sessionStorage.setItem("wasPlayingOnHomePage", "true");
+            sessionStorage.setItem("wasPausedOnHomePage", "false");
+          })
+          .catch((error) => console.error("Failed to play audio:", error));
+      } else {
+        pauseTrack();
       }
     }
   };
@@ -247,7 +299,6 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
         currentSong,
         setCurrentSong,
         isPlaying,
-
         setIsPlaying,
         playTrack,
         pauseTrack,
