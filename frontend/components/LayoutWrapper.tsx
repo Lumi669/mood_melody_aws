@@ -17,6 +17,8 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
       setView(null); // Initial load
     } else if (previousPath.current === pathname) {
       setView("reload"); // Reload
+      sessionStorage.removeItem("currentMessage");
+      sessionStorage.removeItem("currentMood");
     } else {
       setView("navigate"); // Navigation
     }

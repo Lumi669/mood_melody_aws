@@ -8,6 +8,8 @@ import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
 import Image from "next/image";
 
+import { useRouteState } from "@context/RouteContext"; // Import the custom hook
+
 const MusicPlayer: React.FC = () => {
   const {
     mediaData,
@@ -27,6 +29,8 @@ const MusicPlayer: React.FC = () => {
     audio,
   } = useMedia();
 
+  const { view } = useRouteState();
+
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
   const [isAnimationActive, setAnimationActive] = useState(false);
@@ -35,7 +39,7 @@ const MusicPlayer: React.FC = () => {
   const [moodSource, setMoodSource] = useState<"button" | "analysis" | null>(
     null,
   );
-  const [sentimentMessage, setSentimentMessage] = useState<string>("");
+  // const [currentMessage, setCurrentMessage] = useState<string>("");
 
   useEffect(() => {
     const currentMood = sessionStorage.getItem("currentMood");
@@ -85,6 +89,19 @@ const MusicPlayer: React.FC = () => {
     stopMusic();
     setMoodSource(source);
     sessionStorage.setItem("currentMood", mood);
+
+    // Determine and store the message based on the mood
+    let message = "";
+    if (mood === "happy") {
+      message = "You seem happy";
+    } else if (mood === "sad") {
+      message = "You seem sad";
+    } else if (mood === "calm") {
+      message = "You seem peaceful";
+    }
+
+    // Store the message in sessionStorage
+    sessionStorage.setItem("currentMessage", message);
 
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
     const randomSong =
@@ -136,22 +153,20 @@ const MusicPlayer: React.FC = () => {
   );
 
   const handleSentimentAnalysis = useCallback((message: string) => {
-    setSentimentMessage(message);
+    // setSentimentMessage(message);
     setMoodSource("analysis");
     sessionStorage.setItem("moodSource", "analysis");
-    sessionStorage.setItem("sentimentMessage", message);
+    sessionStorage.setItem("currentMessage", message);
   }, []);
 
   const getMoodMessage = () => {
-    if (moodSource === "analysis") {
-      return sentimentMessage;
-    } else if (moodSource === "button") {
-      if (isRed) return "You seem happy";
-      if (isBlue) return "You seem sad";
-      if (isBrown) return "You seem peaceful";
+    const displayMessage = sessionStorage.getItem("currentMessage");
+    if (displayMessage) {
+      return displayMessage;
+    } else {
+      console.log("vvvvvvvv");
+      return "You have no mood at the moment";
     }
-
-    return "You have no emotion at the moment";
   };
 
   return (
