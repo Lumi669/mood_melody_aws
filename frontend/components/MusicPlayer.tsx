@@ -8,7 +8,7 @@ import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
 import Image from "next/image";
 
-import { useRouteState } from "@context/RouteContext"; // Import the custom hook
+// import { useRouteState } from "@context/RouteContext"; // Import the custom hook
 
 const MusicPlayer: React.FC = () => {
   const {
@@ -29,7 +29,7 @@ const MusicPlayer: React.FC = () => {
     audio,
   } = useMedia();
 
-  const { view } = useRouteState();
+  // const { view } = useRouteState();
 
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);

@@ -27,7 +27,6 @@ const Nav: React.FC = () => {
         {/* Songs Dropdown */}
         <SongsDropdown />
         <NavLink href="/live">Live</NavLink>
-        <NavLink href="/test">Test</NavLink>
 
         <AboutDropdown />
 
