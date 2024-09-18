@@ -8,8 +8,6 @@ import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
 import Image from "next/image";
 
-// import { useRouteState } from "@context/RouteContext"; // Import the custom hook
-
 const MusicPlayer: React.FC = () => {
   const {
     mediaData,
@@ -21,15 +19,12 @@ const MusicPlayer: React.FC = () => {
     setCurrentSong,
     currentTrack,
     currentSong,
-    isPlaying,
     setIsPlaying,
     isRed,
     isBlue,
     isBrown,
     audio,
   } = useMedia();
-
-  // const { view } = useRouteState();
 
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
   const [isOriginalViewVisible, setOriginalViewVisible] = useState(true);
@@ -39,7 +34,6 @@ const MusicPlayer: React.FC = () => {
   const [moodSource, setMoodSource] = useState<"button" | "analysis" | null>(
     null,
   );
-  // const [currentMessage, setCurrentMessage] = useState<string>("");
 
   useEffect(() => {
     const currentMood = sessionStorage.getItem("currentMood");

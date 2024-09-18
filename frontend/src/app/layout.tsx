@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "@components/NavComponents/Nav";
 import { MediaProvider } from "@context/MediaContext";
-// import { RouteProvider } from "@context/RouteContext"; // Import RouteProvider
+
 import LayoutWrapper from "@components/LayoutWrapper";
 import GlobalControls from "@components/GlobalControls";
 import "./styles/globals.css";
@@ -49,7 +49,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <RouteProvider> */}
         <MediaProvider>
           <LayoutWrapper>
             <Nav />
@@ -61,7 +60,6 @@ export default function RootLayout({
             <audio id="audio" />
           </LayoutWrapper>
         </MediaProvider>
-        {/* </RouteProvider> */}
       </body>
     </html>
   );
