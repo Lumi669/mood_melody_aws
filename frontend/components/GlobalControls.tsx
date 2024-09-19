@@ -59,6 +59,18 @@ const GlobalControls: React.FC = () => {
     updatePlaylist(updatedPlaylist);
   };
 
+  const handleStopMusic = () => {
+    // Stop music through context
+    stopMusic();
+    sessionStorage.setItem("wasPlayingOnHomePage", "false");
+    sessionStorage.setItem("wasPausedOnHomePage", "false");
+    sessionStorage.removeItem("lastPlayedSong");
+    sessionStorage.removeItem("timePointOfHomePage");
+
+    // Dispatch any events or callbacks  notify other components e.g MusicPlayer.tsx
+    window.dispatchEvent(new Event("musicStopped"));
+  };
+
   return (
     <div
       className={`fixed bottom-0 left-0 w-full p-4 bg-gray-800 text-white flex flex-col items-center justify-center z-50 transition-all duration-500 ${animate ? "animate-fly-in" : ""}`}
@@ -80,7 +92,7 @@ const GlobalControls: React.FC = () => {
             {isPlaying ? "Pause" : "Play "}
           </button>
           <button
-            onClick={stopMusic}
+            onClick={handleStopMusic}
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           >
             Stop Music

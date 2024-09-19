@@ -132,6 +132,26 @@ const MusicPlayer: React.FC = () => {
     sessionStorage.setItem("wasPausedOnHomePage", "true"); // Set it as paused
   };
 
+  useEffect(() => {
+    const handleMusicStopped = () => {
+      setOriginalViewVisible(true);
+      setAnimationActive(false);
+      setVideoVisible(false);
+      setCurrentMusicName(null);
+    };
+
+    // Listen for the 'musicStopped' event to reset the UI state
+    // the 'musicStopped' event is dispacthed by the handleStopMusic function in GlobalControls.tsx
+    // which pass the event to MusicPlayer, which in turn, updates the component state e.g setting isOriginalViewVisible to true,
+    // hiding any animations, and clearing the current music data.
+    window.addEventListener("musicStopped", handleMusicStopped);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("musicStopped", handleMusicStopped);
+    };
+  }, []);
+
   const OriginalViewPart = () => (
     <>
       <div>
