@@ -33,7 +33,7 @@ const Aboutpage = () => {
               <li className="mb-4">
                 <Link
                   href="/about/tech/architecture"
-                  className="text-blue-500 font-bold no-underline hover:text-blue-700 text-xl"
+                  className="text-blue-700 font-bold no-underline hover:underline text-xl"
                 >
                   Architecture
                 </Link>
@@ -41,7 +41,7 @@ const Aboutpage = () => {
               <li className="mb-4">
                 <Link
                   href="/about/tech/cicd"
-                  className="text-blue-500 font-bold no-underline hover:text-blue-700 text-xl"
+                  className="text-blue-700 font-bold no-underline hover:underline text-xl"
                 >
                   CI/CD
                 </Link>
@@ -49,7 +49,7 @@ const Aboutpage = () => {
               <li className="mb-4">
                 <Link
                   href="/about/tech/techstack"
-                  className="text-blue-500 font-bold no-underline hover:text-blue-700 text-xl"
+                  className="text-blue-700 font-bold no-underline hover:underline text-xl"
                 >
                   Tech Stack
                 </Link>
