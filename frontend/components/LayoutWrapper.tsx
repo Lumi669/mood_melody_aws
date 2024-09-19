@@ -44,7 +44,7 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     previousPath.current = pathname;
     console.log("444444 layout.tsx ...");
   }, [pathname]);
-  console.log("555555 layout.tsx ...");
+  console.log("555555 layout.tsx .....");
 
   // Set the background color
   let backgroundColor = "bg-white"; // Default to white
