@@ -5,7 +5,7 @@ import { useMedia } from "@context/MediaContext";
 import CustomImage from "components/CustomImage";
 import { extractAuthorName, extractMusicName } from "@utils/extractMusicInfo";
 
-const Liveplay = () => {
+const LivePlay = () => {
   const [hasImage, setHasImage] = useState(false);
   const { currentTrack, currentSong, isPlaying } = useMedia();
   console.log("current song from live.tsx === ", currentSong);
@@ -73,4 +73,4 @@ const Liveplay = () => {
   );
 };
 
-export default Liveplay;
+export default LivePlay;

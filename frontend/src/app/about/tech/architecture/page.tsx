@@ -1,7 +1,7 @@
 import React from "react";
 
-const Architecturepage = () => {
+const ArchitecturePage = () => {
   return <div>This is Architecture page</div>;
 };
 
-export default Architecturepage;
+export default ArchitecturePage;

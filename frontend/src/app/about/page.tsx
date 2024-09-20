@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const Aboutpage = () => {
+const AboutPage = () => {
   const router = useRouter();
 
   return (
@@ -74,4 +74,4 @@ const Aboutpage = () => {
   );
 };
 
-export default Aboutpage;
+export default AboutPage;

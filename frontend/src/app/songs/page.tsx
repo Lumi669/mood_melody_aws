@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link"; // Import the Link component from Next.js
 
-const Songspage = () => {
+const SongsPage = () => {
   return (
     <div className="flex items-start justify-center h-screen">
       <p className="mt-20 text-center text-2xl">
@@ -25,4 +25,4 @@ const Songspage = () => {
   );
 };
 
-export default Songspage;
+export default SongsPage;

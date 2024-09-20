@@ -1,6 +1,6 @@
 import React from "react";
 
-const Privacypage = () => {
+const PrivacyPage = () => {
   return (
     <div className="h-screen overflow-y-scroll px-4  pb-80 p-10">
       <div className="max-w-5xl mx-auto">
@@ -201,4 +201,4 @@ const Privacypage = () => {
   );
 };
 
-export default Privacypage;
+export default PrivacyPage;
