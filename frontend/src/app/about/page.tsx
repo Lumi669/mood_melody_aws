@@ -56,7 +56,7 @@ const Aboutpage = () => {
               </li>
             </ul>
           </div>
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-16">
             <button
               type="button"
               onClick={() => router.push("/contact")}
