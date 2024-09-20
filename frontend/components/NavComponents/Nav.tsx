@@ -9,7 +9,7 @@ import AboutDropdown from "./AboutDropdown";
 
 const Nav: React.FC = () => {
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md">
+    <nav className="sticky top-0 z-50 bg-gray-50 shadow-md">
       <div className="container mx-auto flex justify-start items-center space-x-6 p-4">
         {/* Logo */}
         <Link href="/">

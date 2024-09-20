@@ -9,7 +9,7 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
 
   // Set the background color based on the states
   useEffect(() => {
-    let color = "bg-white"; // Default to white
+    let color = "bg-gray-50"; // Default to white
     if (isRed) color = "bg-light-red";
     else if (isBlue) color = "bg-light-blue";
     else if (isBrown) color = "bg-gray-400";
@@ -21,7 +21,7 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     console.log("Background color changed to:", backgroundColor);
 
-    if (backgroundColor === "bg-white") {
+    if (backgroundColor === "bg-gray-50") {
       console.log("Background is white. Clearing session storage.");
       sessionStorage.removeItem("currentMessage");
       sessionStorage.removeItem("currentMood");
