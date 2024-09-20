@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const SongsPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-8">
+    <div className="flex flex-col items-center justify-center h-screen bg-no-mood">
       {/* Title with a playful style */}
       <h1 className="text-5xl font-extrabold text-pink-600 mb-8 drop-shadow-lg">
         Welcome to the Music Garden!

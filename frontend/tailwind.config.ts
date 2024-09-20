@@ -20,6 +20,16 @@ const config: Config = {
       colors: {
         "light-red": "#fdba74", // Customize light orange
         "light-blue": "#93c5fd", // Customize light blue
+        beige: {
+          100: "#faf4e1", // Light Beige
+          200: "#f5e6c8", // Medium Beige
+          300: "#edd1a3", // Darker Beige
+        },
+        pastel: {
+          100: "#f7e6f8", // Light Pastel Pink
+          200: "#e6d8f7", // Light Pastel Purple
+          300: "#d8e6f7", // Light Pastel Blue
+        },
       },
       keyframes: {
         "fly-in": {

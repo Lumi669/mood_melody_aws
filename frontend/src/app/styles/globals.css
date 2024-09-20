@@ -61,3 +61,23 @@ body {
          hover:bg-pink-500 hover:shadow-lg focus:outline-none
          focus:ring-4 focus:ring-pink-200 transition-all duration-200 ease-in-out;
 }
+
+/* Warm and cute gradient backgournd for happy mood */
+.bg-warm-gradient {
+  @apply bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50;
+}
+
+/* Cold and cute gradient backgournd for happy mood */
+.bg-cold-gradient {
+  @apply bg-gradient-to-br from-blue-100 via-teal-200 to-indigo-300;
+}
+
+/* Neutral and cute gradient backgournd for calm mood */
+.bg-neutral-gradient {
+  @apply bg-gradient-to-br from-gray-100 via-beige-200 to-pastel-300;
+}
+
+/* Default backgournd for no mood */
+.bg-no-mood {
+  @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200; /* Soft neutral gradient */
+}
