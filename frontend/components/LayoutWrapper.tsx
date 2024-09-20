@@ -10,9 +10,12 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   // Set the background color based on the states
   useEffect(() => {
     let color = "bg-gray-50"; // Default to white
-    if (isRed) color = "bg-light-red";
-    else if (isBlue) color = "bg-light-blue";
-    else if (isBrown) color = "bg-gray-400";
+    // if (isRed) color = "bg-light-red";
+    if (isRed) color = "bg-purple-200";
+    // else if (isBlue) color = "bg-light-blue";
+    else if (isBlue) color = "bg-blue-200";
+    // else if (isBrown) color = "bg-gray-400";
+    else if (isBrown) color = "bg-gray-200";
 
     setBackgroundColor(color);
   }, [isRed, isBlue, isBrown]);
