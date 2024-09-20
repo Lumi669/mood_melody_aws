@@ -1,11 +1,34 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import { useMedia } from "@context/MediaContext";
 
 const SongsPage = () => {
+  const { isRed, isBlue, isBrown } = useMedia();
+
+  // Determine text color based on context values
+  const getTextColor = () => {
+    if (isRed) return "text-pink-600";
+    if (isBlue) return "text-blue-500";
+    if (isBrown) return "text-amber-900";
+    return "text-gray-700";
+  };
+  // Determine page background color based on context values
+  const getPageBackgroundColor = () => {
+    if (isRed) return "bg-warm-gradient";
+    if (isBlue) return "bg-cold-gradient";
+    if (isBrown) return "bg-neutral-gradient";
+    return "bg-no-mood";
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-no-mood">
+    <div
+      className={`flex flex-col items-center justify-center h-screen ${getPageBackgroundColor()}`}
+    >
       {/* Title with a playful style */}
-      <h1 className="text-5xl font-extrabold text-pink-600 mb-8 drop-shadow-lg">
+      <h1
+        className={`text-5xl font-extrabold mb-8 drop-shadow-lg ${getTextColor()}`}
+      >
         Welcome to the Music Garden!
       </h1>
 
