@@ -63,8 +63,12 @@ body {
 }
 
 /* Warm and cute gradient backgournd for happy mood */
-.bg-warm-gradient {
+/* .bg-warm-gradient {
   @apply bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50;
+} */
+
+.bg-warm-gradient {
+  @apply bg-gradient-to-br from-pink-200 via-purple-100  to-blue-100;
 }
 
 /* Cold and cute gradient backgournd for happy mood */
@@ -73,8 +77,11 @@ body {
 }
 
 /* Neutral and cute gradient backgournd for calm mood */
-.bg-neutral-gradient {
+/* .bg-neutral-gradient {
   @apply bg-gradient-to-br from-gray-100 via-beige-200 to-pastel-300;
+} */
+.bg-neutral-gradient {
+  @apply bg-gradient-to-br from-yellow-500 via-beige-300 to-pastel-100;
 }
 
 /* Default backgournd for no mood */

@@ -13,18 +13,9 @@ const SongsPage = () => {
     if (isBrown) return "text-amber-900";
     return "text-gray-700";
   };
-  // Determine page background color based on context values
-  const getPageBackgroundColor = () => {
-    if (isRed) return "bg-warm-gradient";
-    if (isBlue) return "bg-cold-gradient";
-    if (isBrown) return "bg-neutral-gradient";
-    return "bg-no-mood";
-  };
 
   return (
-    <div
-      className={`flex flex-col items-center justify-center h-screen ${getPageBackgroundColor()}`}
-    >
+    <div className="flex flex-col items-center justify-center h-screen ">
       {/* Title with a playful style */}
       <h1
         className={`text-5xl font-extrabold mb-8 drop-shadow-lg ${getTextColor()}`}
