@@ -77,9 +77,9 @@ body {
 }
 
 /* Neutral and cute gradient backgournd for calm mood */
-/* .bg-neutral-gradient {
+.bg-neutral-gradient {
   @apply bg-gradient-to-br from-gray-100 via-beige-200 to-pastel-300;
-} */
+}
 .bg-neutral-gradient {
   @apply bg-gradient-to-br from-yellow-500 via-beige-300 to-pastel-100;
 }

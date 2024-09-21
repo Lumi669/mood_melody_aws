@@ -2,23 +2,20 @@
 import React from "react";
 import Link from "next/link";
 import { useMedia } from "@context/MediaContext";
+import { getTextColor } from "@utils/getTextColor";
 
 const SongsPage = () => {
   const { isRed, isBlue, isBrown } = useMedia();
-
-  // Determine text color based on context values
-  const getTextColor = () => {
-    if (isRed) return "text-pink-600";
-    if (isBlue) return "text-blue-500";
-    if (isBrown) return "text-amber-900";
-    return "text-gray-700";
-  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen ">
       {/* Title with a playful style */}
       <h1
-        className={`text-5xl font-extrabold mb-8 drop-shadow-lg ${getTextColor()}`}
+        className={`text-5xl font-extrabold mb-8 drop-shadow-lg ${getTextColor(
+          isRed,
+          isBlue,
+          isBrown,
+        )}`}
       >
         Welcome to the Music Garden!
       </h1>

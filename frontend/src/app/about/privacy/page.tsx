@@ -1,10 +1,23 @@
+"use client";
+
 import React from "react";
+import { useMedia } from "@context/MediaContext";
+import { getTextColor } from "@utils/getTextColor";
 
 const PrivacyPage = () => {
+  const { isRed, isBlue, isBrown } = useMedia();
   return (
     <div className="h-screen overflow-y-scroll px-4  pb-80 p-10">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Privacy Policy</h1>
+        <h1
+          className={`text-3xl font-extrabold mb-4 ${getTextColor(
+            isRed,
+            isBlue,
+            isBrown,
+          )}`}
+        >
+          Privacy Policy
+        </h1>
         <p className="text-gray-700 mb-4">
           This Privacy Policy explains how this app handles your data. Please
           note that this app is a demonstration project created to showcase my
@@ -12,7 +25,13 @@ const PrivacyPage = () => {
           Therefore, it does not actively collect or store personal data.
         </p>
 
-        <h2 className="text-xl font-semibold mb-2">
+        <h2
+          className={`text-xl font-semibold mb-2 ${getTextColor(
+            isRed,
+            isBlue,
+            isBrown,
+          )}`}
+        >
           Content Usage and Attribution
         </h2>
         <p className="text-gray-700 mb-4">
