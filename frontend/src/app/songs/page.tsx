@@ -23,17 +23,11 @@ const SongsPage = () => {
       {/* Description with a soft tone */}
       <p className="text-xl text-purple-600 mb-6 text-center max-w-xl leading-relaxed">
         Discover melodies that match your vibe. Feel free to browse{" "}
-        <Link
-          href="/songs/allmusic"
-          className="text-blue-500 underline hover:text-blue-700"
-        >
+        <Link href="/songs/allmusic" className="text-blue-700 hover:underline">
           all music
         </Link>{" "}
         or check out{" "}
-        <Link
-          href="/songs/mixtape"
-          className="text-blue-500 underline hover:text-blue-700"
-        >
+        <Link href="/songs/mixtape" className="text-blue-700 hover:underline">
           your played list
         </Link>
         .

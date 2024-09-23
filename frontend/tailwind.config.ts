@@ -43,6 +43,12 @@ const config: Config = {
     },
   },
   plugins: [],
-  safelist: ["bg-light-red", "bg-light-blue"],
+  safelist: [
+    "bg-light-red",
+    "bg-light-blue",
+    "text-pink-600", // Add your dynamic classes here
+    "text-blue-500",
+    "text-amber-900",
+  ],
 };
 export default config;

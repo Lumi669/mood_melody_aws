@@ -25,13 +25,7 @@ const PrivacyPage = () => {
           Therefore, it does not actively collect or store personal data.
         </p>
 
-        <h2
-          className={`text-xl font-semibold mb-2 ${getTextColor(
-            isRed,
-            isBlue,
-            isBrown,
-          )}`}
-        >
+        <h2 className="text-xl font-semibold mb-2">
           Content Usage and Attribution
         </h2>
         <p className="text-gray-700 mb-4">
