@@ -225,7 +225,9 @@ const PrivacyPage = () => {
           information, such as their username and email address, stored within
           this app. If you would like to exercise these rights or have any
           concerns about how your data is being handled, please contact me at{" "}
-          {email}.
+          <a href={`mailto:${email}`} className="text-blue-500 hover:underline">
+            {email}
+          </a>
         </p>
 
         <h2 className="text-xl font-semibold mb-2">Disclaimer</h2>
