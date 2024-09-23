@@ -236,7 +236,7 @@ const PrivacyPage = () => {
           user data, specifically usernames and email addresses, but no other
           personal information. The collected data is used solely for creating
           and managing user accounts and is not shared with third parties,
-          except as required for the app's functionality. This app is not
+          except as required for the app&apos;s functionality. This app is not
           intended for commercial use.
         </p>
       </div>

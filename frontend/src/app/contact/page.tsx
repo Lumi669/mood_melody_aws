@@ -165,10 +165,10 @@ const ContactPage = () => {
             <div>
               <h1 className="text-4xl font-bold mb-4 text-white">Contact me</h1>
               <p className="text-lg text-gray-100 mb-4">
-                Interested in collaborating? If you're looking for a passionate
-                developer to join your team, whether full-time or as a
-                subcontractor, or if you'd like to discuss potential cooperation
-                on a project, I'd love to hear from you!
+                Interested in collaborating? If you&apos;re looking for a
+                passionate developer to join your team, whether full-time or as
+                a subcontractor, or if you&apos;d like to discuss potential
+                cooperation on a project, I&apos;d love to hear from you!
               </p>
               <p className="text-lg text-gray-100">
                 Feel free to reach out using the form below or directly via your
@@ -192,7 +192,7 @@ const ContactPage = () => {
         <h2 className="text-2xl font-bold mb-6">Additional Content</h2>
         <p className="text-gray-700 mb-4">
           This section can be used to include additional information such as a
-          contact form, testimonials, or anything else you'd like to share.
+          contact form, testimonials, or anything else you&apos;d like to share.
         </p>
         <p className="text-gray-700 mb-4">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
