@@ -4,9 +4,9 @@
 
 // const ContactPage = () => {
 //   return (
-//     <div className="w-full h-screen overflow-hidden">
-//       {/* Container with gradient background */}
-//       <div className="w-full h-[90vh] flex items-center justify-center bg-gradient-to-r from-orange-500 to-black via-white from-20% via-70% to-90%">
+//     <div className="w-full h-screen flex flex-col overflow-hidden">
+//       {/* Container with gradient background - Fixed top section */}
+//       <div className="flex-none w-full h-[40vh] flex items-center justify-center bg-gradient-to-r from-orange-500 to-black via-white from-20% via-70% to-90%">
 //         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-4 max-w-5xl mx-auto">
 //           {/* Text content */}
 //           <div className="space-y-4">
@@ -37,12 +37,32 @@
 //           </div>
 //         </div>
 //       </div>
-//       {/* Additional content that will be scrollable */}
-//       <div className="h-[10vh] overflow-y-auto">
+//       {/* Scrollable content section */}
+//       <div className="flex-grow overflow-y-auto bg-gray-100 p-4 border-t border-gray-300">
 //         {/* Add more content here */}
 //         <p>
 //           Additional content goes here. Users can scroll to view this content.
 //         </p>
+//         <p>Content line 1...</p>
+//         <p>Content line 2...</p>
+//         <p>Content line 3...</p>
+//         <p>Content line 4...</p>
+//         <p>Content line 5...</p>
+//         <p>Content line 6...</p>
+//         <p>Content line 7...</p>
+//         <p>Content line 8...</p>
+//         <p>Content line 9...</p>
+//         <p>Content line 10...</p>
+//         <p>Content line 11...</p>
+//         <p>Content line 12...</p>
+
+//         <p>Content line 6...</p>
+//         <p>Content line 7...</p>
+//         <p>Content line 8...</p>
+//         <p>Content line 9...</p>
+//         <p>Content line 10...</p>
+//         <p>Content line 11...</p>
+//         <p>Content line 12...</p>
 //       </div>
 //     </div>
 //   );
@@ -55,9 +75,9 @@ import React from "react";
 
 const ContactPage = () => {
   return (
-    <div className="w-full h-screen flex flex-col overflow-hidden">
-      {/* Container with gradient background - Fixed top section */}
-      <div className="flex-none w-full h-[40vh] flex items-center justify-center bg-gradient-to-r from-orange-500 to-black via-white from-20% via-70% to-90%">
+    <div className="min-h-screen flex flex-col px-4 py-10">
+      {/* Gradient background and content */}
+      <div className="w-full flex flex-col items-center justify-center py-12 bg-gradient-to-r from-orange-500 to-black via-white from-20% via-70% to-90%">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-4 max-w-5xl mx-auto">
           {/* Text content */}
           <div className="space-y-4">
@@ -88,24 +108,41 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
-      {/* Scrollable content section */}
-      <div className="flex-grow overflow-y-auto bg-gray-100 p-4 border-t border-gray-300">
-        {/* Add more content here */}
-        <p>
-          Additional content goes here. Users can scroll to view this content.
+
+      {/* Additional content section */}
+      <div className="w-full max-w-5xl mx-auto mt-10 bg-white p-6 border-t border-gray-300">
+        <h2 className="text-2xl font-bold mb-4">Additional Content</h2>
+        <p className="text-gray-700 mb-4">
+          This section can be used to include additional information such as a
+          contact form, testimonials, or anything else you'd like to share.
         </p>
-        <p>Content line 1...</p>
-        <p>Content line 2...</p>
-        <p>Content line 3...</p>
-        <p>Content line 4...</p>
-        <p>Content line 5...</p>
-        <p>Content line 6...</p>
-        <p>Content line 7...</p>
-        <p>Content line 8...</p>
-        <p>Content line 9...</p>
-        <p>Content line 10...</p>
-        <p>Content line 11...</p>
-        <p>Content line 12...</p>
+        <p className="text-gray-700 mb-4">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
+          odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla
+          quis sem at nibh elementum imperdiet.
+        </p>
+        <p className="text-gray-700 mb-4">
+          Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue
+          semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
+        </p>
+        <p className="text-gray-700 mb-4">
+          Class aptent taciti sociosqu ad litora torquent per conubia nostra,
+          per inceptos himenaeos. Curabitur sodales ligula in libero.
+        </p>
+        <p className="text-gray-700 mb-4">
+          Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh.
+          Aenean quam. In scelerisque sem at dolor. Maecenas mattis.
+        </p>
+        <p className="text-gray-700 mb-4">
+          Sed convallis tristique sem. Proin ut ligula vel nunc egestas
+          porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non,
+          massa.
+        </p>
+        <p className="text-gray-700 mb-4">
+          Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus
+          metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque
+          volutpat condimentum velit.
+        </p>
       </div>
     </div>
   );
