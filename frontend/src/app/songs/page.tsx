@@ -26,12 +26,15 @@ const SongsPage = () => {
           Discover melodies that match your vibe. Feel free to browse{" "}
           <Link
             href="/songs/allmusic"
-            className="text-blue-700 hover:underline"
+            className="text-blue-500 underline hover:text-blue-700"
           >
             all music
           </Link>{" "}
           or check out{" "}
-          <Link href="/songs/mixtape" className="text-blue-700 hover:underline">
+          <Link
+            href="/songs/mixtape"
+            className="text-blue-500 underline hover:text-blue-700"
+          >
             your played list
           </Link>
           .
@@ -39,7 +42,7 @@ const SongsPage = () => {
         {/* Button area styled with a cute look */}
         <div className="flex justify-center gap-6">
           <Link href="/songs/allmusic">
-            <div className="bg-blue-300 text-white px-8 py-4 rounded-full hover:bg-blue-400 transition text-lg font-semibold shadow-lg cursor-pointer">
+            <div className="bg-blue-300 text-white px-8 py-4 rounded-full underlined hover:bg-blue-400 transition text-lg font-semibold shadow-md cursor-pointer">
               All Music
             </div>
           </Link>
