@@ -1,11 +1,15 @@
 "use client";
 
+// require("dotenv").config();
+
 import React from "react";
 import { useMedia } from "@context/MediaContext";
 import { getTextColor } from "@utils/getTextColor";
 
 const PrivacyPage = () => {
   const { isRed, isBlue, isBrown } = useMedia();
+  const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
+
   return (
     <div className="h-screen overflow-y-scroll px-4  pb-80 p-10">
       <div className="max-w-5xl mx-auto">
@@ -47,13 +51,13 @@ const PrivacyPage = () => {
           <li>
             Music from{" "}
             <a
-              href="https://pixabay.com/"
+              href="https://artlist.io/"
               className="text-blue-500 hover:underline"
               target="_blank"
             >
-              Pixabay
+              Artlist
             </a>
-            , licensed for free use.
+            , all song titles and artists are mentioned on the music page.
           </li>
         </ul>
 
@@ -151,8 +155,11 @@ const PrivacyPage = () => {
         <h2 className="text-xl font-semibold mb-2">Types of Data Collected</h2>
         <ul className="list-disc pl-6 mb-4">
           <li>
-            <strong>Personal Information:</strong> This app does not collect
-            personal information like names or email addresses.
+            <strong>Personal Information:</strong> This app may collect personal
+            information such as usernames and email addresses during the user
+            registration process. This information is used solely for creating
+            and managing user accounts, and to provide a personalized experience
+            within the app.
           </li>
           <li>
             <strong>Usage Data:</strong> The app may track how users navigate
@@ -176,9 +183,12 @@ const PrivacyPage = () => {
           Data Sharing and Disclosure
         </h2>
         <p className="text-gray-700 mb-4">
-          No data is shared with third parties. If third-party services (such as
-          analytics tools) are used, they may collect data as per their privacy
-          policies.
+          No personal data is shared with third parties for marketing or
+          advertising purposes. However, if third-party services (such as
+          analytics tools) are used, they may collect and process data in
+          accordance with their own privacy policies. Please review the privacy
+          policies of these third-party services to understand how they handle
+          your data.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">Data Security</h2>
@@ -190,24 +200,29 @@ const PrivacyPage = () => {
 
         <h2 className="text-xl font-semibold mb-2">User Rights</h2>
         <p className="text-gray-700 mb-4">
-          Since this is a demonstration app, no real data is collected, stored,
-          or processed. As such, users do not have personal data rights to
-          request access, deletion, or correction.
+          Users have the right to access, update, or delete their personal
+          information, such as their username and email address, stored within
+          this app. If you would like to exercise these rights or have any
+          concerns about how your data is being handled, please contact us at{" "}
+          {email}.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">Contact Information</h2>
         <p className="text-gray-700 mb-4">
           If you have any questions or concerns about this Privacy Policy,
-          please contact me at [your-email@example.com].
+          please contact me at {email}.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">
           Disclaimer for Demo Purposes
         </h2>
         <p className="text-gray-700 mb-4">
-          This app is for demonstration purposes only and does not collect or
-          process real user data. Any data displayed is purely fictitious or
-          anonymized.
+          This app is for demonstration purposes. It may collect and store real
+          user data, specifically usernames and email addresses, but no other
+          personal information. The collected data is used solely for creating
+          and managing user accounts and is not shared with third parties,
+          except as required for the app's functionality. This app is not
+          intended for commercial use.
         </p>
       </div>
     </div>
