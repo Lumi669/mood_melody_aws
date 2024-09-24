@@ -150,7 +150,7 @@ const ContactForm: React.FC = () => {
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="recruiters" className="ml-2 text-sm">
-                Recruiters
+                Recruiter
               </label>
             </div>
             <div className="flex items-center">
@@ -162,7 +162,7 @@ const ContactForm: React.FC = () => {
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="investors" className="ml-2 text-sm">
-                Investors
+                Investor
               </label>
             </div>
             <div className="flex items-center">
@@ -174,7 +174,7 @@ const ContactForm: React.FC = () => {
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="mentors" className="ml-2 text-sm">
-                Mentors
+                Mentor
               </label>
             </div>
             <div className="flex items-center">
@@ -186,7 +186,7 @@ const ContactForm: React.FC = () => {
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="partners" className="ml-2 text-sm">
-                Partners
+                Partner
               </label>
             </div>
             <div className="flex items-center">
