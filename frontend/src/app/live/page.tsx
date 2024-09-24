@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useMedia } from "@context/MediaContext";
-import CustomImage from "components/CustomImage";
+import CustomImage from "@components/CustomImage";
 import { extractAuthorName, extractMusicName } from "@utils/extractMusicInfo";
 
 const LivePlay = () => {
