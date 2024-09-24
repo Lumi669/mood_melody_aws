@@ -54,7 +54,6 @@ const ContactPage = () => {
 
         {/* Additional Content Section */}
         <div className="max-w-5xl mx-auto mt-10 px-4 py-8 bg-white">
-          <h2 className="text-2xl font-bold mb-6">Contact form</h2>
           <ContactForm />
         </div>
       </div>
