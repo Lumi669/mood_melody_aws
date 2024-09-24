@@ -22,28 +22,39 @@ const AboutPage = () => {
           <div className="indent-8 m-2 text-xl leading-relaxed">
             <p>
               This application serves as a demonstration of my{" "}
-              <span className="font-bold text-blue-600">
+              <span className="font-bold text-blue-800">
                 full-stack development expertise
               </span>
               . It highlights my ability to{" "}
-              <span className="bg-yellow-200">design</span> and{" "}
-              <span className="bg-yellow-200">develop</span> user-friendly,
-              responsive web applications, build{" "}
-              <span className="text-green-500">
+              <span className="bg-gray-200 text-black px-1 rounded">
+                design
+              </span>{" "}
+              and{" "}
+              <span className="bg-gray-200 text-black px-1 rounded">
+                develop
+              </span>{" "}
+              user-friendly, responsive web applications, build{" "}
+              <span className="text-gray-800 font-semibold">
                 efficient back-end solutions
               </span>{" "}
-              and <span className="text-green-500">APIs</span>, and integrate
-              modern <span className="underline">front-end technologies</span>.
-              Additionally, it features a{" "}
-              <span className="font-bold text-purple-600">CI/CD pipeline</span>{" "}
+              and <span className="text-gray-800 font-semibold">APIs</span>, and
+              integrate modern{" "}
+              <span className="underline text-blue-800">
+                front-end technologies
+              </span>
+              . Additionally, it features a{" "}
+              <span className="font-bold text-purple-800">CI/CD pipeline</span>{" "}
               and{" "}
-              <span className="font-bold text-purple-600">
+              <span className="font-bold text-purple-800">
                 DevOps practices
               </span>
               , ensuring seamless and automated deployment. Utilizing{" "}
-              <span className="italic">AWS services</span> for hosting and
-              deployment, this project also incorporates{" "}
-              <span className="text-pink-500">AI-driven functionalities</span>.
+              <span className="italic text-gray-900">AWS services</span> for
+              hosting and deployment, this project also incorporates{" "}
+              <span className="text-indigo-800 font-medium">
+                AI-driven functionalities
+              </span>
+              .
             </p>
           </div>
 
