@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 import { useMedia } from "@context/MediaContext";
 import CustomImage from "@components/CustomImage";
 import { extractAuthorName, extractMusicName } from "@utils/extractMusicInfo";
+import { getTextColor } from "@utils/getTextColor";
 
 const LivePlay = () => {
   const [hasImage, setHasImage] = useState(false);
-  const { currentTrack, currentSong, isPlaying } = useMedia();
-  console.log("current song from live.tsx === ", currentSong);
-  console.log("current track from live.tsx === ", currentTrack);
+  const { currentTrack, currentSong, isPlaying, isRed, isBlue, isBrown } =
+    useMedia();
+  const textColor = getTextColor(isRed, isBlue, isBrown);
 
   let authorName;
   let musicName;
@@ -47,11 +48,13 @@ const LivePlay = () => {
             mood={currentSong.mood}
           />
           <div className="text-center">
-            <h1 className="text-xl font-bold">Music Name</h1>
+            <h1 className={`text-xl font-bold ${textColor} mt-8`}>
+              Music Name
+            </h1>
             <div className="pb-5">{musicName}</div>
-            <h1 className="text-xl font-bold">Author Name</h1>
+            <h1 className={`text-xl font-bold ${textColor}`}>Author Name</h1>
             <div className="pb-5">{authorName}</div>
-            <h1 className="text-xl font-bold">Music Status</h1>
+            <h1 className={`text-xl font-bold ${textColor}`}>Music Status</h1>
             <div>{isPlaying ? "Playing" : "Paused"}</div>
           </div>
         </div>
