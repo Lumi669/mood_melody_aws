@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import ContactForm from "@components/ContactForm";
 
 const ContactPage = () => {
   const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
@@ -53,41 +54,11 @@ const ContactPage = () => {
 
         {/* Additional Content Section */}
         <div className="max-w-5xl mx-auto mt-10 px-4 py-8 bg-white">
-          <h2 className="text-2xl font-bold mb-6">Additional Content</h2>
-          <p className="text-gray-700 mb-4">
-            This section can be used to include additional information such as a
-            contact form, testimonials, or anything else you&apos;d like to
-            share.
-          </p>
-          <p className="text-gray-700 mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
-            odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla
-            quis sem at nibh elementum imperdiet.
-          </p>
-          <p className="text-gray-700 mb-4">
-            Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue
-            semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
-          </p>
-          <p className="text-gray-700 mb-4">
-            Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-            per inceptos himenaeos. Curabitur sodales ligula in libero.
-          </p>
-          <p className="text-gray-700 mb-4">
-            Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh.
-            Aenean quam. In scelerisque sem at dolor. Maecenas mattis.
-          </p>
-          <p className="text-gray-700 mb-4">
-            Sed convallis tristique sem. Proin ut ligula vel nunc egestas
-            porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus
-            non, massa.
-          </p>
-          <p className="text-gray-700 mb-4">
-            Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla
-            metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.
-            Quisque volutpat condimentum velit.
-          </p>
+          <h2 className="text-2xl font-bold mb-6">Contact form</h2>
+          <ContactForm />
         </div>
       </div>
+      <div></div>
     </div>
   );
 };
