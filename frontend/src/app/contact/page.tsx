@@ -55,13 +55,18 @@ const ContactPage = () => {
       </div>
 
       {/* Contact Form Section */}
-      <div className="max-w-5xl mx-auto mt-10 px-4 py-8 ">
+      <div className="max-w-5xl mx-auto mt-8 px-4 py-8 ">
         <ContactForm />
       </div>
-
+      <div className="text-center text-4xl text-rose-600">
+        <p>Thank you for your time !</p>
+      </div>
       {/* Info Sections */}
       <div className="max-w-5xl mx-auto  px-4 py-2 ">
         <InfoSections /> {/* Include the InfoSections component */}
+      </div>
+      <div className="max-w-5xl mx-auto  px-4 py-2 ">
+        <p className="text-center mt-10">Jinghuan @ 2 0 2 4</p>
       </div>
     </div>
   );
