@@ -1,3 +1,5 @@
+"use client";
+
 // components/ContactForm.tsx
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";

@@ -73,7 +73,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src",
+    "./src/*",
     ".storybook",
     "stories",
     ".next/types/**/*.ts"
