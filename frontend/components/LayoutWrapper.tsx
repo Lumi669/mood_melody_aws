@@ -28,7 +28,7 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     console.log("Background color changed to:", backgroundColor);
 
-    if (backgroundColor === "bg-gray-50") {
+    if (backgroundColor === "bg-no-mood") {
       console.log("Background is white. Clearing session storage.");
       sessionStorage.removeItem("currentMessage");
       sessionStorage.removeItem("currentMood");
