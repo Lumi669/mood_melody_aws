@@ -224,10 +224,14 @@ const PrivacyPage = () => {
           Users have the right to access, update, or delete their personal
           information, such as their username and email address, stored within
           this app. If you would like to exercise these rights or have any
-          concerns about how your data is being handled, please contact me at{" "}
+          concerns about how your data is being handled, sent me email to{" "}
           <a href={`mailto:${email}`} className="text-blue-500 hover:underline">
             {email}
-          </a>
+          </a>{" "}
+          or{" "}
+          <Link href="/contact" className="text-blue-500 hover:underline">
+            contact me.
+          </Link>
         </p>
 
         <h2 className="text-xl font-semibold mb-2">Disclaimer</h2>
