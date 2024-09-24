@@ -3,25 +3,47 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { getTextColor } from "@utils/getTextColor";
+import { useMedia } from "@context/MediaContext";
+import { get } from "axios";
 
 const AboutPage = () => {
   const router = useRouter();
+  const { isRed, isBlue, isBrown } = useMedia();
+  const textColor = getTextColor(isRed, isBlue, isBrown);
 
   return (
     <div>
-      <h1 className="text-center mt-8 text-4xl">About This App</h1>
+      <h1 className={`text-center mt-16 text-4xl font-extrabold ${textColor}`}>
+        About This App
+      </h1>
       <div className="h-screen overflow-y-scroll px-4 pb-80 p-10">
         <div className="max-w-5xl mx-auto">
-          <div className="indent-8 m-10 text-xl leading-relaxed">
+          <div className="indent-8 m-2 text-xl leading-relaxed">
             <p>
-              This application serves as a demonstration of my full-stack
-              development expertise. It highlights my ability to design and
-              develop user-friendly, responsive web applications, build
-              efficient back-end solutions and APIs, and integrate modern
-              front-end technologies. Additionally, it features a CI/CD pipeline
-              and DevOps practices, ensuring seamless and automated deployment.
-              Utilizing AWS services for hosting and deployment, this project
-              also incorporates AI-driven functionalities.
+              This application serves as a demonstration of my{" "}
+              <span className="font-bold text-blue-600">
+                full-stack development expertise
+              </span>
+              . It highlights my ability to{" "}
+              <span className="bg-yellow-200">design</span> and{" "}
+              <span className="bg-yellow-200">develop</span> user-friendly,
+              responsive web applications, build{" "}
+              <span className="text-green-500">
+                efficient back-end solutions
+              </span>{" "}
+              and <span className="text-green-500">APIs</span>, and integrate
+              modern <span className="underline">front-end technologies</span>.
+              Additionally, it features a{" "}
+              <span className="font-bold text-purple-600">CI/CD pipeline</span>{" "}
+              and{" "}
+              <span className="font-bold text-purple-600">
+                DevOps practices
+              </span>
+              , ensuring seamless and automated deployment. Utilizing{" "}
+              <span className="italic">AWS services</span> for hosting and
+              deployment, this project also incorporates{" "}
+              <span className="text-pink-500">AI-driven functionalities</span>.
             </p>
           </div>
 
