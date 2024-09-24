@@ -20,7 +20,9 @@ const ContactForm: React.FC = () => {
     formState: { errors },
   } = useForm<ContactFormInputs>();
 
-  const onSubmit: SubmitHandler<ContactFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<ContactFormInputs> = (
+    data: ContactFormInputs,
+  ) => {
     console.log("Form submitted:", data);
   };
 
