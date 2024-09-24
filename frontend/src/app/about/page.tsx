@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getTextColor } from "@utils/getTextColor";
 import { useMedia } from "@context/MediaContext";
-import { get } from "axios";
 
 const AboutPage = () => {
   const router = useRouter();
