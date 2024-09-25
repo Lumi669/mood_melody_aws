@@ -7,27 +7,35 @@ import { usePathname } from "next/navigation";
 
 interface AboutDropdownProps {
   closeDropdown?: () => void; // Optional closeDropdown prop
+  isTechActive?: boolean; // Optional isTechActive prop
 }
 
-const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
+const AboutDropdown: React.FC<AboutDropdownProps> = ({
+  closeDropdown,
+  isTechActive,
+}) => {
   const [isTechDropdownOpen, setTechDropdownOpen] = useState(false);
+  const [isHovered, setHovered] = useState(false); // State for hover
   const pathname = usePathname();
 
-  const handleTechMouseEnter = () => {
-    if (window.innerWidth >= 768) setTechDropdownOpen(true); // Open on hover for desktop
+  // When mouse enters or leaves any tech sub-item, set hover state
+  const handleTechHover = (hovered: boolean) => {
+    setHovered(hovered);
   };
 
-  const handleTechMouseLeave = () => {
-    if (window.innerWidth >= 768) setTechDropdownOpen(false); // Close on hover leave for desktop
-  };
-
+  // Toggle dropdown visibility on click for mobile
   const handleTechClick = () => {
-    if (window.innerWidth < 768) setTechDropdownOpen(!isTechDropdownOpen); // Toggle on click for mobile
+    if (window.innerWidth < 768) setTechDropdownOpen(!isTechDropdownOpen);
   };
 
+  // Close dropdown when a subpage link is clicked
   const handleLinkClick = () => {
-    if (closeDropdown) closeDropdown(); // Close dropdown if prop is passed
+    if (closeDropdown) closeDropdown();
   };
+
+  // Combine styles for active or hover states
+  const techClass =
+    isTechActive || isHovered ? "bg-gray-200 font-bold text-blue-600" : "";
 
   return (
     <div className="relative">
@@ -37,20 +45,19 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-md z-50" // Increased z-index
+          className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-md z-50"
         >
           {/* Tech Menu Item with Nested Dropdown */}
           <li
-            className="relative"
-            onMouseEnter={handleTechMouseEnter}
-            onMouseLeave={handleTechMouseLeave}
-            onClick={handleTechClick} // Click event for mobile view
+            className={`relative ${techClass}`} // Apply styles for active or hovered Tech
+            onMouseEnter={() => handleTechHover(true)}
+            onMouseLeave={() => handleTechHover(false)}
+            onClick={handleTechClick} // Toggle on click for mobile view
           >
             <div className="flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-100">
               <span>Tech</span>
               {/* Arrow icon toggles direction based on dropdown state */}
               <span className="md:hidden">
-                {" "}
                 {/* Hide arrow on desktop */}
                 {isTechDropdownOpen ? (
                   <svg
@@ -86,13 +93,13 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
               </span>
             </div>
             <AnimatePresence>
-              {isTechDropdownOpen && (
+              {(isTechDropdownOpen || isHovered || isTechActive) && ( // Render when dropdown open or hovered
                 <motion.ul
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-full top-0 mt-0 w-40 bg-white shadow-lg rounded-md z-60" // Further increase z-index for Tech submenu
+                  className="absolute left-full top-0 mt-0 w-40 bg-white shadow-lg rounded-md z-60"
                 >
                   {["Architecture", "CICD", "Tech Stack"].map((item) => (
                     <li key={item}>
@@ -100,6 +107,8 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
                         href={`/about/tech/${item.replace(" ", "").toLowerCase()}`}
                         className="block px-4 py-2 hover:bg-gray-100"
                         onClick={handleLinkClick}
+                        onMouseEnter={() => handleTechHover(true)}
+                        onMouseLeave={() => handleTechHover(false)} // Propagate hover state
                       >
                         {item}
                       </Link>

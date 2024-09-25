@@ -7,11 +7,13 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import SongsDropdown from "./SongsDropdown";
 import AboutDropdown from "./AboutDropdown";
+import { usePathname } from "next/navigation";
 
 const Nav: React.FC = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isSongsDropdownOpen, setSongsDropdownOpen] = useState(false);
   const [isAboutDropdownOpen, setAboutDropdownOpen] = useState(false);
+  const pathname = usePathname(); // Get the current path
 
   // Toggle main mobile menu
   const toggleMenu = () => {
@@ -58,6 +60,9 @@ const Nav: React.FC = () => {
     }
   };
 
+  // Check if current path is related to Tech subpages
+  const isTechActive = pathname.startsWith("/about/tech");
+
   return (
     <nav className="sticky top-0 z-50 bg-gray-50 shadow-md">
       <div className="container mx-auto flex justify-between items-center p-4">
@@ -101,7 +106,7 @@ const Nav: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-30" // Adjust z-index for SongsDropdown
+                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-30"
                   >
                     <SongsDropdown closeDropdown={closeMobileMenu} />
                   </motion.div>
@@ -139,20 +144,18 @@ const Nav: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-50" // Increase z-index for AboutDropdown
+                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-50"
                   >
-                    <AboutDropdown closeDropdown={closeMobileMenu} />
+                    <AboutDropdown
+                      closeDropdown={closeMobileMenu}
+                      isTechActive={isTechActive} // Pass active state to AboutDropdown
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Ensure Contact is above other elements */}
-            <NavLink
-              href="/contact"
-              className="relative z-10"
-              onClick={closeMobileMenu}
-            >
+            <NavLink href="/contact" onClick={closeMobileMenu}>
               Contact
             </NavLink>
           </div>
@@ -242,7 +245,10 @@ const Nav: React.FC = () => {
             </div>
             {isAboutDropdownOpen && (
               <div className="ml-4">
-                <AboutDropdown closeDropdown={closeMobileMenu} />
+                <AboutDropdown
+                  closeDropdown={closeMobileMenu}
+                  isTechActive={isTechActive} // Pass active state to AboutDropdown
+                />
               </div>
             )}
 
