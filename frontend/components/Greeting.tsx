@@ -13,7 +13,7 @@ const Greeting = () => {
           className="rounded-lg"
         />
 
-        <h1 className="m-10 p-20 bg-yellow-100 text-4xl font-mono text-green-500 font-bold tracking-wide text-center">
+        <h1 className="m-10 p-20 bg-yellow-100 text-4xl font-mono text-[#1a9f4b] font-bold tracking-wide text-center">
           Hi there, How do you feel today :D ?
         </h1>
       </div>
