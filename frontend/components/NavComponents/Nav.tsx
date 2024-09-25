@@ -67,7 +67,11 @@ const Nav: React.FC = () => {
               onMouseEnter={() => handleMouseEnter("songs")}
               onMouseLeave={() => handleMouseLeave("songs")}
             >
-              <NavLink href="/songs" onClick={closeMobileMenu}>
+              <NavLink
+                href="/songs"
+                activePaths={["/songs", "/allmusic", "/mixtape"]} // Consider these paths as active
+                onClick={closeMobileMenu}
+              >
                 Songs
               </NavLink>
               <AnimatePresence>
@@ -95,7 +99,17 @@ const Nav: React.FC = () => {
               onMouseEnter={() => handleMouseEnter("about")}
               onMouseLeave={() => handleMouseLeave("about")}
             >
-              <NavLink href="/about" onClick={closeMobileMenu}>
+              <NavLink
+                href="/about"
+                activePaths={[
+                  "/about",
+                  "/about/tech",
+                  "/about/privacy",
+                  "/about/testimonials",
+                  "/about/analytics",
+                ]}
+                onClick={closeMobileMenu}
+              >
                 About
               </NavLink>
               <AnimatePresence>
@@ -154,7 +168,11 @@ const Nav: React.FC = () => {
 
             {/* Songs Menu Item with "+" to Expand */}
             <div className="flex items-center justify-between">
-              <NavLink href="/songs" onClick={closeMobileMenu}>
+              <NavLink
+                href="/songs"
+                activePaths={["/songs", "/allmusic", "/mixtape"]}
+                onClick={closeMobileMenu}
+              >
                 Songs
               </NavLink>
               <button
@@ -177,7 +195,17 @@ const Nav: React.FC = () => {
 
             {/* About Menu Item with "+" to Expand */}
             <div className="flex items-center justify-between">
-              <NavLink href="/about" onClick={closeMobileMenu}>
+              <NavLink
+                href="/about"
+                activePaths={[
+                  "/about",
+                  "/about/tech",
+                  "/about/privacy",
+                  "/about/testimonials",
+                  "/about/analytics",
+                ]}
+                onClick={closeMobileMenu}
+              >
                 About
               </NavLink>
               <button

@@ -7,12 +7,22 @@ import { usePathname } from "next/navigation";
 interface NavLinkProps {
   href: string;
   children: React.ReactNode;
+  activePaths?: string[]; // Optional array of active paths
   onClick?: () => void; // Optional onClick prop
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ href, children, onClick }) => {
+const NavLink: React.FC<NavLinkProps> = ({
+  href,
+  children,
+  activePaths,
+  onClick,
+}) => {
   const pathname = usePathname();
-  const isActive = pathname === href;
+
+  // Check if the current path matches the href or any of the activePaths
+  const isActive =
+    pathname === href ||
+    (activePaths && activePaths.some((path) => pathname.startsWith(path)));
 
   return (
     <Link
