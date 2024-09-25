@@ -1,4 +1,3 @@
-// components/GlobalControls.tsx
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -75,41 +74,49 @@ const GlobalControls: React.FC = () => {
 
   return (
     <div
-      className={`fixed bottom-16 left-0 w-full p-2 bg-gray-800 bg-opacity-90 text-white flex flex-col items-center justify-center z-50 rounded-lg shadow-lg transition-all duration-500 ${
+      className={`fixed bottom-16 left-0 w-full p-4 flex flex-col items-center justify-center z-50 transition-all duration-500 ${
         animate ? "opacity-100" : "opacity-0"
       }`}
       style={{ position: "fixed", bottom: "4rem" }} // Adjust position to reduce crowding
     >
       {currentSong && (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4">
           {!isLivePage && (
-            <button
+            <div
               onClick={() => handleSkipTrack("previous")}
-              className="bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-full"
+              className="bg-gray-200 hover:bg-gray-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
+              style={{ width: "40px", height: "40px" }} // Set the width and height to fit the icon
             >
-              <FaStepBackward size={20} />
-            </button>
+              <FaStepBackward size={20} className="text-blue-500" />
+            </div>
           )}
-          <button
+          <div
             onClick={handlePlayPause}
-            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center"
+            className="bg-green-200 hover:bg-green-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
+            style={{ width: "40px", height: "40px" }} // Set the width and height to fit the icon
           >
-            {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
-          </button>
-          <button
+            {isPlaying ? (
+              <FaPause size={20} className="text-green-600" />
+            ) : (
+              <FaPlay size={20} className="text-green-600" />
+            )}
+          </div>
+          <div
             onClick={handleStopMusic}
-            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full"
+            className="bg-red-200 hover:bg-red-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
+            style={{ width: "40px", height: "40px" }} // Set the width and height to fit the icon
           >
-            <FaStop size={20} />
-          </button>
+            <FaStop size={20} className="text-red-600" />
+          </div>
 
           {!isLivePage && (
-            <button
+            <div
               onClick={() => handleSkipTrack("next")}
-              className="bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-full"
+              className="bg-gray-200 hover:bg-gray-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
+              style={{ width: "40px", height: "40px" }} // Set the width and height to fit the icon
             >
-              <FaStepForward size={20} />
-            </button>
+              <FaStepForward size={20} className="text-blue-500" />
+            </div>
           )}
         </div>
       )}
