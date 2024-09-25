@@ -37,7 +37,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-md"
+          className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-md z-50" // Increased z-index
         >
           {/* Tech Menu Item with Nested Dropdown */}
           <li
@@ -66,7 +66,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
                       strokeWidth="2"
                       d="M19 9l-7 7-7-7"
                     ></path>
-                  </svg> // Arrow pointing down when dropdown is open
+                  </svg>
                 ) : (
                   <svg
                     className="w-4 h-4 text-gray-600"
@@ -81,7 +81,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
                       strokeWidth="2"
                       d="M9 5l7 7-7 7"
                     ></path>
-                  </svg> // Arrow pointing right when dropdown is closed
+                  </svg>
                 )}
               </span>
             </div>
@@ -92,7 +92,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-full top-0 mt-0 w-40 bg-white shadow-lg rounded-md"
+                  className="absolute left-full top-0 mt-0 w-40 bg-white shadow-lg rounded-md z-60" // Further increase z-index for Tech submenu
                 >
                   {["Architecture", "CICD", "Tech Stack"].map((item) => (
                     <li key={item}>

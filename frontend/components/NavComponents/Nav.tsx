@@ -47,8 +47,14 @@ const Nav: React.FC = () => {
   const handleDropdownClick = (dropdown: string) => {
     if (window.innerWidth < 768) {
       // Check if screen width is < 768px (mobile view)
-      if (dropdown === "songs") setSongsDropdownOpen(!isSongsDropdownOpen);
-      if (dropdown === "about") setAboutDropdownOpen(!isAboutDropdownOpen);
+      if (dropdown === "songs") {
+        setSongsDropdownOpen(!isSongsDropdownOpen);
+        setAboutDropdownOpen(false); // Close About dropdown if Songs is opened
+      }
+      if (dropdown === "about") {
+        setAboutDropdownOpen(!isAboutDropdownOpen);
+        setSongsDropdownOpen(false); // Close Songs dropdown if About is opened
+      }
     }
   };
 
@@ -95,7 +101,7 @@ const Nav: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-20"
+                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-30" // Adjust z-index for SongsDropdown
                   >
                     <SongsDropdown closeDropdown={closeMobileMenu} />
                   </motion.div>
@@ -133,7 +139,7 @@ const Nav: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-20"
+                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-50" // Increase z-index for AboutDropdown
                   >
                     <AboutDropdown closeDropdown={closeMobileMenu} />
                   </motion.div>
@@ -141,7 +147,12 @@ const Nav: React.FC = () => {
               </AnimatePresence>
             </div>
 
-            <NavLink href="/contact" onClick={closeMobileMenu}>
+            {/* Ensure Contact is above other elements */}
+            <NavLink
+              href="/contact"
+              className="relative z-10"
+              onClick={closeMobileMenu}
+            >
               Contact
             </NavLink>
           </div>
@@ -172,7 +183,7 @@ const Nav: React.FC = () => {
         <div
           className={`${
             isMenuOpen ? "block" : "hidden"
-          } md:hidden absolute top-16 left-0 w-full bg-gray-50 shadow-md rounded-md`}
+          } md:hidden absolute top-16 left-0 w-full bg-gray-50 shadow-md rounded-md z-40`}
         >
           <div className="flex flex-col space-y-4 p-4">
             {/* Home Link */}

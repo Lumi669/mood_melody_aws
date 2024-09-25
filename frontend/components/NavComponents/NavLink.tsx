@@ -9,6 +9,7 @@ interface NavLinkProps {
   children: React.ReactNode;
   activePaths?: string[]; // Optional array of active paths
   onClick?: () => void; // Optional onClick prop
+  className?: string;
 }
 
 const NavLink: React.FC<NavLinkProps> = ({
