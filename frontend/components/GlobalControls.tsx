@@ -1,119 +1,3 @@
-// "use client";
-
-// import React, { useState, useEffect, useRef } from "react";
-// import { useMedia } from "@context/MediaContext";
-// import { MusicWithImageSimplified } from "../types/type";
-// import { usePathname } from "next/navigation"; // Import usePathname from next/navigation
-// import path from "path";
-
-// const GlobalControls: React.FC = () => {
-//   const { stopMusic, togglePlayPause, isPlaying, currentSong, skipTrack } =
-//     useMedia();
-//   const pathname = usePathname(); // Initialize usePathname
-//   const [animate, setAnimate] = useState(false);
-
-//   // Use useRef to keep a stable reference to the playlist
-//   const playlistRef = useRef<MusicWithImageSimplified[]>([]);
-
-//   useEffect(() => {
-//     if (isPlaying) {
-//       setAnimate(true);
-//     }
-//   }, [isPlaying, currentSong]);
-
-//   const isLivePage = pathname === "/live";
-
-//   // Use useEffect to update localStorage whenever currentSong changes and is on the homepage
-//   useEffect(() => {
-//     const isHomePage = pathname === "/"; // Check if the current page is the homepage
-
-//     if (isHomePage && currentSong) {
-//       localStorage.setItem("currentMood", currentSong.mood);
-//       localStorage.setItem(
-//         `lastPlayed_${currentSong.mood}`,
-//         JSON.stringify(currentSong),
-//       );
-//     }
-//   }, [currentSong, pathname]);
-
-//   const handlePlayPause = () => {
-//     togglePlayPause();
-//   };
-
-//   const updatePlaylist = (newPlaylist: MusicWithImageSimplified[]) => {
-//     // Update the ref with the new playlist
-//     playlistRef.current = newPlaylist;
-
-//     localStorage.setItem("playlist", JSON.stringify(newPlaylist));
-//     window.dispatchEvent(new Event("playlistUpdated"));
-//   };
-
-//   const handleSkipTrack = (direction: "next" | "previous") => {
-//     const isHomePage = pathname === "/"; // Check if the current page is the homepage
-//     const updatedPlaylist = skipTrack(direction, isHomePage); // Pass both direction and isHomePage
-//     console.log(
-//       "uuuuuuu updatedPlaylist from GlobalControls.tsx === ",
-//       updatedPlaylist,
-//     );
-
-//     updatePlaylist(updatedPlaylist);
-//   };
-
-//   const handleStopMusic = () => {
-//     // Stop music through context
-//     stopMusic();
-//     sessionStorage.setItem("wasPlayingOnHomePage", "false");
-//     sessionStorage.setItem("wasPausedOnHomePage", "false");
-//     sessionStorage.removeItem("lastPlayedSong");
-//     sessionStorage.removeItem("timePointOfHomePage");
-
-//     // Dispatch any events or callbacks  notify other components e.g MusicPlayer.tsx
-//     window.dispatchEvent(new Event("musicStopped"));
-//   };
-
-//   return (
-//     <div
-//       className={`fixed bottom-0 left-0 w-full p-4 bg-gray-800 text-white flex flex-col items-center justify-center z-50 transition-all duration-500 ${animate ? "animate-fly-in" : ""}`}
-//     >
-//       {currentSong && (
-//         <div className="flex items-center space-x-4">
-//           {!isLivePage && (
-//             <button
-//               onClick={() => handleSkipTrack("previous")}
-//               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-//             >
-//               Previous
-//             </button>
-//           )}
-//           <button
-//             onClick={handlePlayPause}
-//             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-24 text-center"
-//           >
-//             {isPlaying ? "Pause" : "Play "}
-//           </button>
-//           <button
-//             onClick={handleStopMusic}
-//             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-//           >
-//             Stop Music
-//           </button>
-
-//           {!isLivePage && (
-//             <button
-//               onClick={() => handleSkipTrack("next")}
-//               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-//             >
-//               Next
-//             </button>
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default GlobalControls;
-
 // components/GlobalControls.tsx
 "use client";
 
@@ -121,6 +5,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { useMedia } from "@context/MediaContext";
 import { MusicWithImageSimplified } from "../types/type";
 import { usePathname } from "next/navigation";
+import {
+  FaPlay,
+  FaPause,
+  FaStepBackward,
+  FaStepForward,
+  FaStop,
+} from "react-icons/fa";
 
 const GlobalControls: React.FC = () => {
   const { stopMusic, togglePlayPause, isPlaying, currentSong, skipTrack } =
@@ -184,40 +75,40 @@ const GlobalControls: React.FC = () => {
 
   return (
     <div
-      className={`fixed bottom-0 left-0 w-full p-4 bg-gray-800 text-white flex flex-col items-center justify-center z-50 transition-all duration-500 ${
+      className={`fixed bottom-16 left-0 w-full p-2 bg-gray-800 bg-opacity-90 text-white flex flex-col items-center justify-center z-50 rounded-lg shadow-lg transition-all duration-500 ${
         animate ? "opacity-100" : "opacity-0"
       }`}
-      style={{ position: "fixed", bottom: "60px" }} // Adjust 'bottom' to move the component above footer
+      style={{ position: "fixed", bottom: "4rem" }} // Adjust position to reduce crowding
     >
       {currentSong && (
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
           {!isLivePage && (
             <button
               onClick={() => handleSkipTrack("previous")}
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-full"
             >
-              Previous
+              <FaStepBackward size={20} />
             </button>
           )}
           <button
             onClick={handlePlayPause}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-24 text-center"
+            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center"
           >
-            {isPlaying ? "Pause" : "Play "}
+            {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
           </button>
           <button
             onClick={handleStopMusic}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full"
           >
-            Stop Music
+            <FaStop size={20} />
           </button>
 
           {!isLivePage && (
             <button
               onClick={() => handleSkipTrack("next")}
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-full"
             >
-              Next
+              <FaStepForward size={20} />
             </button>
           )}
         </div>
