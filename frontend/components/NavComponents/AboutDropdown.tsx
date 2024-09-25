@@ -45,7 +45,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-md z-50"
+          className="absolute left-0 w-40 bg-white shadow-lg rounded-md z-50"
         >
           {/* Tech Menu Item with Nested Dropdown */}
           <li
