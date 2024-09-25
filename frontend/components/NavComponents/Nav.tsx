@@ -55,7 +55,8 @@ const Nav: React.FC = () => {
             <div className="relative group">
               <NavLink href="/songs">Songs</NavLink>
               <div className="absolute left-0 hidden group-hover:block mt-2 bg-white shadow-md rounded-md">
-                <SongsDropdown closeDropdown={() => {}} />
+                <SongsDropdown closeDropdown={() => {}} />{" "}
+                {/* Passing empty function */}
               </div>
             </div>
 
@@ -111,22 +112,22 @@ const Nav: React.FC = () => {
             </NavLink>
 
             {/* Songs Menu Item with "+" to Expand */}
-            <div>
-              <div
-                className="w-full flex justify-between items-center text-lg font-semibold px-4 py-2 cursor-pointer transition-transform duration-200 ease-in-out text-gray-800 hover:text-gray-600"
+            <div className="flex items-center justify-between">
+              <NavLink href="/songs" onClick={closeMobileMenu}>
+                Songs
+              </NavLink>
+              <button
+                className="text-lg font-semibold text-gray-800 hover:text-gray-600 focus:outline-none"
                 onClick={() => toggleSubMenu("songs")}
               >
-                <span>Songs</span>
-                <span className="text-gray-600">
-                  {openSubMenu === "songs" ? "-" : "+"}
-                </span>
-              </div>
-              {openSubMenu === "songs" && (
-                <div className="ml-4">
-                  <SongsDropdown closeDropdown={closeMobileMenu} />
-                </div>
-              )}
+                {openSubMenu === "songs" ? "-" : "+"}
+              </button>
             </div>
+            {openSubMenu === "songs" && (
+              <div className="ml-4">
+                <SongsDropdown closeDropdown={closeMobileMenu} />
+              </div>
+            )}
 
             {/* Live Link */}
             <NavLink href="/live" onClick={closeMobileMenu}>
@@ -134,22 +135,22 @@ const Nav: React.FC = () => {
             </NavLink>
 
             {/* About Menu Item with "+" to Expand */}
-            <div>
-              <div
-                className="w-full flex justify-between items-center text-lg font-semibold px-4 py-2 cursor-pointer transition-transform duration-200 ease-in-out text-gray-800 hover:text-gray-600"
+            <div className="flex items-center justify-between">
+              <NavLink href="/about" onClick={closeMobileMenu}>
+                About
+              </NavLink>
+              <button
+                className="text-lg font-semibold text-gray-800 hover:text-gray-600 focus:outline-none"
                 onClick={() => toggleSubMenu("about")}
               >
-                <span>About</span>
-                <span className="text-gray-600">
-                  {openSubMenu === "about" ? "-" : "+"}
-                </span>
-              </div>
-              {openSubMenu === "about" && (
-                <div className="ml-4">
-                  <AboutDropdown closeDropdown={closeMobileMenu} />
-                </div>
-              )}
+                {openSubMenu === "about" ? "-" : "+"}
+              </button>
             </div>
+            {openSubMenu === "about" && (
+              <div className="ml-4">
+                <AboutDropdown closeDropdown={closeMobileMenu} />
+              </div>
+            )}
 
             {/* Contact Link */}
             <NavLink href="/contact" onClick={closeMobileMenu}>
