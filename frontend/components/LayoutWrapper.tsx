@@ -91,6 +91,17 @@ const LayoutWrapper = ({
     else if (isBrown) color = "bg-neutral-gradient";
     setBackgroundColor(color);
   }, [isRed, isBlue, isBrown]);
+  // Monitor the background color change and clear session storage if it turns to white
+  useEffect(() => {
+    console.log("Background color changed to:", backgroundColor);
+
+    if (backgroundColor === "bg-no-mood") {
+      console.log("Background is white. Clearing session storage.");
+      sessionStorage.removeItem("currentMessage");
+      sessionStorage.removeItem("currentMood");
+      console.log("Session storage cleared.");
+    }
+  }, [backgroundColor]);
 
   return (
     <div
