@@ -4,28 +4,38 @@ import React, { useState } from "react";
 import NavLink from "./NavLink";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import SongsDropdown from "./SongsDropdown";
 import AboutDropdown from "./AboutDropdown";
 
 const Nav: React.FC = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+  const [isSongsDropdownOpen, setSongsDropdownOpen] = useState(false);
+  const [isAboutDropdownOpen, setAboutDropdownOpen] = useState(false);
 
   // Toggle main mobile menu
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
-    setOpenSubMenu(null); // Close any open submenu when toggling the main menu
-  };
-
-  // Toggle individual submenu
-  const toggleSubMenu = (menu: string) => {
-    setOpenSubMenu(openSubMenu === menu ? null : menu);
+    setSongsDropdownOpen(false);
+    setAboutDropdownOpen(false);
   };
 
   // Close menu when navigating
   const closeMobileMenu = () => {
     setMenuOpen(false);
-    setOpenSubMenu(null);
+    setSongsDropdownOpen(false);
+    setAboutDropdownOpen(false);
+  };
+
+  // Mouse enter and leave handlers for dropdowns
+  const handleMouseEnter = (dropdown: string) => {
+    if (dropdown === "songs") setSongsDropdownOpen(true);
+    if (dropdown === "about") setAboutDropdownOpen(true);
+  };
+
+  const handleMouseLeave = (dropdown: string) => {
+    if (dropdown === "songs") setSongsDropdownOpen(false);
+    if (dropdown === "about") setAboutDropdownOpen(false);
   };
 
   return (
@@ -51,25 +61,56 @@ const Nav: React.FC = () => {
               Home
             </NavLink>
 
-            {/* Desktop SongsDropdown */}
-            <div className="relative group">
-              <NavLink href="/songs">Songs</NavLink>
-              <div className="absolute left-0 hidden group-hover:block mt-2 bg-white shadow-md rounded-md">
-                <SongsDropdown closeDropdown={() => {}} />{" "}
-                {/* Passing empty function */}
-              </div>
+            {/* Desktop SongsDropdown with hover behavior */}
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter("songs")}
+              onMouseLeave={() => handleMouseLeave("songs")}
+            >
+              <NavLink href="/songs" onClick={closeMobileMenu}>
+                Songs
+              </NavLink>
+              <AnimatePresence>
+                {isSongsDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-20"
+                  >
+                    <SongsDropdown closeDropdown={closeMobileMenu} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <NavLink href="/live" onClick={closeMobileMenu}>
               Live
             </NavLink>
 
-            {/* Desktop AboutDropdown */}
-            <div className="relative group">
-              <NavLink href="/about">About</NavLink>
-              <div className="absolute left-0 hidden group-hover:block mt-2 bg-white shadow-md rounded-md">
-                <AboutDropdown closeDropdown={() => {}} />
-              </div>
+            {/* Desktop AboutDropdown with hover behavior */}
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter("about")}
+              onMouseLeave={() => handleMouseLeave("about")}
+            >
+              <NavLink href="/about" onClick={closeMobileMenu}>
+                About
+              </NavLink>
+              <AnimatePresence>
+                {isAboutDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-20"
+                  >
+                    <AboutDropdown closeDropdown={closeMobileMenu} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <NavLink href="/contact" onClick={closeMobileMenu}>
@@ -118,12 +159,12 @@ const Nav: React.FC = () => {
               </NavLink>
               <button
                 className="text-lg font-semibold text-gray-800 hover:text-gray-600 focus:outline-none"
-                onClick={() => toggleSubMenu("songs")}
+                onClick={() => setSongsDropdownOpen(!isSongsDropdownOpen)}
               >
-                {openSubMenu === "songs" ? "-" : "+"}
+                {isSongsDropdownOpen ? "-" : "+"}
               </button>
             </div>
-            {openSubMenu === "songs" && (
+            {isSongsDropdownOpen && (
               <div className="ml-4">
                 <SongsDropdown closeDropdown={closeMobileMenu} />
               </div>
@@ -141,12 +182,12 @@ const Nav: React.FC = () => {
               </NavLink>
               <button
                 className="text-lg font-semibold text-gray-800 hover:text-gray-600 focus:outline-none"
-                onClick={() => toggleSubMenu("about")}
+                onClick={() => setAboutDropdownOpen(!isAboutDropdownOpen)}
               >
-                {openSubMenu === "about" ? "-" : "+"}
+                {isAboutDropdownOpen ? "-" : "+"}
               </button>
             </div>
-            {openSubMenu === "about" && (
+            {isAboutDropdownOpen && (
               <div className="ml-4">
                 <AboutDropdown closeDropdown={closeMobileMenu} />
               </div>
