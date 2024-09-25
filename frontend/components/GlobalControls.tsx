@@ -85,37 +85,45 @@ const GlobalControls: React.FC = () => {
             <div
               onClick={() => handleSkipTrack("previous")}
               className="bg-gray-200 hover:bg-gray-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
-              style={{ width: "40px", height: "40px" }} // Set the width and height to fit the icon
+              style={{ width: "48px", height: "48px" }} // Match width and height with icon size
+              aria-label="Previous Track"
+              title="Previous Track" // Add title for screen readers and tooltips
             >
-              <FaStepBackward size={20} className="text-blue-500" />
+              <FaStepBackward size={24} className="text-blue-800" />
             </div>
           )}
           <div
             onClick={handlePlayPause}
-            className="bg-green-200 hover:bg-green-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
-            style={{ width: "40px", height: "40px" }} // Set the width and height to fit the icon
+            className="bg-gray-200 hover:bg-gray-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
+            style={{ width: "48px", height: "48px" }} // Match width and height with icon size
+            aria-label={isPlaying ? "Pause" : "Play"}
+            title={isPlaying ? "Pause" : "Play"} // Add title for screen readers and tooltips
           >
             {isPlaying ? (
-              <FaPause size={20} className="text-green-600" />
+              <FaPause size={24} className="text-blue-800" />
             ) : (
-              <FaPlay size={20} className="text-green-600" />
+              <FaPlay size={24} className="text-blue-800" />
             )}
           </div>
           <div
             onClick={handleStopMusic}
-            className="bg-red-200 hover:bg-red-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
-            style={{ width: "40px", height: "40px" }} // Set the width and height to fit the icon
+            className="bg-gray-200 hover:bg-gray-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
+            style={{ width: "48px", height: "48px" }} // Match width and height with icon size
+            aria-label="Stop Music"
+            title="Stop Music" // Add title for screen readers and tooltips
           >
-            <FaStop size={20} className="text-red-600" />
+            <FaStop size={24} className="text-blue-800" />
           </div>
 
           {!isLivePage && (
             <div
               onClick={() => handleSkipTrack("next")}
               className="bg-gray-200 hover:bg-gray-300 p-3 rounded-full cursor-pointer flex items-center justify-center transition-colors"
-              style={{ width: "40px", height: "40px" }} // Set the width and height to fit the icon
+              style={{ width: "48px", height: "48px" }} // Match width and height with icon size
+              aria-label="Next Track"
+              title="Next Track" // Add title for screen readers and tooltips
             >
-              <FaStepForward size={20} className="text-blue-500" />
+              <FaStepForward size={24} className="text-blue-800" />
             </div>
           )}
         </div>
