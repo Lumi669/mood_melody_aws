@@ -26,7 +26,7 @@ const SongsDropdown: React.FC = () => {
     "My Playlist": "mixtape",
   };
 
-  const isActive = pathname.startsWith("/songs/") || pathname === "/allmusic";
+  const isActive = pathname.startsWith("/songs") || pathname === "/allmusic";
 
   return (
     <div
