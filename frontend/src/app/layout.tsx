@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "@components/NavComponents/Nav";
+import Footer from "@components/Footer";
 import { MediaProvider } from "@context/MediaContext";
-
 import LayoutWrapper from "@components/LayoutWrapper";
 import GlobalControls from "@components/GlobalControls";
 import "./styles/globals.css";
@@ -46,18 +46,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Determine if the current page requires scrolling or not
+  const noScroll = true; // Change this condition based on the page
+
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen flex flex-col">
         <MediaProvider>
-          <LayoutWrapper>
+          <LayoutWrapper noScroll={noScroll}>
             <Nav />
-            <main>
+            <main className={`flex-grow ${noScroll ? "h-screen" : ""}`}>
               <div>{children}</div>
             </main>
             <GlobalControls />
-            {/* Add the global audio element for playback control */}
-            <audio id="audio" />
+            <Footer />
           </LayoutWrapper>
         </MediaProvider>
       </body>

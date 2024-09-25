@@ -36,13 +36,21 @@
 }
 
 /* Adjusted styles for html and body */
+/* styles/globals.css */
 html,
 body {
-  height: 100%; /* Ensures the full height of the viewport */
+  height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-  overflow-y: hidden; /* Prevent vertical scrolling by default */
+  overflow-x: hidden;
+}
+
+body.no-scroll {
+  overflow-y: hidden; /* Disable vertical scrolling */
+}
+
+body.scroll {
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Active cute button style */
@@ -87,4 +95,12 @@ body {
 /* Default backgournd for no mood */
 .bg-no-mood {
   @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200; /* Soft neutral gradient */
+}
+
+/* styles/globals.css */
+footer {
+  z-index: 10;
+  background-color: #1f2937; /* dark gray for visibility */
+  color: white;
+  padding: 1rem;
 }
