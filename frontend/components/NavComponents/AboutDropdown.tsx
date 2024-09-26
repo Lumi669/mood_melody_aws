@@ -15,12 +15,12 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
   isTechActive,
 }) => {
   const [isTechDropdownOpen, setTechDropdownOpen] = useState(false);
-  const [isHovered, setHovered] = useState(false); // State for hover
+  const [isHovered, setIsHovered] = useState(false); // State for hover
   const pathname = usePathname();
 
   // When mouse enters or leaves any tech sub-item, set hover state
   const handleTechHover = (hovered: boolean) => {
-    setHovered(hovered);
+    setIsHovered(hovered);
   };
 
   // Toggle dropdown visibility on click for mobile
