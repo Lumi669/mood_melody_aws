@@ -8,9 +8,13 @@ import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
 import Image from "next/image";
 
-const MusicPlayer: React.FC = () => {
+// Define the props type for the initial data passed from the server component
+interface MusicPlayerProps {
+  initialData: any;
+}
+
+const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
   const {
-    mediaData,
     setIsRed,
     setIsBlue,
     setIsBrown,
@@ -36,6 +40,12 @@ const MusicPlayer: React.FC = () => {
   );
 
   useEffect(() => {
+    // Use the initialData from props instead of fetching again
+    if (initialData) {
+      console.log("Received initial data:", initialData);
+    }
+
+    // Restore state from sessionStorage or initialize
     const currentMood = sessionStorage.getItem("currentMood");
     const lastPlayedSong = sessionStorage.getItem("lastPlayedSong");
     const wasPlayingOnHomePage =
@@ -94,7 +104,7 @@ const MusicPlayer: React.FC = () => {
 
     sessionStorage.setItem("currentMessage", message);
 
-    const filteredSongs = mediaData.filter((song) => song.mood === mood);
+    const filteredSongs = initialData.filter((song: any) => song.mood === mood);
     const randomSong =
       filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
     setCurrentSong(randomSong);
@@ -223,7 +233,7 @@ const MusicPlayer: React.FC = () => {
       )}
 
       {currentSong && currentSong.imgUrl && (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center h-auto">
           <CustomImage
             src={currentSong.imgUrl}
             alt={currentMusicName || "an image associated with the music"}

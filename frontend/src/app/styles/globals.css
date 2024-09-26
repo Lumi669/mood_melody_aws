@@ -11,13 +11,16 @@ body {
   overflow-x: hidden;
 }
 
-/* Control scrolling based on screen size */
+/* Remove or modify this class if it's being applied on mobile */
 body.no-scroll {
   overflow-y: hidden; /* Disable vertical scrolling */
 }
 
-body.scroll {
-  overflow-y: auto; /* Enable vertical scrolling */
+/* Instead, use this for mobile */
+@media (max-width: 768px) {
+  body {
+    overflow-y: auto; /* Enable vertical scrolling on mobile */
+  }
 }
 
 /* Animation styles */
