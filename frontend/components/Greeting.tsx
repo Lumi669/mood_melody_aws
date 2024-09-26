@@ -1,27 +1,3 @@
-// import React from "react";
-// import Image from "next/image";
-
-// const Greeting = () => {
-//   return (
-//     <div>
-//       <div className="flex justify-center">
-//         <Image
-//           src="/dancing-girl-removebg.webp"
-//           alt="Description of the image"
-//           width={300}
-//           height={300}
-//           className="rounded-lg"
-//         />
-
-//         <h1 className="m-10 p-20 bg-yellow-100 text-4xl font-mono text-[#1a9f4b] font-bold tracking-wide text-center">
-//           Hi there, How do you feel today :D ?
-//         </h1>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Greeting;
 import React from "react";
 import Image from "next/image";
 

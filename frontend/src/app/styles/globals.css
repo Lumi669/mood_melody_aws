@@ -1,11 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Jersey+20+Charted&display=swap");
-
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-.test {
-  @apply font-jersey text-2xl text-red-400;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Control scrolling based on screen size */
+body.no-scroll {
+  overflow-y: hidden; /* Disable vertical scrolling */
+}
+
+body.scroll {
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Animation styles */
@@ -26,6 +38,7 @@
   animation: fly-to-corner 1s forwards;
 }
 
+/* Video overlay */
 .video-on-top {
   z-index: 50;
   position: fixed;
@@ -35,26 +48,7 @@
   height: 20rem;
 }
 
-/* Adjusted styles for html and body */
-/* styles/globals.css */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-body.no-scroll {
-  overflow-y: hidden; /* Disable vertical scrolling */
-}
-
-body.scroll {
-  overflow-y: auto; /* Enable vertical scrolling */
-}
-
-/* Active cute button style */
-/* Updated Active Button Style */
+/* Button styles */
 .active-button-style {
   @apply bg-[#ff79c6] text-[#2a2a2a] px-6 py-3 rounded-full shadow-md 
          hover:bg-[#ff92d1] hover:shadow-lg active:bg-[#ff61b6] 
@@ -63,7 +57,6 @@ body.scroll {
          w-32 border-2 border-[#ff61b6] cursor-pointer;
 }
 
-/* Inactive cute button style */
 .inactive-button-style {
   @apply bg-pink-400 text-white px-6 py-3 rounded-full shadow-md 
          opacity-70 w-32 border-2 border-gray-300 cursor-pointer
@@ -71,37 +64,19 @@ body.scroll {
          focus:ring-4 focus:ring-pink-200 transition-all duration-200 ease-in-out;
 }
 
-/* Warm and cute gradient backgournd for happy mood */
-/* .bg-warm-gradient {
-  @apply bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50;
-} */
-
+/* Background styles */
 .bg-warm-gradient {
-  @apply bg-gradient-to-br from-pink-200 via-purple-100  to-blue-100;
+  @apply bg-gradient-to-br from-pink-200 via-purple-100 to-blue-100;
 }
 
-/* Cold and cute gradient backgournd for happy mood */
 .bg-cold-gradient {
   @apply bg-gradient-to-br from-blue-100 via-teal-200 to-indigo-300;
 }
 
-/* Neutral and cute gradient backgournd for calm mood */
 .bg-neutral-gradient {
   @apply bg-gradient-to-br from-gray-100 via-beige-200 to-pastel-300;
 }
-/* .bg-neutral-gradient {
-  @apply bg-gradient-to-br from-yellow-500 via-beige-300 to-pastel-100;
-} */
 
-/* Default backgournd for no mood */
 .bg-no-mood {
-  @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200; /* Soft neutral gradient */
-}
-
-/* styles/globals.css */
-footer {
-  z-index: 10;
-  background-color: #1f2937; /* dark gray for visibility */
-  color: white;
-  padding: 1rem;
+  @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200;
 }

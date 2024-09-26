@@ -47,7 +47,6 @@ const MusicPlayer: React.FC = () => {
     if (lastPlayedSong) {
       const song = JSON.parse(lastPlayedSong);
 
-      // Stop any other music playing from other pages
       if (audio) {
         audio.pause(); // Stop any other playing audio
       }
@@ -84,7 +83,6 @@ const MusicPlayer: React.FC = () => {
     setMoodSource(source);
     sessionStorage.setItem("currentMood", mood);
 
-    // Determine and store the message based on the mood
     let message = "";
     if (mood === "happy") {
       message = "You seem happy";
@@ -94,7 +92,6 @@ const MusicPlayer: React.FC = () => {
       message = "You seem peaceful";
     }
 
-    // Store the message in sessionStorage
     sessionStorage.setItem("currentMessage", message);
 
     const filteredSongs = mediaData.filter((song) => song.mood === mood);
@@ -129,7 +126,7 @@ const MusicPlayer: React.FC = () => {
     setVideoVisible(false);
     stopMusic();
     sessionStorage.setItem("wasPlayingOnHomePage", "false");
-    sessionStorage.setItem("wasPausedOnHomePage", "true"); // Set it as paused
+    sessionStorage.setItem("wasPausedOnHomePage", "true");
   };
 
   useEffect(() => {
@@ -140,13 +137,8 @@ const MusicPlayer: React.FC = () => {
       setCurrentMusicName(null);
     };
 
-    // Listen for the 'musicStopped' event to reset the UI state
-    // the 'musicStopped' event is dispacthed by the handleStopMusic function in GlobalControls.tsx
-    // which pass the event to MusicPlayer, which in turn, updates the component state e.g setting isOriginalViewVisible to true,
-    // hiding any animations, and clearing the current music data.
     window.addEventListener("musicStopped", handleMusicStopped);
 
-    // Cleanup the event listener on component unmount
     return () => {
       window.removeEventListener("musicStopped", handleMusicStopped);
     };
@@ -167,7 +159,6 @@ const MusicPlayer: React.FC = () => {
   );
 
   const handleSentimentAnalysis = useCallback((message: string) => {
-    // setSentimentMessage(message);
     setMoodSource("analysis");
     sessionStorage.setItem("moodSource", "analysis");
     sessionStorage.setItem("currentMessage", message);
@@ -178,7 +169,6 @@ const MusicPlayer: React.FC = () => {
     if (displayMessage) {
       return displayMessage;
     } else {
-      console.log("vvvvvvvv");
       return "You have no mood at the moment";
     }
   };
@@ -186,7 +176,7 @@ const MusicPlayer: React.FC = () => {
   return (
     <div className="relative min-h-screen px-4">
       {isOriginalViewVisible && <OriginalViewPart />}
-      <div className="flex justify-center space-x-8 m-3">
+      <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 m-3">
         <button
           onClick={() => playMusic("happy", "button")}
           className={isRed ? "active-button-style" : "inactive-button-style"}
