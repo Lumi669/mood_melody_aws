@@ -1,3 +1,4 @@
+/* globals.css */
 @import url("https://fonts.googleapis.com/css2?family=Jersey+20+Charted&display=swap");
 @import "tailwindcss/base";
 @import "tailwindcss/components";
@@ -16,7 +17,7 @@ body.no-scroll {
   overflow-y: hidden; /* Disable vertical scrolling */
 }
 
-/* Instead, use this for mobile */
+/* Enable scrolling on mobile */
 @media (max-width: 768px) {
   body {
     overflow-y: auto; /* Enable vertical scrolling on mobile */
