@@ -12,7 +12,7 @@ const Home: React.FC = async () => {
   const matchedData = await fetchAllMusicWithImages();
 
   return (
-    <div className="relative min-h-screen overflow-auto px-4">
+    <div className="relative h-screen overflow-auto md:overflow-hidden px-4 pb-60">
       {/* Pass initial data as props to the client component */}
       <MusicPlayer initialData={matchedData} />
       <ClientContextUpdater initialData={matchedData} />
