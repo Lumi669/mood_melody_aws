@@ -224,7 +224,8 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
             autoPlay
             loop
             muted
-            className="w-full h-full"
+            playsInline
+            className="w-full h-full object-cover"
           />
           <div className="absolute top-0 left-0 right-0 text-center p-4 bg-opacity-75 bg-black text-white font-bold">
             {getMoodMessage()}

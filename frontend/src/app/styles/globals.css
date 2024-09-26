@@ -43,7 +43,7 @@ body.no-scroll {
 
 /* Video overlay */
 .video-on-top {
-  z-index: 50;
+  z-index: 100;
   position: fixed;
   bottom: 2rem;
   right: 2rem;
