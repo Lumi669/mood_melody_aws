@@ -9,19 +9,21 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-y: hidden; /* Disable vertical scroll globally */
 }
 
-/* Remove or modify this class if it's being applied on mobile */
-body.no-scroll {
-  overflow-y: hidden; /* Disable vertical scrolling */
-}
-
-/* Enable scrolling on mobile */
+/* Allow vertical scrolling on mobile */
 @media (max-width: 768px) {
+  html,
   body {
-    overflow-y: auto; /* Enable vertical scrolling on mobile */
+    overflow-y: auto;
   }
+}
+
+/* Class to disable scroll */
+body.no-scroll {
+  overflow-y: hidden;
 }
 
 /* Animation styles */
@@ -83,4 +85,23 @@ body.no-scroll {
 
 .bg-no-mood {
   @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200;
+}
+
+/* Custom Media Query for 1024x600 */
+@media screen and (min-width: 1024px) and (max-width: 1024px) and (min-height: 600px) and (max-height: 600px) {
+  .custom-style-1024x600 {
+    max-height: 90vh; /* Adjust max height to fit content */
+    overflow-y: auto; /* Enable scrolling if needed */
+  }
+
+  .custom-image-1024x600 {
+    max-width: 70%; /* Scale down image */
+    max-height: 300px; /* Limit height of the image */
+    margin-top: 0; /* Adjust top margin */
+  }
+
+  .text-custom-1024x600 {
+    font-size: 1rem; /* Adjust text size */
+    margin-bottom: 4px; /* Adjust margin for better spacing */
+  }
 }

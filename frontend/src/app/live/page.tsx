@@ -33,17 +33,17 @@ const LivePlay = () => {
   }
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex h-screen md:overflow-auto md:justify-center lg:justify-center lg:overflow-auto">
       {currentSong && (
-        <div className="w-1/2 flex flex-col items-center">
+        <div className="w-full md:flex-grow md:w-full lg:flex lg:w-1/2 flex flex-col items-center">
           <CustomImage
             src={currentSong.imgUrl}
             alt={currentSong.name}
             dataUrl={currentTrack}
             layout="responsive"
-            width={1200}
-            height={600}
-            className="cursor-pointer mt-10 mb-5"
+            width={1600}
+            height={800}
+            className="cursor-pointer mt-10 mb-5 max-w-[600px] lg:max-w-[500px] xl:max-w-[600px]" // Add max-width for images
             ctg={currentSong.ctg}
             mood={currentSong.mood}
           />
