@@ -15,7 +15,6 @@ const LivePlay = () => {
   let authorName;
   let musicName;
 
-  // Use useEffect to update hasImage when currentSong changes
   useEffect(() => {
     if (currentSong && currentSong.imgUrl) {
       setHasImage(true);
@@ -43,7 +42,7 @@ const LivePlay = () => {
             layout="responsive"
             width={1600}
             height={800}
-            className="cursor-pointer mt-10 mb-5 max-w-[600px] lg:max-w-[500px] xl:max-w-[600px]" // Add max-width for images
+            className="cursor-pointer mt-10 mb-5 aspect-[3/2] md:aspect-[2/1] max-w-[600px] md: max-w-[700px] lg:max-w-[800px] xl:max-w-[600px]" // Adjusted aspect ratio classes
             ctg={currentSong.ctg}
             mood={currentSong.mood}
           />
