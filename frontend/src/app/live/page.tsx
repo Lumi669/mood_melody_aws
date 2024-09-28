@@ -48,12 +48,12 @@ const LivePlay = () => {
           />
           <div className="text-center">
             <h1 className={`text-xl font-bold ${textColor} mt-8`}>
-              Music Name
+              Music name
             </h1>
             <div className="pb-5">{musicName}</div>
-            <h1 className={`text-xl font-bold ${textColor}`}>Author Name</h1>
+            <h1 className={`text-xl font-bold ${textColor}`}>Author name</h1>
             <div className="pb-5">{authorName}</div>
-            <h1 className={`text-xl font-bold ${textColor}`}>Music Status</h1>
+            <h1 className={`text-xl font-bold ${textColor}`}>Music status</h1>
             <div>{isPlaying ? "Playing" : "Paused"}</div>
           </div>
         </div>
