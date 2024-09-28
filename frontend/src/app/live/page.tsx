@@ -42,7 +42,7 @@ const LivePlay = () => {
             layout="responsive"
             width={1600}
             height={800}
-            className="cursor-pointer mt-10 mb-5 aspect-[3/2] md:aspect-[2/1] max-w-[600px] md: max-w-[700px] lg:max-w-[800px] 2xl:max-w-[1000px]" // Adjusted aspect ratio classes
+            className="cursor-pointer mt-10 mb-5 aspect-[3/2] md:aspect-[2/1] max-w-[600px] md: max-w-[700px] lg:max-w-[800px] " // Adjusted aspect ratio classes
             ctg={currentSong.ctg}
             mood={currentSong.mood}
           />
