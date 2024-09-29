@@ -220,7 +220,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
               layout="responsive"
               width={1400}
               height={700}
-              className="cursor-pointer w-full h-full object-cover"
+              className="cursor-pointer w-full h-full object-cover aspect-[3/2] md:aspect-[2/1]"
               ctg={currentMusicCtg}
               mood={currentSong.mood}
             />
