@@ -238,7 +238,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
                   playsInline
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-0 left-0 right-0 text-center p-1 bg-opacity-75 bg-black text-white text-xs lg:text-sm font-bold">
+                <div className="absolute top-0 left-0 right-0 text-center p-1 bg-opacity-50 bg-black text-white text-xs lg:text-sm font-bold">
                   {getMoodMessage()}
                 </div>
               </div>
