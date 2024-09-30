@@ -12,7 +12,7 @@ import {
   MusicWithImageSimplified,
   MediaContextType,
   MusicWithImage,
-} from "../../types/type";
+} from "../types/type";
 import { addToPlaylist22 } from "utils/addToPlaylist";
 import { fetchAllMusicWithImages } from "../utils/fetchAllMusicWithImages";
 

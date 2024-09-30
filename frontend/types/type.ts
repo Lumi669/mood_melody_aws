@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 export interface Music {
   id: string;

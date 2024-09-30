@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { customLoader } from "@utils/customImageLoader";
-import { CustomImageProps } from "../../types/type";
+import type { CustomImageProps } from "../types/type";
 import { useMedia } from "@context/MediaContext";
 
 const CustomImage: React.FC<CustomImageProps> = ({

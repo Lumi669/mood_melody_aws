@@ -61,7 +61,7 @@
       "@context/*": ["context/*"],
       "@utils/*": ["utils/*"],
       "@src/*": ["src/*"],
-      "@types/*": ["../types/*"]
+      "@types/*": ["types/*"]
     },
     "plugins": [
       {
@@ -76,7 +76,8 @@
     "./src/*",
     ".storybook",
     "stories",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "types" // Include the root-level types folder
   ],
   "exclude": ["node_modules"]
 }
