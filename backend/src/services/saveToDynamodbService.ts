@@ -1,3 +1,4 @@
+require("dotenv").config({ path: ".env.local" });
 import { ContactFormInputs } from "../types/type";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"; // AWS SDK v3
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb"; // DynamoDB DocumentClient for SDK v3
@@ -40,7 +41,9 @@ export async function saveToDynamodbService(inputData: ContactFormInputs) {
   }
 
   const submissionId = `submission-${Date.now()}`; // Generate unique ID
-  const tableName = "UserFeedbackTable";
+  const tableName = process.env.DYNAMO_DB_TABLE_NAME;
+
+  console.log("ttttt tableName === ", tableName);
 
   // DynamoDB PutCommand parameters
   const command = new PutCommand({
