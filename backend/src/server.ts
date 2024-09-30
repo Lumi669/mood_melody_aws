@@ -8,11 +8,20 @@ import imageRoutes from "./routes/imageRoutes";
 import musicRoutes from "./routes/musicRoutes";
 import rootRoutes from "./routes/rtRoutes";
 import sentimentRoutes from "./routes/sentimentRoutes";
+import saveUserFeedBack from "./routes/saveUserFeedback";
 
 import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
-app.use(cors());
+// app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000", // Specify my frontend URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Specify the allowed methods
+  credentials: true, // If I need to handle cookies or authentication
+};
+
+app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 
 // Middleware to parse JSON bodies
@@ -29,6 +38,7 @@ app.use("/", rootRoutes);
 app.use("/test", testRoutes);
 
 app.use("/api/sentimentanalysis", sentimentRoutes);
+app.use("/api/saveUserFeedback", saveUserFeedBack);
 
 // Register other routes...
 // app.use("/api/other", otherRoutes);
