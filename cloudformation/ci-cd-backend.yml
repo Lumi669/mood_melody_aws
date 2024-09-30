@@ -3,17 +3,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 Resources:
   UserFeedbackTable:
     Type: AWS::DynamoDB::Table
-  Properties:
-    TableName: "UserFeedbackTable"
-    AttributeDefinitions:
-      - AttributeName: "submissionId"
-        AttributeType: "S" # String type
-    KeySchema:
-      - AttributeName: "submissionId"
-        KeyType: "HASH" # Partition key
-    BillingMode: PAY_PER_REQUEST
-    SSESpecification: # Enable server-side encryption for better security
-      SSEEnabled: true
+    Properties:
+      TableName: "UserFeedbackTable"
+      AttributeDefinitions:
+        - AttributeName: "submissionId"
+          AttributeType: "S" # String type
+      KeySchema:
+        - AttributeName: "submissionId"
+          KeyType: "HASH" # Partition key
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification: # Enable server-side encryption for better security
+        SSEEnabled: true
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
