@@ -12,7 +12,7 @@ Resources:
         - AttributeName: "submissionId"
           KeyType: "HASH" # Partition key
       BillingMode: PAY_PER_REQUEST
-      SSESpecification: # Enable server-side encryption for better security
+      SSESpecification:
         SSEEnabled: true
 
   LambdaExecutionRole:
