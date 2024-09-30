@@ -18,14 +18,31 @@ const ContactForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset, // Import reset method from react-hook-form
+    reset,
   } = useForm<ContactFormInputs>();
 
-  const onSubmit: SubmitHandler<ContactFormInputs> = (
-    data: ContactFormInputs,
-  ) => {
-    console.log("Form submitted:", data);
-    reset(); // Reset form fields after submission
+  const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/submitFeedback", {
+        // URL of your backend
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        console.log("Feedback submitted successfully");
+        reset(); // Reset form after successful submission
+      } else {
+        console.error("Failed to submit feedback");
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+    }
+
+    reset();
   };
 
   return (

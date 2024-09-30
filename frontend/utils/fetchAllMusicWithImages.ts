@@ -1,4 +1,4 @@
-import { Music, Image } from "../types/type";
+import { Music, Image } from "../../types/type";
 
 import { apiUrls } from "../config/apiConfig";
 

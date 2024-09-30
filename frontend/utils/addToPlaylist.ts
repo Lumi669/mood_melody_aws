@@ -1,4 +1,4 @@
-import { MusicWithImageSimplified } from "../types/type";
+import { MusicWithImageSimplified } from "../../types/type";
 export const addToPlaylist22 = (currentMusic: MusicWithImageSimplified) => {
   console.log("addtoplaylist get called .....");
 

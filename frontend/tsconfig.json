@@ -61,7 +61,7 @@
       "@context/*": ["context/*"],
       "@utils/*": ["utils/*"],
       "@src/*": ["src/*"],
-      "@types/*": ["types/*"]
+      "@types/*": ["../types/*"]
     },
     "plugins": [
       {

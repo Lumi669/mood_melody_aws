@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import CustomImage from "@components/CustomImage";
-import { MusicWithImageSimplified } from "../../../../types/type";
+import { MusicWithImageSimplified } from "../../../../../types/type";
 
 const MixTape: React.FC = () => {
   const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]);

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useMedia } from "@context/MediaContext";
-import { MusicWithImageSimplified } from "../types/type";
+import { MusicWithImageSimplified } from "../../types/type";
 import { usePathname } from "next/navigation";
 import {
   FaPlay,
