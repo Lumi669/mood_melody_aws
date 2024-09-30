@@ -1,6 +1,20 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Resources:
+  UserFeedbackTable:
+    Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: "UserFeedbackTable"
+    AttributeDefinitions:
+      - AttributeName: "submissionId"
+        AttributeType: "S" # String type
+    KeySchema:
+      - AttributeName: "submissionId"
+        KeyType: "HASH" # Partition key
+    BillingMode: PAY_PER_REQUEST
+    SSESpecification: # Enable server-side encryption for better security
+      SSEEnabled: true
+
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -32,6 +46,14 @@ Resources:
                 Action:
                   - comprehend:DetectSentiment
                 Resource: "*"
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                Resource: !GetAtt UserFeedbackTable.Arn
 
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
@@ -41,6 +63,9 @@ Resources:
       Code:
         ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-{{resolve:ssm:/mood-melody/backend-timestamp}}"
       PackageType: Image
+      Environment:
+        Variables:
+          DYNAMO_DB_TABLE_NAME: !Ref UserFeedbackTable
 
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
