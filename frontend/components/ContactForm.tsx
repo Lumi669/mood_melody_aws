@@ -2,16 +2,7 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-interface ContactFormInputs {
-  name: string;
-  surname: string;
-  email: string;
-  telephonenumber: string;
-  title: string;
-  organisation: string;
-  message: string;
-  role: string[]; // Array to hold multiple selections
-}
+import { ContactFormInputs } from "../types/type";
 
 const ContactForm: React.FC = () => {
   const {
@@ -59,11 +50,13 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="firstname"
-              {...register("name", { required: "Firstname is required" })}
+              {...register("firstname", { required: "Firstname is required" })}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            {errors.firstname && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.firstname.message}
+              </p>
             )}
           </div>
           <div>
@@ -163,7 +156,7 @@ const ContactForm: React.FC = () => {
                 type="checkbox"
                 id="recruiters"
                 value="Recruiters"
-                {...register("role")}
+                {...register("roles")}
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="recruiters" className="ml-2 text-sm">
@@ -175,7 +168,7 @@ const ContactForm: React.FC = () => {
                 type="checkbox"
                 id="investors"
                 value="Investors"
-                {...register("role")}
+                {...register("roles")}
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="investors" className="ml-2 text-sm">
@@ -187,7 +180,7 @@ const ContactForm: React.FC = () => {
                 type="checkbox"
                 id="mentors"
                 value="Mentors"
-                {...register("role")}
+                {...register("roles")}
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="mentors" className="ml-2 text-sm">
@@ -199,7 +192,7 @@ const ContactForm: React.FC = () => {
                 type="checkbox"
                 id="partners"
                 value="Partners"
-                {...register("role")}
+                {...register("roles")}
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="partners" className="ml-2 text-sm">
@@ -211,15 +204,17 @@ const ContactForm: React.FC = () => {
                 type="checkbox"
                 id="other"
                 value="Other"
-                {...register("role")}
+                {...register("roles")}
                 className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
               />
               <label htmlFor="other" className="ml-2 text-sm">
                 Other
               </label>
             </div>
-            {errors.role && (
-              <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
+            {errors.roles && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.roles.message}
+              </p>
             )}
           </div>
         </div>
@@ -248,34 +243,6 @@ const ContactForm: React.FC = () => {
           Submit
         </button>
       </form>
-
-      {/* Additional Information Section */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Section 1 */}
-        {/* <div className="text-center">
-          <h2 className="font-bold text-lg">My Name</h2>
-          <p className="mt-2">Jinghuan Wang</p>
-          <h2 className="font-bold text-lg mt-4">My Title</h2>
-          <p className="mt-2">Software Developer</p>
-        </div> */}
-
-        {/* Section 2 */}
-        {/* <div className="text-center">
-          <h2 className="font-bold text-lg">My Interested Roles</h2>
-          <p className="mt-2">Fullstack Developer</p>
-          <p className="mt-1">Frontend Developer</p>
-          <p className="mt-1">Backend Developer</p>
-          <p className="mt-1">AWS and Software Dev Related Roles</p>
-        </div> */}
-
-        {/* Section 3 */}
-        {/* <div className="text-center">
-          <h2 className="font-bold text-lg">My Working Place</h2>
-          <p className="mt-2">Tampere, Finland: Onsite, Hybrid</p>
-          <p className="mt-1">Other Places in Finland: Remote</p>
-          <p className="mt-1">Other Countries: Remote</p>
-        </div> */}
-      </div>
     </div>
   );
 };
