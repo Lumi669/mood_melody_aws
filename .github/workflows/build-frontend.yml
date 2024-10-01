@@ -58,6 +58,7 @@ jobs:
             --build-arg NEXT_PUBLIC_API_URL_2=${BACKEND_API_URL}/api/musics \
             --build-arg NEXT_PUBLIC_API_URL_3=${BACKEND_API_URL}/api/test \
             --build-arg NEXT_PUBLIC_API_URL_4=${BACKEND_API_URL}/api/sentimentanalysis \
+            --build-arg NEXT_PUBLIC_API_URL_5=${BACKEND_API_URL}/api/saveUserFeedback \
             -t mood-melody-aws:frontend-${TIMESTAMP} \
             -t mood-melody-aws:frontend-latest \
             ./frontend
