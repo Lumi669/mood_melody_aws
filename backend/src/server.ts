@@ -31,7 +31,7 @@ app.use("/", rootRoutes);
 app.use("/test", testRoutes);
 
 app.use("/api/sentimentanalysis", sentimentRoutes);
-app.use("/api/saveUserFeedback", saveUserFeedBack);
+app.use("/api/saveuserfeedback", saveUserFeedBack);
 
 // Register other routes...
 // app.use("/api/other", otherRoutes);

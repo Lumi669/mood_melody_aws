@@ -17,9 +17,9 @@ const ContactForm: React.FC = () => {
   const handleFormSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
     console.log("hhhhhh handleFormSubmit get called ...");
     console.log("dddd data === ", data);
-    console.log("apiUrls.saveUserFeedback === ", apiUrls.saveUserFeedback);
+    console.log("apiUrls.saveUserFeedback === ", apiUrls.saveuserfeedback);
     try {
-      const response = await fetch(`${apiUrls.saveUserFeedback}`, {
+      const response = await fetch(`${apiUrls.saveuserfeedback}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
