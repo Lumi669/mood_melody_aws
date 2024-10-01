@@ -3,7 +3,6 @@
 import React from "react";
 import ContactForm from "@components/ContactForm";
 import InfoSections from "@components/InfoSections"; // Import the InfoSections component
-
 const ContactPage = () => {
   const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
 

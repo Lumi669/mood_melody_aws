@@ -4,11 +4,12 @@ const router = express.Router();
 import { saveToDynamodbService } from "../services/saveToDynamodbService";
 
 router.post("/", async (req, res) => {
-  const { userInputs } = req.body;
+  console.log("rrrrrr req === ", req);
+  const userInputs = req.body;
 
   console.log("uuuuuu userinputs === ", userInputs);
 
-  if (!userInputs) {
+  if (!userInputs || userInputs === undefined) {
     return res.status(400).json({ error: "No user inputs" });
   }
 

@@ -12,20 +12,28 @@ const ContactForm: React.FC = () => {
     reset,
   } = useForm<ContactFormInputs>();
 
-  const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
+  const handleFormSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
+    console.log("hhhhhh handleFormSubmit get called ..."); // Add this here
+    console.log("dddd data === ", data); // Add this here
     try {
-      const response = await fetch("http://localhost:3000/api/submitFeedback", {
-        // URL of your backend
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:4000/api/saveUserFeedback",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      });
+      );
+      console.log("rrrrr response ===== ", response);
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
 
       if (response.ok) {
         console.log("Feedback submitted successfully");
-        reset(); // Reset form after successful submission
+        reset();
       } else {
         console.error("Failed to submit feedback");
       }
@@ -39,7 +47,7 @@ const ContactForm: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto p-8">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleFormSubmit)}
         className="bg-gray-50 p-8 rounded-lg shadow-lg max-w-xl mx-auto"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
