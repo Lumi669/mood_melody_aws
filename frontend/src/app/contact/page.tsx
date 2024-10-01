@@ -43,11 +43,17 @@ const ContactPage = () => {
             </div>
             {/* Personal Photo */}
             <div className="flex justify-center px-4 md:px-0">
-              <img
-                src="/profile.webp"
-                alt="Jinghuan Wang"
-                className="w-64 h-64 rounded-full border-4 border-white shadow-lg"
-              />
+              <a
+                href="https://www.linkedin.com/in/jinghuanwang/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/profile.webp"
+                  alt="Jinghuan Wang"
+                  className="w-64 h-64 rounded-full border-4 border-white shadow-lg"
+                />
+              </a>
             </div>
           </div>
         </div>
