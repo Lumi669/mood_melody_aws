@@ -15,7 +15,7 @@ const TechStackPage = () => {
         <h1
           className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-12 text-center ${textColor}`}
         >
-          Tech Stack of My Full-Stack Application
+          Tech Stack of Mood melody Application
         </h1>
         <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-2xl mx-auto">
           <Image
