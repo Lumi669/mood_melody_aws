@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 
+import ContactButton from "@components/ContactButton";
+
 import { useMedia } from "@context/MediaContext";
 import { getTextColor } from "@utils/getTextColor";
 
@@ -27,6 +29,9 @@ const TechStackPage = () => {
             priority={true}
           />
         </div>
+      </div>
+      <div className="flex justify-center mt-12">
+        <ContactButton />
       </div>
     </div>
   );
