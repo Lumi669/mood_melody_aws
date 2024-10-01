@@ -4,6 +4,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 import { ContactFormInputs } from "../types/type";
 
+import { apiUrls } from "@config/apiConfig";
+
 const ContactForm: React.FC = () => {
   const {
     register,
@@ -16,16 +18,13 @@ const ContactForm: React.FC = () => {
     console.log("hhhhhh handleFormSubmit get called ..."); // Add this here
     console.log("dddd data === ", data); // Add this here
     try {
-      const response = await fetch(
-        "http://localhost:4000/api/saveUserFeedback",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+      const response = await fetch(`${apiUrls.saveUserFeedback}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(data),
+      });
       console.log("rrrrr response ===== ", response);
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
