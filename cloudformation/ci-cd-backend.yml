@@ -103,7 +103,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref ApiGatewayResourceRoot
-      PathPart: saveUserFeedback
+      PathPart: saveuserfeedback
       RestApiId: !Ref ApiGatewayRestApi
 
   ApiGatewayMethodRoot:
@@ -210,12 +210,12 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
-  ApiGatewayMethodSaveUserFeedback:
+  ApiGatewayMethodSaveuserfeedback:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
       HttpMethod: POST
-      ResourceId: !Ref ApiGatewayResourceSaveUserFeedback
+      ResourceId: !Ref ApiGatewayResourceSaveuserfeedback
       RestApiId: !Ref ApiGatewayRestApi
       Integration:
         IntegrationHttpMethod: POST
