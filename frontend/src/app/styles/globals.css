@@ -105,3 +105,7 @@ body.no-scroll {
     margin-bottom: 4px; /* Adjust margin for better spacing */
   }
 }
+
+.custom-scrollable {
+  overflow-y: auto; /* Allow vertical scrolling */
+}
