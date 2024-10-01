@@ -99,7 +99,7 @@ Resources:
       ParentId: !Ref ApiGatewayResourceRoot
       PathPart: sentimentanalysis
       RestApiId: !Ref ApiGatewayRestApi
-  ApiGatewayResourceSaveUserfeedback:
+  ApiGatewayResourceSaveuserfeedback:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref ApiGatewayResourceRoot
