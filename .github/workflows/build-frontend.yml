@@ -8,6 +8,10 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,24 +23,21 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::536560382233:role/jinghuan-github-actions-OIDC-role
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/jinghuan-github-actions-OIDC-role
           role-session-name: OIDCSession
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Set up environment variables
         env:
           BACKEND_API_URL: ${{ github.event.client_payload.BACKEND_API_URL }}
           UNIQUE_ID: ${{ github.event.client_payload.UNIQUE_ID }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_REGION: ${{ env.AWS_REGION }}
           NEXT_PUBLIC_PERSONAL_EMAIL: ${{ secrets.NEXT_PUBLIC_PERSONAL_EMAIL }}
           NEXT_PUBLIC_PERSONAL_PHONE: ${{ secrets.NEXT_PUBLIC_PERSONAL_PHONE }}
 
         run: |
           echo "BACKEND_API_URL=${BACKEND_API_URL}" >> $GITHUB_ENV
-          echo "UNIQUE_ID=${UNIQUE_ID}" >> $GITHUB_ENV
-          echo "BACKEND_API_URL ===== , ${BACKEND_API_URL}"
-          echo "UNIQUE_ID ===== , ${UNIQUE_ID}"
-          echo "AWS Region: $AWS_REGION"
+          echo "UNIQUE_ID=${UNIQUE_ID}" >> $GITHUB_ENV         
           echo "NEXT_PUBLIC_PERSONAL_EMAIL=${NEXT_PUBLIC_PERSONAL_EMAIL}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_PERSONAL_PHONE=${NEXT_PUBLIC_PERSONAL_PHONE}" >> $GITHUB_ENV
 
@@ -46,16 +47,16 @@ jobs:
 
       - name: Store Timestamp in Parameter Store
         run: |
-          aws ssm put-parameter --name "/mood-melody/frontend-timestamp" --value ${{ env.TIMESTAMP }} --type String --overwrite --region ${{ secrets.AWS_REGION }}
+          aws ssm put-parameter --name "/mood-melody/frontend-timestamp" --value ${{ env.TIMESTAMP }} --type String --overwrite --region ${{ env.AWS_REGION }}
 
       - name: Log in to Amazon ECR
         run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
       - name: Build and push frontend Docker image
         env:
           TIMESTAMP: ${{ env.TIMESTAMP }}
-          REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mood-melody-aws
+          REPO_URI: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/mood-melody-aws
           BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
           NEXT_PUBLIC_PERSONAL_EMAIL: ${{ env.NEXT_PUBLIC_PERSONAL_EMAIL }}
           NEXT_PUBLIC_PERSONAL_PHONE: ${{ env.NEXT_PUBLIC_PERSONAL_PHONE }}
