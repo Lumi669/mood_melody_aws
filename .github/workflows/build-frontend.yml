@@ -27,12 +27,14 @@ jobs:
         env:
           BACKEND_API_URL: ${{ github.event.client_payload.BACKEND_API_URL }}
           UNIQUE_ID: ${{ github.event.client_payload.UNIQUE_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
 
         run: |
           echo "BACKEND_API_URL=${BACKEND_API_URL}" >> $GITHUB_ENV
           echo "UNIQUE_ID=${UNIQUE_ID}" >> $GITHUB_ENV
           echo "BACKEND_API_URL ===== , ${BACKEND_API_URL}"
           echo "UNIQUE_ID ===== , ${UNIQUE_ID}"
+          echo "AWS Region: $AWS_REGION"
 
       - name: Generate timestamp
         id: vars
