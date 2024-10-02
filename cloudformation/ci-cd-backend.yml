@@ -269,6 +269,7 @@ Resources:
       - ApiGatewayMethodMusicDelete
       - ApiGatewayMethodSentimentanalysis
       - ApiGatewayMethodSaveuserfeedback
+      - ApiGatewayMethodSaveuserfeedbackOptions
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
