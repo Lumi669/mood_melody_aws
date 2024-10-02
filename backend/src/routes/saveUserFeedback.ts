@@ -5,12 +5,11 @@ import { saveToDynamodbService } from "../services/saveToDynamodbService";
 
 // Handle preflight OPTIONS request
 router.options("/", (req, res) => {
-  console.log("oooooooo OPTIONS request received. Headers: ", req.headers);
+  console.log("OPTIONS request received");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  console.log("oooooooo OPTIONS headers set. Sending 200 response.");
-  res.sendStatus(200); // Respond to preflight request with a 200 status
+  res.sendStatus(200);
 });
 
 // Handle POST request
