@@ -3,6 +3,14 @@ const router = express.Router();
 
 import { saveToDynamodbService } from "../services/saveToDynamodbService";
 
+// Handle preflight OPTIONS request
+router.options("/", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.sendStatus(200); // Respond to preflight request with a 200 status
+});
+
 router.post("/", async (req, res) => {
   console.log("rrrrrr req === ", req);
   const userInputs = req.body;
@@ -10,7 +18,7 @@ router.post("/", async (req, res) => {
   console.log("uuuuuu userinputs === ", userInputs);
 
   // Add CORS headers for all responses
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Change "*" to your specific domain if needed
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
 
