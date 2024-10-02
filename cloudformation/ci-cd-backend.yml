@@ -221,12 +221,6 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
-        IntegrationResponses:
-          - StatusCode: 200
-            ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization'"
       MethodResponses:
         - StatusCode: 200
           ResponseParameters:
@@ -242,13 +236,9 @@ Resources:
       ResourceId: !Ref ApiGatewayResourceSaveuserfeedback
       RestApiId: !Ref ApiGatewayRestApi
       Integration:
-        Type: MOCK
-        IntegrationResponses:
-          - StatusCode: 200
-            ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
       MethodResponses:
         - StatusCode: 200
           ResponseParameters:
