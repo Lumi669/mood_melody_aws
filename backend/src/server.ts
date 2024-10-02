@@ -13,7 +13,15 @@ import saveUserFeedBack from "./routes/saveUserFeedback";
 import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
-app.use(cors());
+// app.use(cors());
+
+app.use(
+  cors({
+    origin: "*", // Or specify your frontend domain for more security
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 
 app.use(bodyParser.json());
 
