@@ -77,16 +77,19 @@ export default function SentimentAnalysisPage({
 
   return (
     <div className="p-4 max-w-3xl mx-auto grid gap-4">
-      <div className="relative flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0">
-        <textarea
-          value={text}
-          onChange={handleTextChange}
-          placeholder="Enter text to analyze your sentiment"
-          rows={4}
-          className="flex-grow tracking-wide p-3 border border-gray-300 rounded resize-none w-full"
-        />
-        <div className="absolute bottom-1 right-4 text-gray-500 text-sm">
-          {maxChars - text.length}
+      <div className="relative flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 w-full">
+        <div className="w-full relative">
+          <textarea
+            value={text}
+            onChange={handleTextChange}
+            placeholder="Enter text to analyze your sentiment"
+            rows={4}
+            maxLength={maxChars}
+            className="tracking-wide p-3 border border-gray-300 rounded resize-none w-full"
+          />
+          <div className="absolute bottom-1 right-4 text-gray-500 text-sm">
+            {maxChars - text.length} characters left
+          </div>
         </div>
         <button
           onClick={analyzeSentiment}
