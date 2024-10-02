@@ -9,6 +9,11 @@ router.post("/", async (req, res) => {
 
   console.log("uuuuuu userinputs === ", userInputs);
 
+  // Add CORS headers for all responses
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Change "*" to your specific domain if needed
+  res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+
   if (!userInputs || userInputs === undefined) {
     return res.status(400).json({ error: "No user inputs" });
   }
@@ -16,7 +21,6 @@ router.post("/", async (req, res) => {
   try {
     const message = await saveToDynamodbService(userInputs);
     console.log("mmmmm message from saveUserFeedback.ts === ", message);
-    // Your logic to save user inputs (e.g., to DynamoDB)
     res.json({ "message from aws DynamoDB is": message });
   } catch (error) {
     res.status(500).json({ error: "Failed to save user inputs" });
