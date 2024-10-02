@@ -27,6 +27,8 @@ jobs:
         env:
           BACKEND_API_URL: ${{ github.event.client_payload.BACKEND_API_URL }}
           UNIQUE_ID: ${{ github.event.client_payload.UNIQUE_ID }}
+          NEXT_PUBLIC_PERSONAL_EMAIL: ${{ secrets.NEXT_PUBLIC_PERSONAL_EMAIL }}
+          NEXT_PUBLIC_PERSONAL_PHONE: ${{ secrets.NEXT_PUBLIC_PERSONAL_PHONE }}
         run: |
           echo "BACKEND_API_URL=${BACKEND_API_URL}" >> $GITHUB_ENV
           echo "UNIQUE_ID=${UNIQUE_ID}" >> $GITHUB_ENV
