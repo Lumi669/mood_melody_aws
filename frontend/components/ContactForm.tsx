@@ -12,6 +12,7 @@ const ContactForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<ContactFormInputs>();
 
   const handleFormSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
@@ -233,15 +234,24 @@ const ContactForm: React.FC = () => {
           </label>
           <textarea
             id="message"
-            {...register("message")}
+            {...register("message", {
+              maxLength: {
+                value: 100,
+                message: "Maximum 100 characters allowed",
+              },
+            })}
             className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
             rows={4}
+            maxLength={100}
           ></textarea>
           {errors.message && (
             <p className="text-red-500 text-sm mt-1">
               {errors.message.message}
             </p>
           )}
+          <p className="text-sm text-gray-500">
+            {watch("message")?.length || 0}/100 characters
+          </p>
         </div>
 
         <button
