@@ -53,8 +53,6 @@ jobs:
           BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
         run: |
           echo "BACKEND_API_URL from build and push frontend image step ========= ${BACKEND_API_URL}"
-          echo "Email=======  ${NEXT_PUBLIC_PERSONAL_EMAIL}"
-          echo "Phone========  ${NEXT_PUBLIC_PERSONAL_PHONE}"
           docker build \
             --build-arg NEXT_PUBLIC_API_URL_0=${BACKEND_API_URL}/ \
             --build-arg NEXT_PUBLIC_API_URL_1=${BACKEND_API_URL}/api/images \
@@ -62,7 +60,6 @@ jobs:
             --build-arg NEXT_PUBLIC_API_URL_3=${BACKEND_API_URL}/api/test \
             --build-arg NEXT_PUBLIC_API_URL_4=${BACKEND_API_URL}/api/sentimentanalysis \
             --build-arg NEXT_PUBLIC_API_URL_5=${BACKEND_API_URL}/api/saveuserfeedback \
-           
             -t mood-melody-aws:frontend-${TIMESTAMP} \
             -t mood-melody-aws:frontend-latest \
             ./frontend
