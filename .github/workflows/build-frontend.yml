@@ -28,6 +28,8 @@ jobs:
           BACKEND_API_URL: ${{ github.event.client_payload.BACKEND_API_URL }}
           UNIQUE_ID: ${{ github.event.client_payload.UNIQUE_ID }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          NEXT_PUBLIC_PERSONAL_EMAIL: ${{ secrets.NEXT_PUBLIC_PERSONAL_EMAIL }}
+          NEXT_PUBLIC_PERSONAL_PHONE: ${{ secrets.NEXT_PUBLIC_PERSONAL_PHONE }}
 
         run: |
           echo "BACKEND_API_URL=${BACKEND_API_URL}" >> $GITHUB_ENV
@@ -35,6 +37,8 @@ jobs:
           echo "BACKEND_API_URL ===== , ${BACKEND_API_URL}"
           echo "UNIQUE_ID ===== , ${UNIQUE_ID}"
           echo "AWS Region: $AWS_REGION"
+          echo "NEXT_PUBLIC_PERSONAL_EMAIL=${NEXT_PUBLIC_PERSONAL_EMAIL}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_PERSONAL_PHONE=${NEXT_PUBLIC_PERSONAL_PHONE}" >> $GITHUB_ENV
 
       - name: Generate timestamp
         id: vars
@@ -53,6 +57,8 @@ jobs:
           TIMESTAMP: ${{ env.TIMESTAMP }}
           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mood-melody-aws
           BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
+          NEXT_PUBLIC_PERSONAL_EMAIL: ${{ env.NEXT_PUBLIC_PERSONAL_EMAIL }}
+          NEXT_PUBLIC_PERSONAL_PHONE: ${{ env.NEXT_PUBLIC_PERSONAL_PHONE }}
         run: |
           echo "BACKEND_API_URL from build and push frontend image step ========= ${BACKEND_API_URL}"
           docker build \
@@ -62,6 +68,8 @@ jobs:
             --build-arg NEXT_PUBLIC_API_URL_3=${BACKEND_API_URL}/api/test \
             --build-arg NEXT_PUBLIC_API_URL_4=${BACKEND_API_URL}/api/sentimentanalysis \
             --build-arg NEXT_PUBLIC_API_URL_5=${BACKEND_API_URL}/api/saveuserfeedback \
+            --build-arg NEXT_PUBLIC_PERSONAL_EMAIL=${NEXT_PUBLIC_PERSONAL_EMAIL} \
+            --build-arg NEXT_PUBLIC_PERSONAL_PHONE=${NEXT_PUBLIC_PERSONAL_PHONE} \
             -t mood-melody-aws:frontend-${TIMESTAMP} \
             -t mood-melody-aws:frontend-latest \
             ./frontend
