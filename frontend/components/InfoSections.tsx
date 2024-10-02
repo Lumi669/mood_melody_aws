@@ -7,7 +7,7 @@ import { useMedia } from "@context/MediaContext";
 const InfoSections: React.FC = () => {
   const { isRed, isBlue, isBrown } = useMedia();
   const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
-  const mobile = process.env.NEXT_PUBLIC_PERSONAL_phone;
+  const mobile = process.env.NEXT_PUBLIC_PERSONAL_PHONE;
   const textColor = getTextColor(isRed, isBlue, isBrown);
 
   return (
