@@ -1,0 +1,100 @@
+import {
+  DynamoDBClient,
+  DescribeTableCommand,
+  CreateTableCommand,
+  CreateTableCommandInput,
+} from "@aws-sdk/client-dynamodb";
+import { CloudFormationCustomResourceEvent, Context } from "aws-lambda";
+import https from "https";
+
+const dynamoDB = new DynamoDBClient({ region: "your-region" });
+
+export const handler = async (
+  event: CloudFormationCustomResourceEvent,
+  context: Context,
+) => {
+  const tableName = event.ResourceProperties.TableName;
+
+  if (event.RequestType === "Delete") {
+    // Skip deletion or handle custom deletion logic if needed
+    await sendResponse(event, context, "SUCCESS", {
+      Message: "Delete not required.",
+    });
+    return;
+  }
+
+  try {
+    // Check if the table already exists
+    const describeCommand = new DescribeTableCommand({ TableName: tableName });
+    const data = await dynamoDB.send(describeCommand);
+    console.log("Table already exists: ", data);
+    await sendResponse(event, context, "SUCCESS", {
+      Message: "Table exists, skipping creation.",
+    });
+  } catch (error: any) {
+    if (error.name === "ResourceNotFoundException") {
+      // Table does not exist, create it
+      const createParams: CreateTableCommandInput = {
+        TableName: tableName,
+        AttributeDefinitions: [
+          { AttributeName: "submissionId", AttributeType: "S" },
+        ],
+        KeySchema: [{ AttributeName: "submissionId", KeyType: "HASH" }],
+        BillingMode: "PAY_PER_REQUEST",
+      };
+
+      const createCommand = new CreateTableCommand(createParams);
+      await dynamoDB.send(createCommand);
+      console.log("Table created successfully");
+      await sendResponse(event, context, "SUCCESS", {
+        Message: "Table created.",
+      });
+    } else {
+      console.error("Error checking table: ", error);
+      await sendResponse(event, context, "FAILED", {
+        Message: "Error checking table.",
+      });
+    }
+  }
+};
+
+// Helper function to send a response back to CloudFormation
+const sendResponse = async (
+  event: CloudFormationCustomResourceEvent,
+  context: Context,
+  responseStatus: string,
+  responseData: any,
+) => {
+  const responseBody = JSON.stringify({
+    Status: responseStatus,
+    Reason: `See the details in CloudWatch Log Stream: ${context.logStreamName}`,
+    PhysicalResourceId: context.logStreamName,
+    StackId: event.StackId,
+    RequestId: event.RequestId,
+    LogicalResourceId: event.LogicalResourceId,
+    Data: responseData,
+  });
+
+  const parsedUrl = new URL(event.ResponseURL);
+  const options = {
+    hostname: parsedUrl.hostname,
+    port: 443,
+    path: parsedUrl.pathname,
+    method: "PUT",
+    headers: {
+      "Content-Type": "",
+      "Content-Length": responseBody.length,
+    },
+  };
+
+  const req = https.request(options, (res) => {
+    console.log("CloudFormation response sent:", res.statusCode);
+  });
+
+  req.on("error", (error) => {
+    console.log("sendResponse Error:", error);
+  });
+
+  req.write(responseBody);
+  req.end();
+};
