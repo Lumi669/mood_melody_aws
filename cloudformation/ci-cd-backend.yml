@@ -71,7 +71,10 @@ Resources:
               - Effect: Allow
                 Action:
                   - dynamodb:PutItem
-                Resource: !GetAtt UserFeedbackTable.Arn
+                  - dynamodb:DescribeTable
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                Resource: !Sub "${UserFeedbackTable.Arn}/*"
 
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
