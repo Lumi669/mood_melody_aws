@@ -14,6 +14,7 @@ export const handler = async (
   context: Context,
 ) => {
   const tableName = event.ResourceProperties.TableName;
+  console.log("Received event:", JSON.stringify(event));
 
   if (event.RequestType === "Delete") {
     // Skip deletion or handle custom deletion logic if needed
@@ -25,15 +26,18 @@ export const handler = async (
 
   try {
     // Check if the table already exists
+    console.log(`Checking if table ${tableName} exists`);
     const describeCommand = new DescribeTableCommand({ TableName: tableName });
     const data = await dynamoDB.send(describeCommand);
-    console.log("Table already exists: ", data);
+    console.log("Table already exists:", data);
     await sendResponse(event, context, "SUCCESS", {
       Message: "Table exists, skipping creation.",
     });
   } catch (error: any) {
+    console.error("Error while describing table:", error);
     if (error.name === "ResourceNotFoundException") {
       // Table does not exist, create it
+      console.log(`Table ${tableName} does not exist. Creating now...`);
       const createParams: CreateTableCommandInput = {
         TableName: tableName,
         AttributeDefinitions: [
@@ -50,9 +54,9 @@ export const handler = async (
         Message: "Table created.",
       });
     } else {
-      console.error("Error checking table: ", error);
+      console.error("Unexpected error:", error);
       await sendResponse(event, context, "FAILED", {
-        Message: "Error checking table.",
+        Message: `Error checking table: ${error.message}`,
       });
     }
   }
@@ -89,10 +93,15 @@ const sendResponse = async (
 
   const req = https.request(options, (res) => {
     console.log("CloudFormation response sent:", res.statusCode);
+    if (res.statusCode !== 200) {
+      console.error(
+        `Failed to send response to CloudFormation: ${res.statusCode}`,
+      );
+    }
   });
 
   req.on("error", (error) => {
-    console.log("sendResponse Error:", error);
+    console.error("Error sending response to CloudFormation:", error);
   });
 
   req.write(responseBody);
