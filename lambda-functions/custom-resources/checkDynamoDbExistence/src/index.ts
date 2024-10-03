@@ -7,7 +7,7 @@ import {
 import { CloudFormationCustomResourceEvent, Context } from "aws-lambda";
 import https from "https";
 
-const dynamoDB = new DynamoDBClient({ region: "your-region" });
+const dynamoDB = new DynamoDBClient({ region: "eu-north-1" });
 
 export const handler = async (
   event: CloudFormationCustomResourceEvent,
