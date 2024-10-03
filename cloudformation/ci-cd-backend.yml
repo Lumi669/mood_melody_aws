@@ -1,20 +1,42 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Resources:
+  CustomDynamoDBCheckFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "CheckDynamoDBTable"
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Handler: index.handler
+      Runtime: nodejs14.x
+      Code:
+        S3Bucket: mood-melody-custom-resources
+        S3Key: function.zip
+
+  CheckDynamoDBTableResource:
+    Type: Custom::CheckDynamoDBTable
+    Properties:
+      ServiceToken: !GetAtt CustomDynamoDBCheckFunction.Arn
+      TableName: "UserFeedbackTable"
+
   UserFeedbackTable:
     Type: AWS::DynamoDB::Table
+    Condition: CreateTableCondition
     Properties:
       TableName: "UserFeedbackTable"
       AttributeDefinitions:
         - AttributeName: "submissionId"
-          AttributeType: "S" # String type
+          AttributeType: "S"
       KeySchema:
         - AttributeName: "submissionId"
-          KeyType: "HASH" # Partition key
+          KeyType: "HASH"
       BillingMode: PAY_PER_REQUEST
       SSESpecification:
         SSEEnabled: true
     DeletionPolicy: Retain
+
+Conditions:
+  CreateTableCondition:
+    !Equals [!Ref CheckDynamoDBTableResource, "TableNotExists"]
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
