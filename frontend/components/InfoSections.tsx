@@ -13,9 +13,9 @@ const InfoSections: React.FC = () => {
   return (
     <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
       <div className="text-center p-4   mb-4">
-        <h2 className={`font-bold text-2xl mb-2 ${textColor}`}>My Name</h2>
+        <h2 className={`font-bold text-2xl mb-2 ${textColor}`}>My name</h2>
         <p className="text-lg font-medium text-gray-700">Jinghuan Wang</p>
-        <h2 className={`font-bold text-2xl  mt-2 ${textColor} `}>My Title</h2>
+        <h2 className={`font-bold text-2xl  mt-2 ${textColor} `}>My title</h2>
         <p className="text-lg font-medium text-gray-700 mb-2">
           Software developer
         </p>
@@ -34,7 +34,7 @@ const InfoSections: React.FC = () => {
       {/* Section 2 */}
       <div className="text-center p-4 ">
         <h2 className={`font-bold text-2xl  mb-2 ${textColor}`}>
-          My Interested Roles
+          My interested roles
         </h2>
         <p className="mt-2 text-lg">
           <span className=" text-gray-800">Fullstack developer</span>
@@ -53,7 +53,7 @@ const InfoSections: React.FC = () => {
       {/* Section 3 */}
       <div className="text-center p-4  ">
         <h2 className={`font-bold text-2xl mb-4 ${textColor} `}>
-          My Work Place
+          My work place
         </h2>
         <p className="mt-2 text-lg">
           <span className="font-semibold text-gray-800">Tampere, Finland:</span>
@@ -61,7 +61,7 @@ const InfoSections: React.FC = () => {
         </p>
         <p className="mt-2 text-lg">
           <span className="font-semibold text-gray-800">
-            Other Places in Finland:
+            Other places in Finland:
           </span>
           <span className="text-gray-600"> Remote</span>
         </p>
