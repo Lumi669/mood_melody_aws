@@ -20,7 +20,6 @@ Resources:
 
   UserFeedbackTable:
     Type: AWS::DynamoDB::Table
-    Condition: CreateTableCondition
     Properties:
       TableName: "UserFeedbackTable"
       AttributeDefinitions:
