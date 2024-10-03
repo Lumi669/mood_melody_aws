@@ -46,7 +46,7 @@ const InfoSections: React.FC = () => {
           <span className=" text-gray-800">Backend developer</span>
         </p>
         <p className="mt-2 text-lg">
-          <span className=" text-gray-800">AWS & Software dev related</span>
+          <span className=" text-gray-800">AWS and Software dev related</span>
         </p>
       </div>
 
