@@ -290,9 +290,6 @@ Resources:
       FunctionName: !Ref BackendLambdaFunction
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*"
-Conditions:
-  CreateTableCondition:
-    !Equals [!Ref CheckDynamoDBTableResource, "TableNotExists"]
 
 Outputs:
   BackendApiUrl:
