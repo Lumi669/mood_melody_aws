@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.662.0"
+    "@aws-sdk/client-dynamodb": "^3.662.0",
+    "@smithy/config-resolver": "^3.0.9"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.145",
