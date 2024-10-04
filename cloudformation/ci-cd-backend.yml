@@ -75,7 +75,7 @@ Resources:
                   - dynamodb:DescribeTable
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
-                Resource: !Sub "${UserFeedbackTable.Arn}/*"
+                Resource: !GetAtt UserFeedbackTable.Arn
         # - PolicyName: AllowHttpRequest
         #   PolicyDocument:
         #     Version: "2012-10-17"
