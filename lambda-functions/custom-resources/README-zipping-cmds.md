@@ -15,5 +15,3 @@
 # 7. run `zip -r function.zip dist/ node_modules package.json tsconfig.json`
 
 # 8. upload the .zip file to aws s3
-
-# 9. upload in aws lambda function from s3 again
