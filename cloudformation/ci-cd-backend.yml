@@ -311,6 +311,6 @@ Resources:
 Outputs:
   BackendApiUrl:
     Description: "URL for the backend API Gateway"
-    Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+    Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
     Export:
       Name: BackendApiUrl
