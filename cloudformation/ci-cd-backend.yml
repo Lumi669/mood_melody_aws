@@ -35,7 +35,6 @@ Resources:
         SSEEnabled: true
     DeletionPolicy: Retain
 
-  Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
