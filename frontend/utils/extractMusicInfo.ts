@@ -1,11 +1,11 @@
 export const extractAuthorName = (fileName: string) => {
-  // Split the string by the first hyphen
-  const authorName = fileName.split("-")[0];
-
-  console.log("authorName.trim === ", authorName.trim());
+  let authorName = fileName.split("-")[0];
 
   if (authorName) {
-    return authorName.trim();
+    // Replace underscores with spaces and trim the result
+    authorName = authorName.replace(/_/g, " ").trim();
+    console.log("authorName.trim === ", authorName);
+    return authorName;
   } else {
     return "";
   }
