@@ -35,56 +35,58 @@ Resources:
         SSEEnabled: true
     DeletionPolicy: Retain
 
+  Resources:
   LambdaExecutionRole:
-  Type: AWS::IAM::Role
-  Properties:
-    AssumeRolePolicyDocument:
-      Version: "2012-10-17"
-      Statement:
-        - Effect: Allow
-          Principal:
-            Service: lambda.amazonaws.com
-          Action:
-            - sts:AssumeRole
-    ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-    Policies:
-      - PolicyName: LambdaHttpRequest
-        PolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - execute-api:Invoke
-              Resource: "*"
-      - PolicyName: ComprehendPermissions
-        PolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - comprehend:DetectSentiment
-              Resource: "*"
-      - PolicyName: DynamoDBAccess
-        PolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:PutItem
-                - dynamodb:DescribeTable
-                - dynamodb:GetItem
-                - dynamodb:UpdateItem
-              Resource: !Sub "${UserFeedbackTable.Arn}/*"
-      - PolicyName: AllowHttpRequest
-        PolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - "execute-api:Invoke" # Invoking APIs (API Gateway/HTTPS)
-                - "lambda:InvokeFunction"
-              Resource: "*"
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: LambdaHttpRequest
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - execute-api:Invoke
+                Resource: "*"
+        - PolicyName: ComprehendPermissions
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - comprehend:DetectSentiment
+                Resource: "*"
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:DescribeTable
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                Resource: !Sub "${UserFeedbackTable.Arn}/*"
+        - PolicyName: AllowHttpRequest
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - execute-api:Invoke # Invoking APIs (API Gateway/HTTPS)
+                  - lambda:InvokeFunction
+                Resource: "*"
 
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
