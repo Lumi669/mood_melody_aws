@@ -1,23 +1,23 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Resources:
-  CustomDynamoDBCheckFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: "CheckDynamoDBTable"
-      Role: !GetAtt LambdaExecutionRole.Arn
-      Handler: dist/index.handler
-      Runtime: nodejs18.x
-      Code:
-        S3Bucket: mood-melody-custom-resources
-        S3Key: function.zip
-      Timeout: 300
+  # CustomDynamoDBCheckFunction:
+  #   Type: AWS::Lambda::Function
+  #   Properties:
+  #     FunctionName: "CheckDynamoDBTable"
+  #     Role: !GetAtt LambdaExecutionRole.Arn
+  #     Handler: dist/index.handler
+  #     Runtime: nodejs18.x
+  #     Code:
+  #       S3Bucket: mood-melody-custom-resources
+  #       S3Key: function.zip
+  #     Timeout: 300
 
-  CheckDynamoDBTableResource:
-    Type: Custom::CheckDynamoDBTable
-    Properties:
-      ServiceToken: !GetAtt CustomDynamoDBCheckFunction.Arn
-      TableName: "UserFeedbackTable"
+  # CheckDynamoDBTableResource:
+  #   Type: Custom::CheckDynamoDBTable
+  #   Properties:
+  #     ServiceToken: !GetAtt CustomDynamoDBCheckFunction.Arn
+  #     TableName: "UserFeedbackTable"
 
   UserFeedbackTable:
     Type: AWS::DynamoDB::Table
@@ -76,15 +76,15 @@ Resources:
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
                 Resource: !Sub "${UserFeedbackTable.Arn}/*"
-        - PolicyName: AllowHttpRequest
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - execute-api:Invoke # Invoking APIs (API Gateway/HTTPS)
-                  - lambda:InvokeFunction
-                Resource: "*"
+        # - PolicyName: AllowHttpRequest
+        #   PolicyDocument:
+        #     Version: "2012-10-17"
+        #     Statement:
+        #       - Effect: Allow
+        #         Action:
+        #           - execute-api:Invoke # Invoking APIs (API Gateway/HTTPS)
+        #           - lambda:InvokeFunction
+        #         Resource: "*"
 
   BackendLambdaFunction:
     Type: AWS::Lambda::Function
