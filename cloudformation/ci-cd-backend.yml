@@ -130,6 +130,7 @@ Resources:
       ParentId: !Ref ApiGatewayResourceRoot
       PathPart: sentimentanalysis
       RestApiId: !Ref ApiGatewayRestApi
+
   ApiGatewayResourceSaveuserfeedback:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -219,6 +220,7 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+
   ApiGatewayMethodMusicDelete:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -230,6 +232,7 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+
   ApiGatewayMethodSentimentanalysis:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -241,6 +244,7 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations"
+
   ApiGatewayMethodSaveuserfeedback:
     Type: AWS::ApiGateway::Method
     Properties:
