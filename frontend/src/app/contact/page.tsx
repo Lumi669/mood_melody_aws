@@ -2,7 +2,7 @@
 
 import React from "react";
 import ContactForm from "@components/ContactForm";
-import InfoSections from "@components/InfoSections"; // Import the InfoSections component
+import InfoSections from "@components/InfoSections";
 const ContactPage = () => {
   const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
 
@@ -10,8 +10,10 @@ const ContactPage = () => {
     <div className="h-screen overflow-y-scroll pb-80">
       {/* Contact Section with Gradient Background */}
       <div>
-        <div className="py-16 px-4 sm:px-6 md:px-8 lg:px-12 bg-gradient-to-r from-orange-500 to-black via-white from-20% via-70% to-90%">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
+        <div className="relative py-16 px-4 sm:px-6 md:px-8 lg:px-12 bg-gradient-to-r from-orange-500 to-black via-gray-800 from-20% via-50% to-90%">
+          {/* Overlay to ensure contrast */}
+          <div className="absolute inset-0 bg-black opacity-40 lg:opacity-20"></div>
+          <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
             {/* Text Content */}
             <div className="px-4 sm:px-6 md:px-8 lg:px-12">
               <h1 className="text-4xl font-bold mb-4 text-white">Contact me</h1>
@@ -68,7 +70,7 @@ const ContactPage = () => {
       </div>
       {/* Info Sections */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-2">
-        <InfoSections /> {/* Include the InfoSections component */}
+        <InfoSections />
       </div>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-2">
         <p className="text-center mt-10">Jinghuan @ 2 0 2 4</p>
