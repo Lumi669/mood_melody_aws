@@ -72,7 +72,7 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
             }`}
           >
             <h2 className="text-xl font-semibold mb-5">
-              <span className="font-bold text-blue-600">
+              <span className="font-bold text-blue-900">
                 {extractAuthorName(item.name)}
               </span>
               <span className="text-gray-800">

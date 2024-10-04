@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import CustomImage from "@components/CustomImage";
 import { MusicWithImageSimplified } from "../../../../types/type";
+import { extractAuthorName, extractMusicName } from "@utils/extractMusicInfo";
 
 const MixTape: React.FC = () => {
   const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]);
@@ -64,9 +65,13 @@ const MixTape: React.FC = () => {
               />
             </div>
 
-            {/* Name */}
-            <h2 className="text-xl font-semibold ml-4 flex-grow basis-3/4 whitespace-nowrap verflow-hidden">
-              {item.name}
+            <h2 className="text-xl font-semibold ml-4 flex-grow basis-3/4">
+              <div className="font-bold text-blue-900">
+                {extractAuthorName(item.name)}
+              </div>
+              <div className="text-gray-800 whitespace-nowrap overflow-hidden">
+                {extractMusicName(item.name)}
+              </div>
             </h2>
           </li>
         ))}
