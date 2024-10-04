@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { MusicWithImage, MusicWithImageSimplified } from "../types/type";
 import CustomImage from "@components/CustomImage";
 import { useMedia } from "@context/MediaContext";
+import { extractAuthorName, extractMusicName } from "@utils/extractMusicInfo";
 
 interface MusicListProps {
   matchedData: MusicWithImage[];
@@ -70,7 +71,15 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
               currentSong?.url === item.url ? "bg-gray-100" : ""
             }`}
           >
-            <h2 className="text-xl font-semibold mb-5">{item.name}</h2>
+            <h2 className="text-xl font-semibold mb-5">
+              <span className="font-bold text-blue-600">
+                {extractAuthorName(item.name)}
+              </span>
+              <span className="text-gray-800">
+                : {extractMusicName(item.name)}
+              </span>
+            </h2>
+
             <CustomImage
               src={item.imgUrl}
               alt={item.name}
