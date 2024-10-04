@@ -34,7 +34,7 @@ const SongsPage = () => {
             href="/songs/mixtape"
             className="text-blue-500 underline hover:text-blue-700"
           >
-            your played list
+            my played list
           </Link>
           .
         </p>
@@ -42,12 +42,12 @@ const SongsPage = () => {
         <div className="flex justify-center gap-6">
           <Link href="/songs/allmusic">
             <div className="bg-[#5a799c] text-white px-8 py-4 rounded-full hover:bg-blue-400 transition text-lg font-semibold shadow-md cursor-pointer">
-              All Music
+              All music
             </div>
           </Link>
           <Link href="/songs/mixtape">
             <div className="bg-[#7e6894] text-white px-8 py-4 rounded-full hover:bg-purple-400 transition text-lg font-semibold shadow-lg cursor-pointer">
-              Your Played List
+              My played list
             </div>
           </Link>
         </div>
