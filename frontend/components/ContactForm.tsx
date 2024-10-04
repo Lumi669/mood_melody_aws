@@ -256,7 +256,7 @@ const ContactForm: React.FC = () => {
 
         <button
           type="submit"
-          className="mt-6 w-32 bg-red-600 text-white py-2 rounded-full hover:bg-red-700 transition-colors"
+          className="mt-6 w-32 bg-pink-500 text-white py-2 rounded-full hover:bg-pink-600 transition-colors"
         >
           Submit
         </button>

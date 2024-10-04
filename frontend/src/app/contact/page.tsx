@@ -2,7 +2,7 @@
 
 import React from "react";
 import ContactForm from "@components/ContactForm";
-import InfoSections from "@components/InfoSections"; // Import the InfoSections component
+import InfoSections from "@components/InfoSections";
 const ContactPage = () => {
   const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
 
@@ -66,7 +66,7 @@ const ContactPage = () => {
       <div className="max-w-5xl mx-auto mt-8 px-4 sm:px-6 md:px-8 lg:px-12 py-8">
         <ContactForm />
       </div>
-      <div className="text-center text-4xl text-rose-600">
+      <div className="text-center text-4xl text-pink-500">
         <p>Thank you for your time !</p>
       </div>
       {/* Info Sections */}
