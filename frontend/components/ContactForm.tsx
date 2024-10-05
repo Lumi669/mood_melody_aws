@@ -297,8 +297,8 @@ const ContactForm: React.FC = () => {
           <p
             className={`mt-4 text-center ${
               submissionStatus.startsWith("Error")
-                ? "text-red-500"
-                : "text-green-500"
+                ? "text-red-600"
+                : "text-green-700"
             }`}
           >
             {submissionStatus}
