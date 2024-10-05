@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+  UserFeedbackTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "UserFeedbackTable"
+      AttributeDefinitions:
+        - AttributeName: "submissionId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "submissionId"
+          KeyType: "HASH"
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: true
+    DeletionPolicy: Retain
+
+Outputs:
+  UserFeedbackTableArn:
+    Description: "ARN of the UserFeedbackTable"
+    Value: !GetAtt UserFeedbackTable.Arn
+    Export:
+      Name: UserFeedbackTableArn
+
+  UserFeedbackTableName:
+    Description: "Name of the UserFeedbackTable"
+    Value: !Ref UserFeedbackTable
+    Export:
+      Name: UserFeedbackTableName

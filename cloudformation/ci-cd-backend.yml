@@ -19,21 +19,6 @@ Resources:
   #     ServiceToken: !GetAtt CustomDynamoDBCheckFunction.Arn
   #     TableName: "UserFeedbackTable"
 
-  UserFeedbackTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: "UserFeedbackTable"
-      AttributeDefinitions:
-        - AttributeName: "submissionId"
-          AttributeType: "S"
-      KeySchema:
-        - AttributeName: "submissionId"
-          KeyType: "HASH"
-      BillingMode: PAY_PER_REQUEST
-      SSESpecification:
-        SSEEnabled: true
-    DeletionPolicy: Retain
-
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -75,7 +60,7 @@ Resources:
                   - dynamodb:DescribeTable
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
-                Resource: !GetAtt UserFeedbackTable.Arn
+                Resource: !ImportValue UserFeedbackTableArn
         # - PolicyName: AllowHttpRequest
         #   PolicyDocument:
         #     Version: "2012-10-17"
@@ -96,7 +81,7 @@ Resources:
       PackageType: Image
       Environment:
         Variables:
-          DYNAMO_DB_TABLE_NAME: !Ref UserFeedbackTable
+          DYNAMO_DB_TABLE_NAME: !ImportValue UserFeedbackTableName
 
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
