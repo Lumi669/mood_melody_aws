@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { useMedia } from "@context/MediaContext";
 import { getTextColor } from "@utils/getTextColor";
+import ButtonGroup from "@components/ButtonGroup";
 
 const SongsPage = () => {
   const { isRed, isBlue, isBrown } = useMedia();
@@ -38,19 +39,8 @@ const SongsPage = () => {
           </Link>
           .
         </p>
-        {/* Button area styled with a cute look */}
-        <div className="flex justify-center gap-6">
-          <Link href="/songs/allmusic">
-            <div className="bg-[#5a799c] text-white px-8 py-4 rounded-full hover:bg-blue-400 transition text-lg font-semibold shadow-md cursor-pointer">
-              All music
-            </div>
-          </Link>
-          <Link href="/songs/mixtape">
-            <div className="bg-[#7e6894] text-white px-8 py-4 rounded-full hover:bg-purple-400 transition text-lg font-semibold shadow-lg cursor-pointer">
-              My played list
-            </div>
-          </Link>
-        </div>
+
+        <ButtonGroup />
       </div>
       {/* Decorative shapes for a playful look */}
       <div className="absolute top-10 right-10 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
