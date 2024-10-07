@@ -181,8 +181,8 @@ const MixTape: React.FC = () => {
       {playlist.length === 0 ? (
         <>
           {/* This section matches the SongsPage layout */}
-          <div className="relative flex flex-col items-center justify-center min-h-screen">
-            <div className="flex flex-col items-center justify-center pt-10">
+          <div className="relative flex flex-col items-center justify-center h-screen">
+            <div className="flex flex-col items-center justify-center -mt-40">
               <h1
                 className={`text-5xl font-extrabold mb-6 drop-shadow-lg ${getTextColor(
                   isRed,
