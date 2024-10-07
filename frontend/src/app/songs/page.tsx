@@ -11,7 +11,7 @@ const SongsPage = () => {
   const textColor = getTextColor(isRed, isBlue, isBrown);
 
   return (
-    <div>
+    <div className="h-screen overflow-y-auto">
       {/* Title section */}
       <h1
         className={`text-center mt-64 text-5xl md:text-4xl sm:text-3xl font-extrabold ${textColor}`}
