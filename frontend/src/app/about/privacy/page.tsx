@@ -22,9 +22,7 @@ const PrivacyPage = () => {
           Privacy Policy
         </h1>
         <p className="text-gray-700 mb-4">
-          This Privacy Policy explains how this app handles your data. Please
-          note that this app is a demonstration project created to showcase my
-          development skills and is not intended for commercial use.
+          This Privacy Policy explains how this app handles your data.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">
@@ -198,24 +196,22 @@ const PrivacyPage = () => {
             offerings.
           </li>
           <li className="text-gray-700 mb-2">
-            <strong>To send relevant updates or communications:</strong> With
-            your consent, I may contact you with follow-up communications
-            related to your inquiry.
+            <strong>To send relevant updates or communications:</strong>{" "}
+            Depending on your inquiry, I may follow up with additional
+            communications related to your request.
           </li>
         </ol>
 
         <p className="text-gray-700 mb-4">
-          I do not share your personal information with third parties for
-          marketing purposes. Your data will be automatically cleared from the
-          database after one month and is only used internally to assist with
-          your inquiries and feedback.
+          Your data will be automatically cleared from the database after one
+          month and is only used internally to assist with your inquiries and
+          feedback.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">
           Data Security and Sharing
         </h2>
         <p className="text-gray-700 mb-4">
-          Any data collected is used solely for demonstrating app functionality.
           I do not share your personal information with third parties for
           marketing or advertising purposes. However, I may use the following
           third-party service to improve the app: Google Analytics, which tracks
@@ -229,9 +225,9 @@ const PrivacyPage = () => {
         </h2>
         <p className="text-gray-700 mb-4">
           Users have the right to access, update, or delete their personal
-          information, such as their username and email address, stored within
-          this app. If you would like to exercise these rights or have any
-          concerns about how your data is being handled, send me an email at{" "}
+          information stored within this app. If you would like to exercise
+          these rights or have any concerns about how your data is being
+          handled, send me an email at{" "}
           <a href={`mailto:${email}`} className="text-blue-500 hover:underline">
             {email}
           </a>{" "}
@@ -243,12 +239,8 @@ const PrivacyPage = () => {
 
         <h2 className="text-xl font-semibold mb-2">Disclaimer</h2>
         <p className="text-gray-700 mb-4">
-          This app is for demonstration purposes. It may collect and store real
-          user data, specifically usernames and email addresses, but no other
-          personal information. The collected data is used solely for creating
-          and managing user accounts and is not shared with third parties,
-          except as required for the app's functionality. This app is not
-          intended for commercial use.
+          This app is a demonstration project created to showcase my development
+          skills and is not intended for commercial use.
         </p>
       </div>
     </div>
