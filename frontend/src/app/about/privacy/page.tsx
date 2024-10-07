@@ -182,27 +182,34 @@ const PrivacyPage = () => {
           intended for commercial distribution.
         </p>
 
-        {/* The rest of your content remains the same */}
+        {/* Data Collection and Usage Section */}
         <h2 className="text-xl font-semibold mb-2">
           Data Collection and Usage
         </h2>
-        <ul className="list-disc pl-6 mb-4">
-          <li>
-            <strong>Personal Information:</strong> This app may collect
-            usernames and email addresses during the user registration process.
-            This information is used solely for creating and managing user
-            accounts and providing a personalized experience.
+        <ol className="list-decimal pl-6 mb-4">
+          <li className="text-gray-700 mb-2">
+            <strong>To respond to your inquiries:</strong> Your contact details
+            will allow me to reach out to you regarding your questions,
+            feedback, or inquiries.
           </li>
-          <li>
-            <strong>Usage Data:</strong> The app may track user activity to
-            demonstrate usage statistics.
+          <li className="text-gray-700 mb-2">
+            <strong>To improve my services:</strong> The information you provide
+            may be used to help me understand your needs and improve my
+            offerings.
           </li>
-          <li>
-            <strong>Cookies and Tracking Technologies:</strong> This app may use
-            cookies to improve the user experience, but no personally
-            identifiable information is stored.
+          <li className="text-gray-700 mb-2">
+            <strong>To send relevant updates or communications:</strong> With
+            your consent, I may contact you with follow-up communications
+            related to your inquiry.
           </li>
-        </ul>
+        </ol>
+
+        <p className="text-gray-700 mb-4">
+          I do not share your personal information with third parties for
+          marketing purposes. Your data will be automatically cleared from the
+          database after one month and is only used internally to assist with
+          your inquiries and feedback.
+        </p>
 
         <h2 className="text-xl font-semibold mb-2">
           Data Security and Sharing
@@ -211,9 +218,9 @@ const PrivacyPage = () => {
           Any data collected is used solely for demonstrating app functionality.
           I do not share your personal information with third parties for
           marketing or advertising purposes. However, I may use the following
-          third-party service to improve the app: Google Analytics which tracks
+          third-party service to improve the app: Google Analytics, which tracks
           anonymized user behavior to help me improve the app experience. For
-          more information on how this third-party service handle your data,
+          more information on how this third-party service handles your data,
           please review their respective privacy policies.
         </p>
 
@@ -224,7 +231,7 @@ const PrivacyPage = () => {
           Users have the right to access, update, or delete their personal
           information, such as their username and email address, stored within
           this app. If you would like to exercise these rights or have any
-          concerns about how your data is being handled, sent me email to{" "}
+          concerns about how your data is being handled, send me an email at{" "}
           <a href={`mailto:${email}`} className="text-blue-500 hover:underline">
             {email}
           </a>{" "}
@@ -240,7 +247,7 @@ const PrivacyPage = () => {
           user data, specifically usernames and email addresses, but no other
           personal information. The collected data is used solely for creating
           and managing user accounts and is not shared with third parties,
-          except as required for the app&apos;s functionality. This app is not
+          except as required for the app's functionality. This app is not
           intended for commercial use.
         </p>
       </div>
