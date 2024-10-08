@@ -59,9 +59,47 @@ const LivePlay = () => {
             <div className="text-2xl">{authorName}</div>
             <h1 className={`text-4xl font-bold ${textColor}`}>Music status</h1>
 
-            <div className={`text-2xl ${isPlaying ? "animate-shake" : ""}`}>
+            <div
+              className={`sm:pb-10 text-2xl ${isPlaying ? "animate-shake" : ""}`}
+            >
               {isPlaying ? "Playing" : "Paused"}
             </div>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Molestiae cum quos est beatae quis eaque atque illum quas error ad
+              excepturi officiis officia fuga, repudiandae quia qui cumque quae
+              vel!
+            </p>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Molestiae cum quos est beatae quis eaque atque illum quas error ad
+              excepturi officiis officia fuga, repudiandae quia qui cumque quae
+              vel!
+            </p>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Molestiae cum quos est beatae quis eaque atque illum quas error ad
+              excepturi officiis officia fuga, repudiandae quia qui cumque quae
+              vel!
+            </p>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Molestiae cum quos est beatae quis eaque atque illum quas error ad
+              excepturi officiis officia fuga, repudiandae quia qui cumque quae
+              vel!
+            </p>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Molestiae cum quos est beatae quis eaque atque illum quas error ad
+              excepturi officiis officia fuga, repudiandae quia qui cumque quae
+              vel!
+            </p>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Molestiae cum quos est beatae quis eaque atque illum quas error ad
+              excepturi officiis officia fuga, repudiandae quia qui cumque quae
+              vel!
+            </p>
           </div>
         </div>
       )}
