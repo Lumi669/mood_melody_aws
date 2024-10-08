@@ -38,8 +38,6 @@ const LivePlay = () => {
         <div className="w-[90vw] max-w-7xl flex flex-col lg:flex-row items-center lg:items-start sm:mt-20 lg:mt-28">
           {/* Image Section */}
           <div className="lg:w-[70%] h-auto">
-            {" "}
-            {/* Reduced width to 70% for smaller image */}
             <CustomImage
               src={currentSong.imgUrl}
               alt={currentSong.name}
@@ -55,14 +53,15 @@ const LivePlay = () => {
 
           {/* Text Section */}
           <div className="text-center lg:text-left lg:w-[30%] lg:ml-16 mt-4 lg:mt-4 space-y-4">
-            {" "}
-            {/* Adjusted text section */}
             <h1 className={`text-4xl font-bold ${textColor}`}>Music name</h1>
             <div className="text-2xl">{musicName}</div>
             <h1 className={`text-4xl font-bold ${textColor}`}>Author name</h1>
             <div className="text-2xl">{authorName}</div>
             <h1 className={`text-4xl font-bold ${textColor}`}>Music status</h1>
-            <div className="text-2xl">{isPlaying ? "Playing" : "Paused"}</div>
+
+            <div className={`text-2xl ${isPlaying ? "animate-shake" : ""}`}>
+              {isPlaying ? "Playing" : "Paused"}
+            </div>
           </div>
         </div>
       )}
@@ -78,7 +77,6 @@ const LivePlay = () => {
           />
         </div>
       )}
-      {/* Decorative shapes for a playful look */}
       <div className="absolute bottom-56 right-60 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
       <DecorativeElements />
     </div>
