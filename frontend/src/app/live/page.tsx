@@ -80,7 +80,7 @@ const LivePlay = () => {
           />
         </div>
       )}
-      <div className="absolute bottom-56 right-60 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
+      <div className="hidden md:block absolute bottom-56 right-60 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
       <DecorativeElements />
     </div>
   );

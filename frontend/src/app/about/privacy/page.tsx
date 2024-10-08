@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useMedia } from "@context/MediaContext";
 import { getTextColor } from "@utils/getTextColor";
+import DecorativeElements from "@components/DecorativeElements";
 
 const PrivacyPage = () => {
   const { isRed, isBlue, isBrown } = useMedia();
@@ -243,6 +244,7 @@ const PrivacyPage = () => {
           skills and is not intended for commercial use.
         </p>
       </div>
+      <DecorativeElements />
     </div>
   );
 };
