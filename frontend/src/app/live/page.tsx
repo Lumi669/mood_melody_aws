@@ -34,7 +34,7 @@ const LivePlay = () => {
   return (
     <div className="flex h-screen justify-center overflow-y-auto m-4 lg:mt-10">
       {currentSong && (
-        <div className="w-[90vw] max-w-7xl flex flex-col lg:flex-row items-center lg:items-start sm:mt-20">
+        <div className="w-[90vw] max-w-7xl flex flex-col lg:flex-row items-center lg:items-start sm:mt-20 lg:mt-28">
           {/* Image Section */}
           <div className="lg:w-[70%] h-auto">
             {" "}
@@ -53,7 +53,7 @@ const LivePlay = () => {
           </div>
 
           {/* Text Section */}
-          <div className="text-center lg:text-left lg:w-[30%] lg:ml-6 mt-4 lg:mt-4 space-y-4">
+          <div className="text-center lg:text-left lg:w-[30%] lg:ml-16 mt-4 lg:mt-4 space-y-4">
             {" "}
             {/* Adjusted text section */}
             <h1 className={`text-4xl font-bold ${textColor}`}>Music name</h1>
