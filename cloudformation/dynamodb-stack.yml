@@ -18,7 +18,7 @@ Resources:
       SSESpecification:
         SSEEnabled: true
       TimeToLiveSpecification:
-        AttributeName: "ttl" # The attribute that will store the TTL timestamp
+        AttributeName: "ttl"
         Enabled: true
     DeletionPolicy: Retain
 
