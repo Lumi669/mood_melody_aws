@@ -38,14 +38,14 @@ const MixTape: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-y-auto">
+    <div>
       {playlist.length === 0 ? (
         <>
           {/* This section matches the SongsPage layout */}
-          <div className="relative flex flex-col items-center justify-center h-screen">
-            <div className="flex flex-col items-center justify-center -mt-40">
+          <div>
+            <div className="h-screen overflow-y-auto">
               <h1
-                className={`text-5xl font-extrabold mb-6 drop-shadow-lg ${getTextColor(
+                className={`text-center mt-64 text-5xl md:text-4xl sm:text-3xl font-extrabold ${getTextColor(
                   isRed,
                   isBlue,
                   isBrown,
@@ -53,25 +53,33 @@ const MixTape: React.FC = () => {
               >
                 You have no played music yet.
               </h1>
-              <p className="text-xl text-purple-600 text-center max-w-xl leading-relaxed mb-8">
-                Explore the entire music collection{" "}
-                <Link
-                  href="/songs/allmusic"
-                  className="text-blue-500 underline hover:text-blue-700"
-                >
-                  all music.
-                </Link>{" "}
-                You may also try selecting a mood to match your vibe or check
-                your mood using the AI tool on the{" "}
-                <Link
-                  href="/"
-                  className="text-blue-500 underline hover:text-blue-700"
-                >
-                  homepage
-                </Link>
-                .
-              </p>
-              <ButtonGroup />
+              <div className="h-screen overflow-y-scroll px-4 pb-80 pt-10">
+                <div className="max-w-5xl mx-auto">
+                  <div className="indent-8 m-2 text-xl leading-relaxed text-center text-purple-600">
+                    <p>
+                      Explore the entire music collection{" "}
+                      <Link
+                        href="/songs/allmusic"
+                        className="text-blue-500 underline hover:text-blue-700"
+                      >
+                        all music.
+                      </Link>{" "}
+                      You may also try selecting a mood to match your vibe or
+                      check your mood using the AI tool on the{" "}
+                      <Link
+                        href="/"
+                        className="text-blue-500 underline hover:text-blue-700"
+                      >
+                        homepage
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                  <div className="flex justify-center mt-8">
+                    <ButtonGroup />
+                  </div>
+                </div>
+              </div>
             </div>
             {/* Decorative shapes */}
             <div className="absolute top-10 right-10 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
