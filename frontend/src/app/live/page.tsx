@@ -5,6 +5,7 @@ import { useMedia } from "@context/MediaContext";
 import CustomImage from "@components/CustomImage";
 import { extractAuthorName, extractMusicName } from "@utils/extractMusicInfo";
 import { getTextColor } from "@utils/getTextColor";
+import DecorativeElements from "@components/DecorativeElements";
 
 const LivePlay = () => {
   const [hasImage, setHasImage] = useState(false);
@@ -78,10 +79,8 @@ const LivePlay = () => {
         </div>
       )}
       {/* Decorative shapes for a playful look */}
-      <div className="absolute bottom-40 right-30 w-24 h-24 bg-blue-200 rounded-full opacity-40"></div>
       <div className="absolute bottom-56 right-60 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
-      <div className="absolute top-10 right-10 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
-      <div className="absolute bottom-32 left-20 w-32 h-32 bg-purple-200 rounded-full opacity-50"></div>
+      <DecorativeElements />
     </div>
   );
 };
