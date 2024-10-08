@@ -32,11 +32,13 @@ const LivePlay = () => {
   }
 
   return (
-    <div className="flex h-screen  justify-center overflow-y-auto m-4 lg:mt-10">
+    <div className="flex h-screen justify-center overflow-y-auto m-4 lg:mt-10">
       {currentSong && (
         <div className="w-[90vw] max-w-7xl flex flex-col lg:flex-row items-center lg:items-start sm:mt-20">
           {/* Image Section */}
-          <div className="lg:w-4/5 h-auto ">
+          <div className="lg:w-[70%] h-auto">
+            {" "}
+            {/* Reduced width to 70% for smaller image */}
             <CustomImage
               src={currentSong.imgUrl}
               alt={currentSong.name}
@@ -51,7 +53,9 @@ const LivePlay = () => {
           </div>
 
           {/* Text Section */}
-          <div className="text-center lg:text-left lg:w-1/5 lg:ml-8 mt-4 lg:mt-20 space-y-4">
+          <div className="text-center lg:text-left lg:w-[30%] lg:ml-6 mt-4 lg:mt-4 space-y-4">
+            {" "}
+            {/* Adjusted text section */}
             <h1 className={`text-4xl font-bold ${textColor}`}>Music name</h1>
             <div className="text-2xl">{musicName}</div>
             <h1 className={`text-4xl font-bold ${textColor}`}>Author name</h1>
@@ -62,7 +66,6 @@ const LivePlay = () => {
         </div>
       )}
 
-      {/* Video in the bottom right corner */}
       {!hasImage && (
         <div className="fixed inset-0 flex justify-center items-center overflow-hidden">
           <video
@@ -74,6 +77,11 @@ const LivePlay = () => {
           />
         </div>
       )}
+      {/* Decorative shapes for a playful look */}
+      <div className="absolute bottom-40 right-30 w-24 h-24 bg-blue-200 rounded-full opacity-40"></div>
+      <div className="absolute bottom-56 right-60 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
+      <div className="absolute top-10 right-10 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
+      <div className="absolute bottom-32 left-20 w-32 h-32 bg-purple-200 rounded-full opacity-50"></div>
     </div>
   );
 };
