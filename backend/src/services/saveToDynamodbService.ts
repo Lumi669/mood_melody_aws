@@ -45,6 +45,9 @@ export async function saveToDynamodbService(inputData: ContactFormInputs) {
 
   console.log("ttttt tableName === ", tableName);
 
+  // Calculate the TTL (30 days from now in seconds)
+  const ttl = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
+
   // DynamoDB PutCommand parameters
   const command = new PutCommand({
     TableName: tableName,
@@ -59,6 +62,7 @@ export async function saveToDynamodbService(inputData: ContactFormInputs) {
       roles,
       message,
       createdAt: new Date().toISOString(),
+      ttl, // Add TTL attribute for expiration
     },
   });
 
