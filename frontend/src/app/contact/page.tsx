@@ -3,6 +3,7 @@
 import React from "react";
 import ContactForm from "@components/ContactForm";
 import InfoSections from "@components/InfoSections";
+import DecorativeElements from "@components/DecorativeElements";
 const ContactPage = () => {
   const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
 
@@ -77,9 +78,7 @@ const ContactPage = () => {
         <p className="text-center mt-10">Jinghuan @ 2 0 2 4</p>
       </div>
       {/* Decorative shapes for a playful look */}
-      <div className="absolute top-10 right-10 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
-      <div className="absolute bottom-32 left-20 w-32 h-32 bg-purple-200 rounded-full opacity-50"></div>
-      <div className="absolute bottom-40 right-30 w-24 h-24 bg-blue-200 rounded-full opacity-40"></div>
+      <DecorativeElements />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React from "react";
 import { fetchAllMusicWithImages } from "@utils/fetchAllMusicWithImages";
 import ClientContextUpdater from "@components/ClientContextUpdater";
 import dynamic from "next/dynamic";
+import DecorativeElements from "@components/DecorativeElements";
 
 // Dynamically import MusicPlayer to ensure it's treated as a client component
 const MusicPlayer = dynamic(() => import("@components/MusicPlayer"), {
@@ -17,9 +18,7 @@ const Home: React.FC = async () => {
       <MusicPlayer initialData={matchedData} />
       <ClientContextUpdater initialData={matchedData} />
       {/* Decorative shapes for a playful look */}
-      <div className="absolute top-10 right-10 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
-      <div className="absolute bottom-32 left-20 w-32 h-32 bg-purple-200 rounded-full opacity-50"></div>
-      <div className="absolute bottom-40 right-30 w-24 h-24 bg-blue-200 rounded-full opacity-40"></div>
+      <DecorativeElements />
     </div>
   );
 };
