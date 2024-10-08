@@ -32,29 +32,32 @@ const LivePlay = () => {
   }
 
   return (
-    <div className="flex h-screen md:overflow-auto md:justify-center lg:justify-center lg:overflow-auto">
+    <div className="flex h-screen  justify-center overflow-y-auto m-4 lg:mt-10">
       {currentSong && (
-        <div className="w-full md:flex-grow md:w-full lg:flex lg:w-1/2 flex flex-col items-center">
-          <CustomImage
-            src={currentSong.imgUrl}
-            alt={currentSong.name}
-            dataUrl={currentTrack}
-            layout="responsive"
-            width={1600}
-            height={800}
-            className="cursor-pointer mt-10 mb-5 aspect-[3/2] md:aspect-[2/1] max-w-[600px] md: max-w-[700px] lg:max-w-[800px] " // Adjusted aspect ratio classes
-            ctg={currentSong.ctg}
-            mood={currentSong.mood}
-          />
-          <div className="text-center">
-            <h1 className={`text-xl font-bold ${textColor} mt-8`}>
-              Music name
-            </h1>
-            <div className="pb-5">{musicName}</div>
-            <h1 className={`text-xl font-bold ${textColor}`}>Author name</h1>
-            <div className="pb-5">{authorName}</div>
-            <h1 className={`text-xl font-bold ${textColor}`}>Music status</h1>
-            <div>{isPlaying ? "Playing" : "Paused"}</div>
+        <div className="w-[90vw] max-w-7xl flex flex-col lg:flex-row items-center lg:items-start sm:mt-20">
+          {/* Image Section */}
+          <div className="lg:w-4/5 h-auto ">
+            <CustomImage
+              src={currentSong.imgUrl}
+              alt={currentSong.name}
+              dataUrl={currentTrack}
+              layout="responsive"
+              width={1600}
+              height={800}
+              className="cursor-pointer aspect-[3/2] lg:aspect-[2/1] w-full"
+              ctg={currentSong.ctg}
+              mood={currentSong.mood}
+            />
+          </div>
+
+          {/* Text Section */}
+          <div className="text-center lg:text-left lg:w-1/5 lg:ml-8 mt-4 lg:mt-20 space-y-4">
+            <h1 className={`text-4xl font-bold ${textColor}`}>Music name</h1>
+            <div className="text-2xl">{musicName}</div>
+            <h1 className={`text-4xl font-bold ${textColor}`}>Author name</h1>
+            <div className="text-2xl">{authorName}</div>
+            <h1 className={`text-4xl font-bold ${textColor}`}>Music status</h1>
+            <div className="text-2xl">{isPlaying ? "Playing" : "Paused"}</div>
           </div>
         </div>
       )}
