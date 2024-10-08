@@ -76,10 +76,11 @@ const LivePlay = () => {
             autoPlay
             loop
             muted
-            className="w-3/4 h-2/3"
+            className="w-full h-auto md:w-3/4 md:h-2/3"
           />
         </div>
       )}
+
       <div className="hidden md:block absolute bottom-56 right-60 w-40 h-40 bg-pink-200 rounded-full opacity-50"></div>
       <DecorativeElements />
     </div>
