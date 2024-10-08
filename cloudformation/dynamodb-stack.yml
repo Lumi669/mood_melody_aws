@@ -30,7 +30,7 @@ Outputs:
       Name: UserFeedbackTableArn
 
   UserFeedbackTableName:
-    Description: "Name of the UserFeedbackTable"
+    Description: "Name of the DynamoDB UserFeedbackTable"
     Value: !Ref UserFeedbackTable
     Export:
       Name: UserFeedbackTableName
