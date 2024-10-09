@@ -210,24 +210,61 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
       </div>
 
       {/* Music Image and Video Positioned Together */}
-      <div className="relative flex justify-center items-center w-full mx-auto max-w-screen-lg lg:max-w-screen-xl mt-4 mb-10">
+      {/* <div className="relative flex w-full mx-auto max-w-screen-md lg:max-w-screen-xl xl:max-w-screen-xl 2xl:max-w-screen-2xl mt-4 mb-0">
         {currentSong && currentSong.imgUrl && (
-          <div className="relative w-full max-w-full h-[55vh]">
+          <div className="relative w-full max-w-full h-[55vh] min-h-screen ">
             <CustomImage
               src={currentSong.imgUrl}
               alt={currentMusicName || "an image associated with the music"}
               dataUrl={currentTrack}
               layout="responsive"
-              width={1400}
-              height={700}
-              className="cursor-pointer w-full h-full object-cover aspect-[3/2] md:aspect-[2/1]"
+              width={1800}
+              height={900}
+              className="cursor-pointer w-full lg:h-full object-cover aspect-[3/2] md:aspect-[2/1]"
               ctg={currentMusicCtg}
               mood={currentSong.mood}
             />
 
             {isVideoVisible && (
               <div
-                className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 w-40 h-40 lg:w-48 lg:h-48 cursor-pointer"
+                className="absolute  lg:bottom-96 lg:right-0 w-40 h-40 lg:w-48 lg:h-48 cursor-pointer sm:static sm:mt-0"
+                onClick={handleVideoClick}
+              >
+                <video
+                  src="/animation-center-yellowbg-noblinking.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-0 left-0 right-0 text-center p-1 bg-opacity-50 bg-black text-white text-xs lg:text-sm font-bold sm:static sm:mt-0">
+                  {getMoodMessage()}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div> */}
+
+      <div className="relative flex w-full mx-auto max-w-screen-md lg:max-w-screen-xl xl:max-w-screen-xl 2xl:max-w-screen-2xl mt-4 mb-0">
+        {currentSong && currentSong.imgUrl && (
+          <div className="relative w-full max-w-full h-[55vh] min-h-screen ">
+            <CustomImage
+              src={currentSong.imgUrl}
+              alt={currentMusicName || "an image associated with the music"}
+              dataUrl={currentTrack}
+              layout="responsive"
+              width={1800}
+              height={900}
+              className="cursor-pointer w-full lg:h-full object-cover aspect-[3/2] md:aspect-[2/1]"
+              ctg={currentMusicCtg}
+              mood={currentSong.mood}
+            />
+
+            {isVideoVisible && (
+              <div
+                className="absolute right-[-20px] lg:bottom-96 lg:right-[-140px] w-40 h-40 md:w-52 md:h-52 cursor-pointer"
                 onClick={handleVideoClick}
               >
                 <video
