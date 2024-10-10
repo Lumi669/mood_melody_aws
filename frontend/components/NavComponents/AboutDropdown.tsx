@@ -1,8 +1,6 @@
-"use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
 
 interface AboutDropdownProps {
   closeDropdown?: () => void; // Optional closeDropdown prop
@@ -16,9 +14,11 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
   const [isTechDropdownOpen, setTechDropdownOpen] = useState(false); // Initial state is false (dropdown closed)
   const [isHovered, setIsHovered] = useState(false); // State for hover
 
-  // Handle hover state
+  // Handle hover state (for desktop only)
   const handleTechHover = (hovered: boolean) => {
-    setIsHovered(hovered);
+    if (window.innerWidth >= 768) {
+      setIsHovered(hovered);
+    }
   };
 
   // Toggle dropdown on click for mobile
@@ -26,7 +26,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
     console.log("Tech clicked...");
     console.log("isTechDropdownOpen === ", isTechDropdownOpen);
     if (window.innerWidth < 768) {
-      setTechDropdownOpen((prevState) => !prevState); // Toggle the state between true/false
+      setTechDropdownOpen((prevState) => !prevState); // Toggle the state between true/false for mobile
     }
   };
 
@@ -52,8 +52,8 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
           {/* Tech Menu Item with Nested Dropdown */}
           <li
             className={`relative ${techClass}`} // Apply styles for active or hovered Tech
-            onMouseEnter={() => handleTechHover(true)}
-            onMouseLeave={() => handleTechHover(false)}
+            onMouseEnter={() => handleTechHover(true)} // Only for desktop
+            onMouseLeave={() => handleTechHover(false)} // Only for desktop
             onClick={handleTechClick} // Toggle on click for mobile view
           >
             <div className="flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-100">
@@ -95,8 +95,8 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
               </span>
             </div>
             <AnimatePresence>
-              {/* Only show nested dropdown when isTechDropdownOpen is true */}
-              {isTechDropdownOpen && (
+              {/* Only show nested dropdown when either hovered (desktop) or open (mobile) */}
+              {(isTechDropdownOpen || isHovered || isTechActive) && (
                 <motion.ul
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
