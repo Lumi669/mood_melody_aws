@@ -15,9 +15,16 @@ const Nav: React.FC = () => {
   const [isAboutDropdownOpen, setAboutDropdownOpen] = useState(false);
   const pathname = usePathname(); // Get the current path
   const menuRef = useRef<HTMLDivElement>(null); // Create a ref for the menu
+  const buttonRef = useRef<HTMLButtonElement>(null); // Ref for the 'X' button
+
+  // Check if current path is related to Tech subpages
+  const isTechActive = pathname.startsWith("/about/tech");
 
   // Toggle main mobile menu
-  const toggleMenu = () => {
+  const toggleMenu = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.stopPropagation(); // Prevent the click from bubbling up to the document
     setMenuOpen(!isMenuOpen);
     setSongsDropdownOpen(false);
     setAboutDropdownOpen(false);
@@ -33,7 +40,13 @@ const Nav: React.FC = () => {
   // Close dropdown menu if clicked outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      // Check if the click is outside the menu and not on the button
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
         closeMobileMenu();
       }
     };
@@ -42,7 +55,7 @@ const Nav: React.FC = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [menuRef]);
+  }, [menuRef, buttonRef]);
 
   // Handle hover events for wider screens (desktop)
   const handleMouseEnter = (dropdown: string) => {
@@ -74,9 +87,6 @@ const Nav: React.FC = () => {
       }
     }
   };
-
-  // Check if current path is related to Tech subpages
-  const isTechActive = pathname.startsWith("/about/tech");
 
   return (
     <nav className="sticky top-0 z-50 bg-gray-50 shadow-md">
@@ -178,6 +188,7 @@ const Nav: React.FC = () => {
 
         {/* Hamburger Icon for Mobile */}
         <button
+          ref={buttonRef} // Attach ref to the button
           className="md:hidden block text-gray-800 hover:text-gray-600 focus:outline-none"
           onClick={toggleMenu}
         >
