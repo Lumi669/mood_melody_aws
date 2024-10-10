@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NavLink from "./NavLink";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,7 @@ const Nav: React.FC = () => {
   const [isSongsDropdownOpen, setSongsDropdownOpen] = useState(false);
   const [isAboutDropdownOpen, setAboutDropdownOpen] = useState(false);
   const pathname = usePathname(); // Get the current path
+  const menuRef = useRef<HTMLDivElement>(null); // Create a ref for the menu
 
   // Toggle main mobile menu
   const toggleMenu = () => {
@@ -28,6 +29,20 @@ const Nav: React.FC = () => {
     setSongsDropdownOpen(false);
     setAboutDropdownOpen(false);
   };
+
+  // Close dropdown menu if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        closeMobileMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRef]);
 
   // Handle hover events for wider screens (desktop)
   const handleMouseEnter = (dropdown: string) => {
@@ -184,6 +199,7 @@ const Nav: React.FC = () => {
 
         {/* Mobile Menu */}
         <div
+          ref={menuRef} // Attach ref to the menu container
           className={`${
             isMenuOpen ? "block" : "hidden"
           } md:hidden absolute top-16 left-0 w-full bg-gray-50 shadow-md rounded-md z-40`}
