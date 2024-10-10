@@ -25,7 +25,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
     ref={menuRef}
     className={`${
       isMenuOpen ? "block" : "hidden"
-    } md:hidden absolute top-16 left-0 right-0 min-w-screen bg-gray-50 shadow-md rounded-md z-40 overflow-x-visible`} // Ensure dropdown is not cut off
+    } md:hidden absolute top-16 left-0 right-7 min-w-screen bg-red-50 shadow-md rounded-md z-40 overflow-x-visible`} // Ensure dropdown is not cut off
   >
     <div className="flex flex-col space-y-4 p-4">
       {/* Dropdown Links */}
