@@ -42,7 +42,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           Songs
         </NavLink>
         <button
-          className="text-lg font-semibold text-gray-800 hover:text-gray-600 focus:outline-none pl-2"
+          className="text-2xl font-semibold text-gray-800 hover:text-4xl focus:outline-none pr-4"
           onClick={() => handleDropdownClick("songs")}
         >
           {isSongsDropdownOpen ? "-" : "+"}
@@ -73,7 +73,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           About
         </NavLink>
         <button
-          className="text-lg font-semibold text-gray-800 hover:text-gray-600 focus:outline-none pl-2"
+          className="text-2xl font-semibold text-gray-800 hover:text-4xl focus:outline-none pr-4"
           onClick={() => handleDropdownClick("about")}
         >
           {isAboutDropdownOpen ? "-" : "+"}

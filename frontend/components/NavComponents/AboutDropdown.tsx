@@ -56,7 +56,9 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
             onMouseLeave={() => handleTechHover(false)} // Only for desktop
             onClick={handleTechClick} // Toggle on click for mobile view
           >
-            <div className="flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-100">
+            <div
+              className={`flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-100 ${isTechDropdownOpen ? "bg-gray-100 " : ""}`}
+            >
               <span>Tech</span>
               {/* Arrow icon toggles direction based on dropdown state */}
               <span className="md:hidden">
