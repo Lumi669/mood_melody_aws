@@ -17,13 +17,13 @@ const SongsDropdown: React.FC<SongsDropdownProps> = ({ closeDropdown }) => {
   };
 
   return (
-    <ul className="flex flex-col bg-white shadow-md rounded-md w-40">
+    <ul className="flex flex-col bg-white shadow-md rounded-md w-full sm:w-3/4 md:w-40">
       {(["All Music", "My Playlist"] as ("All Music" | "My Playlist")[]).map(
         (item) => (
           <li key={item}>
             <Link
               href={`/songs/${urlMapping[item]}`}
-              className="block px-4 py-2 hover:bg-gray-100 w-40"
+              className="block px-4 py-2 hover:bg-gray-100 w-full shadow-inner md:shadow-none"
               onClick={closeDropdown} // Close dropdown on link click
             >
               {item}

@@ -105,7 +105,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
                     <li key={item}>
                       <Link
                         href={`/about/tech/${item.replace(" ", "").toLowerCase()}`}
-                        className="block px-4 py-2 hover:bg-gray-100"
+                        className="block px-4 py-2 hover:bg-gray-100 shadow-inner md:shadow-none"
                         onClick={handleLinkClick}
                         onMouseEnter={() => handleTechHover(true)}
                         onMouseLeave={() => handleTechHover(false)} // Propagate hover state

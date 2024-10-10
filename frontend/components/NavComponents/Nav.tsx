@@ -260,7 +260,7 @@ const Nav: React.FC = () => {
               </button>
             </div>
             {isAboutDropdownOpen && (
-              <div className="ml-4">
+              <div className="ml-4 ">
                 <AboutDropdown
                   closeDropdown={closeMobileMenu}
                   isTechActive={isTechActive} // Pass active state to AboutDropdown
