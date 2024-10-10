@@ -40,7 +40,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
     isTechActive || isHovered ? "bg-gray-200 font-bold text-blue-600" : "";
 
   return (
-    <div className="relative">
+    <div className="relative pb-40">
       <AnimatePresence>
         <motion.ul
           initial={{ opacity: 0, y: -10 }}

@@ -80,7 +80,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         </button>
       </div>
       {isAboutDropdownOpen && (
-        <div className="ml-4 ">
+        <div className="ml-4">
           <AboutDropdown closeDropdown={closeMobileMenu} />
         </div>
       )}
