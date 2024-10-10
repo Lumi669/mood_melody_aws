@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,18 +13,21 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
   closeDropdown,
   isTechActive,
 }) => {
-  const [isTechDropdownOpen, setTechDropdownOpen] = useState(false);
+  const [isTechDropdownOpen, setTechDropdownOpen] = useState(false); // Initial state is false (dropdown closed)
   const [isHovered, setIsHovered] = useState(false); // State for hover
-  const pathname = usePathname();
 
-  // When mouse enters or leaves any tech sub-item, set hover state
+  // Handle hover state
   const handleTechHover = (hovered: boolean) => {
     setIsHovered(hovered);
   };
 
-  // Toggle dropdown visibility on click for mobile
+  // Toggle dropdown on click for mobile
   const handleTechClick = () => {
-    if (window.innerWidth < 768) setTechDropdownOpen(!isTechDropdownOpen);
+    console.log("Tech clicked...");
+    console.log("isTechDropdownOpen === ", isTechDropdownOpen);
+    if (window.innerWidth < 768) {
+      setTechDropdownOpen((prevState) => !prevState); // Toggle the state between true/false
+    }
   };
 
   // Close dropdown when a subpage link is clicked
@@ -93,7 +95,8 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
               </span>
             </div>
             <AnimatePresence>
-              {(isTechDropdownOpen || isHovered || isTechActive) && ( // Render when dropdown open or hovered
+              {/* Only show nested dropdown when isTechDropdownOpen is true */}
+              {isTechDropdownOpen && (
                 <motion.ul
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
