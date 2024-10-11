@@ -16,13 +16,18 @@ const NonEmptyPlaylist: React.FC<NonEmptyPlaylistProps> = ({ playlist }) => {
             key={item.ctg}
             className="flex flex-col md:flex-row items-center w-full max-w-xl mx-auto mb-10"
           >
-            {/* Number and text on top of image for mobile */}
-            <div className="flex flex-col items-center mb-4 md:hidden">
-              <span className="text-2xl font-bold">{index + 1}.</span>
-              <div className="text-lg font-semibold">
-                {extractAuthorName(item.name)}
+            {/* For mobile view (number with text in the same line) */}
+            <div className="flex items-center justify-center mb-4 md:hidden">
+              {/* Number */}
+              <span className="text-2xl font-bold mr-2">{index + 1}.</span>
+
+              {/* Text content */}
+              <div className="text-center">
+                <div className="text-lg font-semibold">
+                  {extractAuthorName(item.name)}
+                </div>
+                <div className="text-sm">{extractMusicName(item.name)}</div>
               </div>
-              <div className="text-sm">{extractMusicName(item.name)}</div>
             </div>
 
             {/* Number for desktop (left side of the image) */}
