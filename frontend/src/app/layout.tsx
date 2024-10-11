@@ -1,5 +1,5 @@
 import React from "react";
-import Nav from "@components/NavComponents/Nav";
+import Nav from "@components/navComponents/Nav";
 import Footer from "@components/Footer";
 import { MediaProvider } from "@context/MediaContext";
 import LayoutWrapper from "@components/LayoutWrapper";

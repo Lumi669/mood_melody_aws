@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import MobileMenu from "@components/NavComponents/MobileMenu";
-import DesktopMenu from "@components/NavComponents/DesktopMenu";
+import MobileMenu from "@components/navComponents/MobileMenu";
+import DesktopMenu from "@components/navComponents/DesktopMenu";
 import { usePathname } from "next/navigation";
 
 const Nav: React.FC = () => {

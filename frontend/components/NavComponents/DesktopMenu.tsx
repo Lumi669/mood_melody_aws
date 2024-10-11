@@ -1,5 +1,5 @@
 import React from "react";
-import NavLink from "@components/NavComponents/NavLink";
+import NavLink from "@components/navComponents/NavLink";
 import { AnimatePresence, motion } from "framer-motion";
 import SongsDropdown from "./SongsDropdown";
 import AboutDropdown from "./AboutDropdown";
