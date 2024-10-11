@@ -92,7 +92,7 @@ const AboutPage = () => {
             </ul>
           </div>
 
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-8 mb-10 md:mb-0">
             <ContactButton />
           </div>
         </div>
