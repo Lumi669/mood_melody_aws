@@ -1,8 +1,8 @@
 // export default MobileMenu;
 import React, { RefObject } from "react";
-import NavLink from "@components/navComponents/NavLink";
-import SongsDropdown from "@components/navComponents/SongsDropdown";
-import AboutDropdown from "@components/navComponents/AboutDropdown";
+import NavLink from "@components/NavComponents/NavLink";
+import SongsDropdown from "@components/NavComponents/SongsDropdown";
+import AboutDropdown from "@components/NavComponents/AboutDropdown";
 
 interface MobileMenuProps {
   isMenuOpen: boolean;

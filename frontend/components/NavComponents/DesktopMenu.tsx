@@ -1,8 +1,8 @@
 import React from "react";
-import NavLink from "@components/navComponents/NavLink";
+import NavLink from "@components/NavComponents/NavLink";
 import { AnimatePresence, motion } from "framer-motion";
-import SongsDropdown from "../navComponents/SongsDropdown";
-import AboutDropdown from "../navComponents/AboutDropdown";
+import SongsDropdown from "./SongsDropdown";
+import AboutDropdown from "./AboutDropdown";
 interface DesktopMenuProps {
   isSongsDropdownOpen: boolean;
   isAboutDropdownOpen: boolean;
