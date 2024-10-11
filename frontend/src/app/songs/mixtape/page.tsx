@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import EmptyPlaylist from "@components/myplaylist/EmptyPlaylist";
-import NonEmptyPlaylist from "@components/myplaylist/NonEmptyPlaylist";
+import EmptyPlaylist from "@components/myplaylistComponents/EmptyPlaylist";
+import NonEmptyPlaylist from "@components/myplaylistComponents/NonEmptyPlaylist";
 import { MusicWithImageSimplified } from "../../../../types/type";
 
 const MixTape: React.FC = () => {
