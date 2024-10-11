@@ -53,6 +53,11 @@ jobs:
         run: |
           aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
+      - name: Clear Cache
+        run: |
+          rm -rf node_modules
+          rm -rf .next
+
       - name: Build and push frontend Docker image
         env:
           TIMESTAMP: ${{ env.TIMESTAMP }}
