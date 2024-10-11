@@ -211,7 +211,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
 
       <div className="relative flex w-full mx-auto max-w-screen-md lg:max-w-screen-xl xl:max-w-screen-xl 2xl:max-w-screen-2xl mt-4 mb-0">
         {currentSong && currentSong.imgUrl && (
-          <div className="relative w-full max-w-full h-[55vh] min-h-screen ">
+          <div className="relative w-full max-w-full h-[55vh] ">
             <CustomImage
               src={currentSong.imgUrl}
               alt={currentMusicName || "an image associated with the music"}
@@ -226,7 +226,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
 
             {isVideoVisible && (
               <div
-                className="absolute right-[-20px] w-40 h-40 md:w-52 md:h-52 lg:bottom-[680px] lg:right-[-40px]  cursor-pointer"
+                className="absolute right-[-20px] w-40 h-40 md:w-52 md:h-52 lg:bottom-[80px] lg:right-[-40px]  cursor-pointer"
                 onClick={handleVideoClick}
               >
                 <video
