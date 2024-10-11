@@ -52,12 +52,18 @@ const LivePlay = () => {
           </div>
 
           {/* Text Section */}
-          <div className="pb-[260px] text-center lg:text-left lg:w-[30%] lg:ml-16 mt-4 lg:mt-4 space-y-4">
-            <h1 className={`text-4xl font-bold ${textColor}`}>Music name</h1>
-            <div className="text-2xl">{musicName}</div>
-            <h1 className={`text-4xl font-bold ${textColor}`}>Author name</h1>
-            <div className="text-2xl">{authorName}</div>
-            <h1 className={`text-4xl font-bold ${textColor}`}>Music status</h1>
+          <div className="pb-[260px] text-center lg:text-left lg:w-[30%] lg:ml-16 mt-4 lg:mt-4 space-y-2">
+            <h1 className={`text-2xl md:text-4xl font-bold ${textColor}`}>
+              Music name
+            </h1>
+            <div className="text-2xl pb-3">{musicName}</div>
+            <h1 className={`text-2xl md:text-4xl font-bold ${textColor}`}>
+              Author name
+            </h1>
+            <div className="text-2xl pb-3">{authorName}</div>
+            <h1 className={`text-2xl md:text-4xl font-bold ${textColor}`}>
+              Music status
+            </h1>
             <div
               className={` sm:pb-10 text-2xl ${isPlaying ? "animate-shake" : ""}`}
             >
