@@ -47,7 +47,7 @@ const NonEmptyPlaylist: React.FC<NonEmptyPlaylistProps> = ({ playlist }) => {
             </div>
 
             {/* Text beside image for desktop */}
-            <div className="flex flex-col md:flex-grow md:ml-4">
+            <div className="hidden md:block flex flex-col md:flex-grow md:ml-4">
               <div className="font-bold text-blue-900 text-lg md:text-xl">
                 {extractAuthorName(item.name)}
               </div>
