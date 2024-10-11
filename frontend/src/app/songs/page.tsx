@@ -15,7 +15,7 @@ const SongsPage = () => {
     <div className="h-screen overflow-y-auto">
       {/* Title section */}
       <h1
-        className={`text-center mt-64 text-5xl md:text-4xl sm:text-3xl font-extrabold ${textColor}`}
+        className={`text-center mt-64 text-3xl md:text-5xl font-extrabold ${textColor}`}
       >
         Welcome to the Music Garden!
       </h1>
