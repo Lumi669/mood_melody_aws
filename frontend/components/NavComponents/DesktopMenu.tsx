@@ -3,7 +3,6 @@ import NavLink from "./NavLink";
 import { AnimatePresence, motion } from "framer-motion";
 import SongsDropdown from "./SongsDropdown";
 import AboutDropdown from "./AboutDropdown";
-
 interface DesktopMenuProps {
   isSongsDropdownOpen: boolean;
   isAboutDropdownOpen: boolean;
