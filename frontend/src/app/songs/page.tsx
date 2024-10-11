@@ -15,13 +15,13 @@ const SongsPage = () => {
     <div className="h-screen overflow-y-auto">
       {/* Title section */}
       <h1
-        className={`text-center mt-64 text-3xl md:text-5xl font-extrabold ${textColor}`}
+        className={`text-center mt-20 md:mt-64 text-3xl md:text-5xl font-extrabold ${textColor}`}
       >
         Welcome to the Music Garden!
       </h1>
 
       {/* Main content wrapper with scrollable behavior */}
-      <div className="h-screen overflow-y-scroll px-4 pb-80 pt-10">
+      <div className="overflow-y-scroll px-4 pb-80 pt-10">
         <div className="max-w-5xl mx-auto">
           {/* Description centered in the middle */}
           <div className="indent-8 m-2 text-xl leading-relaxed text-center text-purple-600">
