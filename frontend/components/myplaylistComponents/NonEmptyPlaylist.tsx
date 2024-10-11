@@ -14,10 +14,10 @@ const NonEmptyPlaylist: React.FC<NonEmptyPlaylistProps> = ({ playlist }) => {
         {playlist.map((item: MusicWithImageSimplified, index: number) => (
           <li
             key={item.ctg}
-            className="flex items-center w-full max-w-xl mx-auto mb-10"
+            className="flex flex-col md:flex-row items-center w-full max-w-xl mx-auto mb-10"
           >
-            {/* Number and text on left of image for mobile */}
-            <div className="md:hidden w-full flex flex-col items-center mb-4">
+            {/* Number and text on top of image for mobile */}
+            <div className="flex flex-col items-center mb-4 md:hidden">
               <span className="text-2xl font-bold">{index + 1}.</span>
               <div className="text-lg font-semibold">
                 {extractAuthorName(item.name)}
@@ -47,14 +47,14 @@ const NonEmptyPlaylist: React.FC<NonEmptyPlaylistProps> = ({ playlist }) => {
             </div>
 
             {/* Text beside image for desktop */}
-            <h2 className="hidden md:block text-xl font-semibold ml-4 flex-grow basis-3/4">
-              <div className="font-bold text-blue-900">
+            <div className="flex flex-col md:flex-grow md:ml-4">
+              <div className="font-bold text-blue-900 text-lg md:text-xl">
                 {extractAuthorName(item.name)}
               </div>
-              <div className="text-gray-800 whitespace-nowrap overflow-hidden">
+              <div className="text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden">
                 {extractMusicName(item.name)}
               </div>
-            </h2>
+            </div>
           </li>
         ))}
       </ul>
