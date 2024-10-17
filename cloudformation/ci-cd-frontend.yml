@@ -63,6 +63,26 @@ Resources:
       DefaultRouteSettings:
         DetailedMetricsEnabled: True
 
+  # Adding dev stage with lambdaAlias set to green
+  DevStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref ServerlessHttpApi
+      StageName: dev
+      AutoDeploy: true
+      Variables:
+        lambdaAlias: green
+
+  # Adding prod stage with lambdaAlias set to blue
+  ProdStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref ServerlessHttpApi
+      StageName: prod
+      AutoDeploy: true
+      Variables:
+        lambdaAlias: blue
+
   ApiGatewayIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
