@@ -9,7 +9,6 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       PackageType: Image
       ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:frontend-{{resolve:ssm:/mood-melody/frontend-timestamp}}"
-
       MemorySize: 512
       Timeout: 300
       Architectures:
@@ -63,6 +62,18 @@ Resources:
         AllowOrigins: "'*'"
       DefaultRouteSettings:
         DetailedMetricsEnabled: True
+
+  ApiGatewayIntegration:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: ANY
+      ResourceId: !GetAtt ServerlessHttpApi.RootResourceId
+      RestApiId: !Ref ServerlessHttpApi
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}:$stageVariables.lambdaAlias/invocations"
 
 Outputs:
   FrontendApiUrl:
