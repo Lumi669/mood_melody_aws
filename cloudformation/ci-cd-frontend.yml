@@ -13,11 +13,12 @@ Resources:
       Timeout: 300
       Architectures:
         - x86_64
+      AutoPublishAlias: blue # Automatically creates an alias named 'blue' for the function version
       Events:
         HttpEvent:
           Type: HttpApi
           Properties:
-            Path: /{proxy+} # Catch-all route
+            Path: /{proxy+}
             Method: ANY
             ApiId: !Ref ServerlessHttpApi
 
@@ -53,6 +54,15 @@ Resources:
                   - apigateway:Invoke
                   - apigateway:ManageConnections
                 Resource: "*"
+
+  # Alias for the green environment
+  GreenAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      FunctionName: !Ref FrontendLambdaFunction
+      FunctionVersion: !GetAtt FrontendLambdaFunction.Version
+      Name: green
+
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -63,7 +73,14 @@ Resources:
       DefaultRouteSettings:
         DetailedMetricsEnabled: True
 
-  # Adding dev stage with lambdaAlias set to green
+  ApiGatewayIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref ServerlessHttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}:${stageVariables.lambdaAlias}/invocations"
+      PayloadFormatVersion: "2.0"
+
   DevStage:
     Type: AWS::ApiGatewayV2::Stage
     Properties:
@@ -72,8 +89,10 @@ Resources:
       AutoDeploy: true
       Variables:
         lambdaAlias: green
+    DependsOn:
+      - ServerlessHttpApi
+      - ApiGatewayIntegration
 
-  # Adding prod stage with lambdaAlias set to blue
   ProdStage:
     Type: AWS::ApiGatewayV2::Stage
     Properties:
@@ -82,14 +101,9 @@ Resources:
       AutoDeploy: true
       Variables:
         lambdaAlias: blue
-
-  ApiGatewayIntegration:
-    Type: AWS::ApiGatewayV2::Integration
-    Properties:
-      ApiId: !Ref ServerlessHttpApi
-      IntegrationType: AWS_PROXY
-      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}:${stageVariables.lambdaAlias}/invocations"
-      PayloadFormatVersion: "2.0"
+    DependsOn:
+      - ServerlessHttpApi
+      - ApiGatewayIntegration
 
 Outputs:
   FrontendApiUrl:
