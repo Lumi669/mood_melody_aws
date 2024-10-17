@@ -69,6 +69,7 @@ Resources:
       ApiId: !Ref ServerlessHttpApi
       IntegrationType: AWS_PROXY
       IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}:$stageVariables.lambdaAlias/invocations"
+      PayloadFormatVersion: "2.0"
 
 Outputs:
   FrontendApiUrl:
