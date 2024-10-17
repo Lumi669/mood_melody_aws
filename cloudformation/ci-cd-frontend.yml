@@ -20,7 +20,6 @@ Resources:
             Path: /{proxy+} # Catch-all route
             Method: ANY
             ApiId: !Ref ServerlessHttpApi
-            IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}:$stageVariables.lambdaAlias/invocations"
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
