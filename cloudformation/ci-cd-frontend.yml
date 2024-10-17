@@ -13,7 +13,7 @@ Resources:
       Timeout: 300
       Architectures:
         - x86_64
-      AutoPublishAlias: blue # Automatically creates an alias named 'blue' for the function version
+      AutoPublishAlias: green
       Events:
         HttpEvent:
           Type: HttpApi
@@ -55,13 +55,13 @@ Resources:
                   - apigateway:ManageConnections
                 Resource: "*"
 
-  # Alias for the green environment
-  GreenAlias:
+  # Manually i.e explictely create the blue alias and point it to the latest version created by AutoPublishAlias
+  BlueAlias:
     Type: AWS::Lambda::Alias
     Properties:
       FunctionName: !Ref FrontendLambdaFunction
       FunctionVersion: !GetAtt FrontendLambdaFunction.Version
-      Name: green
+      Name: blue
 
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
