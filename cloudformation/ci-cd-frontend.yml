@@ -62,6 +62,8 @@ Resources:
       FunctionName: !Ref FrontendLambdaFunction
       FunctionVersion: !GetAtt FrontendLambdaFunction.Version
       Name: blue
+    DependsOn:
+      - FrontendLambdaFunction
 
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
