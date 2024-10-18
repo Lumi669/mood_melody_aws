@@ -79,7 +79,7 @@ Resources:
       ApiId: !Ref ServerlessHttpApi
       StageName: dev
       AutoDeploy: true
-      Variables:
+      StageVariables:
         lambdaAlias: green
     DependsOn:
       - ApiGatewayIntegration
@@ -90,7 +90,7 @@ Resources:
       ApiId: !Ref ServerlessHttpApi
       StageName: prod
       AutoDeploy: true
-      Variables:
+      StageVariables:
         lambdaAlias: blue
     DependsOn:
       - ApiGatewayIntegration
