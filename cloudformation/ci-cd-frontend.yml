@@ -70,7 +70,7 @@ Resources:
     Properties:
       ApiId: !Ref ServerlessHttpApi
       IntegrationType: AWS_PROXY
-      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}:${stageVariables.lambdaAlias}/invocations"
+      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}/invocations"
       PayloadFormatVersion: "2.0"
 
   DevStage:
