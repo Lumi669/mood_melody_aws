@@ -55,16 +55,6 @@ Resources:
                   - apigateway:ManageConnections
                 Resource: "*"
 
-  # Manually i.e explictely create the blue alias and point it to the latest version created by AutoPublishAlias
-  BlueAlias:
-    Type: AWS::Lambda::Alias
-    Properties:
-      FunctionName: !Ref FrontendLambdaFunction
-      FunctionVersion: !GetAtt FrontendLambdaFunction.Version
-      Name: blue
-    DependsOn:
-      - FrontendLambdaFunction
-
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
