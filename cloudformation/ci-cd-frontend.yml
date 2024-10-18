@@ -95,9 +95,22 @@ Resources:
     DependsOn:
       - ApiGatewayIntegration
 
+# Outputs:
+#   FrontendApiUrl:
+#     Description: "URL for the frontend API Gateway"
+#     Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/"
+#     Export:
+#       Name: FrontendApiUrl
+
 Outputs:
-  FrontendApiUrl:
-    Description: "URL for the frontend API Gateway"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/"
+  DevStageUrl:
+    Description: "URL for the dev stage of the frontend API Gateway"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/dev"
     Export:
-      Name: FrontendApiUrl
+      Name: DevStageUrl
+
+  ProdStageUrl:
+    Description: "URL for the prod stage of the frontend API Gateway"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/prod"
+    Export:
+      Name: ProdStageUrl
