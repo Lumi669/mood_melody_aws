@@ -34,3 +34,7 @@ docker run -e NEXT_PUBLIC_API_URL_0=http://host.docker.internal:4000/ \
 docker buildx build --build-arg NEXT_PUBLIC_API_URL_0=http://localhost:4000/ --build-arg NEXT_PUBLIC_API_URL_1=http://localhost:4000/api/images --build-arg
 NEXT_PUBLIC_API_URL_2=http://localhost:4000/api/musics --build-arg
 NEXT_PUBLIC_API_URL_3=http://localhost:4000/test -t aaa .
+
+# trigger frontend app directly via cmd
+
+aws lambda invoke --function-name MoodMelodyFrontendFunction:green --payload '{"path":"/"}' response.json --cli-binary-format raw-in-base64-out
