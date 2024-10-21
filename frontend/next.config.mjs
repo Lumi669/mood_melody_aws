@@ -8,6 +8,7 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL_2: process.env.NEXT_PUBLIC_API_URL_2,
     NEXT_PUBLIC_API_URL_3: process.env.NEXT_PUBLIC_API_URL_3,
   },
+  trailingSlash: true,
   async rewrites() {
     return [
       {
@@ -20,6 +21,14 @@ const nextConfig = {
       },
       {
         source: "/:path*",
+        destination: "/:path*",
+      },
+      {
+        source: "/dev/:path*",
+        destination: "/:path*",
+      },
+      {
+        source: "/prod/:path*",
         destination: "/:path*",
       },
     ];
