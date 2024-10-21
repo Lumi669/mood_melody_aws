@@ -14,17 +14,25 @@ const nextConfig = {
       {
         source: "/dev",
         destination: "/dev/",
-        permanent: true,
+        permanent: false,
       },
       {
         source: "/prod",
         destination: "/prod/",
-        permanent: true,
+        permanent: false,
       },
     ];
   },
   async rewrites() {
     return [
+      {
+        source: "/dev",
+        destination: "/",
+      },
+      {
+        source: "/prod",
+        destination: "/",
+      },
       {
         source: "/live",
         destination: "/live",
