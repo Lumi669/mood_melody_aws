@@ -31,6 +31,14 @@ const nextConfig = {
         source: "/prod/:path*",
         destination: "/:path*",
       },
+      {
+        source: "/dev",
+        destination: "/",
+      },
+      {
+        source: "/prod",
+        destination: "/",
+      },
     ];
   },
   images: {
