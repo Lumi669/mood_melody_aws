@@ -29,15 +29,7 @@ const nextConfig = {
         source: "/prod",
         destination: "/",
       },
-      // Rewrite for base paths with trailing slash
-      {
-        source: "/dev/",
-        destination: "/",
-      },
-      {
-        source: "/prod/",
-        destination: "/",
-      },
+
       // Handle all other paths
       {
         source: "/dev/:path*",
@@ -47,10 +39,10 @@ const nextConfig = {
         source: "/prod/:path*",
         destination: "/:path*",
       },
-      // {
-      //   source: "/:path*",
-      //   destination: "/:path*",
-      // },
+      {
+        source: "/:path*",
+        destination: "/:path*",
+      },
     ];
   },
   images: {
