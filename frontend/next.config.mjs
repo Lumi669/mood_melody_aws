@@ -47,10 +47,10 @@ const nextConfig = {
         source: "/prod/:path*",
         destination: "/:path*",
       },
-      {
-        source: "/:path*",
-        destination: "/:path*",
-      },
+      // {
+      //   source: "/:path*",
+      //   destination: "/:path*",
+      // },
     ];
   },
   images: {
