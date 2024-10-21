@@ -9,20 +9,7 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL_3: process.env.NEXT_PUBLIC_API_URL_3,
   },
   trailingSlash: true,
-  async redirects() {
-    return [
-      {
-        source: "/dev",
-        destination: "/dev/",
-        permanent: false,
-      },
-      {
-        source: "/prod",
-        destination: "/prod/",
-        permanent: false,
-      },
-    ];
-  },
+
   async rewrites() {
     return [
       {
