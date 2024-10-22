@@ -17,13 +17,13 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/${stage}",
-        destination: "/",
+        source: `/${stage}`,
+        destination: `/${stage}`,
       },
 
       {
         source: `/${stage}/:path*`,
-        destination: "/:path*",
+        destination: `/${stage}/:path*`,
       },
       {
         source: "/:path*",
