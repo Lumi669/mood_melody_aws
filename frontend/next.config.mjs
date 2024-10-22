@@ -10,32 +10,32 @@ const nextConfig = {
   },
   trailingSlash: true,
 
-  async rewrites() {
-    return [
-      {
-        source: "/",
-        destination: "/dev",
-      },
-      {
-        source: "/",
-        destination: "/prod",
-      },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/dev",
+  //       destination: "/",
+  //     },
+  //     {
+  //       source: "/prod",
+  //       destination: "/",
+  //     },
 
-      // Handle all other paths
-      {
-        source: "/:path*",
-        destination: "/dev/:path*",
-      },
-      {
-        source: "/:path*",
-        destination: "/prod/:path*",
-      },
-      // {
-      //   source: "/:path*",
-      //   destination: "/:path*",
-      // },
-    ];
-  },
+  //     // Handle all other paths
+  //     {
+  //       source: "/dev/:path*",
+  //       destination: "/:path*",
+  //     },
+  //     {
+  //       source: "/prod/:path*",
+  //       destination: "/:path*",
+  //     },
+  //     {
+  //       source: "/:path*",
+  //       destination: "/:path*",
+  //     },
+  //   ];
+  // },
   images: {
     unoptimized: true, // Add this to disable image optimization if using serverless environments
   },
