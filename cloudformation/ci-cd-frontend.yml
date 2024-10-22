@@ -13,6 +13,7 @@ Resources:
       Timeout: 300
       Architectures:
         - x86_64
+      AutoPublishAlias: green # Automatically creates an alias named 'green' for the latest version
       Events:
         HttpEvent:
           Type: HttpApi
@@ -54,18 +55,12 @@ Resources:
                   - apigateway:ManageConnections
                 Resource: "*"
 
-  GreenAlias:
-    Type: AWS::Lambda::Alias
-    Properties:
-      FunctionName: !Ref FrontendLambdaFunction
-      FunctionVersion: $LATEST
-      Name: green
-
+  # Alias for the blue environment, pointing to the latest published version
   BlueAlias:
     Type: AWS::Lambda::Alias
     Properties:
       FunctionName: !Ref FrontendLambdaFunction
-      FunctionVersion: !GetAtt FrontendLambdaFunction.Version
+      FunctionVersion: !GetAtt FrontendLambdaFunction.Version # Use the version created by AutoPublishAlias
       Name: blue
 
   ServerlessHttpApi:
@@ -83,7 +78,7 @@ Resources:
     Properties:
       ApiId: !Ref ServerlessHttpApi
       IntegrationType: AWS_PROXY
-      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/function:MoodMelodyFrontendFunction:green"
+      IntegrationUri: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:MoodMelodyFrontendFunction:green"
       PayloadFormatVersion: "2.0"
 
   ApiGatewayIntegrationProd:
@@ -91,7 +86,7 @@ Resources:
     Properties:
       ApiId: !Ref ServerlessHttpApi
       IntegrationType: AWS_PROXY
-      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/function:MoodMelodyFrontendFunction:blue"
+      IntegrationUri: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:MoodMelodyFrontendFunction:blue"
       PayloadFormatVersion: "2.0"
 
   DevStage:
@@ -115,13 +110,6 @@ Resources:
         lambdaAlias: blue
     DependsOn:
       - ApiGatewayIntegrationProd
-
-# Outputs:
-#   FrontendApiUrl:
-#     Description: "URL for the frontend API Gateway"
-#     Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/"
-#     Export:
-#       Name: FrontendApiUrl
 
 Outputs:
   DevStageUrl:
