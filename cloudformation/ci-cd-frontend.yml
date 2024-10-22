@@ -103,7 +103,7 @@ Resources:
       StageVariables:
         lambdaAlias: green
     DependsOn:
-      - ApiGatewayIntegration
+      - ApiGatewayIntegrationDev
 
   ProdStage:
     Type: AWS::ApiGatewayV2::Stage
@@ -114,7 +114,7 @@ Resources:
       StageVariables:
         lambdaAlias: blue
     DependsOn:
-      - ApiGatewayIntegration
+      - ApiGatewayIntegrationProd
 
 # Outputs:
 #   FrontendApiUrl:
