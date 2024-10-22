@@ -53,7 +53,7 @@ const ContactPage = () => {
                 rel="noopener noreferrer"
               >
                 <img
-                  src="/profile.webp"
+                  src="/dev/profile.webp"
                   alt="Jinghuan Wang"
                   className="w-64 h-64 rounded-full border-4 border-white shadow-lg"
                 />
