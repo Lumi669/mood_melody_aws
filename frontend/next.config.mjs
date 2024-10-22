@@ -12,32 +12,23 @@ const nextConfig = {
 
   async rewrites() {
     return [
-      // {
-      //   source: "/live",
-      //   destination: "/live",
-      // },
-      // {
-      //   source: "/allmusic",
-      //   destination: "/allmusic",
-      // },
-      // Rewrite for base paths without trailing slash
       {
-        source: "/dev",
-        destination: "/",
+        source: "/",
+        destination: "/dev",
       },
       {
-        source: "/prod",
-        destination: "/",
+        source: "/",
+        destination: "/prod",
       },
 
       // Handle all other paths
       {
-        source: "/dev/:path*",
-        destination: "/:path*",
+        source: "/:path*",
+        destination: "/dev/:path*",
       },
       {
-        source: "/prod/:path*",
-        destination: "/:path*",
+        source: "/:path*",
+        destination: "/prod/:path*",
       },
       {
         source: "/:path*",
