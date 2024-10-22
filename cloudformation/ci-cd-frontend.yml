@@ -9,16 +9,16 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       PackageType: Image
       ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:frontend-{{resolve:ssm:/mood-melody/frontend-timestamp}}"
+
       MemorySize: 512
       Timeout: 300
       Architectures:
         - x86_64
-      AutoPublishAlias: green # Automatically creates an alias named 'green' for the latest version
       Events:
         HttpEvent:
           Type: HttpApi
           Properties:
-            Path: /{proxy+}
+            Path: /{proxy+} # Catch-all route
             Method: ANY
             ApiId: !Ref ServerlessHttpApi
 
@@ -54,15 +54,6 @@ Resources:
                   - apigateway:Invoke
                   - apigateway:ManageConnections
                 Resource: "*"
-
-  # Alias for the blue environment, pointing to the latest published version
-  BlueAlias:
-    Type: AWS::Lambda::Alias
-    Properties:
-      FunctionName: !Ref FrontendLambdaFunction
-      FunctionVersion: !GetAtt FrontendLambdaFunction.Version # Use the version created by AutoPublishAlias
-      Name: blue
-
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -73,53 +64,9 @@ Resources:
       DefaultRouteSettings:
         DetailedMetricsEnabled: True
 
-  ApiGatewayIntegrationDev:
-    Type: AWS::ApiGatewayV2::Integration
-    Properties:
-      ApiId: !Ref ServerlessHttpApi
-      IntegrationType: AWS_PROXY
-      IntegrationUri: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:MoodMelodyFrontendFunction:green"
-      PayloadFormatVersion: "2.0"
-
-  ApiGatewayIntegrationProd:
-    Type: AWS::ApiGatewayV2::Integration
-    Properties:
-      ApiId: !Ref ServerlessHttpApi
-      IntegrationType: AWS_PROXY
-      IntegrationUri: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:MoodMelodyFrontendFunction:blue"
-      PayloadFormatVersion: "2.0"
-
-  DevStage:
-    Type: AWS::ApiGatewayV2::Stage
-    Properties:
-      ApiId: !Ref ServerlessHttpApi
-      StageName: dev
-      AutoDeploy: true
-      StageVariables:
-        lambdaAlias: green
-    DependsOn:
-      - ApiGatewayIntegrationDev
-
-  ProdStage:
-    Type: AWS::ApiGatewayV2::Stage
-    Properties:
-      ApiId: !Ref ServerlessHttpApi
-      StageName: prod
-      AutoDeploy: true
-      StageVariables:
-        lambdaAlias: blue
-    DependsOn:
-      - ApiGatewayIntegrationProd
-
 Outputs:
-  DevStageUrl:
-    Description: "URL for the dev stage of the frontend API Gateway"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/dev"
+  FrontendApiUrl:
+    Description: "URL for the frontend API Gateway"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/"
     Export:
-      Name: DevStageUrl
-
-  ProdStageUrl:
-    Description: "URL for the prod stage of the frontend API Gateway"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/prod"
-    Export:
-      Name: ProdStageUrl
+      Name: FrontendApiUrl
