@@ -6,10 +6,10 @@ export function middleware(req: NextRequest) {
 
   // Check if the URL starts with /dev or /prod
   if (pathname.startsWith("/dev") || pathname.startsWith("/prod")) {
-    // Rewrite the request to the appropriate path without changing the basePath
-    return NextResponse.rewrite(new URL(pathname, req.url));
+    // Do nothing, continue with the current path
+    return NextResponse.next();
   }
 
-  // If the path doesn't match /dev or /prod, continue with the request
+  // If the path doesn't start with /dev or /prod, continue with the request
   return NextResponse.next();
 }
