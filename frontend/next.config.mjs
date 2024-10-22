@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
+
+//note env.NEXT_PUBLIC_STAGE is set in aws lambda configuration envionment variable
+const stage = process.env.NEXT_PUBLIC_STAGE || "prod";
 const nextConfig = {
+  basePath: `/${stage}`, // Set basePath based on the stage
   reactStrictMode: true,
   output: "standalone",
   env: {
@@ -10,32 +14,23 @@ const nextConfig = {
   },
   trailingSlash: true,
 
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: "/dev",
-  //       destination: "/",
-  //     },
-  //     {
-  //       source: "/prod",
-  //       destination: "/",
-  //     },
+  async rewrites() {
+    return [
+      {
+        source: "/${stage}",
+        destination: "/",
+      },
 
-  //     // Handle all other paths
-  //     {
-  //       source: "/dev/:path*",
-  //       destination: "/:path*",
-  //     },
-  //     {
-  //       source: "/prod/:path*",
-  //       destination: "/:path*",
-  //     },
-  //     {
-  //       source: "/:path*",
-  //       destination: "/:path*",
-  //     },
-  //   ];
-  // },
+      {
+        source: `/${stage}/:path*`,
+        destination: "/:path*",
+      },
+      {
+        source: "/:path*",
+        destination: "/:path*",
+      },
+    ];
+  },
   images: {
     unoptimized: true, // Add this to disable image optimization if using serverless environments
   },
