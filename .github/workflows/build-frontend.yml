@@ -65,6 +65,8 @@ jobs:
           BACKEND_API_URL: ${{ env.BACKEND_API_URL }}
           NEXT_PUBLIC_PERSONAL_EMAIL: ${{ env.NEXT_PUBLIC_PERSONAL_EMAIL }}
           NEXT_PUBLIC_PERSONAL_PHONE: ${{ env.NEXT_PUBLIC_PERSONAL_PHONE }}
+          NEXT_PUBLIC_STAGE: ${{ env.NEXT_PUBLIC_STAGE }} # Make sure this is set
+
         run: |
           echo "BACKEND_API_URL from build and push frontend image step ========= ${BACKEND_API_URL}"
           docker build \
@@ -76,6 +78,7 @@ jobs:
             --build-arg NEXT_PUBLIC_API_URL_5=${BACKEND_API_URL}/api/saveuserfeedback \
             --build-arg NEXT_PUBLIC_PERSONAL_EMAIL=${NEXT_PUBLIC_PERSONAL_EMAIL} \
             --build-arg NEXT_PUBLIC_PERSONAL_PHONE=${NEXT_PUBLIC_PERSONAL_PHONE} \
+            --build-arg NEXT_PUBLIC_STAGE=${NEXT_PUBLIC_STAGE} \ 
             -t mood-melody-aws:frontend-${TIMESTAMP} \
             -t mood-melody-aws:frontend-latest \
             ./frontend
