@@ -2,14 +2,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const url = req.nextUrl.clone();
+  const { pathname } = req.nextUrl;
 
   // Check if the URL starts with /dev or /prod
-  if (url.pathname.startsWith("/dev") || url.pathname.startsWith("/prod")) {
-    // Rewrite the request to the same path without removing the stage prefix
-    return NextResponse.rewrite(url);
+  if (pathname.startsWith("/dev") || pathname.startsWith("/prod")) {
+    // Rewrite to the same path, preserving the stage prefix
+    return NextResponse.rewrite(req.nextUrl);
   }
 
-  // If the path doesn't start with /dev or /prod, continue with the request
+  // If the path doesn't match /dev or /prod, continue with the original request
   return NextResponse.next();
 }
