@@ -55,6 +55,13 @@ Resources:
                   - apigateway:ManageConnections
                 Resource: "*"
 
+  LambdaAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      FunctionName: !Ref FrontendLambdaFunction
+      FunctionVersion: !GetAtt FrontendLambdaFunction.Version
+      Name: green
+
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -70,7 +77,7 @@ Resources:
     Properties:
       ApiId: !Ref ServerlessHttpApi
       IntegrationType: AWS_PROXY
-      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:MoodMelodyFrontendFunction:${LambdaAlias}/invocations"
+      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FrontendLambdaFunction.Arn}:${stageVariables.lambdaAlias}/invocations"
       PayloadFormatVersion: "2.0"
 
   DevStage:
