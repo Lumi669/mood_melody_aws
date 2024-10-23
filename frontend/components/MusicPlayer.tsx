@@ -6,7 +6,6 @@ import { addToPlaylist22 } from "@utils/addToPlaylist";
 import CustomImage from "@components/CustomImage";
 import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
-import Image from "next/image";
 
 // Define the props type for the initial data passed from the server component
 interface MusicPlayerProps {
@@ -209,7 +208,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
         </button>
       </div>
 
-      <div className="relative flex w-full mx-auto max-w-screen-md lg:max-w-screen-xl xl:max-w-screen-xl 2xl:max-w-screen-2xl mt-4 mb-0">
+      <div className="relative flex w-full mx-auto max-w-screen-md lg:max-w-screen-xl mt-4 mb-0">
         {currentSong && currentSong.imgUrl && (
           <div className="relative w-full max-w-full h-[55vh] ">
             <CustomImage
