@@ -9,6 +9,7 @@ import musicRoutes from "./routes/musicRoutes";
 import rootRoutes from "./routes/rtRoutes";
 import sentimentRoutes from "./routes/sentimentRoutes";
 import saveUserFeedBack from "./routes/saveUserFeedback";
+import analyticsRouter from "./routes/analyticsRoutes";
 
 import { errorHandler } from "./middleware/errorHandler";
 
@@ -40,6 +41,8 @@ app.use("/test", testRoutes);
 
 app.use("/api/sentimentanalysis", sentimentRoutes);
 app.use("/api/saveuserfeedback", saveUserFeedBack);
+
+app.use("/api", analyticsRouter);
 
 // Register other routes...
 // app.use("/api/other", otherRoutes);

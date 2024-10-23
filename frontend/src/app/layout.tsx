@@ -4,6 +4,8 @@ import Footer from "@components/Footer";
 import { MediaProvider } from "@context/MediaContext";
 import LayoutWrapper from "@components/LayoutWrapper";
 import GlobalControls from "@components/GlobalControls";
+import AnalyticsTracker from "@components/AnalyticsTracker";
+
 import "./styles/globals.css";
 
 export const metadata = {
@@ -55,6 +57,7 @@ export default function RootLayout({
         <MediaProvider>
           <LayoutWrapper noScroll={noScroll}>
             <Nav />
+            <AnalyticsTracker /> {/* Add the AnalyticsTracker component here */}
             <main className={`flex-grow ${noScroll ? "h-screen" : ""}`}>
               <div>{children}</div>
             </main>
