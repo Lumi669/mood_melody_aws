@@ -13,7 +13,6 @@ const SongsPage = () => {
 
   return (
     <div className="h-screen overflow-y-auto">
-      {/* Title section */}
       <h1
         className={`text-center mt-20 md:mt-64 text-3xl md:text-5xl font-extrabold ${textColor}`}
       >
