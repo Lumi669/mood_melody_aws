@@ -7,6 +7,11 @@ import DecorativeElements from "@components/DecorativeElements";
 const ContactPage = () => {
   const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
 
+  console.log(
+    "NEXT_PUBLIC_STAGE from contact page ==== ",
+    process.env.NEXT_PUBLIC_STAGE,
+  );
+
   return (
     <div className="h-screen overflow-y-scroll pb-80">
       {/* Contact Section with Warm and Cute Gradient Background */}

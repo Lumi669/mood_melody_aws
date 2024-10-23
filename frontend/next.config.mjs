@@ -4,7 +4,7 @@
 const stage = process.env.NEXT_PUBLIC_STAGE || "prod";
 
 const nextConfig = {
-  basePath: `/${stage}`, // Set basePath based on the stage
+  basePath: stage === "prod" ? "" : `/${stage}`, // Use empty basePath for prod
   reactStrictMode: true,
   output: "standalone",
   env: {
@@ -18,12 +18,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: `/${stage}`, // Match the base path without a trailing slash
-        destination: "/",
-      },
-      {
         source: `/${stage}/:path*`, // Match any path under the base path
-        destination: "/:path*",
+        destination: "/:path*", // Rewrite to root paths
       },
     ];
   },
