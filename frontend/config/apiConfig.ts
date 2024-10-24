@@ -6,6 +6,7 @@ interface ApiUrls {
   test: string;
   sentimentanalysis: string;
   saveuserfeedback: string;
+  analytics: string;
 }
 
 // process.env.NEXT_PUBLIC_API_URL_0 is how application reads
@@ -17,4 +18,5 @@ export const apiUrls: ApiUrls = {
   test: process.env.NEXT_PUBLIC_API_URL_3 || "",
   sentimentanalysis: process.env.NEXT_PUBLIC_API_URL_4 || "",
   saveuserfeedback: process.env.NEXT_PUBLIC_API_URL_5 || "",
+  analytics: process.env.NEXT_PUBLIC_API_URL_6 || "",
 };

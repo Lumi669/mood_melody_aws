@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { apiUrls } from "@config/apiConfig";
 
 const AnalyticsTracker = () => {
   useEffect(() => {
@@ -17,7 +18,7 @@ const AnalyticsTracker = () => {
 
     const sendAnalyticsData = async (duration: number) => {
       try {
-        await fetch("/api/analytics", {
+        await fetch(`${apiUrls.analytics}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

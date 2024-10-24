@@ -1,30 +1,30 @@
 import express, { Request, Response } from "express";
 import {
   saveAnalyticsData,
-  getAnalyticsData,
+  getAllAnalyticsData,
 } from "../services/saveAnalyticsToDynamoService";
 
 const router = express.Router();
 
 // Define the type for the DynamoDB item
 interface AnalyticsItem {
-  userId?: { S: string };
+  sessionId?: { S: string };
   visitTimestamp?: { S: string };
   sessionDuration?: { N: string };
 }
 
 // Endpoint to collect analytics data (store it in DynamoDB)
-router.post("/analytics", async (req: Request, res: Response) => {
-  const { userId, visitTimestamp, sessionDuration } = req.body;
+router.post("/", async (req: Request, res: Response) => {
+  const { sessionId, visitTimestamp, sessionDuration } = req.body;
 
   console.log("Received data === ", {
-    userId,
+    sessionId,
     visitTimestamp,
     sessionDuration,
   });
 
   try {
-    await saveAnalyticsData(userId, visitTimestamp, sessionDuration);
+    await saveAnalyticsData(sessionId, visitTimestamp, sessionDuration);
     res.status(200).json({ message: "Analytics data recorded successfully" });
   } catch (error) {
     console.error("Error recording analytics data:", error);
@@ -32,27 +32,22 @@ router.post("/analytics", async (req: Request, res: Response) => {
   }
 });
 
-// Endpoint to retrieve analytics data for display on the Analysis page
-router.get("/analytics", async (req: Request, res: Response) => {
-  const userId = req.query.userId as string;
-
-  if (!userId) {
-    return res.status(400).json({ message: "userId is required" });
-  }
-
+// Endpoint to retrieve all analytics data for display on the Analysis page
+// Endpoint to retrieve all analytics data for display on the Analysis page
+router.get("/", async (_req: Request, res: Response) => {
   try {
-    const items = await getAnalyticsData(userId);
-    console.log("iiiii items === ", items);
+    const items = await getAllAnalyticsData();
+    console.log("Fetched analytics data:", items);
 
     // Calculate Total Number of Visits
     const totalVisits = items.length;
 
-    // Calculate Unique Visitors (using a unique userId field), with a check for userId and userId.S
+    // Calculate Unique Visitors (distinct sessionIds)
     const uniqueVisitors = new Set(
       items
-        .map((item: AnalyticsItem) => item.userId?.S)
+        .map((item: AnalyticsItem) => item.sessionId?.S)
         .filter(
-          (userId: string): userId is string => typeof userId === "string",
+          (id: string | undefined): id is string => typeof id === "string",
         ),
     ).size;
 
