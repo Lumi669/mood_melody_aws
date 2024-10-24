@@ -22,6 +22,7 @@ const AnalysisPage = () => {
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
         const data = await response.json();
+        console.log("dddd data ==== ", data);
         setAnalytics(data);
       } catch (err) {
         if (err instanceof Error) {

@@ -24,8 +24,16 @@ router.post("/", async (req: Request, res: Response) => {
   });
 
   try {
-    await saveAnalyticsData(sessionId, visitTimestamp, sessionDuration);
-    res.status(200).json({ message: "Analytics data recorded successfully" });
+    // Save analytics data and get the response
+    const savedData = await saveAnalyticsData(
+      sessionId,
+      visitTimestamp,
+      sessionDuration,
+    );
+    res.status(200).json({
+      message: "Analytics data recorded successfully",
+      data: savedData,
+    });
   } catch (error) {
     console.error("Error recording analytics data:", error);
     res.status(500).send("Server error");
@@ -37,7 +45,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.get("/", async (_req: Request, res: Response) => {
   try {
     const items = await getAllAnalyticsData();
-    console.log("Fetched analytics data:", items);
+    console.log("Fetched analytics data ==== ", items);
 
     // Calculate Total Number of Visits
     const totalVisits = items.length;
@@ -50,6 +58,8 @@ router.get("/", async (_req: Request, res: Response) => {
           (id: string | undefined): id is string => typeof id === "string",
         ),
     ).size;
+
+    console.log("uniqueVisitors ====== ", uniqueVisitors);
 
     // Calculate Average Session Duration
     const totalDuration = items.reduce((acc: number, item: AnalyticsItem) => {
