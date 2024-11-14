@@ -6,29 +6,41 @@ import { apiUrls } from "@config/apiConfig";
 
 const AnalyticsTracker = () => {
   useEffect(() => {
-    // Generate a sessionId if it doesn't exist in localStorage
-    let sessionId = localStorage.getItem("sessionId");
+    // Generate a sessionId if it doesn't exist in sessionStorage
+    let sessionId = sessionStorage.getItem("sessionId");
     if (!sessionId) {
       sessionId = crypto.randomUUID();
-      localStorage.setItem("sessionId", sessionId);
+      sessionStorage.setItem("sessionId", sessionId);
     }
+
+    // Generate a unique visitId for this visit
+    const visitId = `visit-${Date.now()}`;
 
     const visitTimestamp = new Date().toISOString();
     const startTime = Date.now();
 
     const sendAnalyticsData = async (duration: number) => {
       try {
-        await fetch(`${apiUrls.analytics}`, {
+        const response = await fetch(`${apiUrls.analytics}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             sessionId,
+            visitId, // Include visitId in the request
             visitTimestamp,
             sessionDuration: duration,
           }),
         });
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to send analytics data: ${response.statusText}`,
+          );
+        }
+
+        console.log("Analytics data sent successfully");
       } catch (error) {
         console.error("Error sending analytics data:", error);
       }
@@ -41,7 +53,7 @@ const AnalyticsTracker = () => {
 
     window.addEventListener("beforeunload", handleBeforeUnload);
 
-    // Cleanup event listener on unmount
+    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
