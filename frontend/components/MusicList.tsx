@@ -15,49 +15,44 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
   const listRefs = useRef<{ [key: string]: HTMLLIElement | null }>({});
   const containerRef = useRef<HTMLUListElement | null>(null);
 
-  // State to track if the scroll logic has been triggered
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const scrollToActiveMusic = (retryCount: number = 0) => {
+    if (!currentSong?.url || !containerRef.current) return;
 
-  useEffect(() => {
-    // Reset the scroll state whenever the currentSong changes
-    setHasScrolled(false);
-  }, [currentSong]);
-
-  useEffect(() => {
-    // Execute centering logic if currentSong is valid, container exists, and scroll hasn't been triggered
-    if (!currentSong?.url || !containerRef.current || hasScrolled) return;
-
-    // Get the active song element
+    const container = containerRef.current;
     const element = listRefs.current[currentSong.url];
+
     if (element) {
-      // Use a timeout to ensure the layout is fully rendered before scrolling
-      setTimeout(() => {
-        // Calculate scroll offset to center the active item in the container
-        const containerHeight = containerRef.current!.clientHeight;
-        const elementTop = element.offsetTop;
-        const elementHeight = element.clientHeight;
+      const containerHeight = container.clientHeight;
+      const elementTop = element.offsetTop;
+      const elementHeight = element.clientHeight;
 
-        const scrollOffset =
-          elementTop - containerHeight / 2 + elementHeight / 2;
+      const scrollOffset = elementTop - containerHeight / 2 + elementHeight / 2;
 
-        // Scroll to the calculated position
-        containerRef.current!.scrollTo({
-          top: scrollOffset,
-          behavior: "smooth",
-        });
+      // Perform the scroll
+      container.scrollTo({
+        top: scrollOffset,
+        behavior: "smooth",
+      });
 
-        // Mark as scrolled to avoid re-triggering
-        setHasScrolled(true);
-      }, 100); // Adjust the delay as needed to ensure the layout is ready
+      // Check if the element is centered
+      const isCentered = Math.abs(container.scrollTop - scrollOffset) < 5; // Allow a small margin of error
+
+      if (!isCentered && retryCount < 10) {
+        // Retry after a delay
+        setTimeout(() => scrollToActiveMusic(retryCount + 1), 100);
+      }
     }
-  }, [currentSong, hasScrolled]);
+  };
+
+  useEffect(() => {
+    scrollToActiveMusic();
+  }, [currentSong]);
 
   return (
     <ul ref={containerRef} className="overflow-y-scroll h-full">
       {matchedData.map((item: MusicWithImage) => (
         <li
           key={item.url}
-          id={item.url || ""}
           ref={(el) => {
             if (el) {
               listRefs.current[item.url] = el;
