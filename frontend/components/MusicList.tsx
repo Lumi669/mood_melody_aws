@@ -15,7 +15,9 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
   const listRefs = useRef<{ [key: string]: HTMLLIElement | null }>({});
   const containerRef = useRef<HTMLUListElement | null>(null);
 
-  const scrollToActiveMusic = (retryCount: number = 0) => {
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  const scrollToActiveMusic = () => {
     if (!currentSong?.url || !containerRef.current) return;
 
     const container = containerRef.current;
@@ -28,24 +30,25 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
 
       const scrollOffset = elementTop - containerHeight / 2 + elementHeight / 2;
 
-      // Perform the scroll
+      setIsScrolling(true);
+
+      // Smooth scrolling logic
       container.scrollTo({
         top: scrollOffset,
         behavior: "smooth",
       });
 
-      // Check if the element is centered
-      const isCentered = Math.abs(container.scrollTop - scrollOffset) < 5; // Allow a small margin of error
-
-      if (!isCentered && retryCount < 10) {
-        // Retry after a delay
-        setTimeout(() => scrollToActiveMusic(retryCount + 1), 100);
-      }
+      // Wait for the scroll to complete
+      setTimeout(() => setIsScrolling(false), 500); // Adjust timeout to match scroll duration
     }
   };
 
+  // Debounce scroll logic to prevent overlapping triggers
   useEffect(() => {
-    scrollToActiveMusic();
+    if (isScrolling) return;
+
+    const timeout = setTimeout(scrollToActiveMusic, 100); // Add slight delay for rendering stability
+    return () => clearTimeout(timeout);
   }, [currentSong]);
 
   return (
