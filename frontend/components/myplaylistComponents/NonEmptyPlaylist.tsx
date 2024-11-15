@@ -40,10 +40,8 @@ const NonEmptyPlaylist: React.FC<NonEmptyPlaylistProps> = ({ playlist }) => {
               <CustomImage
                 src={item.imgUrl}
                 alt={item.name}
-                layout="fixed"
-                objectFit="cover"
                 dataUrl={item.url ?? ""}
-                className="cursor-pointer rounded-lg transition-all"
+                className="cursor-pointer rounded-lg transition-all object-cover" // Tailwind class for object fit
                 width={260}
                 height={130}
                 ctg={item.ctg}

@@ -48,7 +48,6 @@ const TechStackPage = () => {
             alt="Tech Stack"
             width={600}
             height={400}
-            layout="responsive"
             priority={true}
           />
         </div>

@@ -74,10 +74,8 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
           <CustomImage
             src={item.imgUrl}
             alt={item.name}
-            layout="responsive"
-            objectFit="cover"
             dataUrl={item.url}
-            className="cursor-pointer rounded-lg transition-all"
+            className="cursor-pointer rounded-lg transition-all object-cover" // Tailwind class for object fit
             width={900}
             height={450}
             ctg={item.ctg}

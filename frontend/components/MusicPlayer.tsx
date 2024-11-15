@@ -215,7 +215,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
               src={currentSong.imgUrl}
               alt={currentMusicName || "an image associated with the music"}
               dataUrl={currentTrack}
-              layout="responsive"
               width={1800}
               height={900}
               className="cursor-pointer w-full lg:h-full object-cover aspect-[3/2] md:aspect-[2/1]"

@@ -9,8 +9,6 @@ import { useMedia } from "@context/MediaContext";
 const CustomImage: React.FC<CustomImageProps> = ({
   src,
   alt = "not specified",
-  layout,
-  objectFit,
   onClick,
   dataUrl,
   width,
@@ -95,8 +93,6 @@ const CustomImage: React.FC<CustomImageProps> = ({
         loader={() => customLoader({ srcOfImageUrl: validSrc })}
         src={validSrc}
         alt={alt}
-        layout={layout}
-        objectFit={objectFit}
         unoptimized
         data-url={dataUrl}
         width={width}

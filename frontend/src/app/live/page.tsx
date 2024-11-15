@@ -42,7 +42,6 @@ const LivePlay = () => {
               src={currentSong.imgUrl}
               alt={currentSong.name}
               dataUrl={currentTrack}
-              layout="responsive"
               width={1600}
               height={800}
               className="cursor-pointer aspect-[3/2] lg:aspect-[2/1] w-full"
