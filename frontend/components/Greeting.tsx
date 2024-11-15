@@ -13,7 +13,7 @@ const Greeting = () => {
       />
 
       <h1 className="bg-yellow-100 text-2xl md:text-4xl font-mono text-[#1a9f4b] font-bold tracking-wide text-center p-4 rounded-lg">
-        Hi there, How do you feel today :D === ?
+        Hi there, How do you feel today :D ?
       </h1>
     </div>
   );
