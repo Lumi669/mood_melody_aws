@@ -50,7 +50,7 @@ export const handler = async (event: any) => {
     }
 
     // Step 2: Retrieve the GitHub token from Parameter Store
-    const parameterName = "github-token-mood-melody"; // Replace with the name of your parameter
+    const parameterName = "github-token-mood-melody";
     const ssmResponse = await ssm
       .getParameter({ Name: parameterName, WithDecryption: true })
       .promise();
