@@ -149,6 +149,10 @@ const ContactForm: React.FC = () => {
               id="telephonenumber"
               {...register("telephonenumber", {
                 required: "Telephone number is required",
+                pattern: {
+                  value: /^(\+?\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,9}$/,
+                  message: "Invalid telephone number format",
+                },
               })}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
             />
