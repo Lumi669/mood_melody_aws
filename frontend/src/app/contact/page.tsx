@@ -62,7 +62,10 @@ const ContactPage = () => {
                 className="w-64 h-64 rounded-full border-4 border-white shadow-lg transition-transform duration-300 group-hover:scale-105"
               />
               {/* Tooltip */}
-              <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full text-sm text-white bg-black bg-opacity-75 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {/* <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full text-sm text-white bg-black bg-opacity-75 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                Click to check my LinkedIn
+              </span> */}
+              <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-[120%] text-sm text-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 Click to check my LinkedIn
               </span>
             </a>
