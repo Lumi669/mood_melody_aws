@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const validatePhoneNumber = async (
   phoneNumber: string,
-): Promise<{ isValid: boolean; validationStatus: string }> => {
+): Promise<{ isValid: boolean | "NA"; validationStatus: string }> => {
   console.log(
     "ppp phone number to be validated by numverify === ",
     phoneNumber,
@@ -25,47 +25,39 @@ export const validatePhoneNumber = async (
       },
     });
 
-    console.log("rrrr res from numVerify === ", response);
-
     // Check if the response indicates a valid phone number
     const data = response.data;
 
-    if (data && data.valid) {
-      return { isValid: true, validationStatus: "validated" };
-    }
+    console.log("rrrr response.data from numVerify === ", data);
 
-    // If the phone number is invalid and country prefix is missing
-    if (data && !data.valid && !data.country_code) {
-      return { isValid: false, validationStatus: "missing-country-prefix" };
-    }
+    if (!data.success) {
+      console.warn("NumVerify API Error: ", data.error);
+      const errorCode = data.error.code;
 
-    // If the phone number is invalid for other reasons
-    if (data && !data.valid) {
+      if (errorCode === 104) {
+        // Monthly usage limit reached
+        return { isValid: "NA", validationStatus: "unvalidated-phone" };
+      }
+
+      // Handle other error cases if needed
       return { isValid: false, validationStatus: "invalid-phone" };
     }
 
-    // Handle unexpected responses
-    console.warn("Unexpected response from NumVerify:", data);
+    if (data.valid) {
+      // Valid phone number
+      return { isValid: true, validationStatus: "validated" };
+    }
+
+    // If phone number is invalid
     return { isValid: false, validationStatus: "invalid-phone" };
   } catch (error) {
-    console.error("Error validating phone number or quota exceeded:", error);
+    console.error("Unexpected error during phone validation:", error);
 
-    if (axios.isAxiosError(error)) {
-      if (error.response?.data?.error) {
-        const errorCode = error.response.data.error.code;
-        const errorMessage = error.response.data.error.info;
-
-        console.warn(`NumVerify API Error [${errorCode}]: ${errorMessage}`);
-
-        if (errorCode === 104) {
-          // Code 104 indicates quota limit exceeded
-          return { isValid: true, validationStatus: "unvalidated-phone" };
-        }
-      }
-    } else if (error instanceof Error) {
+    if (error instanceof Error) {
       console.error("Generic error:", error.message);
     }
 
-    return { isValid: true, validationStatus: "unvalidated-phone" };
+    // Fallback to "unvalidated-phone" for any other errors
+    return { isValid: "NA", validationStatus: "unvalidated-phone" };
   }
 };

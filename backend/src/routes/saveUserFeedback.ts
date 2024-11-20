@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
     }
 
     if (validationStatus === "unvalidated-phone") {
-      userInputs.phoneValidated = false;
+      userInputs.phoneValidated = null;
       console.warn(
         "NumVerify quota exceeded. Saving data without phone validation.",
       );
