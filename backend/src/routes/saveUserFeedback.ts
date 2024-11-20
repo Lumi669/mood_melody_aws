@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 
 import { saveToDynamodbService } from "../services/saveToDynamodbService";
+import { validatePhoneNumber } from "../services/validatePhoneNumberService";
 
 // Handle preflight OPTIONS request
 router.options("/", (req, res) => {
@@ -12,41 +13,7 @@ router.options("/", (req, res) => {
   res.sendStatus(200);
 });
 
-// // Handle POST request
-// router.post("/", async (req, res) => {
-//   console.log("rrrrrr POST request received. Headers: ", req.headers);
-//   const userInputs = req.body;
-
-//   console.log("uuuuuu User inputs received: ", userInputs);
-
-//   // Add CORS headers for all POST responses
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-//   if (!userInputs || userInputs === undefined) {
-//     console.log("Error: No user inputs.");
-//     return res.status(400).json({ error: "No user inputs" });
-//   }
-
-//   try {
-//     console.log("Saving to DynamoDB...");
-//     const message = await saveToDynamodbService(userInputs);
-//     console.log("Success: Data saved to DynamoDB. Message: ", message);
-//     res.json({ "message from aws DynamoDB is": message });
-//   } catch (error) {
-//     console.log(
-//       "Error: Failed to save user inputs to DynamoDB. Error: ",
-//       error,
-//     );
-//     res.status(500).json({ error: "Failed to save user inputs" });
-//   }
-// });
-
 router.post("/", async (req, res) => {
-  console.log("POST request received. Headers: ", req.headers);
-  console.log("Raw body (buffer): ", req.body); // Log the raw body to debug
-
   // Check if the body is a buffer
   if (Buffer.isBuffer(req.body)) {
     return res.status(400).json({ error: "Invalid JSON format received." });
@@ -54,35 +21,83 @@ router.post("/", async (req, res) => {
 
   const userInputs = req.body;
 
-  console.log("Parsed User inputs received: ", userInputs);
-
   // Add CORS headers for POST responses
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   // Validate required fields
-  if (
-    !userInputs.firstname ||
-    !userInputs.surname ||
-    !userInputs.email ||
-    !userInputs.telephonenumber ||
-    !userInputs.title ||
-    !userInputs.organisation ||
-    !userInputs.roles
-  ) {
-    console.error("Missing required fields");
-    return res.status(400).json({ error: "Missing required fields" });
+  const requiredFields = [
+    "firstname",
+    "surname",
+    "email",
+    "telephonenumber",
+    "title",
+    "organisation",
+    "roles",
+  ];
+
+  const missingFields = requiredFields.filter((field) => !userInputs[field]);
+
+  if (missingFields.length > 0) {
+    return res
+      .status(400)
+      .json({ error: `Missing required fields: ${missingFields.join(", ")}` });
   }
 
+  const telephonenumber = userInputs.telephonenumber;
+
   try {
+    // Validate the phone number
+    const { isValid, validationStatus } =
+      await validatePhoneNumber(telephonenumber);
+
+    if (validationStatus === "unvalidated-phone") {
+      // If free limit is hit, save data with `phone-validated: false`
+      userInputs.phoneValidated = false;
+      console.warn(
+        "NumVerify quota exceeded. Saving data without phone validation.",
+      );
+    } else if (!isValid) {
+      // If phone number is invalid, return error and do not save data
+      console.warn("Invalid telephone number detected by numVerify.");
+      return res.status(400).json({
+        error: "Invalid telephone number",
+      });
+    } else {
+      // If phone number is valid, save data with `phone-validated: true`
+      userInputs.phoneValidated = true;
+    }
+
+    // Save the user inputs to the database
     console.log("Attempting to save user inputs to DynamoDB...");
     const message = await saveToDynamodbService(userInputs);
-    console.log("Data saved to DynamoDB successfully: ", message);
-    res.json({ message });
+    console.log("Data saved to DynamoDB successfully:", message);
+
+    // Return success response
+    res.json({
+      message: "Data saved successfully!",
+      validationStatus: userInputs.phoneValidated
+        ? "validated"
+        : "unvalidated-phone",
+    });
   } catch (error) {
-    console.error("Failed to save user inputs. Error: ", error);
-    res.status(500).json({ error: "Failed to save user inputs" });
+    // Narrow the type of error to ensure proper error handling
+    console.error("Failed to process the request:", error);
+
+    if (error instanceof Error) {
+      // If error is an instance of Error, safely access its message
+      return res.status(500).json({
+        error: "Failed to process the request",
+        details: error.message,
+      });
+    } else {
+      // Handle unknown errors
+      return res.status(500).json({
+        error: "Failed to process the request",
+        details: "An unknown error occurred.",
+      });
+    }
   }
 });
 

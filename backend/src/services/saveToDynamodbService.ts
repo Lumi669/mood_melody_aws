@@ -25,6 +25,7 @@ export async function saveToDynamodbService(inputData: ContactFormInputs) {
     organisation,
     roles,
     message,
+    phoneValidated,
   } = inputData;
 
   // Check if required fields are provided
@@ -61,6 +62,7 @@ export async function saveToDynamodbService(inputData: ContactFormInputs) {
       organisation,
       roles,
       message,
+      phoneValidated,
       createdAt: new Date().toISOString(),
       ttl, // Add TTL attribute for expiration
     },

@@ -7,4 +7,5 @@ export interface ContactFormInputs {
   organisation: string;
   message: string;
   roles: string[]; // Array to hold multiple selections
+  phoneValidated: boolean;
 }
