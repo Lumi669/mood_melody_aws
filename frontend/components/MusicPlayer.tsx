@@ -224,7 +224,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
 
             {isVideoVisible && (
               <div
-                className="absolute right-[-20px] w-40 h-40 md:w-52 md:h-52 lg:bottom-[80px] lg:right-[-40px]  cursor-pointer"
+                className="absolute right-[-20px] w-40 h-40 md:w-52 md:h-52 lg:bottom-[80px] lg:right-[-40px]  cursor-pointer group"
                 onClick={handleVideoClick}
               >
                 <video
@@ -238,6 +238,9 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
                 <div className="absolute top-0 left-0 right-0 text-center p-1 bg-opacity-50 bg-black text-white text-xs lg:text-sm font-bold">
                   {getMoodMessage()}
                 </div>
+                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-[120%] text-sm text-white px-3 py-1 rounded bg-black bg-opacity-70 group-hover:opacity-100 opacity-0 transition-opacity duration-300">
+                  Click to go back
+                </span>
               </div>
             )}
           </div>
