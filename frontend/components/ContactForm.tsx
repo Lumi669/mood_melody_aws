@@ -75,6 +75,16 @@ const ContactForm: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+
+        console.log("eeee errorData === ", errorData);
+
+        // Handle specific error messages
+        if (errorData.error === "Country prefix is needed") {
+          setSubmissionStatus(
+            "Error: The phone number must include a country prefix. Please update and try again.",
+          );
+          return;
+        }
         if (errorData.error === "Invalid telephone number") {
           setSubmissionStatus(
             "Error: The telephone number provided is invalid. Please check and try again.",

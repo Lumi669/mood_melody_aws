@@ -28,25 +28,30 @@ export const validatePhoneNumber = async (
     console.log("rrrr res from numVerify === ", response);
 
     // Check if the response indicates a valid phone number
-    if (response.data && response.data.valid) {
+    const data = response.data;
+
+    if (data && data.valid) {
       return { isValid: true, validationStatus: "validated" };
     }
 
-    // If the phone number is invalid
-    if (response.data && !response.data.valid) {
+    // If the phone number is invalid and country prefix is missing
+    if (data && !data.valid && !data.country_code) {
+      return { isValid: false, validationStatus: "missing-country-prefix" };
+    }
+
+    // If the phone number is invalid for other reasons
+    if (data && !data.valid) {
       return { isValid: false, validationStatus: "invalid-phone" };
     }
 
     // Handle unexpected responses
-    console.warn("Unexpected response from NumVerify:", response.data);
+    console.warn("Unexpected response from NumVerify:", data);
     return { isValid: false, validationStatus: "invalid-phone" };
   } catch (error) {
     console.error("Error validating phone number or quota exceeded:", error);
 
-    // Narrow down the type of 'error'
     if (axios.isAxiosError(error)) {
-      // Handle Axios-specific errors
-      if (error.response && error.response.data && error.response.data.error) {
+      if (error.response?.data?.error) {
         const errorCode = error.response.data.error.code;
         const errorMessage = error.response.data.error.info;
 
@@ -58,11 +63,9 @@ export const validatePhoneNumber = async (
         }
       }
     } else if (error instanceof Error) {
-      // Handle generic errors
       console.error("Generic error:", error.message);
     }
 
-    // For other errors, fallback to unvalidated status
     return { isValid: true, validationStatus: "unvalidated-phone" };
   }
 };
