@@ -55,6 +55,14 @@ const ContactForm: React.FC = () => {
     };
   }, [setValue]);
 
+  // Automatically clear the submission message after 5 seconds
+  useEffect(() => {
+    if (submissionStatus) {
+      const timer = setTimeout(() => setSubmissionStatus(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [submissionStatus]);
+
   const handleFormSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
     try {
       const response = await fetch(`${apiUrls.saveuserfeedback}`, {
@@ -66,6 +74,13 @@ const ContactForm: React.FC = () => {
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.error === "Invalid telephone number") {
+          setSubmissionStatus(
+            "Error: The telephone number provided is invalid. Please check and try again.",
+          );
+          return;
+        }
         throw new Error(`Server error: ${response.status}`);
       }
 
@@ -74,6 +89,12 @@ const ContactForm: React.FC = () => {
     } catch (error) {
       setSubmissionStatus("Error submitting feedback. Please try again.");
     }
+  };
+
+  const validatePhoneNumber = (phoneNumber: string): boolean => {
+    const phoneNumberRegex =
+      /^(\+?\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,9}$/;
+    return phoneNumberRegex.test(phoneNumber);
   };
 
   return (
@@ -149,12 +170,13 @@ const ContactForm: React.FC = () => {
               id="telephonenumber"
               {...register("telephonenumber", {
                 required: "Telephone number is required",
-                pattern: {
-                  value: /^(\+?\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,9}$/,
-                  message: "Invalid telephone number format",
-                },
+                validate: (value) =>
+                  validatePhoneNumber(value) ||
+                  "Invalid telephone number format",
               })}
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
+              className={`mt-1 w-full px-4 py-2 border ${
+                errors.telephonenumber ? "border-red-500" : "border-gray-300"
+              } rounded-md`}
             />
             {errors.telephonenumber && (
               <p className="text-red-500 text-sm mt-1">
@@ -197,71 +219,23 @@ const ContactForm: React.FC = () => {
             I am <span className="text-red-500">*</span>
           </label>
           <div className="mt-1 space-y-2">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="recruiters"
-                value="Recruiters"
-                checked={roles.includes("Recruiters")}
-                onChange={handleCheckboxChange}
-                className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
-              />
-              <label htmlFor="recruiters" className="ml-2 text-sm">
-                Recruiter
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="investors"
-                value="Investors"
-                checked={roles.includes("Investors")}
-                onChange={handleCheckboxChange}
-                className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
-              />
-              <label htmlFor="investors" className="ml-2 text-sm">
-                Investor
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="mentors"
-                value="Mentors"
-                checked={roles.includes("Mentors")}
-                onChange={handleCheckboxChange}
-                className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
-              />
-              <label htmlFor="mentors" className="ml-2 text-sm">
-                Mentor
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="partners"
-                value="Partners"
-                checked={roles.includes("Partners")}
-                onChange={handleCheckboxChange}
-                className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
-              />
-              <label htmlFor="partners" className="ml-2 text-sm">
-                Partner
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="other"
-                value="Other"
-                checked={roles.includes("Other")}
-                onChange={handleCheckboxChange}
-                className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
-              />
-              <label htmlFor="other" className="ml-2 text-sm">
-                Other
-              </label>
-            </div>
+            {["Recruiters", "Investors", "Mentors", "Partners", "Other"].map(
+              (role) => (
+                <div key={role} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={role.toLowerCase()}
+                    value={role}
+                    checked={roles.includes(role)}
+                    onChange={handleCheckboxChange}
+                    className="form-checkbox h-4 w-4 text-red-600 border-gray-300 rounded"
+                  />
+                  <label htmlFor={role.toLowerCase()} className="ml-2 text-sm">
+                    {role}
+                  </label>
+                </div>
+              ),
+            )}
             {errors.roles && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.roles.message}
@@ -299,7 +273,7 @@ const ContactForm: React.FC = () => {
         {/* Submission Message */}
         {submissionStatus && (
           <p
-            className={`mt-4 text-center ${
+            className={`mt-4 mb-6 text-center font-bold ${
               submissionStatus.startsWith("Error")
                 ? "text-red-600"
                 : "text-green-700"
