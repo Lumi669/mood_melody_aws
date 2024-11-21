@@ -10,7 +10,7 @@ const ContactPage = () => {
   const email = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
 
   return (
-    <div className="h-screen overflow-y-scroll pb-20">
+    <div className="h-screen overflow-y-scroll pb-80">
       {/* Contact Section with Warm Gradient Background */}
       <div className="relative py-16 px-4 sm:px-6 md:px-8 lg:px-12 bg-gradient-to-r from-pink-300 to-orange-200 via-yellow-100 from-20% via-50% to-80%">
         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
