@@ -204,6 +204,11 @@ const ContactForm: React.FC = () => {
               {...register("title", { required: "Title is required" })}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
             />
+            {errors.surname && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.title?.message}
+              </p>
+            )}
           </div>
           <div>
             <label
@@ -220,6 +225,11 @@ const ContactForm: React.FC = () => {
               })}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
             />
+            {errors.surname && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.organisation?.message}
+              </p>
+            )}
           </div>
         </div>
 
