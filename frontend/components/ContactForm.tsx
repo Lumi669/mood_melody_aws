@@ -1,4 +1,6 @@
 "use client";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ContactFormInputs } from "../types/type";
@@ -102,10 +104,9 @@ const ContactForm: React.FC = () => {
     }
   };
 
-  const validatePhoneNumber = (phoneNumber: string): boolean => {
-    const phoneNumberRegex =
-      /^(\+?\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,9}$/;
-    return phoneNumberRegex.test(phoneNumber);
+  const clientSideValidatePhoneNumber = (phone: string): boolean => {
+    const phoneNumber = parsePhoneNumberFromString(phone);
+    return phoneNumber?.isValid() || false;
   };
 
   return (
@@ -128,6 +129,9 @@ const ContactForm: React.FC = () => {
                   value: /^[A-Za-z\s]+$/,
                   message: "Firstname can only contain letters and spaces",
                 },
+                validate: (value) =>
+                  value.trim().length > 0 ||
+                  "Firstname cannot be empty or spaces only",
               })}
               className={`mt-1 w-full px-4 py-2 border ${
                 errors.firstname ? "border-red-500" : "border-gray-300"
@@ -153,6 +157,9 @@ const ContactForm: React.FC = () => {
                   message:
                     "Surname can only contain letters, spaces, hyphens, or apostrophes",
                 },
+                validate: (value) =>
+                  value.trim().length > 1 ||
+                  "Surname must be more than 1 character",
                 minLength: {
                   value: 2,
                   message: "Surname must be at least 2 characters long",
@@ -180,7 +187,7 @@ const ContactForm: React.FC = () => {
               {...register("email", {
                 required: "Email is required",
                 pattern: {
-                  value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                   message: "Invalid email address",
                 },
               })}
@@ -205,7 +212,7 @@ const ContactForm: React.FC = () => {
               {...register("telephonenumber", {
                 required: "Telephone number is required",
                 validate: (value) =>
-                  validatePhoneNumber(value) ||
+                  clientSideValidatePhoneNumber(value) ||
                   "Invalid telephone number format",
               })}
               className={`mt-1 w-full px-4 py-2 border ${
@@ -235,6 +242,8 @@ const ContactForm: React.FC = () => {
                   value: 20,
                   message: "Title must not exceed 20 characters",
                 },
+                validate: (value) =>
+                  value.trim().length > 1 || "Title cannot be spaces only",
               })}
               className={`mt-1 w-full px-4 py-2 border ${
                 errors.title ? "border-red-500" : "border-gray-300"
