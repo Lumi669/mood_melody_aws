@@ -1,4 +1,27 @@
+import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 import axios from "axios";
+
+const fetchNumVerifyApiKey = async (): Promise<string> => {
+  const ssmClient = new SSMClient({});
+  const parameterName = process.env.NUMVERIFY_API_PARAM_NAME;
+
+  if (!parameterName) {
+    throw new Error("SSM parameter name for NumVerify API key is missing.");
+  }
+
+  const command = new GetParameterCommand({
+    Name: parameterName,
+    WithDecryption: true,
+  });
+
+  try {
+    const response = await ssmClient.send(command);
+    return response.Parameter?.Value || "";
+  } catch (error) {
+    console.error("Error retrieving API key from SSM:", error);
+    throw new Error("Failed to retrieve NumVerify API key.");
+  }
+};
 
 export const validatePhoneNumber = async (
   phoneNumber: string,
@@ -9,7 +32,8 @@ export const validatePhoneNumber = async (
   );
 
   try {
-    const apiKey = process.env.NUMVERIFY_API_KEY;
+    //const apiKey = process.env.NUMVERIFY_API_KEY;
+    const apiKey = await fetchNumVerifyApiKey();
 
     if (!apiKey) {
       throw new Error("NumVerify API key is missing.");

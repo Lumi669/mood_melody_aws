@@ -34,6 +34,16 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
+        - PolicyName: SSMParameterAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - ssm:GetParameterHistory
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/mood-melody-backend/numverifyapikey"
+
         - PolicyName: LambdaHttpRequest
           PolicyDocument:
             Version: "2012-10-17"
@@ -82,7 +92,7 @@ Resources:
       Environment:
         Variables:
           DYNAMO_DB_TABLE_NAME: !ImportValue UserFeedbackTableName
-          NUMVERIFY_API_KEY: !Sub "{{resolve:ssm-secure:/mood-melody-backend/numverifyapikey}}"
+          NUMVERIFY_API_PARAM_NAME: "/mood-melody-backend/numverifyapikey"
 
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
