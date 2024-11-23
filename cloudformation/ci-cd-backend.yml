@@ -82,6 +82,7 @@ Resources:
       Environment:
         Variables:
           DYNAMO_DB_TABLE_NAME: !ImportValue UserFeedbackTableName
+          NUMVERIFY_API_KEY: !Sub "{{resolve:ssm-secure:/mood-melody-backend/numverifyapikey}}"
 
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
