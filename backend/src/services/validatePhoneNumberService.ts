@@ -2,6 +2,16 @@ import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 import axios from "axios";
 
 const fetchNumVerifyApiKey = async (): Promise<string> => {
+  if (!process.env.LAMBDA_TASK_ROOT) {
+    if (!process.env.NUMVERIFY_API_KEY) {
+      console.warn(
+        "Warning: NUMVERIFY_API_KEY is not set in local environment.",
+      );
+    }
+
+    return process.env.NUMVERIFY_API_KEY || "";
+  }
+  console.log("Running in Lambda environment:", !!process.env.LAMBDA_TASK_ROOT);
   const ssmClient = new SSMClient({});
   const parameterName = process.env.NUMVERIFY_API_PARAM_NAME;
   console.log(
@@ -43,7 +53,7 @@ export const validatePhoneNumber = async (
       throw new Error("NumVerify API key is missing.");
     }
 
-    console.log("aaa apiKey from validatePhoneNumberService.ts === ", apiKey);
+    console.log("Using API key ==== : ", `${apiKey.substring(0, 4)}...`);
 
     // Make the API request
     const response = await axios.get(`http://apilayer.net/api/validate`, {
