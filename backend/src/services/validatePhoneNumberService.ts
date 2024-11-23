@@ -4,6 +4,10 @@ import axios from "axios";
 const fetchNumVerifyApiKey = async (): Promise<string> => {
   const ssmClient = new SSMClient({});
   const parameterName = process.env.NUMVERIFY_API_PARAM_NAME;
+  console.log(
+    "ppppp parameterName from fetchNumVerifyApiKey === ",
+    parameterName,
+  );
 
   if (!parameterName) {
     throw new Error("SSM parameter name for NumVerify API key is missing.");
