@@ -18,6 +18,7 @@ const ContactForm: React.FC = () => {
     defaultValues: {
       roles: [], // Default is an empty array, meaning no checkboxes checked initially
     },
+    mode: "onChange", // Trigger validation on every keystroke
   });
 
   // Watch the roles field to detect changes
@@ -121,8 +122,16 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="firstname"
-              {...register("firstname", { required: "Firstname is required" })}
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
+              {...register("firstname", {
+                required: "Firstname is required",
+                pattern: {
+                  value: /^[A-Za-z\s]+$/,
+                  message: "Firstname can only contain letters and spaces",
+                },
+              })}
+              className={`mt-1 w-full px-4 py-2 border ${
+                errors.firstname ? "border-red-500" : "border-gray-300"
+              } rounded-md`}
             />
             {errors.firstname && (
               <p className="text-red-500 text-sm mt-1">
@@ -137,7 +146,22 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="surname"
-              {...register("surname", { required: "Surname is required" })}
+              {...register("surname", {
+                required: "Surname is required",
+                pattern: {
+                  value: /^[A-Za-z\s'-]+$/,
+                  message:
+                    "Surname can only contain letters, spaces, hyphens, or apostrophes",
+                },
+                minLength: {
+                  value: 2,
+                  message: "Surname must be at least 2 characters long",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "Surname must not exceed 50 characters",
+                },
+              })}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
             />
             {errors.surname && (
@@ -201,10 +225,22 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="title"
-              {...register("title", { required: "Title is required" })}
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
+              {...register("title", {
+                required: "Title is required",
+                minLength: {
+                  value: 2,
+                  message: "Title must be at least 2 characters",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Title must not exceed 20 characters",
+                },
+              })}
+              className={`mt-1 w-full px-4 py-2 border ${
+                errors.title ? "border-red-500" : "border-gray-300"
+              } rounded-md`}
             />
-            {errors.surname && (
+            {errors.title && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.title?.message}
               </p>
@@ -222,10 +258,20 @@ const ContactForm: React.FC = () => {
               id="organisation"
               {...register("organisation", {
                 required: "Organisation is required",
+                minLength: {
+                  value: 2,
+                  message: "Organisation must be at least 2 characters",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "Organisation must not exceed 50 characters",
+                },
               })}
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
+              className={`mt-1 w-full px-4 py-2 border ${
+                errors.organisation ? "border-red-500" : "border-gray-300"
+              } rounded-md`}
             />
-            {errors.surname && (
+            {errors.organisation && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.organisation?.message}
               </p>
