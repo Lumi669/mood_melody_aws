@@ -120,6 +120,16 @@ const ContactForm: React.FC = () => {
   };
 
   const clientSideValidatePhoneNumber = (phone: string): boolean => {
+    // Allow only valid characters for phone numbers: digits, '+', and spaces
+    const isValidCharacters = /^[+\d\s()-]+$/.test(phone);
+    if (!isValidCharacters) {
+      return false; // Invalid if it contains letters or other special characters
+    }
+
+    // Ensure the phone number starts with '+' and is valid
+    if (!phone.startsWith("+")) {
+      return false; // Reject if not in international format
+    }
     const phoneNumber = parsePhoneNumberFromString(phone);
     return phoneNumber?.isValid() || false;
   };
@@ -224,11 +234,12 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="telephonenumber"
+              placeholder="+358401234567" // Example format
               {...register("telephonenumber", {
                 required: "Telephone number is required",
                 validate: (value) =>
                   clientSideValidatePhoneNumber(value) ||
-                  "Invalid telephone number format",
+                  "Invalid telephone number.",
               })}
               className={`mt-1 w-full px-4 py-2 border ${
                 errors.telephonenumber ? "border-red-500" : "border-gray-300"
@@ -239,6 +250,9 @@ const ContactForm: React.FC = () => {
                 {errors.telephonenumber.message}
               </p>
             )}
+            <p className="text-sm text-gray-500">
+              Enter phone number with country code (e.g., +358 for Finland).
+            </p>
           </div>
           <div>
             <label htmlFor="title" className="block text-sm font-semibold">
