@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { sanitizeInput } from "@utils/sanitizeInput";
 
 interface SentimentAnalysisPageProps {
@@ -21,6 +21,9 @@ export default function SentimentAnalysisPage({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [inputError, setInputError] = useState<string | null>(null);
 
+  // Use a ref to manage error messages without triggering re-renders
+  const errorMessageRef = useRef<string | null>(null);
+
   const maxChars = 90;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -40,6 +43,7 @@ export default function SentimentAnalysisPage({
 
   const analyzeSentiment = async () => {
     setIsLoading(true);
+    errorMessageRef.current = null; // Clear previous errors immediately
 
     try {
       // Sanitize the text before sending it to the backend
@@ -58,10 +62,16 @@ export default function SentimentAnalysisPage({
         console.log("Sentiment analysis result:", data.sentiment);
         setSentiment(data.sentiment);
       } else {
+        errorMessageRef.current =
+          "Failed to analyze sentiment. Please try again later.";
+
         setSentiment("Error analyzing sentiment");
       }
     } catch (error) {
       console.error("Error fetching sentiment analysis:", error);
+      errorMessageRef.current =
+        "Failed to analyze sentiment. Please try again later.";
+
       setSentiment("Error analyzing sentiment");
     } finally {
       setIsLoading(false);
@@ -69,7 +79,7 @@ export default function SentimentAnalysisPage({
   };
 
   useEffect(() => {
-    if (sentiment) {
+    if (sentiment && sentiment !== "Error analyzing sentiment") {
       let sentimentMessage = "";
 
       if (sentiment === "POSITIVE") {
@@ -89,6 +99,8 @@ export default function SentimentAnalysisPage({
       onSentimentAnalyzed(sentimentMessage);
     }
   }, [sentiment, playMusic, onSentimentAnalyzed]);
+
+  console.log("ssss sentiment now === ", sentiment); // This logs sentiment during each render
 
   return (
     <div className="p-4 max-w-3xl mx-auto grid gap-4">
@@ -122,10 +134,10 @@ export default function SentimentAnalysisPage({
           {isLoading ? "Checking..." : "Check my mood"}
         </button>
       </div>
-      {sentiment === "Error analyzing sentiment" && (
-        <p className="text-red-500 text-sm mt-2">
-          Failed to analyze sentiment. Please try again.
-        </p>
+      {/* Display the error message immediately */}
+
+      {errorMessageRef.current && (
+        <p className="text-red-500 text-sm mt-2">{errorMessageRef.current}</p>
       )}
     </div>
   );
