@@ -251,7 +251,7 @@ const ContactForm: React.FC = () => {
               </p>
             )}
             <p className="text-sm text-gray-500">
-              Enter phone number with country code (e.g., +358 for Finland).
+              Enter phone number with country code (e.g. +358 for Finland)
             </p>
           </div>
           <div>
