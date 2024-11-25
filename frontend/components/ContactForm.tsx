@@ -21,6 +21,7 @@ const ContactForm: React.FC = () => {
       roles: [], // Default is an empty array, meaning no checkboxes checked initially
     },
     mode: "onChange", // Trigger validation on every keystroke
+    criteriaMode: "all", // Validate all rules for a single field
   });
 
   // Watch the roles field to detect changes
@@ -67,6 +68,11 @@ const ContactForm: React.FC = () => {
   }, [submissionStatus]);
 
   const handleFormSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
+    if (roles.length === 0) {
+      setSubmissionStatus("Error: Please select at least one role.");
+      return;
+    }
+
     try {
       const response = await fetch(`${apiUrls.saveuserfeedback}`, {
         method: "POST",
