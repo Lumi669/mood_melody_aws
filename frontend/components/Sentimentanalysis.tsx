@@ -21,7 +21,7 @@ export default function SentimentAnalysisPage({
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-    if (newText.length <= maxChars) {
+    if (/^[\w\s,.!?-]*$/.test(newText) && newText.length <= maxChars) {
       setText(newText);
     }
   };
@@ -88,14 +88,18 @@ export default function SentimentAnalysisPage({
             maxLength={maxChars}
             className="tracking-wide p-3 border border-gray-300 rounded resize-none w-full"
           />
-          <div className="absolute bottom-1 right-4 text-gray-500 text-sm">
+          <div
+            className={`absolute bottom-1 right-4 text-sm ${
+              text.length > maxChars - 10 ? "text-red-500" : "text-gray-500"
+            }`}
+          >
             {maxChars - text.length} characters left
           </div>
         </div>
         <button
           onClick={analyzeSentiment}
           className="bg-[#326ed1] text-white py-2 px-6 rounded-full hover:bg-[#2758a8] transition-colors mt-4 md:mt-0 md:ml-6 w-full md:w-auto"
-          disabled={isLoading}
+          disabled={isLoading || text.trim().length === 0}
         >
           {isLoading ? "Checking..." : "Check my mood"}
         </button>
