@@ -10,6 +10,7 @@ interface SentimentAnalysisPageProps {
   ) => void;
 }
 
+const forbiddenCharacterRegex = /^[\w\s,.!?-]*$/;
 export default function SentimentAnalysisPage({
   onSentimentAnalyzed,
   playMusic,
@@ -17,12 +18,22 @@ export default function SentimentAnalysisPage({
   const [text, setText] = useState("");
   const [sentiment, setSentiment] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [inputError, setInputError] = useState<string | null>(null);
+
   const maxChars = 90;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-    if (/^[\w\s,.!?-]*$/.test(newText) && newText.length <= maxChars) {
-      setText(newText);
+
+    if (newText.length > maxChars) {
+      return; // Prevent input beyond the max length
+    }
+
+    if (!forbiddenCharacterRegex.test(newText)) {
+      setInputError("Invalid characters are not allowed.");
+    } else {
+      setInputError(null); // Clear error if valid
+      setText(newText); // Update text
     }
   };
 
@@ -95,6 +106,9 @@ export default function SentimentAnalysisPage({
           >
             {maxChars - text.length} characters left
           </div>
+          {inputError && (
+            <p className="text-red-500 text-sm mt-2">{inputError}</p>
+          )}
         </div>
         <button
           onClick={analyzeSentiment}
@@ -104,6 +118,11 @@ export default function SentimentAnalysisPage({
           {isLoading ? "Checking..." : "Check my mood"}
         </button>
       </div>
+      {sentiment === "Error analyzing sentiment" && (
+        <p className="text-red-500 text-sm mt-2">
+          Failed to analyze sentiment. Please try again.
+        </p>
+      )}
     </div>
   );
 }
