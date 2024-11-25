@@ -53,7 +53,7 @@ export default function SentimentAnalysisPage({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ sanitizedText }),
+        body: JSON.stringify({ text: sanitizedText }),
       });
       console.log("response from frontend of sentianalyais === ", response);
 
