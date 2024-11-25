@@ -80,6 +80,7 @@ export default function SentimentAnalysisPage({
       <div className="relative flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 w-full">
         <div className="w-full relative">
           <textarea
+            aria-label="Mood input"
             value={text}
             onChange={handleTextChange}
             placeholder="Enter text to analyze your sentiment"
