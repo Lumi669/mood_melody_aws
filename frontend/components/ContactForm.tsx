@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ContactFormInputs } from "../types/type";
 import { apiUrls } from "@config/apiConfig";
+import { sanitizeInput } from "@utils/sanitizeInput";
 
 const ContactForm: React.FC = () => {
   const [submissionStatus, setSubmissionStatus] = useState<string | null>(null);
@@ -79,12 +80,24 @@ const ContactForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      // Sanitize all text inputs
+      const sanitizedData = {
+        ...data,
+        firstname: sanitizeInput(data.firstname),
+        surname: sanitizeInput(data.surname),
+        email: sanitizeInput(data.email),
+        telephonenumber: sanitizeInput(data.telephonenumber),
+        title: sanitizeInput(data.title),
+        organisation: sanitizeInput(data.organisation),
+        message: sanitizeInput(data.message || ""), // Handle optional field
+      };
+
       const response = await fetch(`${apiUrls.saveuserfeedback}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(sanitizedData),
       });
 
       if (!response.ok) {
