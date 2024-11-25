@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { sanitizeInput } from "@utils/sanitizeInput";
 
 interface SentimentAnalysisPageProps {
   onSentimentAnalyzed: (message: string) => void;
@@ -41,12 +42,14 @@ export default function SentimentAnalysisPage({
     setIsLoading(true);
 
     try {
+      // Sanitize the text before sending it to the backend
+      const sanitizedText = sanitizeInput(text);
       const response = await fetch("/api/sentimentanalysis", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ sanitizedText }),
       });
 
       if (response.ok) {
