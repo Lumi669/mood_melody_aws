@@ -1,4 +1,3 @@
-// src/routes/sentimentRoutes.ts
 import express from "express";
 import { analyzeSentiment } from "../services/comprehendService";
 
@@ -9,6 +8,7 @@ router.post("/", async (req, res) => {
 
   // Parse the body manually if it is a string
   const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+  console.log("bbbb body from sentimentRoutes.ts === ", body);
   const { text } = req.body;
 
   if (!text) {
