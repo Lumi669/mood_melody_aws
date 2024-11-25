@@ -11,7 +11,9 @@ interface SentimentAnalysisPageProps {
   ) => void;
 }
 
-const forbiddenCharacterRegex = /^[\w\s,.!?-]*$/;
+// Regex to disallow invalid characters while allowing common text characters
+const forbiddenCharacterRegex = /^[^\u0000-\u001F<>]+$/u;
+
 export default function SentimentAnalysisPage({
   onSentimentAnalyzed,
   playMusic,
@@ -33,12 +35,18 @@ export default function SentimentAnalysisPage({
       return; // Prevent input beyond the max length
     }
 
-    if (!forbiddenCharacterRegex.test(newText)) {
+    // Clear previous analysis error when the user starts typing
+    errorMessageRef.current = null;
+
+    if (newText.trim() === "") {
+      setInputError(null); // Clear input error when input is empty
+    } else if (!forbiddenCharacterRegex.test(newText)) {
       setInputError("Invalid characters are not allowed.");
     } else {
-      setInputError(null); // Clear error if valid
-      setText(newText); // Update text
+      setInputError(null); // Clear input error if valid
     }
+
+    setText(newText); // Update text
   };
 
   const analyzeSentiment = async () => {
@@ -53,25 +61,20 @@ export default function SentimentAnalysisPage({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: sanitizedText }),
+        body: JSON.stringify({ sanitizedText }),
       });
-      console.log("response from frontend of sentianalyais === ", response);
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Sentiment analysis result:", data.sentiment);
         setSentiment(data.sentiment);
       } else {
         errorMessageRef.current =
           "Failed to analyze sentiment. Please try again later.";
-
         setSentiment("Error analyzing sentiment");
       }
     } catch (error) {
-      console.error("Error fetching sentiment analysis:", error);
       errorMessageRef.current =
         "Failed to analyze sentiment. Please try again later.";
-
       setSentiment("Error analyzing sentiment");
     } finally {
       setIsLoading(false);
@@ -100,8 +103,6 @@ export default function SentimentAnalysisPage({
     }
   }, [sentiment, playMusic, onSentimentAnalyzed]);
 
-  console.log("ssss sentiment now === ", sentiment); // This logs sentiment during each render
-
   return (
     <div className="p-4 max-w-3xl mx-auto grid gap-4">
       <div className="relative flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 w-full">
@@ -128,14 +129,17 @@ export default function SentimentAnalysisPage({
         </div>
         <button
           onClick={analyzeSentiment}
-          className="bg-[#326ed1] text-white py-2 px-6 rounded-full hover:bg-[#2758a8] transition-colors mt-4 md:mt-0 md:ml-6 w-full md:w-auto"
-          disabled={isLoading || text.trim().length === 0}
+          className={`bg-[#326ed1] text-white py-2 px-6 rounded-full hover:bg-[#2758a8] transition-colors mt-4 md:mt-0 md:ml-6 w-full md:w-auto ${
+            inputError || text.trim().length === 0
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          }`}
+          disabled={isLoading || text.trim().length === 0 || !!inputError}
         >
           {isLoading ? "Checking..." : "Check my mood"}
         </button>
       </div>
-      {/* Display the error message immediately */}
-
+      {/* Display the error message */}
       {errorMessageRef.current && (
         <p className="text-red-500 text-sm mt-2">{errorMessageRef.current}</p>
       )}
