@@ -359,6 +359,9 @@ const ContactForm: React.FC = () => {
                 value: 100,
                 message: "Maximum 100 characters allowed",
               },
+              validate: (value) =>
+                /^[\w\s,.!?-]*$/.test(value) ||
+                "Invalid characters in the input",
             })}
             className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
             rows={4}
