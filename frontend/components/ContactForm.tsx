@@ -104,8 +104,8 @@ const ContactForm: React.FC = () => {
           setSubmissionStatus(
             "Error: The telephone number provided is invalid. Please check and try again.",
           );
-          return;
           setIsSubmitting(false);
+          return;
         }
         throw new Error(`Server error: ${response.status}`);
       }
