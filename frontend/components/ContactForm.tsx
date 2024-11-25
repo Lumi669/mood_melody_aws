@@ -8,6 +8,7 @@ import { apiUrls } from "@config/apiConfig";
 
 const ContactForm: React.FC = () => {
   const [submissionStatus, setSubmissionStatus] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -73,6 +74,10 @@ const ContactForm: React.FC = () => {
       return;
     }
 
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     try {
       const response = await fetch(`${apiUrls.saveuserfeedback}`, {
         method: "POST",
@@ -92,6 +97,7 @@ const ContactForm: React.FC = () => {
           setSubmissionStatus(
             "Error: The phone number must include a country prefix. Please update and try again.",
           );
+          setIsSubmitting(false);
           return;
         }
         if (errorData.error === "Invalid telephone number") {
@@ -99,6 +105,7 @@ const ContactForm: React.FC = () => {
             "Error: The telephone number provided is invalid. Please check and try again.",
           );
           return;
+          setIsSubmitting(false);
         }
         throw new Error(`Server error: ${response.status}`);
       }
@@ -107,6 +114,8 @@ const ContactForm: React.FC = () => {
       reset(); // Clear the form
     } catch (error) {
       setSubmissionStatus("Error submitting feedback. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -366,9 +375,14 @@ const ContactForm: React.FC = () => {
 
         <button
           type="submit"
-          className="mt-6 w-32 bg-pink-500 text-white py-2 rounded-full hover:bg-pink-600 transition-colors"
+          disabled={isSubmitting}
+          className={`mt-6 w-32 py-2 rounded-full transition-colors ${
+            isSubmitting
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-pink-500 text-white hover:bg-pink-600"
+          }`}
         >
-          Submit
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>
