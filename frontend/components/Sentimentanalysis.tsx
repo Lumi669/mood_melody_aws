@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   sanitizeInput,
-  validateGeneralInputTexts,
+  validateGeneralMultiLanguageInputTexts,
 } from "@utils/inputValidation";
 
 interface SentimentAnalysisPageProps {
@@ -40,7 +40,7 @@ export default function SentimentAnalysisPage({
 
     if (newText.trim() === "") {
       setInputError(null); // Clear input error when input is empty
-    } else if (!validateGeneralInputTexts(newText)) {
+    } else if (!validateGeneralMultiLanguageInputTexts(newText)) {
       setInputError("Invalid characters are not allowed.");
     } else {
       setInputError(null); // Clear input error if valid

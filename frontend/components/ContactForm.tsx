@@ -7,7 +7,8 @@ import { ContactFormInputs } from "../types/type";
 import { apiUrls } from "@config/apiConfig";
 import {
   sanitizeInput,
-  validateGeneralInputTexts,
+  validateGeneralMultiLanguageInputTexts,
+  validateGeneralEnglishInputs,
 } from "@utils/inputValidation";
 
 const ContactForm: React.FC = () => {
@@ -283,7 +284,7 @@ const ContactForm: React.FC = () => {
                 required: "Title is required",
 
                 validate: (value) => {
-                  if (!validateGeneralInputTexts(value)) {
+                  if (!validateGeneralEnglishInputs(value)) {
                     return "Title contains invalid characters";
                   }
                   if (value.trim().length < 2) {
@@ -318,7 +319,7 @@ const ContactForm: React.FC = () => {
               {...register("organisation", {
                 required: "Organisation is required",
                 validate: (value) => {
-                  if (!validateGeneralInputTexts(value)) {
+                  if (!validateGeneralEnglishInputs(value)) {
                     return "Organisation contains invalid characters";
                   }
                   if (value.trim().length < 2) {
@@ -385,7 +386,7 @@ const ContactForm: React.FC = () => {
                 message: "Maximum 100 characters allowed",
               },
               validate: (value) =>
-                /^[\w\s,.!?-]*$/.test(value) ||
+                validateGeneralEnglishInputs(value) ||
                 "Invalid characters in the input",
             })}
             className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
