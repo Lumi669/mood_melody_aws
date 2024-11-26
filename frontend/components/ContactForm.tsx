@@ -9,6 +9,7 @@ import {
   sanitizeInput,
   validateGeneralMultiLanguageInputTexts,
   validateGeneralEnglishInputs,
+  emailValidationSchema,
 } from "@utils/inputValidation";
 
 const ContactForm: React.FC = () => {
@@ -215,12 +216,14 @@ const ContactForm: React.FC = () => {
               id="email"
               {...register("email", {
                 required: "Email is required",
-                pattern: {
-                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                  message: "Invalid email address",
+                validate: (value) => {
+                  const result = emailValidationSchema.safeParse(value);
+                  return result.success || result.error.issues[0].message;
                 },
               })}
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
+              className={`mt-1 w-full px-4 py-2 border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } rounded-md`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">

@@ -23,3 +23,8 @@ export const validateGeneralMultiLanguageInputTexts = (
 export const validateGeneralEnglishInputs = (input: string): boolean => {
   return /^[\w\s,.!?-]*$/.test(input);
 };
+
+import { z } from "zod";
+
+// Define the Zod email validation schema
+export const emailValidationSchema = z.string().email("Invalid email address");
