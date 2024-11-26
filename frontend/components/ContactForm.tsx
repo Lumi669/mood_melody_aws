@@ -169,13 +169,10 @@ const ContactForm: React.FC = () => {
               id="firstname"
               {...register("firstname", {
                 required: "Firstname is required",
-                pattern: {
-                  value: /^[A-Za-z\s]+$/,
-                  message: "Firstname can only contain letters and spaces",
-                },
+
                 validate: (value) =>
-                  value.trim().length > 0 ||
-                  "Firstname cannot be empty or spaces only",
+                  validateGeneralMultiLanguageInputTexts(value) ||
+                  "Firstname can only contain letters, spaces, and limited punctuation",
               })}
               className={`mt-1 w-full px-4 py-2 border ${
                 errors.firstname ? "border-red-500" : "border-gray-300"
@@ -196,22 +193,10 @@ const ContactForm: React.FC = () => {
               id="surname"
               {...register("surname", {
                 required: "Surname is required",
-                pattern: {
-                  value: /^[A-Za-z\s'-]+$/,
-                  message:
-                    "Surname can only contain letters, spaces, hyphens, or apostrophes",
-                },
+
                 validate: (value) =>
-                  value.trim().length > 1 ||
-                  "Surname must be more than 1 character",
-                minLength: {
-                  value: 2,
-                  message: "Surname must be at least 2 characters long",
-                },
-                maxLength: {
-                  value: 50,
-                  message: "Surname must not exceed 50 characters",
-                },
+                  validateGeneralMultiLanguageInputTexts(value) ||
+                  "Surname can only contain letters, spaces, and limited punctuation",
               })}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md"
             />
