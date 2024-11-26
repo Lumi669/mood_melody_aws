@@ -5,7 +5,10 @@ import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ContactFormInputs } from "../types/type";
 import { apiUrls } from "@config/apiConfig";
-import { sanitizeInput } from "@utils/sanitizeInput";
+import {
+  sanitizeInput,
+  validateGeneralInputTexts,
+} from "@utils/inputValidation";
 
 const ContactForm: React.FC = () => {
   const [submissionStatus, setSubmissionStatus] = useState<string | null>(null);
@@ -91,6 +94,8 @@ const ContactForm: React.FC = () => {
         organisation: sanitizeInput(data.organisation),
         message: sanitizeInput(data.message || ""), // Handle optional field
       };
+
+      console.log("sssss sanitizedData === ", sanitizedData);
 
       const response = await fetch(`${apiUrls.saveuserfeedback}`, {
         method: "POST",
@@ -276,16 +281,19 @@ const ContactForm: React.FC = () => {
               id="title"
               {...register("title", {
                 required: "Title is required",
-                minLength: {
-                  value: 2,
-                  message: "Title must be at least 2 characters",
+
+                validate: (value) => {
+                  if (!validateGeneralInputTexts(value)) {
+                    return "Title contains invalid characters";
+                  }
+                  if (value.trim().length < 2) {
+                    return "Title must be at least 2 characters";
+                  }
+                  if (value.trim().length > 20) {
+                    return "Title must not exceed 20 characters";
+                  }
+                  return true; // Valid input
                 },
-                maxLength: {
-                  value: 20,
-                  message: "Title must not exceed 20 characters",
-                },
-                validate: (value) =>
-                  value.trim().length > 1 || "Title cannot be spaces only",
               })}
               className={`mt-1 w-full px-4 py-2 border ${
                 errors.title ? "border-red-500" : "border-gray-300"
@@ -309,13 +317,17 @@ const ContactForm: React.FC = () => {
               id="organisation"
               {...register("organisation", {
                 required: "Organisation is required",
-                minLength: {
-                  value: 2,
-                  message: "Organisation must be at least 2 characters",
-                },
-                maxLength: {
-                  value: 50,
-                  message: "Organisation must not exceed 50 characters",
+                validate: (value) => {
+                  if (!validateGeneralInputTexts(value)) {
+                    return "Organisation contains invalid characters";
+                  }
+                  if (value.trim().length < 2) {
+                    return "Organisation must be at least 2 characters";
+                  }
+                  if (value.trim().length > 50) {
+                    return "Organisation must not exceed 50 characters";
+                  }
+                  return true; // Valid input
                 },
               })}
               className={`mt-1 w-full px-4 py-2 border ${

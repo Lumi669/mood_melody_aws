@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { sanitizeInput } from "@utils/sanitizeInput";
+import {
+  sanitizeInput,
+  validateGeneralInputTexts,
+} from "@utils/inputValidation";
 
 interface SentimentAnalysisPageProps {
   onSentimentAnalyzed: (message: string) => void;
@@ -10,9 +13,6 @@ interface SentimentAnalysisPageProps {
     source: "button" | "analysis",
   ) => void;
 }
-
-// Regex to disallow invalid characters while allowing common text characters
-const forbiddenCharacterRegex = /^[^\u0000-\u001F<>]+$/u;
 
 export default function SentimentAnalysisPage({
   onSentimentAnalyzed,
@@ -40,7 +40,7 @@ export default function SentimentAnalysisPage({
 
     if (newText.trim() === "") {
       setInputError(null); // Clear input error when input is empty
-    } else if (!forbiddenCharacterRegex.test(newText)) {
+    } else if (!validateGeneralInputTexts(newText)) {
       setInputError("Invalid characters are not allowed.");
     } else {
       setInputError(null); // Clear input error if valid
