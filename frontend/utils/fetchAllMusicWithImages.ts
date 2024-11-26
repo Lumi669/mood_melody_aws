@@ -4,8 +4,8 @@ import { apiUrls } from "../config/apiConfig";
 
 export const fetchAllMusicWithImages = async () => {
   console.log("apiUrls ======== ", apiUrls);
-  console.log("apiUrls.images ====== ", apiUrls.images);
-  console.log("apiUrls.musics ====== ", apiUrls.musics);
+  // console.log("apiUrls.images ====== ", apiUrls.images);
+  // console.log("apiUrls.musics ====== ", apiUrls.musics);
 
   try {
     const musicResponse = await fetch(
@@ -33,8 +33,8 @@ export const fetchAllMusicWithImages = async () => {
     const musicData = await musicResponse.json();
     const imageData = await imageResponse.json();
 
-    console.log("musicData from context === ", musicData);
-    console.log("imageData from context === ", imageData);
+    // console.log("musicData from context === ", musicData);
+    // console.log("imageData from context === ", imageData);
 
     // Match music and image records based on common identifier
     const matchedData = musicData.map((music: Music) => {
