@@ -11,6 +11,9 @@ dependencies:
   axios:
     specifier: ^1.6.7
     version: 1.7.7
+  dompurify:
+    specifier: ^3.2.1
+    version: 3.2.1
   express:
     specifier: ^4.19.2
     version: 4.21.0
@@ -88,6 +91,9 @@ devDependencies:
   "@storybook/test":
     specifier: ^8.3.2
     version: 8.3.3(storybook@8.3.3)
+  "@types/dompurify":
+    specifier: ^3.2.0
+    version: 3.2.0
   "@types/node":
     specifier: ^20
     version: 20.16.6
@@ -4299,6 +4305,16 @@ packages:
       }
     dev: true
 
+  /@types/dompurify@3.2.0:
+    resolution:
+      {
+        integrity: sha512-Fgg31wv9QbLDA0SpTOXO3MaxySc4DKGLi8sna4/Utjo4r3ZRPdCt4UQee8BWr+Q5z21yifghREPJGYaEOEIACg==,
+      }
+    deprecated: This is a stub types definition. dompurify provides its own type definitions, so you do not need this installed.
+    dependencies:
+      dompurify: 3.2.1
+    dev: true
+
   /@types/escodegen@0.0.6:
     resolution:
       {
@@ -4515,6 +4531,14 @@ packages:
       "@types/node": 20.16.6
       "@types/send": 0.17.4
     dev: true
+
+  /@types/trusted-types@2.0.7:
+    resolution:
+      {
+        integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==,
+      }
+    requiresBuild: true
+    optional: true
 
   /@types/unist@3.0.3:
     resolution:
@@ -6666,6 +6690,14 @@ packages:
     dependencies:
       domelementtype: 2.3.0
     dev: true
+
+  /dompurify@3.2.1:
+    resolution:
+      {
+        integrity: sha512-NBHEsc0/kzRYQd+AY6HR6B/IgsqzBABrqJbpCDQII/OK6h7B7LXzweZTDsqSW2LkTRpoxf18YUP+YjGySk6B3w==,
+      }
+    optionalDependencies:
+      "@types/trusted-types": 2.0.7
 
   /domutils@2.8.0:
     resolution:
