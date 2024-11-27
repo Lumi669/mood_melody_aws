@@ -40,9 +40,9 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
 
   useEffect(() => {
     // Use the initialData from props instead of fetching again
-    if (initialData) {
-      console.log("Received initial data:", initialData);
-    }
+    // if (initialData) {
+    //   console.log("Received initial data:", initialData);
+    // }
 
     // Restore state from sessionStorage or initialize
     const currentMood = sessionStorage.getItem("currentMood");

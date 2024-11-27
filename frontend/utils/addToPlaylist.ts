@@ -1,7 +1,5 @@
 import { MusicWithImageSimplified } from "../types/type";
 export const addToPlaylist22 = (currentMusic: MusicWithImageSimplified) => {
-  console.log("addtoplaylist get called .....");
-
   // Get existing playlist from local storage
   const existingPlaylist = localStorage.getItem("playlist");
 

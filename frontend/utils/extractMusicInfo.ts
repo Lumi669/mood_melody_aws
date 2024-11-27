@@ -5,7 +5,6 @@ export const extractAuthorName = (fileName: string) => {
   if (authorName) {
     // Replace hyphens with spaces and trim the result
     authorName = authorName.replace(/-/g, " ").trim();
-    console.log("authorName.trim === ", authorName);
     return authorName;
   } else {
     return "";
@@ -19,7 +18,6 @@ export const extractMusicName = (fileName: string) => {
   if (songName) {
     // Remove the .mp3 extension and replace hyphens with spaces
     songName = songName.replace(".mp3", "").replace(/-/g, " ").trim();
-    console.log("songName.trim() === ", songName);
     return songName;
   } else {
     return "";
