@@ -110,7 +110,8 @@ const CicdPage = () => {
         <div className="w-full flex justify-center">
           {/* Set maximum width and allow responsiveness */}
           <Image
-            src="/cicd-border-50-h.webp"
+            src="/cicd-border50-awsicon.webp"
+            // src="/cicd-border50.webp"
             alt="Architecture"
             width={1200} // Increase the resolution to make it more readable
             height={800} // Keep the aspect ratio proportional
