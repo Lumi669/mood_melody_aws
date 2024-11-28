@@ -7,7 +7,7 @@ import { useMedia } from "@context/MediaContext";
 import { getTextColor } from "@utils/getTextColor";
 import DecorativeElements from "@components/DecorativeElements";
 
-const TechStackPage = () => {
+const ArchitecturePage = () => {
   const { isRed, isBlue, isBrown } = useMedia();
   const router = useRouter();
 
@@ -61,4 +61,4 @@ const TechStackPage = () => {
   );
 };
 
-export default TechStackPage;
+export default ArchitecturePage;
