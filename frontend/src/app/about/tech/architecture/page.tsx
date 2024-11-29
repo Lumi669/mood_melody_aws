@@ -47,8 +47,8 @@ const ArchitecturePage = () => {
             // src="/architecture-border50-black.webp"
             src="/techstack-border50-s3.webp"
             alt="Architecture"
-            width={600}
-            height={400}
+            width={738}
+            height={792}
             priority={true}
           />
         </div>

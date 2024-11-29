@@ -113,8 +113,8 @@ const CicdPage = () => {
             src="/cicd-border50-awsicon.webp"
             // src="/cicd-border50.webp"
             alt="Architecture"
-            width={1200} // Increase the resolution to make it more readable
-            height={800} // Keep the aspect ratio proportional
+            width={1000} // Increase the resolution to make it more readable
+            height={1370} // Keep the aspect ratio proportional
             priority={true}
             className="w-full max-w-4xl object-contain"
           />
