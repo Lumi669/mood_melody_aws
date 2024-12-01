@@ -163,7 +163,7 @@ const PrivacyPage = () => {
           </li>
           <li>
             <Link
-              href="https://www.freepik.com/free-ai-image/cute-puppy-sitting-grass-enjoying-nature-playful-beauty-generated-by-artificial-intelligence_79687547.htm"
+              href="https://www.freepik.com/free-photo/selective-focus-shot-dog-dressed-gray-winter-sweater_13061006.htm"
               legacyBehavior
             >
               <a
