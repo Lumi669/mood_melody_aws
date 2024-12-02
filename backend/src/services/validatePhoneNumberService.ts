@@ -46,7 +46,6 @@ export const validatePhoneNumber = async (
   );
 
   try {
-    //const apiKey = process.env.NUMVERIFY_API_KEY;
     const apiKey = await fetchNumVerifyApiKey();
 
     if (!apiKey) {
@@ -62,23 +61,33 @@ export const validatePhoneNumber = async (
         number: phoneNumber,
       },
     });
+    console.log("rrrr response from numVerify === ", response);
 
     // Check if the response indicates a valid phone number
     const data = response.data;
 
     console.log("rrrr response.data from numVerify === ", data);
 
-    if (!data.success) {
+    if (data.success === false) {
       console.warn("NumVerify API Error: ", data.error);
       const errorCode = data.error.code;
 
-      if (errorCode === 104) {
-        // Monthly usage limit reached
-        return { isValid: "NA", validationStatus: "unvalidated-phone" };
+      if (errorCode === 101) {
+        console.warn("Invalid access key!");
+      } else if (errorCode === 104) {
+        console.warn("Monthly usage limit reached");
+      } else if (errorCode === 403) {
+        console.warn(
+          "User did not supply an Access Key or User entered an invalid Access Key.",
+        );
+      } else if (errorCode === 404) {
+        console.warn(
+          "User requested a resource which does not exist. or User requested a non-existent API function.",
+        );
       }
 
       // Handle other error cases if needed
-      return { isValid: false, validationStatus: "invalid-phone" };
+      return { isValid: "NA", validationStatus: "unvalidated-phone" };
     }
 
     if (data.valid) {
