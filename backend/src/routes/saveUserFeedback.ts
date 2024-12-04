@@ -3,6 +3,7 @@ const router = express.Router();
 
 import { saveToDynamodbService } from "../services/saveToDynamodbService";
 import { validatePhoneNumber } from "../services/validatePhoneNumberService";
+import { contactFormSchema } from "../schemas/contactFormSchema";
 
 // Handle preflight OPTIONS request
 router.options("/", (req, res) => {
@@ -18,33 +19,27 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ error: "Invalid JSON format received." });
   }
 
-  const userInputs = req.body;
-
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  const requiredFields = [
-    "firstname",
-    "surname",
-    "email",
-    "telephonenumber",
-    "title",
-    "organisation",
-    "roles",
-  ];
-
-  const missingFields = requiredFields.filter((field) => !userInputs[field]);
-
-  if (missingFields.length > 0) {
-    return res
-      .status(400)
-      .json({ error: `Missing required fields: ${missingFields.join(", ")}` });
-  }
-
-  const telephonenumber = userInputs.telephonenumber;
-
   try {
+    // Validate the payload with Zod
+    const result = contactFormSchema.safeParse(req.body);
+    console.log("rrrr result from saveUserFeedback.ts === ", result);
+    if (!result.success) {
+      const debugMarker = "ZOD_VALIDATION_CONTACT_FORM"; //add a marker for later debug
+      console.error(`[${debugMarker}] Validation failed:`, result.error.errors);
+
+      return res.status(400).json({
+        error: result.error.errors,
+        debugMarker,
+      });
+    }
+    const userInputs = result.data;
+
+    // Validate phone number after payload validation
+    const telephonenumber = userInputs.telephonenumber;
     const { isValid, validationStatus } =
       await validatePhoneNumber(telephonenumber);
 
@@ -65,6 +60,8 @@ router.post("/", async (req, res) => {
     } else {
       userInputs.phoneValidated = true;
     }
+
+    console.log("uuuuu userInputs from saveUserFeedback.ts === ", userInputs);
 
     const message = await saveToDynamodbService(userInputs);
     console.log("Data saved to DynamoDB successfully:", message);
