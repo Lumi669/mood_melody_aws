@@ -56,7 +56,11 @@ export const contactFormSchema = z.object({
   message: z
     .string()
     .trim()
-    .max(100, "Message must be 100 characters or fewer"),
+    .max(100, "Message must be 100 characters or fewer")
+    .refine(
+      validateGeneralEnglishInputs,
+      "Message contains invalid characters",
+    ),
   roles: z.array(z.string()).min(1, "At least one role must be selected"), // Ensure at least one role is selected
   phoneValidated: z.boolean().nullable().default(null),
 });
