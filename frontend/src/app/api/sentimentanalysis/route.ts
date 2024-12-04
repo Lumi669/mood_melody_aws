@@ -1,19 +1,16 @@
-// src/app/api/analyze-sentiment/route.ts
-
-// a server-side API route to interact with the backend service
+// a server-side API route of frontend to interact with the backend service i.e the real backend which interacts with database
 
 import { NextRequest, NextResponse } from "next/server";
 
 import { apiUrls } from "@config/apiConfig";
 
 export async function POST(req: NextRequest) {
-  console.log("apiUrls from sentimentanalysis route ======== ", apiUrls);
-  console.log("req from frontend api/sentimentanalysis/route.ts ===  ", req);
+  // console.log("apiUrls from sentimentanalysis route ======== ", apiUrls);
 
   const { text } = await req.json();
   console.log("text for analysing sentiment frontend ====== ", text);
 
-  // frontend send request to backend
+  // frontend forward request to backend
   const response = await fetch(`${apiUrls.sentimentanalysis}`, {
     method: "POST",
     headers: {
@@ -22,14 +19,18 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify({ text: text }),
   });
 
-  console.log("response from backend ==== ", response);
-
   if (!response.ok) {
-    console.log("response from backend not ok ");
-    return NextResponse.json(
-      { error: "Failed to analyze sentiment" },
-      { status: 500 },
-    );
+    let backendError;
+    try {
+      backendError = await response.json();
+      console.log("Backend error response::::", backendError);
+    } catch (err) {
+      console.error("Failed to parse backend response body:", err);
+      backendError = { error: "Unexpected error from backend" };
+    }
+
+    // Forward the backend's status code to the frontend
+    return NextResponse.json(backendError, { status: response.status });
   }
 
   const data = await response.json();

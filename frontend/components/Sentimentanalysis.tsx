@@ -38,13 +38,13 @@ export default function SentimentAnalysisPage({
     // Clear previous analysis error when the user starts typing
     errorMessageRef.current = null;
 
-    if (newText.trim() === "") {
-      setInputError(null); // Clear input error when input is empty
-    } else if (!validateGeneralMultiLanguageInputTexts(newText)) {
-      setInputError("Invalid characters are not allowed.");
-    } else {
-      setInputError(null); // Clear input error if valid
-    }
+    // if (newText.trim() === "") {
+    //   setInputError(null); // Clear input error when input is empty
+    // } else if (!validateGeneralMultiLanguageInputTexts(newText)) {
+    //   setInputError("Invalid characters are not allowed.");
+    // } else {
+    //   setInputError(null); // Clear input error if valid
+    // }
 
     setText(newText); // Update text
   };
@@ -56,6 +56,7 @@ export default function SentimentAnalysisPage({
     try {
       // Sanitize the text before sending it to the backend
       const sanitizedText = sanitizeInput(text);
+
       const response = await fetch("/api/sentimentanalysis", {
         method: "POST",
         headers: {
@@ -64,17 +65,28 @@ export default function SentimentAnalysisPage({
         body: JSON.stringify({ text: sanitizedText }),
       });
 
+      console.log("rrrrr response from SentimentAnalysisPage === ", response);
+
       if (response.ok) {
         const data = await response.json();
         setSentiment(data.sentiment);
       } else {
+        // Parse the error details from the body
+        const errorData = await response.json();
+
+        console.error("eeeeee errorData === ", errorData);
+
         errorMessageRef.current =
-          "Failed to analyze sentiment. Please try again later.";
+          errorData.error || "Unexpected error occurred.";
+
         setSentiment("Error analyzing sentiment");
       }
     } catch (error) {
+      console.error("Network or unexpected error:", error);
+
       errorMessageRef.current =
         "Failed to analyze sentiment. Please try again later.";
+
       setSentiment("Error analyzing sentiment");
     } finally {
       setIsLoading(false);
