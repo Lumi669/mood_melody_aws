@@ -38,13 +38,13 @@ export default function SentimentAnalysisPage({
     // Clear previous analysis error when the user starts typing
     errorMessageRef.current = null;
 
-    // if (newText.trim() === "") {
-    //   setInputError(null); // Clear input error when input is empty
-    // } else if (!validateGeneralMultiLanguageInputTexts(newText)) {
-    //   setInputError("Invalid characters are not allowed.");
-    // } else {
-    //   setInputError(null); // Clear input error if valid
-    // }
+    if (newText.trim() === "") {
+      setInputError(null); // Clear input error when input is empty
+    } else if (!validateGeneralMultiLanguageInputTexts(newText)) {
+      setInputError("Invalid characters are not allowed.");
+    } else {
+      setInputError(null); // Clear input error if valid
+    }
 
     setText(newText); // Update text
   };
