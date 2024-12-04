@@ -1,16 +1,8 @@
 import { z } from "zod";
-
-export const validateGeneralMultiLanguageInputTexts = (
-  input: string,
-): boolean => {
-  // Allow letters from all languages, numbers, spaces, and limited punctuation
-  return /^[\p{L}\p{M}0-9\s.,-]+$/u.test(input);
-};
-
-export const validateGeneralEnglishInputs = (input: string): boolean => {
-  // Allow English letters, numbers, spaces, and limited punctuation
-  return /^[\w\s,.!?-]*$/.test(input);
-};
+import {
+  validateGeneralMultiLanguageInputTexts,
+  validateGeneralEnglishInputs,
+} from "../utils/inputValidation";
 
 export const contactFormSchema = z.object({
   firstname: z
