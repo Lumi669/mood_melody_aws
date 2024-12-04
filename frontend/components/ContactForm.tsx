@@ -110,7 +110,7 @@ const ContactForm: React.FC = () => {
       if (!response.ok) {
         const errorData = await response.json();
 
-        console.log("eeee errorData === ", errorData);
+        console.log("eeee errorData.error === ", errorData.error);
 
         // Handle specific error messages
         if (errorData.error === "Country prefix is needed") {
@@ -119,11 +119,14 @@ const ContactForm: React.FC = () => {
           );
           setIsSubmitting(false);
           return;
-        }
-        if (errorData.error === "Invalid telephone number") {
+        } else if (errorData.error === "Invalid telephone number") {
           setSubmissionStatus(
             "Error: The telephone number provided is invalid. Please check and try again.",
           );
+          setIsSubmitting(false);
+          return;
+        } else {
+          setSubmissionStatus(`Error: ${errorData.error}`);
           setIsSubmitting(false);
           return;
         }
@@ -171,9 +174,9 @@ const ContactForm: React.FC = () => {
               {...register("firstname", {
                 required: "Firstname is required",
 
-                validate: (value) =>
-                  validateGeneralMultiLanguageInputTexts(value) ||
-                  "Firstname can only contain letters, spaces, and limited punctuation",
+                // validate: (value) =>
+                //   validateGeneralMultiLanguageInputTexts(value) ||
+                //   "Firstname can only contain letters, spaces, and limited punctuation",
               })}
               className={`mt-1 w-full px-4 py-2 border ${
                 errors.firstname ? "border-red-500" : "border-gray-300"
@@ -272,9 +275,9 @@ const ContactForm: React.FC = () => {
                 required: "Title is required",
 
                 validate: (value) => {
-                  if (!validateGeneralEnglishInputs(value)) {
-                    return "Title contains invalid characters";
-                  }
+                  // if (!validateGeneralEnglishInputs(value)) {
+                  //   return "Title contains invalid characters";
+                  // }
                   if (value.trim().length < 2) {
                     return "Title must be at least 2 characters";
                   }

@@ -31,8 +31,13 @@ router.post("/", async (req, res) => {
       const debugMarker = "ZOD_VALIDATION_CONTACT_FORM"; //add a marker for later debug
       console.error(`[${debugMarker}] Validation failed:`, result.error.errors);
 
+      // Collect all error messages as a single string
+      const errorMessages = result.error.errors
+        .map((error) => error.message)
+        .join("; ");
+
       return res.status(400).json({
-        error: result.error.errors,
+        error: errorMessages,
         debugMarker,
       });
     }
