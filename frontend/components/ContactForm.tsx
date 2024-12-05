@@ -130,7 +130,6 @@ const ContactForm: React.FC = () => {
           setIsSubmitting(false);
           return;
         }
-        throw new Error(`Server error: ${response.status}`);
       }
 
       setSubmissionStatus("Feedback submitted successfully!");
