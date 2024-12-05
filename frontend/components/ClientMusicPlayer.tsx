@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import { MusicPlayerProps } from "../types/type";
 
 import dynamic from "next/dynamic";
@@ -8,13 +10,7 @@ const MusicPlayer = dynamic(() => import("@components/MusicPlayer"), {
   ssr: false,
 });
 
-interface ClientMusicPlayerProps {
-  initialData: any; // Replace `any` with the actual type for `initialData`
-}
-
-const ClientMusicPlayer: React.FC<ClientMusicPlayerProps> = ({
-  initialData,
-}) => {
+const ClientMusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
   return <MusicPlayer initialData={initialData} />;
 };
 
