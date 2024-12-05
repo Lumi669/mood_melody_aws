@@ -5,13 +5,6 @@ node_modules
 data-*.json
 storybook*
 
-# Storybook configuration
-/frontend/.storybook/
-
-# Storybook stories and related assets
-/frontend/src/stories/
-
-
 
 */dist/*
 

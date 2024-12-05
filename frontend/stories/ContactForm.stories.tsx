@@ -1,4 +1,3 @@
-// components/ContactForm.stories.tsx
 import React from "react";
 import { Meta, StoryFn } from "@storybook/react";
 import ContactForm from "../components/ContactForm"; // Adjust the path if necessary
@@ -17,13 +16,3 @@ const Template: StoryFn<typeof ContactForm> = (args) => (
 // Default story
 export const Default = Template.bind({});
 Default.args = {};
-
-// .babelrc
-// {
-//   "presets": [
-//     "@babel/preset-env",
-//     "@babel/preset-react",
-//     "@babel/preset-typescript"
-//   ],
-//   "plugins": []
-// }
