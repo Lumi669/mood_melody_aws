@@ -6,11 +6,7 @@ import { addToPlaylist22 } from "@utils/addToPlaylist";
 import CustomImage from "@components/CustomImage";
 import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
-
-// Define the props type for the initial data passed from the server component
-interface MusicPlayerProps {
-  initialData: any;
-}
+import { MusicPlayerProps } from "../types/type";
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
   const {

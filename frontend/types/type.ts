@@ -77,3 +77,8 @@ export interface ContactFormInputs {
   message: string;
   roles: string[]; // Array to hold multiple selections
 }
+
+// Define the props type for the initial data passed from the server component
+export interface MusicPlayerProps {
+  initialData: any;
+}

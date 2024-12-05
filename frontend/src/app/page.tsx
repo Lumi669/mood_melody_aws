@@ -1,13 +1,8 @@
 import React from "react";
 import { fetchAllMusicWithImages } from "@utils/fetchAllMusicWithImages";
 import ClientContextUpdater from "@components/ClientContextUpdater";
-import dynamic from "next/dynamic";
 import DecorativeElements from "@components/DecorativeElements";
-
-// Dynamically import MusicPlayer to ensure it's treated as a client component
-const MusicPlayer = dynamic(() => import("@components/MusicPlayer"), {
-  ssr: false,
-});
+import ClientMusicPlayer from "@components/ClientMusicPlayer";
 
 const Home: React.FC = async () => {
   const matchedData = await fetchAllMusicWithImages();
@@ -15,7 +10,7 @@ const Home: React.FC = async () => {
   return (
     <div className="relative h-screen overflow-auto md:overflow-hidden px-4 pb-60">
       {/* Pass initial data as props to the client component */}
-      <MusicPlayer initialData={matchedData} />
+      <ClientMusicPlayer initialData={matchedData} />
       <ClientContextUpdater initialData={matchedData} />
       {/* Decorative shapes for a playful look */}
       <DecorativeElements />
