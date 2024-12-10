@@ -4,6 +4,7 @@ const router = express.Router();
 import { saveToDynamodbService } from "../services/saveToDynamodbService";
 import { validatePhoneNumber } from "../services/validatePhoneNumberService";
 import { contactFormSchema } from "../schemas/contactFormSchema";
+import { removeZeroWidthCharacters } from "../utils/inputValidation";
 
 // Handle preflight OPTIONS request
 router.options("/", (req, res) => {
@@ -41,9 +42,25 @@ router.post("/", async (req, res) => {
         debugMarker,
       });
     }
-    const userInputs = result.data;
 
-    // Validate phone number after payload validation
+    let userInputs = result.data;
+
+    // Step 1: Sanitize input fields to remove zero-width characters
+    userInputs = {
+      ...userInputs,
+      firstname: removeZeroWidthCharacters(userInputs.firstname || ""),
+      surname: removeZeroWidthCharacters(userInputs.surname || ""),
+      email: removeZeroWidthCharacters(userInputs.email || ""),
+      telephonenumber: removeZeroWidthCharacters(
+        userInputs.telephonenumber || "",
+      ),
+      title: removeZeroWidthCharacters(userInputs.title || ""),
+      organisation: removeZeroWidthCharacters(userInputs.organisation || ""),
+      message: removeZeroWidthCharacters(userInputs.message || ""),
+    };
+    console.log("ssss sanitized userInputs === ", userInputs);
+
+    // Step 2: Validate phone number after payload validation
     const telephonenumber = userInputs.telephonenumber;
     const { isValid, validationStatus } =
       await validatePhoneNumber(telephonenumber);
@@ -68,6 +85,7 @@ router.post("/", async (req, res) => {
 
     console.log("uuuuu userInputs from saveUserFeedback.ts === ", userInputs);
 
+    // Step 3: Save sanitized and validated data to DynamoDB
     const message = await saveToDynamodbService(userInputs);
     console.log("Data saved to DynamoDB successfully:", message);
 
