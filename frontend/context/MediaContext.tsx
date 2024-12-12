@@ -23,6 +23,7 @@ const MediaContext = createContext<MediaContextType>({
   isBrown: false,
   audio: null,
   currentTrack: null,
+  setCurrentTrack: () => {},
   currentSong: null,
   setCurrentSong: () => {},
   isPlaying: false,
@@ -94,6 +95,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       if (lastPlayedSong) {
         const song = JSON.parse(lastPlayedSong);
         setCurrentSong(song);
+        setCurrentTrack(song.url);
 
         // Stop any other music playing on the other pages
         if (audioRef.current) {
@@ -108,6 +110,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       if (lastPlayedSong) {
         const song = JSON.parse(lastPlayedSong);
         setCurrentSong(song);
+        setCurrentTrack(song.url);
 
         // Stop any other music playing from other pages
         if (audioRef.current) {
@@ -161,6 +164,8 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   const playTrack = (url: string, song?: MusicWithImageSimplified) => {
     if (!audioRef.current) return;
 
+    console.log("uuuuuu url ====== ", url);
+
     // Only play the track if it's not the current track or if the track is paused
     if (audioRef.current.src !== url || audioRef.current.paused) {
       audioRef.current.src = url;
@@ -175,7 +180,9 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
           }
 
           if (song) {
+            console.log("sssss song ======= ", song);
             setCurrentSong(song);
+            setCurrentTrack(song.url);
             addToPlaylist22(song);
             if (isHomePage()) {
               sessionStorage.setItem("lastPlayedSong", JSON.stringify(song));
@@ -296,6 +303,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
         setMediaData,
         audio: audioRef.current,
         currentTrack,
+        setCurrentTrack,
         currentSong,
         setCurrentSong,
         isPlaying,

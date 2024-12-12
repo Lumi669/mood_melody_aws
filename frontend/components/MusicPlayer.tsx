@@ -17,6 +17,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
     stopMusic,
     setCurrentSong,
     currentTrack,
+    setCurrentTrack,
     currentSong,
     setIsPlaying,
     isRed,
@@ -58,12 +59,15 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
 
       if (wasPlayingOnHomePage) {
         setCurrentSong(song);
+        setCurrentTrack(song.url);
         playTrack(song.url, song); // Play the song if it was playing before
         setIsPlaying(true);
         setVideoVisible(true);
         setOriginalViewVisible(false); // Hide the original view when music is playing
       } else if (wasPausedOnHomePage && timePoint) {
         setCurrentSong(song);
+        setCurrentTrack(song.url);
+
         setIsPlaying(false);
         setVideoVisible(true);
         setOriginalViewVisible(false); // Restore the paused state
@@ -103,6 +107,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
     const randomSong =
       filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
     setCurrentSong(randomSong);
+    setCurrentTrack(randomSong.url);
     addToPlaylist22(randomSong);
 
     setIsRed(randomSong.mood === "happy");
@@ -177,6 +182,15 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
       return "You have no mood at the moment";
     }
   };
+
+  console.log(
+    "cccc=ssss currentSong from MusicPlayer before render ==== ",
+    currentSong,
+  );
+  console.log(
+    "cccc=tttt currentTrack from MusicPlayer before render ==== ",
+    currentTrack,
+  );
 
   return (
     <div className="relative min-h-screen px-4 pb-20">

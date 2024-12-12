@@ -39,6 +39,7 @@ export interface MediaContextType {
   isBrown: boolean;
   audio: HTMLAudioElement | null;
   currentTrack: string | null;
+  setCurrentTrack: Dispatch<SetStateAction<string | null>>;
   currentSong: MusicWithImageSimplified | null;
   isPlaying: boolean;
 

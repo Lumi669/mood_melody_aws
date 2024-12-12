@@ -27,6 +27,11 @@ const CustomImage: React.FC<CustomImageProps> = ({
     audio,
     setIsPlaying,
   } = useMedia();
+
+  console.log(
+    "cccc currentTrack from useMedia of CustomImage.tsx === ",
+    currentTrack,
+  );
   const [progress, setProgress] = useState<number>(0);
 
   const validSrc = src ?? "";
