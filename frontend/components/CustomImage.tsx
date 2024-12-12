@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { customLoader } from "@utils/customImageLoader";
 import type { CustomImageProps } from "../types/type";
@@ -28,10 +28,26 @@ const CustomImage: React.FC<CustomImageProps> = ({
     setIsPlaying,
   } = useMedia();
 
-  console.log(
-    "cccc currentTrack from useMedia of CustomImage.tsx === ",
-    currentTrack,
-  );
+  // This is debug code for testing re-render of CustomImage
+  // console.log(
+  //   "cccc currentTrack from useMedia of CustomImage.tsx === ",
+  //   currentTrack,
+  // );
+
+  // Print only when currentTrack is changes
+  const previousTrack = useRef<string | null>(null);
+
+  useEffect(() => {
+    // Log only when currentTrack changes
+    if (currentTrack !== previousTrack.current) {
+      console.log(
+        "cccc currentTrack from useMedia of CustomImage.tsx === ",
+        currentTrack,
+      );
+      previousTrack.current = currentTrack;
+    }
+  }, [currentTrack]);
+
   const [progress, setProgress] = useState<number>(0);
 
   const validSrc = src ?? "";
