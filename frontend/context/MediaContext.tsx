@@ -185,7 +185,15 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
           setIsPlaying(true);
         })
         .catch((error) => {
-          console.error("Failed to resume playback:", error);
+          // Only log the error if it's not in debugging mode i.e inspect (DevTools) is open
+          if (
+            !(
+              navigator.webdriver ||
+              window.performance?.getEntriesByType("resource").length > 0
+            )
+          ) {
+            console.error("Failed to resume playback:", error);
+          }
         });
       return;
     }
@@ -219,14 +227,26 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
           }
         })
         .catch((error) => {
-          console.error("Failed to start playback:", error);
+          // Only log the error if it's not in debugging mode
+          if (
+            !(
+              navigator.webdriver ||
+              window.performance?.getEntriesByType("resource").length > 0
+            )
+          ) {
+            console.error("Failed to start playback:", error);
+          }
         });
     };
 
-    audioRef.current.addEventListener("canplay", handleCanPlay, { once: true });
+    // Use the "loadedmetadata" event instead of "canplay" for better timing
+    audioRef.current.addEventListener("loadedmetadata", handleCanPlay, {
+      once: true,
+    });
 
+    // Cleanup listener
     return () => {
-      audioRef.current?.removeEventListener("canplay", handleCanPlay);
+      audioRef.current?.removeEventListener("loadedmetadata", handleCanPlay);
     };
   };
 
