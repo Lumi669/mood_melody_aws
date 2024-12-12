@@ -9,7 +9,8 @@ const Greeting = () => {
         alt="Description of the image"
         width={300}
         height={300}
-        className="rounded-lg"
+        className="rounded-lg "
+        priority
       />
 
       <h1 className="bg-yellow-100 text-2xl md:text-4xl font-mono text-[#1a9f4b] font-bold tracking-wide text-center p-4 rounded-lg">
