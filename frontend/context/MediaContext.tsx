@@ -162,37 +162,72 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   }, [isPlaying]);
 
   const playTrack = (url: string, song?: MusicWithImageSimplified) => {
-    if (!audioRef.current) return;
+    if (!audioRef.current) {
+      console.error("Audio element is not available.");
+      return;
+    }
 
-    console.log("uuuuuu url ====== ", url);
+    console.log("Attempting to play track with URL:", url);
 
-    // Only play the track if it's not the current track or if the track is paused
-    if (audioRef.current.src !== url || audioRef.current.paused) {
-      audioRef.current.src = url;
+    // If the src is the same and the track is already playing, do nothing
+    if (audioRef.current.src === url && !audioRef.current.paused) {
+      console.log("Track is already playing, no action needed.");
+      return;
+    }
+
+    // If the src is the same but the track is paused, resume playback
+    if (audioRef.current.src === url && audioRef.current.paused) {
+      console.log("Resuming paused track.");
       audioRef.current
         .play()
         .then(() => {
+          console.log("Playback resumed successfully.");
+          setIsPlaying(true);
+        })
+        .catch((error) => {
+          console.error("Failed to resume playback:", error);
+        });
+      return;
+    }
+
+    // Otherwise, update the src and play the new track
+    console.log("Updating audio source to:", url);
+    audioRef.current.pause(); // Pause any existing playback
+    audioRef.current.src = url;
+
+    const handleCanPlay = () => {
+      console.log("Audio is ready to play.");
+      audioRef.current
+        ?.play()
+        .then(() => {
+          console.log("Playback started successfully.");
           setIsPlaying(true);
           setCurrentTrack(url);
+
           if (isHomePage()) {
             sessionStorage.setItem("wasPlayingOnHomePage", "true");
             sessionStorage.setItem("wasPausedOnHomePage", "false");
           }
 
           if (song) {
-            console.log("sssss song ======= ", song);
             setCurrentSong(song);
-            setCurrentTrack(song.url);
             addToPlaylist22(song);
+
             if (isHomePage()) {
               sessionStorage.setItem("lastPlayedSong", JSON.stringify(song));
             }
           }
         })
         .catch((error) => {
-          console.error("Failed to play audio:", error);
+          console.error("Failed to start playback:", error);
         });
-    }
+    };
+
+    audioRef.current.addEventListener("canplay", handleCanPlay, { once: true });
+
+    return () => {
+      audioRef.current?.removeEventListener("canplay", handleCanPlay);
+    };
   };
 
   const pauseTrack = () => {
