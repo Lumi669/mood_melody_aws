@@ -230,6 +230,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
               className="cursor-pointer w-full lg:h-full object-cover aspect-[3/2] md:aspect-[2/1]"
               ctg={currentMusicCtg}
               mood={currentSong.mood}
+              priority={true}
             />
 
             {isVideoVisible && (

@@ -30,6 +30,7 @@ export interface CustomImageProps {
   className: string;
   ctg: string | null;
   mood: "happy" | "sad" | "calm";
+  priority?: boolean;
 }
 
 export interface MediaContextType {

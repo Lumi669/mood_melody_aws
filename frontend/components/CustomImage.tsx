@@ -16,6 +16,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
   className,
   ctg,
   mood,
+  priority = false,
 }) => {
   // Access audio from MediaContext using useMedia hook
   const {
@@ -63,7 +64,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
       }
     };
 
-    // Restore progress on mount
+    // Restore progress on mount, this make sure if paused on homepage, allmusic page show the same lenghth of progress bar
     syncProgress();
 
     const handleEnded = () => {
@@ -80,7 +81,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
       audio.removeEventListener("timeupdate", syncProgress);
       audio.removeEventListener("ended", handleEnded); // Clean up event listener
     };
-  }, [audio, currentTrack, dataUrl, setIsPlaying]); // Include dependencies
+  }, [audio, currentTrack, dataUrl, setIsPlaying]);
 
   const handleClick = () => {
     console.log(
@@ -119,6 +120,8 @@ const CustomImage: React.FC<CustomImageProps> = ({
         width={width}
         height={height}
         className={className}
+        priority={priority}
+        loading={priority ? undefined : "lazy"} // Ensure non-priority images use lazy loading
       />
 
       <div className="absolute inset-0 flex items-center justify-center">
