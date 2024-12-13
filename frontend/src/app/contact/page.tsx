@@ -60,6 +60,7 @@ const ContactPage = () => {
                 width={256}
                 height={256}
                 className="w-64 h-64 rounded-full border-4 border-white shadow-lg transition-transform duration-300 group-hover:scale-105"
+                priority
               />
               {/* Tooltip */}
               {/* <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full text-sm text-white bg-black bg-opacity-75 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
