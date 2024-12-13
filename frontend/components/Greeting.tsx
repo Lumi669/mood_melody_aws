@@ -8,7 +8,7 @@ const Greeting = () => {
         src="/dancing-girl-removebg.webp"
         alt="Description of the image"
         width={300}
-        height={300}
+        height={314}
         className="rounded-lg "
         priority
       />

@@ -89,7 +89,7 @@ const Nav: React.FC = () => {
             src="/logo.webp"
             alt="Logo"
             width={60}
-            height={60}
+            height={58}
             className="cursor-pointer"
             onClick={closeMobileMenu}
           />
