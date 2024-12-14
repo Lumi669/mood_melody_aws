@@ -14,11 +14,10 @@ import analyticsRoutes from "./routes/analyticsRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
-// app.use(cors());
 
 app.use(
   cors({
-    origin: "*", // Or specify your frontend domain for more security
+    origin: "*", // Or specify the frontend domain for more security
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
@@ -32,7 +31,6 @@ app.use(express.json());
 // Register routes for images
 app.use("/api/images", imageRoutes);
 
-// Register routes for musics
 app.use("/api/musics", musicRoutes);
 
 app.use("/", rootRoutes);
@@ -43,9 +41,6 @@ app.use("/api/sentimentanalysis", sentimentRoutes);
 app.use("/api/saveuserfeedback", saveUserFeedBack);
 
 app.use("/api/analytics", analyticsRoutes);
-
-// Register other routes...
-// app.use("/api/other", otherRoutes);
 
 // Register the error handler as the last middleware
 app.use(errorHandler);

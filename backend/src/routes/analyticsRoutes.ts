@@ -41,7 +41,6 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 // Endpoint to retrieve all analytics data for display on the Analysis page
-// Endpoint to retrieve all analytics data for display on the Analysis page
 router.get("/", async (_req: Request, res: Response) => {
   try {
     const items = await getAllAnalyticsData();
