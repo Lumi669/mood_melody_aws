@@ -67,7 +67,7 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2(express@4.20.0)
       "@types/node":
-        specifier: ^20.12.12
+        specifier: ^20.16.0
         version: 20.16.0
       nodemon:
         specifier: ^3.1.7
@@ -76,7 +76,7 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.16.0)(typescript@5.5.4)
       typescript:
-        specifier: ^5.4.5
+        specifier: ^5.5.4
         version: 5.5.4
 
 packages:
