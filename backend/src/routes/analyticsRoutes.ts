@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express";
-import {
-  saveAnalyticsData,
-  getAllAnalyticsData,
-} from "../services/saveAnalyticsToDynamoService";
+import { saveAnalyticsData } from "../services/saveAnalyticsToDynamoService";
+
+import { getAllAnalyticsData } from "../services/getAllAnalyticsDataService";
 
 const router = express.Router();
 
@@ -40,10 +39,49 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+// // Endpoint to retrieve all analytics data for display on the Analysis page
+// router.get("/", async (_req: Request, res: Response) => {
+//   try {
+//     const items = await getAllAnalyticsData();
+//     console.log("Fetched analytics data ==== ", items);
+
+//     // Calculate Total Number of Visits
+//     const totalVisits = items.length;
+
+//     // Calculate Unique Visitors (distinct sessionIds)
+//     const uniqueVisitors = new Set(
+//       items
+//         .map((item: AnalyticsItem) => item.sessionId?.S)
+//         .filter(
+//           (id: string | undefined): id is string => typeof id === "string",
+//         ),
+//     ).size;
+
+//     console.log("uniqueVisitors ====== ", uniqueVisitors);
+
+//     // Calculate Average Session Duration
+//     const totalDuration = items.reduce((acc: number, item: AnalyticsItem) => {
+//       const duration = item.sessionDuration?.N;
+//       return acc + (duration ? parseFloat(duration) : 0);
+//     }, 0);
+//     const averageSessionDuration =
+//       totalVisits > 0 ? totalDuration / totalVisits : 0;
+
+//     res.json({
+//       totalVisits,
+//       uniqueVisitors,
+//       averageSessionDuration,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching analytics data:", error);
+//     res.status(500).send("Server error");
+//   }
+// });
 // Endpoint to retrieve all analytics data for display on the Analysis page
 router.get("/", async (_req: Request, res: Response) => {
   try {
     const items = await getAllAnalyticsData();
+
     console.log("Fetched analytics data ==== ", items);
 
     // Calculate Total Number of Visits
@@ -51,20 +89,17 @@ router.get("/", async (_req: Request, res: Response) => {
 
     // Calculate Unique Visitors (distinct sessionIds)
     const uniqueVisitors = new Set(
-      items
-        .map((item: AnalyticsItem) => item.sessionId?.S)
-        .filter(
-          (id: string | undefined): id is string => typeof id === "string",
-        ),
+      items.map((item) => item.sessionId.S), // Use item.sessionId.S directly
     ).size;
 
-    console.log("uniqueVisitors ====== ", uniqueVisitors);
+    console.log("Unique Visitors ====== ", uniqueVisitors);
 
     // Calculate Average Session Duration
-    const totalDuration = items.reduce((acc: number, item: AnalyticsItem) => {
-      const duration = item.sessionDuration?.N;
-      return acc + (duration ? parseFloat(duration) : 0);
+    const totalDuration = items.reduce((acc, item) => {
+      const duration = parseFloat(item.sessionDuration.N); // Safely parse the string number
+      return acc + duration;
     }, 0);
+
     const averageSessionDuration =
       totalVisits > 0 ? totalDuration / totalVisits : 0;
 
@@ -78,5 +113,4 @@ router.get("/", async (_req: Request, res: Response) => {
     res.status(500).send("Server error");
   }
 });
-
 export default router;

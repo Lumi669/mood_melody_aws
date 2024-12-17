@@ -1,11 +1,11 @@
 import {
   DynamoDBClient,
   PutItemCommand,
-  ScanCommand,
+  AttributeValue,
 } from "@aws-sdk/client-dynamodb";
 
 const dynamoDbClient = new DynamoDBClient({ region: "eu-north-1" });
-const tableName = "test";
+const tableName = "test-analysis";
 
 // Function to save analytics data to DynamoDB
 export const saveAnalyticsData = async (
@@ -17,6 +17,10 @@ export const saveAnalyticsData = async (
   visitTimestamp: string;
   sessionDuration: number;
 }> => {
+  if (!sessionId || !visitTimestamp) {
+    throw new Error("sessionId and visitTimestamp must be defined.");
+  }
+
   const item = {
     sessionId: { S: sessionId }, // Partition key
     visitTimestamp: { S: visitTimestamp },
@@ -41,14 +45,16 @@ export const saveAnalyticsData = async (
   };
 };
 
-// Function to get all analytics data from DynamoDB using Scan
-export const getAllAnalyticsData = async (): Promise<any> => {
-  const command = new ScanCommand({
-    TableName: tableName,
-  });
+// // Function to get all analytics data from DynamoDB using Scan
+// export const getAllAnalyticsData = async (): Promise<any> => {
+//   const command = new ScanCommand({
+//     TableName: tableName,
+//   });
 
-  const data = await dynamoDbClient.send(command);
+//   const data = await dynamoDbClient.send(command);
 
-  console.log("dddd data from getAllAnalyticData function === ", data);
-  return data.Items || [];
-};
+//   console.log("dddd data from getAllAnalyticData function === ", data);
+//   return data.Items || [];
+// };
+
+// Function to calculate analytics metrics
