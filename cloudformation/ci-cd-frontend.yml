@@ -57,13 +57,17 @@ Resources:
                   - apigateway:Invoke
                   - apigateway:ManageConnections
                 Resource: "*"
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
               - Effect: Allow
                 Action:
+                  - dynamodb:DescribeTable
                   - dynamodb:PutItem
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
-                Resource:
-                  - "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/MusicCache"
+                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/MusicCache"
 
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
