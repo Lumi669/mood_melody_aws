@@ -22,6 +22,9 @@ importers:
       dompurify:
         specifier: ^3.2.1
         version: 3.2.1
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       framer-motion:
         specifier: ^11.5.2
         version: 11.5.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -5052,6 +5055,13 @@ packages:
       {
         integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==,
       }
+
+  dotenv@16.4.7:
+    resolution:
+      {
+        integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==,
+      }
+    engines: { node: ">=12" }
 
   eastasianwidth@0.2.0:
     resolution:
@@ -12701,6 +12711,8 @@ snapshots:
     dependencies:
       no-case: 3.0.4
       tslib: 2.7.0
+
+  dotenv@16.4.7: {}
 
   eastasianwidth@0.2.0: {}
 
