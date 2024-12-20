@@ -62,10 +62,8 @@ Resources:
                   - dynamodb:PutItem
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
-                  - dynamodb:DeleteItem
-                  - dynamodb:Scan
-                  - dynamodb:Query
-                Resource: "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/MusicCache"
+                Resource:
+                  - "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/MusicCache"
 
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
