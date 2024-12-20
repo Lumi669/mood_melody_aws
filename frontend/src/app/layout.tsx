@@ -5,6 +5,7 @@ import { MediaProvider } from "@context/MediaContext";
 import LayoutWrapper from "@components/LayoutWrapper";
 import GlobalControls from "@components/GlobalControls";
 import AnalyticsTracker from "@components/AnalyticsTracker";
+import { fetchAllMusicWithImages } from "utils/fetchAllMusicWithImages";
 
 import "./styles/globals.css";
 
@@ -43,7 +44,7 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -51,10 +52,15 @@ export default function RootLayout({
   // Determine if the current page requires scrolling or not
   const noScroll = true; // Change this condition based on the page
 
+  // Fetch data for music and images
+  const musicWithImages = await fetchAllMusicWithImages();
+
+  console.log("FFFFFFFFF Fetched data in RootLayout ====== ", musicWithImages);
+
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
-        <MediaProvider>
+        <MediaProvider initialData={musicWithImages}>
           <LayoutWrapper noScroll={noScroll}>
             <Nav />
             <AnalyticsTracker /> {/* Add the AnalyticsTracker component here */}

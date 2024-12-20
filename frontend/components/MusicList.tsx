@@ -6,12 +6,8 @@ import CustomImage from "@components/CustomImage";
 import { useMedia } from "@context/MediaContext";
 import { extractAuthorName, extractMusicName } from "@utils/extractMusicInfo";
 
-interface MusicListProps {
-  matchedData: MusicWithImage[];
-}
-
-const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
-  const { currentSong } = useMedia();
+const MusicList: React.FC = () => {
+  const { mediaData, currentSong } = useMedia();
   const listRefs = useRef<{ [key: string]: HTMLLIElement | null }>({});
   const containerRef = useRef<HTMLUListElement | null>(null);
 
@@ -53,7 +49,7 @@ const MusicList: React.FC<MusicListProps> = ({ matchedData }) => {
 
   return (
     <ul ref={containerRef} className="overflow-y-scroll h-full">
-      {matchedData.map((item: MusicWithImage) => (
+      {mediaData.map((item: MusicWithImage) => (
         <li
           key={item.url}
           ref={(el) => {

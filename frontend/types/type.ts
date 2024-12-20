@@ -81,6 +81,6 @@ export interface ContactFormInputs {
 }
 
 // Define the props type for the initial data passed from the server component
-export interface MusicPlayerProps {
-  initialData: any;
-}
+// export interface MusicPlayerProps {
+//   initialData: any;
+// }

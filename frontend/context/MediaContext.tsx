@@ -14,7 +14,6 @@ import {
   MusicWithImage,
 } from "../types/type";
 import { addToPlaylist22 } from "utils/addToPlaylist";
-import { fetchAllMusicWithImages } from "../utils/fetchAllMusicWithImages";
 
 const MediaContext = createContext<MediaContextType>({
   mediaData: [],
@@ -27,9 +26,7 @@ const MediaContext = createContext<MediaContextType>({
   currentSong: null,
   setCurrentSong: () => {},
   isPlaying: false,
-
   setIsPlaying: () => {},
-
   setIsRed: () => {},
   setIsBlue: () => {},
   setIsBrown: () => {},
@@ -41,12 +38,19 @@ const MediaContext = createContext<MediaContextType>({
   skipTrack: () => [],
 });
 
+// Define the props for MediaProvider
 interface MediaProviderProps {
   children: ReactNode;
+  initialData?: MusicWithImage[];
 }
 
-export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
-  const [mediaData, setMediaData] = useState<MusicWithImage[]>([]);
+export const MediaProvider: React.FC<MediaProviderProps> = ({
+  children,
+  initialData,
+}) => {
+  const [mediaData, setMediaData] = useState<MusicWithImage[]>(
+    initialData || [],
+  );
   const [isRed, setIsRed] = useState(false);
   const [isBlue, setIsBlue] = useState(false);
   const [isBrown, setIsBrown] = useState(false);
@@ -56,23 +60,31 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
     useState<MusicWithImageSimplified | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-  const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]); // State to manage playlist
+  // const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]); // State to manage playlist
+
+  // const [fetchError, setFetchError] = useState<string | null>(null); // For error handling
 
   const isHomePage = () => window.location.pathname === "/";
 
-  // Fetch mediaData when the component mounts
-  useEffect(() => {
-    const fetchMediaData = async () => {
-      try {
-        const data = await fetchAllMusicWithImages(); // Use the utility function to fetch data
-        setMediaData(data); // Set the fetched data to mediaData
-      } catch (error) {
-        console.error("Failed to fetch media data:", error);
-      }
-    };
+  // // Fetch mediaData when the component mounts
+  // useEffect(() => {
+  //   const fetchMediaData = async () => {
+  //     try {
+  //       const result = await fetchAllMusicWithImages(); // fetch data
+  //       if (result.error) {
+  //         setFetchError(result.message || "Failed to fetch media data.");
+  //       } else {
+  //         setMediaData(result.data); // Update state with valid data
+  //         setFetchError(null); // Clear any previous errors
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch media data:", error);
+  //       setFetchError("An unexpected error occurred.");
+  //     }
+  //   };
 
-    fetchMediaData();
-  }, []);
+  //   fetchMediaData();
+  // }, []);
 
   useEffect(() => {
     audioRef.current = new Audio(); // Create a new audio element

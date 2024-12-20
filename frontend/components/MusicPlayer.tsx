@@ -6,9 +6,9 @@ import { addToPlaylist22 } from "@utils/addToPlaylist";
 import CustomImage from "@components/CustomImage";
 import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
-import { MusicPlayerProps } from "../types/type";
+// import { MusicPlayerProps } from "../types/type";
 
-const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
+const MusicPlayer: React.FC = () => {
   const {
     setIsRed,
     setIsBlue,
@@ -24,6 +24,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
     isBlue,
     isBrown,
     audio,
+    mediaData,
   } = useMedia();
 
   const [currentMusicName, setCurrentMusicName] = useState<string | null>(null);
@@ -103,7 +104,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ initialData }) => {
 
     sessionStorage.setItem("currentMessage", message);
 
-    const filteredSongs = initialData.filter((song: any) => song.mood === mood);
+    const filteredSongs = mediaData.filter((song: any) => song.mood === mood);
     const randomSong =
       filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
     setCurrentSong(randomSong);
