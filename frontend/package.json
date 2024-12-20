@@ -12,6 +12,7 @@
     "export": "next export"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.716.0",
     "aws-serverless-express": "^3.4.0",
     "axios": "^1.6.7",
     "dompurify": "^3.2.1",
