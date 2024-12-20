@@ -7,7 +7,14 @@ import { Music, Image, MusicWithImage } from "../types/type";
 import { apiUrls } from "../config/apiConfig";
 
 const dynamoDbClient = new DynamoDBClient({ region: "eu-north-1" });
-const TABLE_NAME = "MusicCache";
+const TABLE_NAME = process.env.CACHE_TABLE_NAME;
+
+console.log(
+  "TTTTTT TABLE_NAME  from fetchAllMusicWithImages ====== ",
+  TABLE_NAME,
+);
+
+console.log("aaaaa apiUrls from fetchAllMusicWithImages.ts ====== ", apiUrls);
 
 // Function to get data from the cache
 const getCache = async (key: string): Promise<MusicWithImage[] | null> => {
