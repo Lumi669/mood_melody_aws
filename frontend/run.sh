@@ -5,8 +5,10 @@ if [ ! -d "/tmp/cache" ]; then
   mkdir -p /tmp/cache
 fi
 
-echo "Environment Variables:"
-env
+# Optionally print only non-sensitive environment variables
+echo "Selected Environment Variables:"
+echo "NODE_ENV=$NODE_ENV"
+echo "PORT=$PORT"
 
 echo "Starting Next.js server"
 exec node server.js 2>&1 | tee /tmp/server.log
