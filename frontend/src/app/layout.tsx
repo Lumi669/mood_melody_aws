@@ -50,7 +50,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   // Determine if the current page requires scrolling or not
-  const noScroll = true; // Change this condition based on the page
+  // const noScroll = true; // Change this condition based on the page
+
+  const noScroll = false;
 
   // Fetch data for music and images
   const musicWithImages = await fetchAllMusicWithImages();
@@ -59,12 +61,21 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col">
+      {/* <body className="min-h-screen flex flex-col"> */}
+      <body
+        className={`min-h-screen flex flex-col ${
+          noScroll ? "no-scroll" : "scrollable"
+        }`}
+      >
         <MediaProvider initialData={musicWithImages}>
           <LayoutWrapper noScroll={noScroll}>
             <Nav />
-            <AnalyticsTracker /> {/* Add the AnalyticsTracker component here */}
-            <main className={`flex-grow ${noScroll ? "h-screen" : ""}`}>
+            <AnalyticsTracker />
+            <main
+              className={`flex-grow ${
+                noScroll ? "overflow-hidden" : "overflow-auto"
+              }`}
+            >
               <div>{children}</div>
             </main>
             <GlobalControls />

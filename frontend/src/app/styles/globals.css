@@ -10,7 +10,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden; /* Prevent horizontal scroll */
-  overflow-y: auto; /* Disable vertical scroll globally */
+  overflow-y: hidden; /* Disable vertical scroll globally */
 }
 
 /* Allow vertical scrolling on mobile */
@@ -25,7 +25,10 @@ body {
 body.no-scroll {
   overflow-y: hidden;
 }
-
+/* Allow scrolling on the main element */
+body.scrollable {
+  overflow-y: auto;
+}
 /* Animation styles */
 @keyframes fly-to-corner {
   from {
@@ -104,10 +107,6 @@ body.no-scroll {
     font-size: 1rem; /* Adjust text size */
     margin-bottom: 4px; /* Adjust margin for better spacing */
   }
-}
-
-.custom-scrollable {
-  overflow-y: auto; /* Allow vertical scrolling */
 }
 
 @keyframes shake {
