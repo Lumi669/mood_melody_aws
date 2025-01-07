@@ -9,14 +9,14 @@ export function errorHandler(
   const statusCode = err.status || 500; // Default to 500 if no status code is set
 
   console.log("status ccccc code ==== ", statusCode);
-  const message = err.message || "Internal Server Error";
+  const error = err.message || "Internal Server Error";
 
   // Log the error for debugging purposes (can be enhanced with logging tools)
   console.error(
-    `Error from backend errorHandler middleware : ${message}, Status: ${statusCode}`,
+    `Error from backend errorHandler middleware : ${error}, Status: ${statusCode}`,
   );
 
-  const errorResponse: Record<string, any> = { message };
+  const errorResponse: Record<string, any> = { error };
 
   // Include retryAfter if provided
   if (err.retryAfter) {
@@ -30,7 +30,7 @@ export function errorHandler(
     errorResponse,
   );
   // above print out this:
-  //{ message: 'Too many requests. Try after 14 seconds ', retryAfter: 14 }
+  //{ error: 'Too many requests. Try after 14 seconds ', retryAfter: 14 }
 
   // Send the response
   return res.status(statusCode).json(errorResponse);
