@@ -57,8 +57,6 @@ export default async function RootLayout({
   // Fetch data for music and images
   const musicWithImages = await fetchAllMusicWithImages();
 
-  console.log("FFFFFFFFF Fetched data in RootLayout ====== ", musicWithImages);
-
   return (
     <html lang="en">
       {/* <body className="min-h-screen flex flex-col"> */}

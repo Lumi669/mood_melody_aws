@@ -1,4 +1,3 @@
-// app/components/AnalyticsTracker.tsx
 "use client";
 
 import { useEffect } from "react";

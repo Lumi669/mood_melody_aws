@@ -14,7 +14,6 @@ const databaseUrl: string =
 
 // If running in Lambda, copy the database to the /tmp directory
 if (isLambda) {
-  // const sourceFilePath = path.join(__dirname, "../../moodmelodydatabase.db");
   const sourceFilePath = path.join("/var/task", "moodmelodydatabase.db"); // Adjusted to match the Dockerfile copy destination
 
   const destFilePath = lambdaDatabasePath;

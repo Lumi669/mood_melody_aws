@@ -6,7 +6,6 @@ import { addToPlaylist22 } from "@utils/addToPlaylist";
 import CustomImage from "@components/CustomImage";
 import SentimentAnalysisPage from "@components/Sentimentanalysis";
 import Greeting from "./Greeting";
-// import { MusicPlayerProps } from "../types/type";
 
 const MusicPlayer: React.FC = () => {
   const {
@@ -37,11 +36,6 @@ const MusicPlayer: React.FC = () => {
   );
 
   useEffect(() => {
-    // Use the initialData from props instead of fetching again
-    // if (initialData) {
-    //   console.log("Received initial data:", initialData);
-    // }
-
     // Restore state from sessionStorage or initialize
     const currentMood = sessionStorage.getItem("currentMood");
     const lastPlayedSong = sessionStorage.getItem("lastPlayedSong");
