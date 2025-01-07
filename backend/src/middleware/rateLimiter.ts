@@ -3,9 +3,11 @@ import { Request, Response, NextFunction } from "express";
 
 const windowMs = 30 * 1000; // 30 seconds
 
+// const windowMs = 10 * 60 * 1000; // 10 minutes
+
 const apiLimiter = rateLimit({
   windowMs,
-  max: 5000, // Limit each client to 5 requests per time window
+  max: 5, // Limit each client to 5 requests per time window
   keyGenerator: (req) => req.ip || "unknown",
   statusCode: 429,
   message: "Too many requests.",

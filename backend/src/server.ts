@@ -12,8 +12,14 @@ import saveUserFeedBack from "./routes/saveUserFeedback";
 import analyticsRoutes from "./routes/analyticsRoutes";
 
 import { errorHandler } from "./middleware/errorHandler";
+import apiLimiter from "./middleware/rateLimiter";
 
 const app = express();
+
+app.use((req, res, next) => {
+  console.log(`Client IP: ${req.ip}, Method: ${req.method}, Path: ${req.path}`);
+  next();
+});
 
 app.use(
   cors({
@@ -24,6 +30,10 @@ app.use(
 );
 
 app.use(bodyParser.json());
+
+// Apply rate limiter globally i.e The rate limiter affects all routes, if hit the limit,
+// the middleware intercepts the request and returns 429 instead of passing it to the handler.
+app.use(apiLimiter);
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -37,8 +47,8 @@ app.use("/", rootRoutes);
 
 app.use("/test", testRoutes);
 
-app.use("/api/sentimentanalysis", sentimentRoutes);
-app.use("/api/saveuserfeedback", saveUserFeedBack);
+app.use("/api/sentimentanalysis", apiLimiter, sentimentRoutes);
+app.use("/api/saveuserfeedback", apiLimiter, saveUserFeedBack);
 
 app.use("/api/analytics", analyticsRoutes);
 
