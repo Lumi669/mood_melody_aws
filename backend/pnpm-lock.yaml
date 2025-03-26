@@ -57,6 +57,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      "@types/better-sqlite3":
+        specifier: ^7.6.12
+        version: 7.6.12
       "@types/body-parser":
         specifier: ^1.19.5
         version: 1.19.5
@@ -1438,6 +1441,12 @@ packages:
     resolution:
       {
         integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==,
+      }
+
+  "@types/better-sqlite3@7.6.12":
+    resolution:
+      {
+        integrity: sha512-fnQmj8lELIj7BSrZQAdBMHEHX8OZLYIHXqAKT1O7tDfLxaINzf00PMjw22r3N/xXh0w/sGHlO6SVaCQ2mj78lg==,
       }
 
   "@types/body-parser@1.19.5":
@@ -5132,6 +5141,10 @@ snapshots:
   "@tsconfig/node14@1.0.3": {}
 
   "@tsconfig/node16@1.0.4": {}
+
+  "@types/better-sqlite3@7.6.12":
+    dependencies:
+      "@types/node": 20.16.0
 
   "@types/body-parser@1.19.5":
     dependencies:
