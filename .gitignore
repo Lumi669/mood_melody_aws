@@ -138,3 +138,7 @@ lambda-functions/update-stack/idna/
 lambda-functions/update-stack/requests/
 lambda-functions/update-stack/package/
 lambda-functions/update-stack/chardet/
+
+
+# Ignore temp files
+cach-temp.json
