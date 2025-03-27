@@ -27,8 +27,9 @@ WORKDIR /app
 # Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies
-RUN pnpm install
+# Force rebuild native modules and This ensures native module works on Lambda
+RUN pnpm install && \
+    npm rebuild better-sqlite3 --build-from-source --platform=linux --arch=x64 --target=18.20.0
 
 # Copy the application code
 COPY . .
@@ -36,8 +37,6 @@ COPY . .
 # Build the project
 RUN pnpm run build
 
-# Force rebuild native modules to be sure (optional safety)
-RUN pnpm rebuild better-sqlite3
 
 # Stage 2: Create the final image for AWS Lambda
 FROM public.ecr.aws/lambda/nodejs:18
