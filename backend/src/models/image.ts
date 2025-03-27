@@ -1,15 +1,25 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/database";
+import db from "../config/database";
+import { Image } from "../types/type";
 
-const Image = sequelize.define(
-  "Image",
-  {
-    name: { type: DataTypes.STRING, unique: true, allowNull: false },
-    mood: { type: DataTypes.STRING, allowNull: false },
-    url: { type: DataTypes.STRING, unique: true, allowNull: false },
-    ctg: { type: DataTypes.STRING, unique: true, allowNull: false },
-  },
-  { tableName: "images" },
-);
+export const insertManyImages = (imageArray: Image[]): void => {
+  const insert = db.prepare(`
+    INSERT OR IGNORE INTO images (name, mood, url, ctg)
+    VALUES (?, ?, ?, ?)
+  `);
 
-export default Image;
+  const insertMany = db.transaction((images: Image[]) => {
+    images.forEach(({ name, mood, url, ctg }) => {
+      insert.run(name, mood, url, ctg);
+    });
+  });
+
+  insertMany(imageArray);
+};
+
+export const getAllImages = (): Image[] => {
+  return db.prepare("SELECT * FROM images").all() as Image[];
+};
+
+export const deleteAllImages = (): void => {
+  db.prepare("DELETE FROM images").run();
+};
