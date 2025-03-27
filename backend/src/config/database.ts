@@ -1,45 +1,45 @@
-import { Sequelize } from "sequelize";
 import path from "path";
 import fs from "fs";
+import Database from "better-sqlite3";
 
-// Determine if running in Lambda environment
 const isLambda = !!process.env.LAMBDA_TASK_ROOT;
 
-// Define the database URL based on the environment
 const localDatabasePath = "./moodmelodydatabase.db";
 const lambdaDatabasePath = "/tmp/moodmelodydatabase.db";
-const databaseUrl: string =
-  process.env.DATABASE_URL ||
-  `sqlite:${isLambda ? lambdaDatabasePath : localDatabasePath}`;
+const sourceFilePath = path.join("/var/task", "moodmelodydatabase.db");
 
-// If running in Lambda, copy the database to the /tmp directory
 if (isLambda) {
-  const sourceFilePath = path.join("/var/task", "moodmelodydatabase.db"); // Adjusted to match the Dockerfile copy destination
-
-  const destFilePath = lambdaDatabasePath;
-
   if (!fs.existsSync(sourceFilePath)) {
     console.error(`Source database file not found: ${sourceFilePath}`);
     throw new Error(`Source database file not found: ${sourceFilePath}`);
   }
-
-  // Copy the database to /tmp directory
-  fs.copyFileSync(sourceFilePath, destFilePath);
-  console.log(`Database file copied to: ${destFilePath}`);
+  fs.copyFileSync(sourceFilePath, lambdaDatabasePath);
+  console.log(`Database file copied to: ${lambdaDatabasePath}`);
 }
 
-// Initialize Sequelize
-const sequelize = new Sequelize(databaseUrl, {
-  dialect: databaseUrl.startsWith("postgres") ? "postgres" : "sqlite",
-  logging: false,
-  dialectOptions: databaseUrl.startsWith("postgres")
-    ? {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-        },
-      }
-    : {},
-});
+const dbPath = isLambda ? lambdaDatabasePath : localDatabasePath;
 
-export default sequelize;
+console.log("🧠 Using SQLite DB file at:", path.resolve(dbPath));
+
+const db = new Database(dbPath);
+
+// Re-create tables if not exist
+db.exec(`
+  CREATE TABLE IF NOT EXISTS music (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    mood TEXT NOT NULL,
+    url TEXT NOT NULL UNIQUE,
+    ctg TEXT NOT NULL UNIQUE
+  );
+
+  CREATE TABLE IF NOT EXISTS images (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    mood TEXT NOT NULL,
+    url TEXT NOT NULL UNIQUE,
+    ctg TEXT NOT NULL UNIQUE
+  );
+`);
+
+export default db;
