@@ -27,9 +27,7 @@ WORKDIR /app
 # Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
 
-# Force rebuild native modules and This ensures native module works on Lambda
-RUN pnpm install && \
-    npm rebuild better-sqlite3 --build-from-source --platform=linux --arch=x64 --target=18.20.0
+RUN pnpm install
 
 # Copy the application code
 COPY . .
