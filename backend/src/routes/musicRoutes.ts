@@ -1,32 +1,37 @@
-import { Router } from "express";
-import Music from "../models/music";
+import { Router, Request, Response, NextFunction } from "express";
+import {
+  insertManyMusics,
+  getAllMusics,
+  deleteAllMusics,
+} from "../models/music";
+import { Music } from "../types/type";
 
 const router = Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", (req: Request, res: Response, next: NextFunction) => {
   try {
-    const newMusics = await Music.bulkCreate(req.body, { validate: true });
-    res.status(201).json(newMusics);
+    insertManyMusics(req.body as Music[]);
+    res.status(201).json({ message: "Music inserted successfully!" });
   } catch (error) {
-    next(error); // Pass the error to the errorHandler middleware
+    next(error);
   }
 });
 
-router.get("/", async (req, res, next) => {
+router.get("/", (req: Request, res: Response, next: NextFunction) => {
   try {
-    const musics = await Music.findAll();
+    const musics = getAllMusics();
     res.status(200).json(musics);
   } catch (error) {
-    next(error); // Pass the error to the errorHandler middleware
+    next(error);
   }
 });
 
-router.delete("/", async (req, res, next) => {
+router.delete("/", (req: Request, res: Response, next: NextFunction) => {
   try {
-    await Music.destroy({ where: {} });
-    res.status(200).json({ message: "All data deleted successfully!" });
+    deleteAllMusics();
+    res.status(200).json({ message: "All music records deleted." });
   } catch (error) {
-    next(error); // Pass the error to the errorHandler middleware
+    next(error);
   }
 });
 

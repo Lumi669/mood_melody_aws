@@ -1,32 +1,37 @@
-import { Router } from "express";
-import Image from "../models/image";
+import { Router, Request, Response, NextFunction } from "express";
+import {
+  insertManyImages,
+  getAllImages,
+  deleteAllImages,
+} from "../models/image";
+import { Image } from "../types/type";
 
 const router = Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", (req: Request, res: Response, next: NextFunction) => {
   try {
-    const newImages = await Image.bulkCreate(req.body, { validate: true });
-    res.status(201).json(newImages);
+    insertManyImages(req.body as Image[]);
+    res.status(201).json({ message: "Images inserted successfully!" });
   } catch (error) {
-    next(error); // Pass the error to the errorHandler middleware
+    next(error);
   }
 });
 
-router.get("/", async (req, res, next) => {
+router.get("/", (req: Request, res: Response, next: NextFunction) => {
   try {
-    const images = await Image.findAll();
+    const images = getAllImages();
     res.status(200).json(images);
   } catch (error) {
-    next(error); // Pass the error to the errorHandler middleware
+    next(error);
   }
 });
 
-router.delete("/", async (req, res, next) => {
+router.delete("/", (req: Request, res: Response, next: NextFunction) => {
   try {
-    await Image.destroy({ where: {} });
-    res.status(200).json({ message: "All data deleted successfully!" });
+    deleteAllImages();
+    res.status(200).json({ message: "All image records deleted." });
   } catch (error) {
-    next(error); // Pass the error to the errorHandler middleware
+    next(error);
   }
 });
 
