@@ -26,7 +26,7 @@ const getCache = async (key: string): Promise<MusicWithImage[] | null> => {
   try {
     const result = await dynamoDbClient.send(command);
     if (result.Item?.data?.S) {
-      console.log("Cache hit for key:", key);
+      console.log("Cache hit for key from getCache 22222 ===== ", key);
       return JSON.parse(result.Item.data.S) as MusicWithImage[];
     }
     console.warn("Cache miss for key:", key);
@@ -66,18 +66,30 @@ export const fetchAllMusicWithImages = async (): Promise<MusicWithImage[]> => {
   const CACHE_KEY = "music_with_images";
 
   try {
+    console.log("Checking cache for key ====== ", CACHE_KEY);
+
     // Check cache first
     const cachedData = await getCache(CACHE_KEY);
-    if (cachedData) {
+
+    if (cachedData && Array.isArray(cachedData) && cachedData.length > 0) {
       return cachedData;
     }
 
     // If no cache, fetch fresh data
-    console.log("Fetching fresh data from APIs...");
+    console.log("Cache miss. Fetching fresh data...");
     const [musicResponse, imageResponse] = await Promise.all([
-      fetch(apiUrls.musics),
-      fetch(apiUrls.images),
+      fetch(apiUrls.musics, { cache: "no-store" }),
+      fetch(apiUrls.images, { cache: "no-store" }),
     ]);
+
+    console.log(
+      "Music API response status from fetchAllMusicWithImages.ts ===== ",
+      musicResponse.status,
+    );
+    console.log(
+      "Image API response status from fetchAllMusicWithImages.ts ====== ",
+      imageResponse.status,
+    );
 
     // Validate API responses
     if (!musicResponse.ok || !imageResponse.ok) {
@@ -97,11 +109,19 @@ export const fetchAllMusicWithImages = async (): Promise<MusicWithImage[]> => {
 
     // Save to cache with a long TTL since data does not change
     const ONE_WEEK_IN_SECONDS = 7 * 24 * 60 * 60; // 1 week
+
+    console.log("Saving data to cache with key ====== ", CACHE_KEY);
+
     await saveCache(CACHE_KEY, matchedData, ONE_WEEK_IN_SECONDS);
+
+    console.log(
+      "Cache successfully saved to DynamoDB for key =====",
+      CACHE_KEY,
+    );
 
     return matchedData;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error in fetchAllMusicWithImages:", error);
 
     // Fallback: Return an empty array or notify the user appropriately
     return [];
