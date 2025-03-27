@@ -16,7 +16,7 @@
 FROM public.ecr.aws/lambda/nodejs:18 AS build
 
 # Install gcc-c++ and make
-RUN yum install -y gcc-c++ make
+RUN yum install -y gcc-c++ make python3
 
 # Install pnpm
 RUN npm install -g pnpm
@@ -35,6 +35,9 @@ COPY . .
 
 # Build the project
 RUN pnpm run build
+
+# Force rebuild native modules to be sure (optional safety)
+RUN pnpm rebuild better-sqlite3
 
 # Stage 2: Create the final image for AWS Lambda
 FROM public.ecr.aws/lambda/nodejs:18
