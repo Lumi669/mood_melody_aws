@@ -50,7 +50,7 @@ jobs:
           TIMESTAMP: ${{ env.TIMESTAMP }}
           REPO_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mood-melody-aws
         run: |
-          docker build -t mood-melody-aws:backend-${TIMESTAMP} -t mood-melody-aws:backend-latest ./backend
+          docker build --platform linux/amd64 -t mood-melody-aws:backend-${TIMESTAMP} -t mood-melody-aws:backend-latest ./backend
           docker tag mood-melody-aws:backend-${TIMESTAMP} ${REPO_URI}:backend-${TIMESTAMP}
           docker tag mood-melody-aws:backend-latest ${REPO_URI}:backend-latest
           docker push ${REPO_URI}:backend-${TIMESTAMP}
