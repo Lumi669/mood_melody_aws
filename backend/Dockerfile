@@ -51,6 +51,10 @@ COPY package.json pnpm-lock.yaml ./
 # Reinstall dependencies here to get native bindings compiled for Lambda
 RUN npm install -g pnpm && pnpm install
 
+# Rebuild better-sqlite3 for the Lambda environment
+RUN pnpm rebuild better-sqlite3
+
+
 # Copy the built artifacts and dependencies from the build stage
 COPY --from=build /app/dist .
 # COPY --from=build /app/node_modules ./node_modules
