@@ -60,6 +60,6 @@ COPY --from=build /app/dist .
 # Copy the database file
 COPY --from=build /app/moodmelodydatabase.db ./ 
 
-# Set the entrypoint and command
-ENTRYPOINT ["/lambda-entrypoint.sh"]
+# Set the command
+# ENTRYPOINT ["/lambda-entrypoint.sh"]
 CMD ["index.handler"]
