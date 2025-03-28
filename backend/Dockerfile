@@ -39,13 +39,22 @@ RUN pnpm run build
 # Stage 2: Create the final image for AWS Lambda
 FROM public.ecr.aws/lambda/nodejs:18
 
+# Install build tools for native modules
+RUN yum install -y gcc-c++ make python3
+
 # Set the working directory
 WORKDIR /var/task
 
+# Copy package.json and lockfile
+COPY package.json pnpm-lock.yaml ./
+
+# Reinstall dependencies here to get native bindings compiled for Lambda
+RUN npm install -g pnpm && pnpm install
+
 # Copy the built artifacts and dependencies from the build stage
 COPY --from=build /app/dist .
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package.json .
+# COPY --from=build /app/node_modules ./node_modules
+# COPY --from=build /app/package.json .
 
 
 # Copy the database file
