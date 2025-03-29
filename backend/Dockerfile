@@ -49,7 +49,7 @@ WORKDIR /var/task
 COPY package.json pnpm-lock.yaml ./
 
 # Reinstall dependencies here to get native bindings compiled for Lambda
-RUN npm install -g pnpm && pnpm install
+RUN npm install -g pnpm && pnpm install --shamefully-hoist
 
 # Rebuild better-sqlite3 for the Lambda environment
 RUN pnpm rebuild better-sqlite3
