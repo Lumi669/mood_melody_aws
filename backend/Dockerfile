@@ -61,7 +61,7 @@ ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
 
 # Add python path for node-gyp
-ENV PYTHON=$(which python3)
+ENV PYTHON=/usr/bin/python3
 
 # Install deps and rebuild native modules
 RUN pnpm install
