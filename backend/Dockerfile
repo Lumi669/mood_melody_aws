@@ -15,9 +15,13 @@
 # Stage 1: Build the application
 FROM public.ecr.aws/lambda/nodejs:18 AS build
 
-RUN yum install -y gcc-c++ make python3
+# Install native build tools and Python
+RUN yum install -y gcc-c++ make python3 python3-devel
+
+# Install pnpm
 RUN npm install -g pnpm
 
+# Set working directory
 WORKDIR /app
 
 # Copy lock files early
@@ -26,6 +30,11 @@ COPY package.json pnpm-lock.yaml ./
 # Enable and approve native build scripts
 ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
+
+# Important: Add python3 path for node-gyp to work properly
+ENV PYTHON=$(which python3)
+
+# Install dependencies and allow builds
 RUN pnpm install
 
 # Copy rest of the app and build
@@ -36,8 +45,8 @@ RUN pnpm run build
 # Stage 2: Final Lambda image
 FROM public.ecr.aws/lambda/nodejs:18
 
-# Install build tools
-RUN yum install -y gcc-c++ make python3
+# Install native build tools and Python
+RUN yum install -y gcc-c++ make python3 python3-devel
 
 WORKDIR /var/task
 
@@ -47,22 +56,20 @@ COPY package.json pnpm-lock.yaml ./
 # Install pnpm
 RUN npm install -g pnpm
 
-# Enable pre/post scripts
+# Enable pre/post scripts and approve builds
 ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-
-# ✅ Approve better-sqlite3 build script
 RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
 
-# ✅ Install dependencies
-RUN pnpm install
+# Add python path for node-gyp
+ENV PYTHON=$(which python3)
 
-# ✅ Rebuild native bindings
+# Install deps and rebuild native modules
+RUN pnpm install
 RUN pnpm rebuild better-sqlite3
 
-# Copy build artifacts and node_modules
+# Copy app and modules from build
 COPY --from=build /app/dist .
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/moodmelodydatabase.db ./
 
 CMD ["index.handler"]
-
