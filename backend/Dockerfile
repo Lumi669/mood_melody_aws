@@ -27,8 +27,12 @@ WORKDIR /app
 # Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
 
-# ⬇️ APPROVE BUILD SCRIPTS & REBUILD native bindings
-RUN pnpm install --ignore-scripts=false && pnpm rebuild better-sqlite3
+# Allow native module scripts to run
+ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
+
+# Install dependencies with native builds
+RUN pnpm install
+
 
 # Copy the application code
 COPY . .
@@ -37,26 +41,25 @@ COPY . .
 RUN pnpm run build
 
 
-# Stage 2: Create the final image for AWS Lambda
+# Stage 2: Final image
 FROM public.ecr.aws/lambda/nodejs:18
 
-# Install build tools for native modules
 RUN yum install -y gcc-c++ make python3
 
-# Set the working directory
 WORKDIR /var/task
 
-# Copy the built artifacts and dependencies from the build stage
+COPY package.json pnpm-lock.yaml ./
+
+# ✅ Enable pre/post scripts here too
+ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
+
+RUN npm install -g pnpm && pnpm install
+
+# Rebuild better-sqlite3
+RUN pnpm rebuild better-sqlite3
+
 COPY --from=build /app/dist .
-
-# Copy node_modules with native bindings already built
 COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/moodmelodydatabase.db ./
 
-
-
-# Copy the database file
-COPY --from=build /app/moodmelodydatabase.db ./ 
-
-# Set the command
-# ENTRYPOINT ["/lambda-entrypoint.sh"]
 CMD ["index.handler"]
