@@ -32,7 +32,7 @@ ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
 
 # Important: Add python3 path for node-gyp to work properly
-ENV PYTHON=$(which python3)
+ENV PYTHON=/usr/bin/python3
 
 # Install dependencies and allow builds
 RUN pnpm install
