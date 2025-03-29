@@ -98,7 +98,9 @@ ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
 
 # Install dependencies
+ENV PYTHON=/usr/bin/python3
 RUN pnpm install
+
 
 # Copy rest of the app and build it
 COPY . .
@@ -129,7 +131,9 @@ COPY package.json pnpm-lock.yaml ./
 
 # Approve and install native modules
 RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
+ENV PYTHON=/usr/bin/python3
 RUN pnpm install
+
 
 # Rebuild better-sqlite3 (optional but good to ensure ABI compatibility)
 RUN pnpm rebuild better-sqlite3
