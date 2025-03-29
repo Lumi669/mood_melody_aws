@@ -27,7 +27,8 @@ WORKDIR /app
 # Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install
+# ⬇️ APPROVE BUILD SCRIPTS & REBUILD native bindings
+RUN pnpm install --ignore-scripts=false && pnpm rebuild better-sqlite3
 
 # Copy the application code
 COPY . .
@@ -45,20 +46,8 @@ RUN yum install -y gcc-c++ make python3
 # Set the working directory
 WORKDIR /var/task
 
-# Copy package.json and lockfile
-# COPY package.json pnpm-lock.yaml ./
-
-# Reinstall dependencies here to get native bindings compiled for Lambda
-# RUN npm install -g pnpm && pnpm install --shamefully-hoist
-
-# # Rebuild better-sqlite3 for the Lambda environment
-# RUN pnpm rebuild better-sqlite3
-
-
 # Copy the built artifacts and dependencies from the build stage
 COPY --from=build /app/dist .
-# COPY --from=build /app/node_modules ./node_modules
-# COPY --from=build /app/package.json .
 
 # Copy node_modules with native bindings already built
 COPY --from=build /app/node_modules ./node_modules
