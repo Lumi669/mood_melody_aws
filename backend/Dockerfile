@@ -37,8 +37,6 @@ COPY . .
 # Build the app
 RUN pnpm run build
 
----
-
 # Stage 2: Final runtime image
 FROM public.ecr.aws/lambda/nodejs:18
 
