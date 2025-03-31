@@ -1,15 +1,22 @@
-# ---------- Stage 1: Build ----------
-FROM public.ecr.aws/lambda/nodejs:18 as build
 
-# Install Python 3.8 and development tools
-RUN yum install -y gcc-c++ make curl tar gzip \
- && curl -sL https://www.python.org/ftp/python/3.8.18/Python-3.8.18.tgz | tar xz \
- && cd Python-3.8.18 \
- && ./configure --enable-optimizations \
- && make -j$(nproc) \
- && make altinstall \
- && ln -sf /usr/local/bin/python3.8 /usr/bin/python3 \
- && ln -sf /usr/local/bin/python3.8 /usr/bin/python
+
+
+
+
+# !!!!!!!!Below version successfully deployed a working lambda function 
+# NOTE: 1.  when build image, use `docker build --platform linux/amd64 -t mood-molody-aws-backend .` 
+#     i.e add "--platform linux/amd64" in the aws ECR "View push commands" command
+#     ref: https://repost.aws/knowledge-center/lambda-docker-image-error
+
+# 2. NOTE: Docker file indicate the copied files should go to container's root
+# 3. NOTE: Docker file should indicate the entrypoint
+
+
+# Stage 1: Build the application
+FROM public.ecr.aws/lambda/nodejs:18 AS build
+
+# Install native build tools
+RUN yum install -y gcc-c++ make python3
 
 # Install pnpm
 RUN npm install -g pnpm
@@ -17,37 +24,42 @@ RUN npm install -g pnpm
 # Set working directory
 WORKDIR /app
 
-# Copy dependency files
+# Copy lock files and package manifest
 COPY package.json pnpm-lock.yaml ./
 
-# Set environment for native build
-ENV PYTHON=/usr/bin/python3
-ENV npm_config_python=/usr/bin/python3
+# Enable build scripts and allow better-sqlite3
 ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
+RUN pnpm install --config.allowed-build-dependencies=better-sqlite3
 
-# ✅ Debug check to confirm Python installed
-RUN python3 --version && which python3 && ls -l /usr/bin/python3
-
-# Approve native builds
-RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
-
-# Install and rebuild native deps
-RUN pnpm install
-RUN pnpm rebuild better-sqlite3
-
-# Copy source and build
+# Copy the rest of the code
 COPY . .
+
+# Build the app
 RUN pnpm run build
 
-
-# ---------- Stage 2: Final Lambda Image ----------
+# Stage 2: Final runtime image
 FROM public.ecr.aws/lambda/nodejs:18
 
+# Install native build tools for Lambda
+RUN yum install -y gcc-c++ make python3
+
+# Set working directory
 WORKDIR /var/task
 
-# Copy built app and node_modules
-COPY --from=build /app/dist ./
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Enable build scripts and allow native bindings
+ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
+RUN npm install -g pnpm
+RUN pnpm install --config.allowed-build-dependencies=better-sqlite3
+RUN pnpm rebuild better-sqlite3
+
+# Copy build output and node_modules from build stage
+COPY --from=build /app/dist .
 COPY --from=build /app/node_modules ./node_modules
+
+# Copy SQLite DB file
 COPY --from=build /app/moodmelodydatabase.db ./
 
 # Lambda entrypoint
