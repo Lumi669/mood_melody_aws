@@ -74,74 +74,39 @@
 # CMD ["index.handler"]
 
 
-# Base image for AWS Lambda with Node.js 18
-FROM public.ecr.aws/lambda/nodejs:18 AS build
+# Build Stage
+FROM public.ecr.aws/lambda/nodejs:18 as build
 
-# Install build tools and Python 3.8+
 RUN yum install -y gcc-c++ make curl \
     && yum install -y yum-utils \
     && yum-config-manager --enable extras \
     && yum install -y python38 python38-devel glibc-devel libstdc++ \
     && ln -sf /usr/bin/python3.8 /usr/bin/python3
 
-# Install pnpm
 RUN npm install -g pnpm
-
-# Set working directory
+ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 WORKDIR /app
 
-# Copy package manager files
 COPY package.json pnpm-lock.yaml ./
-
-# Enable pre/post scripts and approve better-sqlite3 build
-ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
 
-# Install dependencies
 ENV PYTHON=/usr/bin/python3
 RUN pnpm install
+RUN pnpm rebuild better-sqlite3
 
-
-# Copy rest of the app and build it
 COPY . .
 RUN pnpm run build
 
-
-# --- Final image for Lambda ---
+# Final Lambda Image
 FROM public.ecr.aws/lambda/nodejs:18
-
-# Install build tools and Python 3.8+
-RUN yum install -y gcc-c++ make curl \
-    && yum install -y yum-utils \
-    && yum-config-manager --enable extras \
-    && yum install -y python38 python38-devel glibc-devel libstdc++ \
-    && ln -sf /usr/bin/python3.8 /usr/bin/python3
 
 # Set working directory
 WORKDIR /var/task
 
-# Install pnpm
-RUN npm install -g pnpm
-
-# Set env flags for pnpm
-ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-
-# Copy package manager files
-COPY package.json pnpm-lock.yaml ./
-
-# Approve and install native modules
-RUN pnpm dlx pnpm@latest approve-builds better-sqlite3
-ENV PYTHON=/usr/bin/python3
-RUN pnpm install
-
-
-# Rebuild better-sqlite3 (optional but good to ensure ABI compatibility)
-RUN pnpm rebuild better-sqlite3
-
-# Copy compiled app and node_modules from build
-COPY --from=build /app/dist .
+# Copy built app and working node_modules with native bindings
+COPY --from=build /app/dist ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/moodmelodydatabase.db ./
 
-# Lambda entrypoint
+# Entry point
 CMD ["index.handler"]
