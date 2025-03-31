@@ -54,6 +54,7 @@ ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 RUN npm install -g pnpm
 RUN pnpm install --config.allowed-build-dependencies=better-sqlite3
 RUN pnpm rebuild better-sqlite3
+RUN pnpm approve-builds
 
 # Copy build output and node_modules from build stage
 COPY --from=build /app/dist .
