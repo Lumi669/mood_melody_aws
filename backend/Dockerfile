@@ -105,16 +105,16 @@ RUN npm install -g pnpm
 # Copy only manifest and lock file
 COPY package.json pnpm-lock.yaml ./
 
-# Approve better-sqlite3 build script explicitly
-RUN pnpm dlx pnpm-approve-builds better-sqlite3
-
-# Enable build scripts
+# Set this env var to allow postinstall scripts
 ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 
-# Install production dependencies
+# Allow scripts (globally in Docker; safe in CI)
+RUN pnpm config set allow-scripts true
+
+# Install production dependencies (postinstall runs now)
 RUN pnpm install --prod
 
-# Copy built files and DB (do NOT copy node_modules from build stage!)
+# Copy built files and SQLite DB (no node_modules)
 COPY --from=build /app/dist .
 COPY --from=build /app/moodmelodydatabase.db ./
 
