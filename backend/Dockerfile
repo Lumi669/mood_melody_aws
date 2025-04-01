@@ -81,7 +81,7 @@ COPY package.json pnpm-lock.yaml ./
 
 # Install JS-only dependencies (no native builds needed yet)
 ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-RUN pnpm install --prod=false --config.allowed-build-dependencies=better-sqlite3
+RUN pnpm allow-build better-sqlite3 && pnpm install --prod=false
 
 # Copy app source
 COPY . .
