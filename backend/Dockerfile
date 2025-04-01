@@ -105,9 +105,14 @@ RUN npm install -g pnpm
 # Copy only manifest and lock file
 COPY package.json pnpm-lock.yaml ./
 
-# Enable build scripts and allow better-sqlite3 to be built
+# Approve better-sqlite3 build script explicitly
+RUN pnpm dlx pnpm-approve-builds better-sqlite3
+
+# Enable build scripts
 ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-RUN pnpm install --prod --config.allowed-build-dependencies=better-sqlite3
+
+# Install production dependencies
+RUN pnpm install --prod
 
 # Copy built files and DB (do NOT copy node_modules from build stage!)
 COPY --from=build /app/dist .
@@ -115,3 +120,4 @@ COPY --from=build /app/moodmelodydatabase.db ./
 
 # Lambda entrypoint
 CMD ["index.handler"]
+
