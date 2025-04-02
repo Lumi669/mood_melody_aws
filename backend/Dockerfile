@@ -67,56 +67,40 @@
 # CMD ["index.handler"]
 
 
-# Stage 1: Build non-native app files
-FROM public.ecr.aws/lambda/nodejs:18 AS build
+FROM amazonlinux:2023 AS build
+
+# Install system dependencies using dnf (not yum!)
+RUN dnf install -y \
+  gcc-c++ \
+  make \
+  python3 \
+  git \
+  nodejs \
+  npm
 
 # Install pnpm
 RUN npm install -g pnpm
 
-# Set working directory
 WORKDIR /app
-
-# Copy only manifest and lock file
 COPY package.json pnpm-lock.yaml ./
 
-# Install JS-only dependencies (no native builds needed yet)
 ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-RUN pnpm install --prod=false --config.allowed-build-dependencies=better-sqlite3
 
-# Copy app source
+# Install native dependencies like better-sqlite3
+RUN pnpm install --config.allowed-build-dependencies=better-sqlite3
+
 COPY . .
-
-# Build the app (output to /app/dist)
 RUN pnpm run build
 
 
-# Stage 2: Runtime image (with better-sqlite3 built inside it)
+# Stage 2: Lambda runtime
 FROM public.ecr.aws/lambda/nodejs:18
 
-# Install native build tools needed for better-sqlite3
-RUN yum install -y gcc-c++ make python3
-
-# Set working directory
 WORKDIR /var/task
 
-# Install pnpm
-RUN npm install -g pnpm
-
-# Copy only manifest and lock file
-COPY package.json pnpm-lock.yaml ./
-
-# Set this env var to allow postinstall scripts
-ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-
-# Allow scripts (globally in Docker; safe in CI)
-RUN pnpm config set allow-scripts true
-
-# Install production dependencies (postinstall runs now)
-RUN pnpm install --prod
-
-# Copy built files and SQLite DB (no node_modules)
 COPY --from=build /app/dist .
+COPY --from=build /app/package.json ./
 COPY --from=build /app/moodmelodydatabase.db ./
+COPY --from=build /app/node_modules ./node_modules
 
-# Lambda entrypoint
 CMD ["index.handler"]
