@@ -81,7 +81,7 @@ COPY package.json pnpm-lock.yaml ./
 
 # Install JS-only dependencies (no native builds needed yet)
 ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-RUN pnpm allow-build better-sqlite3 && pnpm install --prod=false
+RUN pnpm install --prod=false --config.allowed-build-dependencies=better-sqlite3
 
 # Copy app source
 COPY . .
@@ -120,4 +120,3 @@ COPY --from=build /app/moodmelodydatabase.db ./
 
 # Lambda entrypoint
 CMD ["index.handler"]
-
