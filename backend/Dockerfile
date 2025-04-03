@@ -12,95 +12,54 @@
 # 3. NOTE: Docker file should indicate the entrypoint
 
 
-# # Stage 1: Build the application
-# FROM public.ecr.aws/lambda/nodejs:18 AS build
-
-# # Install native build tools
-# RUN yum install -y gcc-c++ make python3
-
-# # Install pnpm
-# RUN npm install -g pnpm
-
-# # Set working directory
-# WORKDIR /app
-
-# # Copy lock files and package manifest
-# COPY package.json pnpm-lock.yaml ./
-
-# # Enable build scripts and allow better-sqlite3
-# ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-# RUN pnpm install --config.allowed-build-dependencies=better-sqlite3
-
-# # Copy the rest of the code
-# COPY . .
-
-# # Build the app
-# RUN pnpm run build
-
-# # Stage 2: Final runtime image
-# FROM public.ecr.aws/lambda/nodejs:18
-
-# # Install native build tools for Lambda
-# RUN yum install -y gcc-c++ make python3
-
-# # Set working directory
-# WORKDIR /var/task
-
-# # Copy package files
-# COPY package.json pnpm-lock.yaml ./
-
-# # Enable build scripts and allow native bindings
-# ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-# RUN npm install -g pnpm
-# RUN pnpm install --config.allowed-build-dependencies=better-sqlite3
-# RUN pnpm rebuild better-sqlite3
-# RUN pnpm approve-builds
-
-# # Copy build output and node_modules from build stage
-# COPY --from=build /app/dist .
-# COPY --from=build /app/node_modules ./node_modules
-
-# # Copy SQLite DB file
-# COPY --from=build /app/moodmelodydatabase.db ./
-
-# # Lambda entrypoint
-# CMD ["index.handler"]
 
 
+
+# Stage 1: Build with Amazon Linux 2023 and Node.js 20
 FROM amazonlinux:2023 AS build
 
-# Install system dependencies using dnf (not yum!)
-RUN dnf install -y \
-  gcc-c++ \
-  make \
-  python3 \
-  git \
-  nodejs \
-  npm
+# Add NodeSource Node.js 20 repo and install
+RUN curl -fsSL https://rpm.nodesource.com/setup_20.x | bash - && \
+    dnf install -y --allowerasing \
+    nodejs \
+    gcc-c++ \
+    make \
+    git \
+    python3 \
+    python3-devel \
+    glibc-devel \
+    libstdc++ \
+    curl \
+    tar \
+    gzip \
+    shadow-utils
+
+# Set up environment variables
+ENV PYTHON=/usr/bin/python3
+ENV npm_config_python=/usr/bin/python3
+ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
 
 # Install pnpm
 RUN npm install -g pnpm
 
 WORKDIR /app
+
+# Install dependencies (build better-sqlite3 against Node.js 20)
 COPY package.json pnpm-lock.yaml ./
-
-ENV PNPM_ENABLE_PRE_POST_SCRIPTS=true
-
-# Install native dependencies like better-sqlite3
 RUN pnpm install --config.allowed-build-dependencies=better-sqlite3
 
+# Copy app and build
 COPY . .
 RUN pnpm run build
 
-
-# Stage 2: Lambda runtime
-FROM public.ecr.aws/lambda/nodejs:18
+# Stage 2: Lambda runtime (Node.js 20)
+FROM public.ecr.aws/lambda/nodejs:20
 
 WORKDIR /var/task
 
-COPY --from=build /app/dist .
+COPY --from=build /app/dist ./
 COPY --from=build /app/package.json ./
-COPY --from=build /app/moodmelodydatabase.db ./
 COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/moodmelodydatabase.db ./
 
 CMD ["index.handler"]
