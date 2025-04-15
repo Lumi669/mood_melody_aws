@@ -368,7 +368,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
         isBrown,
         setIsBrown,
         setMediaData,
-        audio: audioRef.current,
+        audio: audioRef.current ?? null,
         currentTrack,
         setCurrentTrack,
         currentSong,

@@ -36,48 +36,14 @@ const MusicPlayer: React.FC = () => {
   );
 
   useEffect(() => {
-    // Restore state from sessionStorage or initialize
-    const currentMood = sessionStorage.getItem("currentMood");
-    const lastPlayedSong = sessionStorage.getItem("lastPlayedSong");
-    const wasPlayingOnHomePage =
-      sessionStorage.getItem("wasPlayingOnHomePage") === "true";
-    const wasPausedOnHomePage =
-      sessionStorage.getItem("wasPausedOnHomePage") === "true";
-    const timePoint = sessionStorage.getItem("timePointOfHomePage");
-
-    if (lastPlayedSong) {
-      const song = JSON.parse(lastPlayedSong);
-
-      if (audio) {
-        audio.pause(); // Stop any other playing audio
-      }
-
-      if (wasPlayingOnHomePage) {
-        setCurrentSong(song);
-        setCurrentTrack(song.url);
-        playTrack(song.url, song); // Play the song if it was playing before
-        setIsPlaying(true);
-        setVideoVisible(true);
-        setOriginalViewVisible(false); // Hide the original view when music is playing
-      } else if (wasPausedOnHomePage && timePoint) {
-        setCurrentSong(song);
-        setCurrentTrack(song.url);
-
-        setIsPlaying(false);
-        setVideoVisible(true);
-        setOriginalViewVisible(false); // Restore the paused state
-
-        if (audio) {
-          audio.src = song.url;
-          audio.currentTime = parseFloat(timePoint);
-          audio.pause(); // Keep it paused
-        }
-      }
+    if (currentSong) {
+      setVideoVisible(true);
+      setOriginalViewVisible(false);
     } else {
-      stopMusic();
+      setVideoVisible(false);
       setOriginalViewVisible(true);
     }
-  }, [audio]);
+  }, [currentSong]);
 
   const playMusic = (
     mood: "happy" | "sad" | "calm",
