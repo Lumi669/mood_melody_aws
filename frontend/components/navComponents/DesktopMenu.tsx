@@ -67,7 +67,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({
           "/about",
           "/about/tech",
           "/about/privacy",
-          "/about/testimonials",
+          "/about/sourcecode",
           "/about/analytics",
         ]}
         onClick={closeMobileMenu}

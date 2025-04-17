@@ -124,7 +124,7 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
             </AnimatePresence>
           </li>
           {/* Other About Items */}
-          {["Privacy", "Testimonials", "Analytics"].map((item) => (
+          {["Privacy", "SourceCode", "Analytics"].map((item) => (
             <li key={item}>
               <Link
                 href={`/about/${item.toLowerCase()}`}

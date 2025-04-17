@@ -65,7 +65,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
             "/about",
             "/about/tech",
             "/about/privacy",
-            "/about/testimonials",
+            "/about/sourcecode",
             "/about/analytics",
           ]}
           onClick={closeMobileMenu}
