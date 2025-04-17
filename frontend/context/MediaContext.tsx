@@ -60,31 +60,7 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({
     useState<MusicWithImageSimplified | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-  // const [playlist, setPlaylist] = useState<MusicWithImageSimplified[]>([]); // State to manage playlist
-
-  // const [fetchError, setFetchError] = useState<string | null>(null); // For error handling
-
   const isHomePage = () => window.location.pathname === "/";
-
-  // // Fetch mediaData when the component mounts
-  // useEffect(() => {
-  //   const fetchMediaData = async () => {
-  //     try {
-  //       const result = await fetchAllMusicWithImages(); // fetch data
-  //       if (result.error) {
-  //         setFetchError(result.message || "Failed to fetch media data.");
-  //       } else {
-  //         setMediaData(result.data); // Update state with valid data
-  //         setFetchError(null); // Clear any previous errors
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch media data:", error);
-  //       setFetchError("An unexpected error occurred.");
-  //     }
-  //   };
-
-  //   fetchMediaData();
-  // }, []);
 
   useEffect(() => {
     audioRef.current = new Audio(); // Create a new audio element
