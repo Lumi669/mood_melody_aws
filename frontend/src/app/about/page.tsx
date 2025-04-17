@@ -10,7 +10,6 @@ import ContactButton from "@components/ContactButton";
 import DecorativeElements from "@components/DecorativeElements";
 
 const AboutPage = () => {
-  const router = useRouter();
   const { isRed, isBlue, isBrown } = useMedia();
   const textColor = getTextColor(isRed, isBlue, isBrown);
 
