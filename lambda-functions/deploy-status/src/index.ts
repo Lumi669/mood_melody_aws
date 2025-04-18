@@ -1,14 +1,37 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { CloudFormationCustomResourceEvent } from "aws-lambda";
+import { CodePipelineCloudWatchEvent } from "aws-lambda";
 
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
-export const handler = async (event: CloudFormationCustomResourceEvent) => {
+export const handler = async (event: CodePipelineCloudWatchEvent) => {
   console.log("Received event:", JSON.stringify(event));
 
   const bucketName = process.env.BUCKET_BADGES!;
-  const fileName = `${process.env.APP_NAME}-${process.env.STAGE}.svg`;
-  const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="20"><text x="0" y="15">deployed</text></svg>`;
+  const appName = process.env.APP_NAME!;
+  const stage = process.env.STAGE!;
+  const fileName = `${appName}-${stage}.svg`;
+
+  const state = event.detail.state;
+  const label = "Deploy";
+  const status = state === "SUCCEEDED" ? "passing" : "failed";
+  const color = state === "SUCCEEDED" ? "#4c1" : "#e05d44";
+
+  const svgContent = `
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="20">
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
+  <rect rx="3" width="110" height="20" fill="#555"/>
+  <rect rx="3" x="55" width="55" height="20" fill="${color}"/>
+  <path fill="${color}" d="M55 0h4v20h-4z"/>
+  <rect rx="3" width="110" height="20" fill="url(#a)"/>
+  <g fill="#fff" text-anchor="middle"
+     font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">
+    <text x="27.5" y="14">${label}</text>
+    <text x="82.5" y="14">${status}</text>
+  </g>
+</svg>`;
 
   const command = new PutObjectCommand({
     Bucket: bucketName,
