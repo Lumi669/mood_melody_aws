@@ -56,6 +56,11 @@ const SourceCodePage = () => {
               alt="Frontend build status"
             />
             <img
+              src="https://mood-melody-badges-images-prod.s3.eu-north-1.amazonaws.com/mood-melody-prod.svg"
+              alt="Deploy Status Badge999888"
+            />
+
+            <img
               src="https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg"
               alt="License: PolyForm Noncommercial"
             />
