@@ -49,3 +49,8 @@ Example usage in mood_melody_aws/frontend/src/app/about/sourcecode/page.tsx:
   src="https://mood-melody-badges-images-prod.s3.eu-north-1.amazonaws.com/mood-melody-prod.svg"
   alt="Deploy Status Badge"
 />
+
+# Note on Lambda deployment ZIP file
+
+The CloudFormation template i.e `aws_build_badges_cf_template.yml` automatically creates a new S3 bucket (with an auto-generated name e.g `mood-melody-pipeline-status-lambdazipsbucket-dbes2azxqgtv`) to store the dist_status_badges.zip.
+It is the helper Lambda function (CopyZipsFunction from `aws_build_badges_cf_template.yml`) copies dist_status_badges.zip from the source bucket (mood-melody-deploy-status-zip-file, I created this bucket manually in aws console and manually uploaded the `dist_status_badges.zip` from local computer to this bucket) into this newly created bucket so it can be used by the main status badge Lambda function.

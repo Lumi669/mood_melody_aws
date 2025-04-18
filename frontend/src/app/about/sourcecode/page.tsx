@@ -57,7 +57,7 @@ const SourceCodePage = () => {
             />
             <img
               src="https://mood-melody-badges-images-prod.s3.eu-north-1.amazonaws.com/mood-melody-prod.svg"
-              alt="Deploy Status Badge999888"
+              alt="Deploy Status Badge"
             />
 
             <img
