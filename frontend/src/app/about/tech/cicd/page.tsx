@@ -30,7 +30,7 @@ const CicdPage = () => {
         <h1
           className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-12 text-center ${textColor}`}
         >
-          Tech Architecture of{" "}
+          Tech CI/CD of{" "}
           <span
             className="relative cursor-pointer text-blue-600 hover:text-blue-800 hover:underline transition duration-300 ease-in-out hover:scale-105 underline-offset-4"
             onClick={handleTextClick}
