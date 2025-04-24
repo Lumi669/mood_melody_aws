@@ -1,0 +1,50 @@
+PolyForm Noncommercial License 1.0.0
+
+Copyright (c) 2025 Jinghuan Wang
+
+1. DEFINITIONS
+   “Licensor” means the copyright owner or entity authorized by the 
+   copyright owner that is granting the License.
+   “License” means this document.
+   “Licensed Material” means the original work of authorship 
+   (including modifications or additions to that work) that is 
+   distributed under this License.
+   “Noncommercial Purpose” means any purpose other than one intended for 
+   or directed toward commercial advantage or monetary compensation.
+   “You” (or “Your”) means an individual or Legal Entity exercising 
+   permissions granted by this License.
+
+2. GRANT OF RIGHTS
+   Licensor grants You a worldwide, royalty-free, non-sublicensable, 
+   non-exclusive license to reproduce, prepare derivative works of, 
+   publicly display, publicly perform, and distribute the Licensed 
+   Material, provided that You do so only for Noncommercial Purpose.
+
+3. RESTRICTIONS
+   You may not use the Licensed Material for any commercial purpose. 
+   If You want to use the Licensed Material commercially, You must 
+   obtain a separate commercial license from the Licensor.
+
+4. TERM AND TERMINATION
+   This License is effective until terminated. Your rights under this 
+   License will terminate automatically without notice from the 
+   Licensor if You fail to comply with any term(s) of this License. 
+   Upon termination, You must stop all use of the Licensed Material.
+
+5. DISCLAIMER OF WARRANTY
+   THE LICENSED MATERIAL IS PROVIDED “AS IS,” WITHOUT WARRANTY OF ANY 
+   KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+   WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, 
+   OR NON‐INFRINGEMENT.  
+
+6. LIMITATION OF LIABILITY
+   IN NO EVENT WILL LICENSOR BE LIABLE TO YOU FOR ANY DAMAGES ARISING 
+   OUT OF YOUR USE OF THE LICENSED MATERIAL.
+
+7. MISCELLANEOUS
+   This License constitutes the complete agreement between the parties 
+   with respect to the Licensed Material and supersedes all prior 
+   or contemporaneous understandings.
+
+You can always view the official text at:
+https://polyformproject.org/licenses/noncommercial/1.0.0/
