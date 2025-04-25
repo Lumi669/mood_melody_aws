@@ -63,21 +63,21 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 2. Install dependencies
 
-# mood_melody_aws
+### mood_melody_aws
 
 pnpm install
 
-# backend
+### backend
 
 cd backend && pnpm install
 
-# frontend
+### frontend
 
 cd ../frontend && pnpm install
 
 3. Run locally
 
-# in two separate shells:
+### in two separate shells:
 
 cd backend && pnpm run build && pnpm run dev
 cd frontend && pnpm run build && pnpm run dev
@@ -150,3 +150,55 @@ This project is fully deployed to AWS using CloudFormation, S3, Lambda, API Gate
 👉 http://localhost:3000/about/tech/cicd
 or
 https://mood-melody.ensintek.com/about/tech/cicd
+
+## Run local app with docker
+
+### at root i.e mood_melody_aws
+
+1. backend
+
+### build backend image
+
+docker build -t my-backend -f backend/Dockerfile backend
+
+### Run it, mounting the local DB
+
+docker run -d --name my-backend \
+ -p 9000:8080 \
+ -v "$(pwd)/backend/moodmelodydatabase.db:/var/task/moodmelodydatabase.db" \
+ my-backend
+
+### test backend working or not
+
+curl -i -XPOST http://localhost:9000/2015-03-31/functions/function/invocations \
+ -H "Content-Type: application/json" \
+ -d '{"route":"GET /songs"}'
+
+HTTP/1.1 200 OK
+Date: Fri, 25 Apr 2025 20:53:59 GMT
+Content-Length: 423
+Content-Type: text/plain; charset=utf-8
+
+{"statusCode":200,"headers":{"x-powered-by":"Express","access-control-allow-origin":"\*","x-ratelimit-limit":"5","x-ratelimit-remaining":"4","date":"Fri, 25 Apr 2025 20:53:59 GMT","x-ratelimit-reset":"1745614470","content-type":"application/json; charset=utf-8","content-length":"57","etag":"W/\"39-FqPhC/ocgcZW6apeUQPxYsdw7lc\""},"isBase64Encoded":false,"body":"\"Welcome to the backend of the mood-melody app .......//\""}%
+
+2. frontend
+
+- build frontend image
+
+  docker build -t my-frontend \
+  -f frontend/Dockerfile \
+  frontend \
+  --build-arg NEXT_PUBLIC_API_URL_0=http://my-backend:9000/2015-03-31/functions/function/invocations
+
+- run frontend
+
+docker rm -f my-frontend  
+docker run -d \
+ --name my-frontend \
+ --network moodmelody_net \
+ -p 7001:7000 \
+ -e NEXT_PUBLIC_API_URL_0=http://my-backend:9000/2015-03-31/functions/function/invocations \
+ my-frontend
+
+app is available at http://localhost:7001/
+note: data is not populated
