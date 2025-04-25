@@ -25,6 +25,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
     playTrack,
     togglePlayPause,
     setCurrentSong,
+    setCurrentTrack,
     audio,
     setIsPlaying,
   } = useMedia();
@@ -99,6 +100,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
         mood: mood,
       };
       setCurrentSong(newSong);
+      setCurrentTrack(dataUrl);
       playTrack(dataUrl || "", newSong);
     } else {
       togglePlayPause();
