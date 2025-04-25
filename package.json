@@ -1,9 +1,4 @@
 {
-  "private": true,
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
   "devDependencies": {
     "concurrently": "^8.2.2",
     "eslint-config-prettier": "^9.1.0",
