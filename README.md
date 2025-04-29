@@ -23,20 +23,24 @@ Built solo over the course of a year—with 1,300+ commits and 1,700+ CI/CD runs
 Mood Melody is an intelligent music player that pairs every song with a mood‑matched image. Tap a mood button or type in your vibe the AI then analyzes your input, curates the perfect soundtrack, and displays an evocative visual for a fully immersive experience.
 
 [![Last Commit](https://img.shields.io/github/last-commit/Lumi669/mood_melody_aws)](https://github.com/Lumi669/mood_melody_aws/commits)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/Lumi669/mood_melody_aws/build-frontend.yml?label=build)](https://github.com/Lumi669/mood_melody_aws/actions)
-[![Last Deploy](https://mood-melody-badges-images-prod.s3.eu-north-1.amazonaws.com/mood-melody-prod.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows/deploy.yml)
+[![Backend Build Status](https://github.com/Lumi669/mood_melody_aws/actions/workflows/build-backend.yml/badge.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows/build-backend.yml)
+
+[![Frontend Build Status](https://github.com/Lumi669/mood_melody_aws/actions/workflows/build-frontend.yml/badge.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows/build-frontend.yml)
+
+[![Deploy Status](https://github.com/Lumi669/mood_melody_aws/actions/workflows/deploy.yml/badge.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows/deploy.yml)
+
 [![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg)](LICENSE)
 
 ## Tech Stack
 
-| Tier           | Technologies                                                   |
-| -------------- | -------------------------------------------------------------- |
-| Frontend       | Next.js, React, Tailwind, Docker, Typescript                   |
-| Backend        | AWS Lambda (Node.js), Express, Serverless , Docker, Typescript |
-| Database       | DynamoDB, SQLite                                               |
-| AI/NLP         | AWS Comprehend                                                 |
-| CI/CD          | GitHub Actions, AWS CodePipeline, CloudFormation               |
-| Infrastructure | S3, API Gateway, IAM                                           |
+| Tier                  | Technologies                                                   |
+| --------------------- | -------------------------------------------------------------- |
+| Frontend              | Next.js, React, Tailwind, Docker, Typescript                   |
+| Backend               | AWS Lambda (Node.js), Express, Serverless , Docker, Typescript |
+| Database              | DynamoDB, SQLite                                               |
+| AI/NLP                | AWS Comprehend                                                 |
+| CI/CD                 | GitHub Actions, AWS CodePipeline, CloudFormation               |
+| Other Infrastructures | S3, API Gateway, IAM                                           |
 
 ---
 
