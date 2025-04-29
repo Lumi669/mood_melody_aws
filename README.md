@@ -27,7 +27,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 [![Frontend Build Status](https://github.com/Lumi669/mood_melody_aws/actions/workflows/build-frontend.yml/badge.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows/build-frontend.yml)
 
-[![Deploy Status](https://github.com/Lumi669/mood_melody_aws/actions/workflows/deploy.yml/badge.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows/deploy.yml)
+[![Deploy Status](https://mood-melody-badges-images-prod.s3.eu-north-1.amazonaws.com/mood-melody-prod.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows)
 
 [![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg)](LICENSE)
 
