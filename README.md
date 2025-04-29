@@ -1,21 +1,18 @@
 ## Developer's Note
 
-This is a solo project that I’ve built from scratch over the course of a year. It includes over 1300 commits and more than 1700 CI/CD workflow runs. Every part of the architecture — from infrastructure-as-code and AWS Lambda backend to frontend UI and deployment — has been designed, developed, tested, and maintained by me.
-
-It demonstrates not only my technical skills but also my long-term dedication, problem-solving ability, and ownership of full-stack development workflows. Code that adapts open-source patterns or external contributions is credited in the README where applicable.
+Built solo over the course of a year—with 1,300+ commits and 1,700+ CI/CD runs—this project highlights my end-to-end ownership of everything from infrastructure-as-code and serverless backends to a responsive AI-driven frontend. It reflects my dedication and problem-solving skills in architecting, deploying, and maintaining a scalable full-stack application.
 
 ## Table of Contents
 
 - [About](#about)
+- [Tech Stack](#tech-stack)
 - [Features](#features)
+- [Live Demo](#live-demo)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Local Development](#local-development)
-- [Docker (Frontend)](#docker-frontend)
-- [Configuration](#configuration)
 - [Architecture](#architecture)
-- [CI/CD & Deployment](#cicd--deployment)
-- [Contributing](#contributing)
+- [CI/CD & Deployment](#ci-cd--deployment)
 - [License](#license)
 - [Contact](#contact)
 
@@ -30,22 +27,39 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 [![Last Deploy](https://mood-melody-badges-images-prod.s3.eu-north-1.amazonaws.com/mood-melody-prod.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows/deploy.yml)
 [![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg)](LICENSE)
 
+## Tech Stack
+
+| Tier           | Technologies                                                   |
+| -------------- | -------------------------------------------------------------- |
+| Frontend       | Next.js, React, Tailwind, Docker, Typescript                   |
+| Backend        | AWS Lambda (Node.js), Express, Serverless , Docker, Typescript |
+| Database       | DynamoDB, SQLite                                               |
+| AI/NLP         | AWS Comprehend                                                 |
+| CI/CD          | GitHub Actions, AWS CodePipeline, CloudFormation               |
+| Infrastructure | S3, API Gateway, IAM                                           |
+
 ---
 
-## Features
+## Features 🎵
 
 - 🎵 Play/pause tracks based on your mood
 - 📊 Mood analytics based on your text input
 - AI‑Powered Curation: Emotion detection via NLP for spot‑on song and image pairing
-- 🔥 Serverless, scales on AWS Lambda
+- Serverless, scales on AWS Lambda
 - CI/CD setup
 - Docker
 
 ---
 
+## Live Demo 🔥
+
+![Mood Melody in action](assets/demo.gif)
+
+> Click a mood button and watch the soundtrack sync with an evocative AI-picked image!
+
 ## Prerequisites
 
-- Node.js ≥ 16
+- Node.js ≥ 20
 - Docker
 - AWS CLI & credentials configured (for deployment)
 
@@ -84,91 +98,30 @@ cd frontend && pnpm run build && pnpm run dev
 
 App will be available at: http://localhost:3000
 
-## Local Frontend Docker Image Build
-
-bash
-Copy
-Edit
-cd frontend
-docker build -t mood-melody-frontend:latest .
-
-Architecture
-See ARCHITECTURE for an overview of:
-
-Lambda functions
-
-API Gateway
-
-S3 bucket for static site
-
-CloudFront distribution
-
-CI/CD & Deployment
-I use two pipelines:
-
-GitHub Actions for CI (build & tests)
-
-AWS CodePipeline for CD (deploy & rollback)
-
 To see the health at a glance, check the badges above or visit:
 
 CI runs: https://github.com/Lumi669/mood_melody_aws/actions
 
 Live site: https://mood-melody.ensintek.com/
 
-Contributing
+### Run local app with docker
 
-Fork the repo
-
-Create your feature branch (git checkout -b feature/awesome)
-
-Commit your changes (git commit -m 'Add awesome feature')
-
-Push (git push origin feature/awesome)
-
-Open a Pull Request
-
-Please read our Code of Conduct before contributing.
-
-## License
-
-This project is licensed under the PolyForm Noncommercial 1.0.0 license.
-See the LICENSE file for details. Commercial use is prohibited without a separate paid license.
-
-## Contact
-
-Lumi669 – wangjinghuan@yahoo.com
-Project Link: https://github.com/Lumi669/mood_melody_aws
-
-Local Development
-⚠️ Note: This project depends on AWS services (S3, Lambda, DynamoDB, Comprehend, etc). Even for local testing, you’ll need an AWS account with proper credentials.
-
-📦 Deployment Details
-This project is fully deployed to AWS using CloudFormation, S3, Lambda, API Gateway, and CodePipeline.
-
-🖼️ Architecture diagrams and CI/CD flow are explained in detail in the app’s About > Tech section:
-👉 http://localhost:3000/about/tech/cicd
-or
-https://mood-melody.ensintek.com/about/tech/cicd
-
-## Run local app with docker
-
-### at root i.e mood_melody_aws
+#### at root i.e mood_melody_aws
 
 1. backend
 
-### build backend image
+#### build backend image
 
 docker build -t my-backend -f backend/Dockerfile backend
 
-### Run it, mounting the local DB
+#### Run it, mounting the local DB
 
 docker run -d --name my-backend \
  -p 9000:8080 \
  -v "$(pwd)/backend/moodmelodydatabase.db:/var/task/moodmelodydatabase.db" \
  my-backend
 
-### test backend working or not
+#### test backend working or not
 
 curl -i -XPOST http://localhost:9000/2015-03-31/functions/function/invocations \
  -H "Content-Type: application/json" \
@@ -202,3 +155,43 @@ docker run -d \
 
 app is available at http://localhost:7001/
 note: data is not populated
+
+## Architecture 🎨
+
+<details>
+  <summary>🖼️ Click to view full architecture diagram</summary>
+
+  <img src="frontend/public/architecture-border50-black.webp" alt="Mood Melody full architecture diagram" />
+
+</details>
+
+For an interactive tour, see the in-app Tech & Architecture page:  
+🔗 https://mood-melody.ensintek.com/about/tech/architecture
+
+## CI/CD & Deployment 📦
+
+<details>
+  <summary>🖼️ Click to view full deployment diagram</summary>
+
+  <img src="frontend/public/cicd-border50.webp" alt="Mood Melody full CI/CD diagram" />
+
+</details>
+
+For an interactive tour, see the in-app Tech & Architecture page:  
+🔗 https://mood-melody.ensintek.com/about/tech/cicd
+
+## License
+
+This project is licensed under the PolyForm Noncommercial 1.0.0 license.
+See the LICENSE file for details. Commercial use is prohibited without a separate paid license.
+
+## Contact
+
+Lumi669 – wangjinghuan@yahoo.com
+Project Link: https://github.com/Lumi669/mood_melody_aws
+
+Local Development
+⚠️ Note: This project depends on AWS services (S3, Lambda, DynamoDB, Comprehend, etc). Even for local testing, you’ll need an AWS account with proper credentials.
+
+📦 Deployment Details
+This project is fully deployed to AWS using CloudFormation, S3, Lambda, API Gateway, and CodePipeline.
