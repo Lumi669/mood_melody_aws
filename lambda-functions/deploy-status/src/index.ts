@@ -38,6 +38,7 @@ export const handler = async (event: CodePipelineCloudWatchEvent) => {
     Key: fileName,
     Body: svgContent,
     ContentType: "image/svg+xml",
+    CacheControl: "no-cache, max-age=0, must-revalidate",
   });
 
   await s3.send(command);

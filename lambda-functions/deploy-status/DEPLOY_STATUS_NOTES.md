@@ -23,7 +23,7 @@ To zip the compiled Lambda code:
 
 - deploy-status git:(main) ✗ `pnpm run build`
 - deploy-status git:(main) ✗ `cd dist`
-- deploy-status git:(main) ✗ `zip ../dist_status_badges.zip index.js`
+- dist git:(main) ✗ `zip ../dist_status_badges.zip index.js`
 
 Then upload dist_status_badges.zip to the S3 bucket:
 mood-melody-deploy-status-zip-file.
@@ -32,6 +32,12 @@ mood-melody-deploy-status-zip-file.
 
 In the AWS console, create a new stack using this template URL:
 https://mood-melody-badges.s3.eu-north-1.amazonaws.com/aws_build_badges_cf_template.yml
+
+Note fill in Parameters as below:
+
+- AppName: mood-melody (must fill)
+- CodePipelineNames: mood-melody (must fill)
+- Stage prod: (must fill)
 
 4. Badge generation
 
@@ -54,3 +60,9 @@ Example usage in mood_melody_aws/frontend/src/app/about/sourcecode/page.tsx:
 
 The CloudFormation template i.e `aws_build_badges_cf_template.yml` automatically creates a new S3 bucket (with an auto-generated name e.g `mood-melody-pipeline-status-lambdazipsbucket-dbes2azxqgtv`) to store the dist_status_badges.zip.
 It is the helper Lambda function (CopyZipsFunction from `aws_build_badges_cf_template.yml`) copies dist_status_badges.zip from the source bucket (mood-melody-deploy-status-zip-file, I created this bucket manually in aws console and manually uploaded the `dist_status_badges.zip` from local computer to this bucket) into this newly created bucket so it can be used by the main status badge Lambda function.
+
+# Note, if package.jon changed, before re-create the lambda function in aws by cloudformation, manually delete below resources from AWS Console, delelte IN ORDER:
+
+1. `dist_status_badges.zip` (local app code)
+2. cloudformation stack of `mood-melody-pipeline-status` (aws Console)
+3. s3 bucket `mood-melody-badges-images-prod` (aws Console)
