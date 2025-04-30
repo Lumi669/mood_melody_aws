@@ -14,7 +14,7 @@ const PrivacyPage = () => {
     <div className="h-screen overflow-y-scroll px-4 pb-80 p-10">
       <div className="max-w-5xl mx-auto">
         <h1
-          className={`text-3xl font-extrabold mb-4 ${getTextColor(
+          className={`text-4xl font-extrabold mb-4 ${getTextColor(
             isRed,
             isBlue,
             isBrown,
