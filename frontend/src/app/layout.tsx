@@ -1,4 +1,5 @@
 import React from "react";
+import { Suspense } from "react";
 import Nav from "@components/navComponents/Nav";
 import Footer from "@components/Footer";
 import { MediaProvider } from "@context/MediaContext";
@@ -8,6 +9,8 @@ import AnalyticsTracker from "@components/AnalyticsTracker";
 import { fetchAllMusicWithImages } from "utils/fetchAllMusicWithImages";
 
 import "./styles/globals.css";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Mood Melody",
@@ -68,7 +71,10 @@ export default async function RootLayout({
         <MediaProvider initialData={musicWithImages}>
           <LayoutWrapper noScroll={noScroll}>
             <Nav />
-            <AnalyticsTracker />
+            {/* <AnalyticsTracker /> */}
+            <Suspense fallback={null}>
+              <AnalyticsTracker />
+            </Suspense>
             <main
               className={`flex-grow ${
                 noScroll ? "overflow-hidden" : "overflow-auto"
