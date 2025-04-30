@@ -78,7 +78,8 @@
     ".storybook",
     "stories",
     ".next/types/**/*.ts",
-    "types" // Include the root-level types folder
+    "types", // Include the root-level types folder
+    "global.d.ts"
   ],
   "exclude": ["node_modules"]
 }

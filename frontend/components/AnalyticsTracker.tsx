@@ -1,52 +1,43 @@
 "use client";
 
 import { useEffect } from "react";
-import { apiUrls } from "@config/apiConfig";
+import { usePathname, useSearchParams } from "next/navigation";
+import Script from "next/script";
 
-const AnalyticsTracker = () => {
+export default function AnalyticsTracker() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // 1) On every client-side navigation, send a GA page_view
   useEffect(() => {
-    // Generate a sessionId if it doesn't exist in localStorage
-    let sessionId = localStorage.getItem("sessionId");
-    if (!sessionId) {
-      sessionId = crypto.randomUUID();
-      localStorage.setItem("sessionId", sessionId);
+    if (typeof window.gtag === "function") {
+      const fullPath =
+        pathname +
+        (searchParams.toString() ? `?${searchParams.toString()}` : "");
+      window.gtag("config", "G-LFGFCJQ737", {
+        page_path: fullPath,
+      });
     }
+  }, [pathname, searchParams]);
 
-    const visitTimestamp = new Date().toISOString();
-    const startTime = Date.now();
+  return (
+    <>
+      {/* 2) Load the gtag.js library once after hydration */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-LFGFCJQ737"
+        strategy="afterInteractive"
+      />
 
-    const sendAnalyticsData = async (duration: number) => {
-      try {
-        await fetch(`${apiUrls.analytics}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sessionId,
-            visitTimestamp,
-            sessionDuration: duration,
-          }),
-        });
-      } catch (error) {
-        console.error("Error sending analytics data:", error);
-      }
-    };
-
-    const handleBeforeUnload = () => {
-      const duration = (Date.now() - startTime) / 1000; // in seconds
-      sendAnalyticsData(duration);
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // Cleanup event listener on unmount
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
-  return null; // This component does not render any UI
-};
-
-export default AnalyticsTracker;
+      {/* 3) Initialize dataLayer & default config */}
+      <Script id="ga-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          // the initial page load:
+          gtag('config', 'G-LFGFCJQ737');
+        `}
+      </Script>
+    </>
+  );
+}
