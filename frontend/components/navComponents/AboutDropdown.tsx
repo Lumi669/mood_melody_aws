@@ -59,7 +59,8 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
             <div
               className={`flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-100 ${isTechDropdownOpen ? "bg-gray-100 " : ""}`}
             >
-              <span>Tech</span>
+              {/* <span>Tech</span> */}
+              <Link href="/about/tech">Tech</Link>
               {/* Arrow icon toggles direction based on dropdown state */}
               <span className="md:hidden">
                 {/* Hide arrow on desktop */}
