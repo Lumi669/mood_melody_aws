@@ -21,12 +21,9 @@ const TechPage = () => {
       <div className="h-screen overflow-y-scroll px-4 pb-80 p-10">
         <div className="max-w-5xl mx-auto space-y-12">
           <section className="text-center">
-            <h2 className="text-3xl font-semibold mb-6">
-              Our Technology Stack
-            </h2>
             <div className="space-y-10">
               <div>
-                <h3 className="text-2xl font-medium mb-4">
+                <h3 className="text-3xl font-semibold mb-6">
                   Language &amp; Tooling
                 </h3>
                 <ul className="list-disc list-inside space-y-2 text-lg">
@@ -46,7 +43,7 @@ const TechPage = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl font-medium mb-4">Backend</h3>
+                <h3 className="text-3xl font-semibold mb-6">Backend</h3>
                 <ul className="list-disc list-inside space-y-2 text-lg">
                   <li>
                     Runtime &amp; framework:{" "}
@@ -63,6 +60,9 @@ const TechPage = () => {
                     API style: <strong>REST</strong>
                   </li>
                   <li>
+                    Text analytics &amp; NLP: <strong>AWS Comprehend</strong>
+                  </li>
+                  <li>
                     Serverless deployment:{" "}
                     <strong>AWS Lambda + API Gateway</strong>
                   </li>
@@ -70,7 +70,7 @@ const TechPage = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl font-medium mb-4">Frontend</h3>
+                <h3 className="text-3xl font-semibold mb-6">Frontend</h3>
                 <ul className="list-disc list-inside space-y-2 text-lg">
                   <li>
                     Frameworks &amp; libraries: <strong>Next.js, React</strong>
@@ -85,7 +85,7 @@ const TechPage = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl font-medium mb-4">
+                <h3 className="text-3xl font-semibold mb-6">
                   DevOps &amp; Infrastructure
                 </h3>
                 <ul className="list-disc list-inside space-y-2 text-lg">
