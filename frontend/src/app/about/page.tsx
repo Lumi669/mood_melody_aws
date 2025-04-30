@@ -22,36 +22,41 @@ const AboutPage = () => {
           <div className="indent-8 m-2 text-xl leading-relaxed">
             <p>
               This application serves as a demonstration of my{" "}
-              <span className="font-bold text-blue-800">
+              <span className="inline-block bg-indigo-100 text-indigo-800 font-semibold px-2 py-0.5 rounded-md">
                 full-stack development expertise
               </span>
               . It highlights my ability to{" "}
-              <span className="bg-gray-200 text-black px-1 rounded">
+              <span className="inline-block bg-yellow-100 text-yellow-800 font-medium px-2 py-0.5 rounded-md">
                 design
               </span>{" "}
               and{" "}
-              <span className="bg-gray-200 text-black px-1 rounded">
+              <span className="inline-block bg-yellow-100 text-yellow-800 font-medium px-2 py-0.5 rounded-md">
                 develop
               </span>{" "}
               user-friendly, responsive web applications, build{" "}
-              <span className="text-gray-800 font-semibold">
+              <span className="inline-block bg-green-100 text-green-800 font-medium px-2 py-0.5 rounded-md">
                 efficient back-end solutions
               </span>{" "}
-              and <span className="text-gray-800 font-semibold">APIs</span>, and
-              integrate modern{" "}
-              <span className="underline text-blue-800">
+              and{" "}
+              <span className="inline-block bg-green-100 text-green-800 font-medium px-2 py-0.5 rounded-md">
+                APIs
+              </span>
+              , and integrate modern{" "}
+              <span className="inline-block bg-teal-100 text-teal-800 font-medium px-2 py-0.5 rounded-md">
                 front-end technologies
               </span>
               . Additionally, it features a{" "}
-              <span className="font-bold text-purple-800">CI/CD pipeline</span>{" "}
+              <span className="inline-block bg-purple-100 text-purple-800 font-semibold px-2 py-0.5 rounded-md">
+                CI/CD pipeline
+              </span>{" "}
               and{" "}
-              <span className="font-bold text-purple-800">
+              <span className="inline-block bg-purple-100 text-purple-800 font-semibold px-2 py-0.5 rounded-md">
                 DevOps practices
               </span>
               , ensuring seamless and automated deployment. Utilizing{" "}
               <span className="italic text-gray-900">AWS services</span> for
               hosting and deployment, this project also incorporates{" "}
-              <span className="text-indigo-800 font-medium">
+              <span className="inline-block bg-indigo-50 text-indigo-800 font-medium px-2 py-0.5 rounded-md">
                 AI-driven functionalities
               </span>
               .
@@ -59,7 +64,7 @@ const AboutPage = () => {
           </div>
 
           <div>
-            <p className="mt-20 text-center text-2xl mb-5">
+            <p className="mt-10 text-center text-2xl mb-5">
               For detailed technical information, check:
             </p>
             <ul className="list-disc list-inside text-center">
