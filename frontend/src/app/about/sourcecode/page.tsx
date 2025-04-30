@@ -7,6 +7,7 @@ import { useMedia } from "@context/MediaContext";
 
 import ContactButton from "@components/ContactButton";
 import DecorativeElements from "@components/DecorativeElements";
+import TechLinks from "@components/TechLinks";
 
 const SourceCodePage = () => {
   const { isRed, isBlue, isBrown } = useMedia();
@@ -68,44 +69,15 @@ const SourceCodePage = () => {
           </div>
 
           <div>
-            <p className="text-center text-2xl mb-5">
+            <p className="text-center text-3xl mb-5">
               For detailed technical information, check:
             </p>
           </div>
-          <div className="text-blue-700 font-bold no-underline hover:underline text-xl text-center">
+          <div className="text-blue-700 font-bold no-underline hover:underline text-3xl text-center">
             <Link href="/about/tech">Technical Documentation</Link>
           </div>
 
-          <div className="text-center text-xl font-bold mb-8 text-blue-700 ">
-            <div>
-              <ul className="list-disc list-inside text-center">
-                <li className="mb-4">
-                  <Link
-                    href="/about/tech/architecture"
-                    className="text-blue-700 font-bold no-underline hover:underline text-xl"
-                  >
-                    Architecture
-                  </Link>
-                </li>
-                <li className="mb-4">
-                  <Link
-                    href="/about/tech/cicd"
-                    className="text-blue-700 font-bold no-underline hover:underline text-xl"
-                  >
-                    CI/CD
-                  </Link>
-                </li>
-                <li className="mb-4">
-                  <Link
-                    href="/about/tech/techstack"
-                    className="text-blue-700 font-bold no-underline hover:underline text-xl"
-                  >
-                    Tech Stack
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
+          <TechLinks />
 
           {/* Contact CTA */}
           <div className="flex justify-center">

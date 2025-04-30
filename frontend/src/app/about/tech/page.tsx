@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+
 import { getTextColor } from "@utils/getTextColor";
 import { useMedia } from "@context/MediaContext";
 
 import ContactButton from "@components/ContactButton";
 import DecorativeElements from "@components/DecorativeElements";
+import TechLinks from "@components/TechLinks";
 
 const TechPage = () => {
   const { isRed, isBlue, isBrown } = useMedia();
@@ -105,37 +106,11 @@ const TechPage = () => {
             </div>
           </section>
 
-          <div>
-            <p className="text-center text-2xl mb-5">
-              For detailed technical information, check:
-            </p>
-            <ul className="list-disc list-inside text-center space-y-4">
-              <li>
-                <Link
-                  href="/about/tech/architecture"
-                  className="text-blue-700 font-bold no-underline hover:underline text-xl"
-                >
-                  Architecture
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about/tech/cicd"
-                  className="text-blue-700 font-bold no-underline hover:underline text-xl"
-                >
-                  CI/CD
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about/tech/techstack"
-                  className="text-blue-700 font-bold no-underline hover:underline text-xl"
-                >
-                  Tech Stack
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <p className="text-center text-2xl mb-5">
+            For detailed technical information, check:
+          </p>
+
+          <TechLinks />
 
           {/* Contact CTA */}
           <div className="flex justify-center">
