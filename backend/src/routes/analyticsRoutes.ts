@@ -1,116 +1,69 @@
-import express, { Request, Response } from "express";
-import { saveAnalyticsData } from "../services/saveAnalyticsToDynamoService";
+import { Router } from "express";
+import AWS from "aws-sdk";
+import { BetaAnalyticsDataClient } from "@google-analytics/data";
 
-import { getAllAnalyticsData } from "../services/getAllAnalyticsDataService";
+type AnalyticsRow = {
+  pagePath: string;
+  pageTitle: string;
+  deviceCategory: string;
+  activeUsers: number;
+  newUsers: number;
+  screenPageViews: number;
+};
 
-const router = express.Router();
+const router = Router();
+const ssm = new AWS.SSM();
+const PROPERTY_ID = process.env.GA4_PROPERTY_ID!;
 
-// Define the type for the DynamoDB item
-interface AnalyticsItem {
-  sessionId?: { S: string };
-  visitTimestamp?: { S: string };
-  sessionDuration?: { N: string };
+let analyticsClient: BetaAnalyticsDataClient | null = null;
+async function getClient() {
+  if (analyticsClient) return analyticsClient;
+  const resp = await ssm
+    .getParameter({ Name: "GA4_SERVICE_ACCOUNT_JSON", WithDecryption: true })
+    .promise();
+  const creds = JSON.parse(resp.Parameter!.Value!);
+  analyticsClient = new BetaAnalyticsDataClient({
+    credentials: creds,
+    projectId: creds.project_id,
+  });
+  return analyticsClient;
 }
 
-// Endpoint to collect analytics data (store it in DynamoDB)
-router.post("/", async (req: Request, res: Response) => {
-  const { sessionId, visitTimestamp, sessionDuration } = req.body;
-
-  console.log("Received data === ", {
-    sessionId,
-    visitTimestamp,
-    sessionDuration,
-  });
-
+router.get("/api/analytics/data", async (_req, res, next) => {
   try {
-    // Save analytics data and get the response
-    const savedData = await saveAnalyticsData(
-      sessionId,
-      visitTimestamp,
-      sessionDuration,
-    );
-    res.status(200).json({
-      message: "Analytics data recorded successfully",
-      data: savedData,
+    const client = await getClient();
+    const [report] = await client.runReport({
+      property: `properties/${PROPERTY_ID}`,
+      dateRanges: [{ startDate: "7daysAgo", endDate: "today" }],
+      dimensions: [
+        { name: "pagePath" },
+        { name: "pageTitle" },
+        { name: "deviceCategory" },
+      ],
+      metrics: [
+        { name: "activeUsers" },
+        { name: "newUsers" },
+        { name: "screenPageViews" },
+      ],
     });
-  } catch (error) {
-    console.error("Error recording analytics data:", error);
-    res.status(500).send("Server error");
+
+    // Ensure rows is defined, default to []
+    const rows = report.rows ?? [];
+
+    // Map safely with optional chaining & defaults
+    const data: AnalyticsRow[] = rows.map((r) => ({
+      pagePath: r.dimensionValues?.[0]?.value ?? "",
+      pageTitle: r.dimensionValues?.[1]?.value ?? "",
+      deviceCategory: r.dimensionValues?.[2]?.value ?? "",
+      activeUsers: Number(r.metricValues?.[0]?.value) || 0,
+      newUsers: Number(r.metricValues?.[1]?.value) || 0,
+      screenPageViews: Number(r.metricValues?.[2]?.value) || 0,
+    }));
+
+    res.json(data);
+  } catch (err) {
+    next(err);
   }
 });
 
-// // Endpoint to retrieve all analytics data for display on the Analysis page
-// router.get("/", async (_req: Request, res: Response) => {
-//   try {
-//     const items = await getAllAnalyticsData();
-//     console.log("Fetched analytics data ==== ", items);
-
-//     // Calculate Total Number of Visits
-//     const totalVisits = items.length;
-
-//     // Calculate Unique Visitors (distinct sessionIds)
-//     const uniqueVisitors = new Set(
-//       items
-//         .map((item: AnalyticsItem) => item.sessionId?.S)
-//         .filter(
-//           (id: string | undefined): id is string => typeof id === "string",
-//         ),
-//     ).size;
-
-//     console.log("uniqueVisitors ====== ", uniqueVisitors);
-
-//     // Calculate Average Session Duration
-//     const totalDuration = items.reduce((acc: number, item: AnalyticsItem) => {
-//       const duration = item.sessionDuration?.N;
-//       return acc + (duration ? parseFloat(duration) : 0);
-//     }, 0);
-//     const averageSessionDuration =
-//       totalVisits > 0 ? totalDuration / totalVisits : 0;
-
-//     res.json({
-//       totalVisits,
-//       uniqueVisitors,
-//       averageSessionDuration,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching analytics data:", error);
-//     res.status(500).send("Server error");
-//   }
-// });
-// Endpoint to retrieve all analytics data for display on the Analysis page
-router.get("/", async (_req: Request, res: Response) => {
-  try {
-    const items = await getAllAnalyticsData();
-
-    console.log("Fetched analytics data ==== ", items);
-
-    // Calculate Total Number of Visits
-    const totalVisits = items.length;
-
-    // Calculate Unique Visitors (distinct sessionIds)
-    const uniqueVisitors = new Set(
-      items.map((item) => item.sessionId.S), // Use item.sessionId.S directly
-    ).size;
-
-    console.log("Unique Visitors ====== ", uniqueVisitors);
-
-    // Calculate Average Session Duration
-    const totalDuration = items.reduce((acc, item) => {
-      const duration = parseFloat(item.sessionDuration.N); // Safely parse the string number
-      return acc + duration;
-    }, 0);
-
-    const averageSessionDuration =
-      totalVisits > 0 ? totalDuration / totalVisits : 0;
-
-    res.json({
-      totalVisits,
-      uniqueVisitors,
-      averageSessionDuration,
-    });
-  } catch (error) {
-    console.error("Error fetching analytics data:", error);
-    res.status(500).send("Server error");
-  }
-});
 export default router;

@@ -1,78 +1,94 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiUrls } from "@config/apiConfig";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
-interface AnalyticsMetrics {
-  totalVisits: number;
-  uniqueVisitors: number;
-  averageSessionDuration: number;
-}
+type Row = {
+  pagePath: string;
+  pageTitle: string;
+  deviceCategory: string;
+  activeUsers: number;
+  newUsers: number;
+  screenPageViews: number;
+};
 
-const AnalysisPage = () => {
-  const [analytics, setAnalytics] = useState<AnalyticsMetrics | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default function AnalyticsPage() {
+  const [data, setData] = useState<Row[]>([]);
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const response = await fetch(`${apiUrls.analytics}`); // Use the correct API URL
-        if (!response.ok) {
-          throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-        const data = await response.json();
-        console.log("dddd data ==== ", data);
-        setAnalytics(data);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unexpected error occurred");
-        }
-        console.error("Error fetching analytics data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAnalytics();
+    fetch("/api/analytics/data")
+      .then((res) => res.json())
+      .then((rows: Row[]) => setData(rows))
+      .catch(console.error);
   }, []);
 
-  if (loading) {
-    return <p>Loading analytics data...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Analysis</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-lg font-semibold">Total Number of Visits</h2>
-          <p>{analytics?.totalVisits ?? "N/A"}</p>{" "}
-          {/* Fallback to "N/A" if null */}
-        </div>
-        <div className="bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-lg font-semibold">Unique Visitors</h2>
-          <p>{analytics?.uniqueVisitors ?? "N/A"}</p>{" "}
-          {/* Fallback to "N/A" if null */}
-        </div>
-        <div className="bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-lg font-semibold">Average Session Duration</h2>
-          <p>
-            {analytics?.averageSessionDuration !== undefined
-              ? `${analytics.averageSessionDuration.toFixed(2)} seconds`
-              : "N/A"}
-          </p>{" "}
-          {/* Safely handle undefined values */}
-        </div>
+    <div className="p-6 space-y-8">
+      <h1 className="text-2xl font-bold">Analytics (Last 7 days)</h1>
+
+      {/* 1. TABLE */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full table-auto border-collapse">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border px-4 py-2">Path</th>
+              <th className="border px-4 py-2">Title</th>
+              <th className="border px-4 py-2">Device</th>
+              <th className="border px-4 py-2">Active Users</th>
+              <th className="border px-4 py-2">New Users</th>
+              <th className="border px-4 py-2">Page Views</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((r, i) => (
+              <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                <td className="border px-4 py-2">{r.pagePath}</td>
+                <td className="border px-4 py-2">{r.pageTitle}</td>
+                <td className="border px-4 py-2">{r.deviceCategory}</td>
+                <td className="border px-4 py-2 text-right">{r.activeUsers}</td>
+                <td className="border px-4 py-2 text-right">{r.newUsers}</td>
+                <td className="border px-4 py-2 text-right">
+                  {r.screenPageViews}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 2. BAR CHART */}
+      <div style={{ width: "100%", height: 400 }}>
+        <ResponsiveContainer>
+          <BarChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="pagePath"
+              tick={{ fontSize: 12 }}
+              interval={0}
+              angle={-30}
+              textAnchor="end"
+              height={60}
+            />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="activeUsers" name="Active Users" stackId="a" />
+            <Bar dataKey="newUsers" name="New Users" stackId="a" />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
-};
-
-export default AnalysisPage;
+}
