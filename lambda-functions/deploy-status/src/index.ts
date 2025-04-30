@@ -33,14 +33,33 @@ export const handler = async (event: CodePipelineCloudWatchEvent) => {
   </g>
 </svg>`;
 
-  const command = new PutObjectCommand({
-    Bucket: bucketName,
-    Key: fileName,
-    Body: svgContent,
-    ContentType: "image/svg+xml",
-    CacheControl: "no-cache, max-age=0, must-revalidate",
-  });
-
-  await s3.send(command);
+  // 1️⃣ Upload the SVG
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: bucketName,
+      Key: fileName,
+      Body: svgContent,
+      ContentType: "image/svg+xml",
+      CacheControl: "no-cache, max-age=0, must-revalidate",
+    }),
+  );
   console.log(`SVG uploaded to ${bucketName}/${fileName}`);
+
+  // 2️⃣ Now upload the JSON for Shields
+  const json = JSON.stringify({
+    schemaVersion: 1,
+    label: "deploy",
+    message: status, // "passing" or "failed"
+    color: state === "SUCCEEDED" ? "brightgreen" : "red",
+  });
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: bucketName,
+      Key: "deploy-status.json",
+      Body: json,
+      ContentType: "application/json",
+      CacheControl: "no-cache, max-age=0, must-revalidate",
+    }),
+  );
+  console.log(`JSON uploaded to ${bucketName}/deploy-status.json`);
 };
