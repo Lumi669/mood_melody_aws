@@ -36,144 +36,113 @@ const PrivacyPage = () => {
         <ul className="list-disc pl-6 mb-4">
           <li>
             Animations from{" "}
-            <Link href="https://www.veed.io/" legacyBehavior>
-              <a
-                className="text-blue-500 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Veed.io
-              </a>
-            </Link>
+            <a
+              href="https://www.veed.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              Veed.io
+            </a>
             , used according to their licensing terms.
           </li>
           <li>
             Music from{" "}
-            <Link href="https://artlist.io/" legacyBehavior>
-              <a
-                className="text-blue-500 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Artlist
-              </a>
-            </Link>
+            <a
+              href="https://artlist.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              Artlist
+            </a>
             , all song titles and artists are mentioned on the music page.
           </li>
         </ul>
 
         <p className="text-gray-700 mb-4">
           This app includes images sourced from{" "}
-          <Link href="https://www.freepik.com" legacyBehavior>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              Freepik
-            </a>
-          </Link>
+          <a
+            href="https://www.freepik.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            Freepik
+          </a>
           . These images are used under Freepik&apos;s free license with proper
           attribution to the original authors.
         </p>
         <ul className="list-disc pl-6 mb-4">
           <li>
-            <Link
+            <a
               href="https://www.freepik.com/free-photo/adorable-little-poodle-with-cute-bunny-ears-beige-surface_15672270.htm"
-              legacyBehavior
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
             >
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Image by wirestock on Freepik
-              </a>
-            </Link>
+              Image by wirestock on Freepik
+            </a>
           </li>
           <li>
-            <Link
+            <a
               href="https://www.freepik.com/free-photo/happy-beagle-with-droopy-ears-blue-background_135010608.htm"
-              legacyBehavior
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
             >
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Image by rorozoa on Freepik
-              </a>
-            </Link>
+              Image by rorozoa on Freepik
+            </a>
           </li>
           <li>
-            <Link
+            <a
               href="https://www.freepik.com/free-photo/medium-shot-friends-eating-pizza_138239739.htm"
-              legacyBehavior
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
             >
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Image by Drazen Zigic on Freepik
-              </a>
-            </Link>
+              Image by Drazen Zigic on Freepik
+            </a>
           </li>
           <li>
-            <Link
+            <a
               href="https://www.freepik.com/free-photo/cute-puppy-sitting-grass-enjoying-nature-playful-beauty-generated-by-artificial-intelligence_79687547.htm"
-              legacyBehavior
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
             >
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Image by upklyak on Freepik
-              </a>
-            </Link>
+              Image by upklyak on Freepik
+            </a>
           </li>
           <li>
-            <Link
+            <a
               href="https://www.freepik.com/free-photo/close-up-adorable-dog-laying-blanket_10422541.htm"
-              legacyBehavior
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
             >
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Image by Freepik
-              </a>
-            </Link>
+              Image by Freepik
+            </a>
           </li>
           <li>
-            <Link
+            <a
               href="https://www.freepik.com/free-photo/small-pug-sofa_11043847.htm"
-              legacyBehavior
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
             >
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Image by Freepik
-              </a>
-            </Link>
+              Image by Freepik
+            </a>
           </li>
           <li>
-            <Link
+            <a
               href="https://www.freepik.com/free-photo/selective-focus-shot-dog-dressed-gray-winter-sweater_13061006.htm"
-              legacyBehavior
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
             >
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Image by vecstock on Freepik
-              </a>
-            </Link>
+              Image by vecstock on Freepik
+            </a>
           </li>
         </ul>
         <p className="text-gray-700 mb-4">
@@ -234,8 +203,9 @@ const PrivacyPage = () => {
           </a>{" "}
           or{" "}
           <Link href="/contact" className="text-blue-500 hover:underline">
-            contact me.
+            contact me
           </Link>
+          .
         </p>
 
         <h2 className="text-xl font-semibold mb-2">Disclaimer</h2>
