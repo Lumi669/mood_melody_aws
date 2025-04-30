@@ -25,9 +25,10 @@ const SourceCodePage = () => {
               <h2 className="text-xl font-semibold">
                 Moode Melody&nbsp;App&nbsp;@&nbsp;GitHub
               </h2>
+
               <p className="text-sm opacity-80">
-                Browse the full open‑source code, submit issues or pull
-                requests.
+                Browse the full open-source code — feel free to fork or clone
+                it.
               </p>
             </div>
 
