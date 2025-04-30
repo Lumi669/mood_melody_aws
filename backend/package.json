@@ -16,6 +16,8 @@
     "@aws-sdk/client-dynamodb": "^3.658.1",
     "@aws-sdk/client-ssm": "^3.699.0",
     "@aws-sdk/lib-dynamodb": "^3.658.1",
+    "@google-analytics/data": "^5.1.0",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.7",
     "better-sqlite3": "^11.9.1",
     "body-parser": "^1.20.3",
