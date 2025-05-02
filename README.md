@@ -194,9 +194,3 @@ See the LICENSE file for details. Commercial use is prohibited without a separat
 
 Lumi669 – wangjinghuan@yahoo.com
 Project Link: https://github.com/Lumi669/mood_melody_aws
-
-Local Development
-⚠️ Note: This project depends on AWS services (S3, Lambda, DynamoDB, Comprehend, etc). Even for local testing, you’ll need an AWS account with proper credentials.
-
-📦 Deployment Details
-This project is fully deployed to AWS using CloudFormation, S3, Lambda, API Gateway, and CodePipeline.
