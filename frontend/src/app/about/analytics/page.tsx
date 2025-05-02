@@ -82,14 +82,16 @@ export default function AnalyticsPage() {
     <div className="py-8 px-4">
       {/* Header & single-line legend */}
       <div className="max-w-7xl mx-auto px-4 text-center mb-6">
-        <h1 className="text-2xl font-semibold">Analytics (Last 7 days)</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-center mt-4 text-3xl font-extrabold">
+          Analytics (Last 7 days)
+        </h1>
+        <p className="mt-3 text-sm text-gray-500">
           Active Users (returned) &nbsp;·&nbsp; New Users (first-time)
         </p>
       </div>
 
       {/* Data table */}
-      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg relative overflow-x-auto overflow-y-auto max-h-[62vh]">
+      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg relative overflow-x-auto overflow-y-auto max-h-[60vh]">
         <table className="min-w-full table-auto border-collapse">
           <thead className="sticky top-0 z-30 bg-white">
             <tr>
