@@ -1,6 +1,6 @@
 ## Developer's Note
 
-Built solo over the course of a year—with 1,300+ commits and 1,700+ CI/CD runs—this project highlights my end-to-end ownership of everything from infrastructure-as-code and serverless backends to a responsive AI-driven frontend. It reflects my dedication and problem-solving skills in architecting, deploying, and maintaining a scalable full-stack application.
+Built solo over the course of a year—with 1,300+ commits and 1,700+ CI/CD runs—this AI-powered project highlights my end-to-end ownership of everything from infrastructure-as-code and serverless backends to a responsive frontend. It reflects my dedication and problem-solving skills in architecting, deploying, and maintaining a scalable full-stack application.
 
 ## Table of Contents
 
