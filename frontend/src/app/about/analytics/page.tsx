@@ -80,34 +80,40 @@ export default function AnalyticsPage() {
 
   return (
     <div className="py-8 px-4">
-      <h1 className="text-2xl font-semibold text-center mb-6">
-        Analytics (Last 7 days)
-      </h1>
-      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg relative overflow-x-auto overflow-y-auto max-h-[70vh]">
+      {/* Header & single-line legend */}
+      <div className="max-w-7xl mx-auto px-4 text-center mb-6">
+        <h1 className="text-2xl font-semibold">Analytics (Last 7 days)</h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Active Users (returned) &nbsp;·&nbsp; New Users (first-time)
+        </p>
+      </div>
+
+      {/* Data table */}
+      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg relative overflow-x-auto overflow-y-auto max-h-[62vh]">
         <table className="min-w-full table-auto border-collapse">
           <thead className="sticky top-0 z-30 bg-white">
             <tr>
               <th
                 rowSpan={2}
-                className="sticky left-0 z-40 px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase bg-gray-100 border-b border-gray-200"
+                className="sticky left-0 z-40 px-6 py-3 text-left text-s font-bold text-gray-700 uppercase bg-gray-100 border-b border-gray-200"
               >
                 Path
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-blue-100 border-b border-gray-200"
+                className="px-6 py-3 text-center text-s font-bold text-gray-700 uppercase bg-blue-100 border-b border-gray-200"
               >
                 Desktop
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-green-100 border-b border-gray-200"
+                className="px-6 py-3 text-center text-s font-bold text-gray-700 uppercase bg-green-100 border-b border-gray-200"
               >
                 Mobile
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-yellow-100 border-b border-gray-200"
+                className="px-6 py-3 text-center text-s font-bold text-gray-700 uppercase bg-yellow-100 border-b border-gray-200"
               >
                 Total
               </th>
@@ -133,7 +139,7 @@ export default function AnalyticsPage() {
                 return (
                   <th
                     key={idx}
-                    className={`${bg} px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase border-b border-gray-200`}
+                    className={`${bg} px-4 py-2 text-right text-xs font-bold text-gray-600 uppercase border-b border-gray-200`}
                   >
                     {label}
                   </th>
@@ -151,7 +157,7 @@ export default function AnalyticsPage() {
                   ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}
                 `}
               >
-                <td className="sticky left-0 z-20 px-6 py-4 whitespace-nowrap text-sm text-gray-800 bg-white">
+                <td className="sticky left-0 z-20 px-6 py-4 whitespace-nowrap text-s font-semibold text-gray-800 bg-white">
                   {r.pagePath}
                 </td>
                 {[
@@ -176,7 +182,7 @@ export default function AnalyticsPage() {
                   return (
                     <td
                       key={idx}
-                      className={`${bg} px-4 py-4 whitespace-nowrap text-sm text-right ${bold}`}
+                      className={`${bg} px-4 py-4 whitespace-nowrap text-s text-right ${bold}`}
                     >
                       {value.toLocaleString()}
                     </td>
