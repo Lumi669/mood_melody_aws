@@ -25,6 +25,14 @@ Resources:
                   - ssm:GetParameter
                   - ssm:GetParameterHistory
                 Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/mood-melody-backend/numverifyapikey"
+        - PolicyName: GA4SecretAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/mood-melody/GA4_SERVICE_ACCOUNT_JSON"
 
         - PolicyName: LambdaHttpRequest
           PolicyDocument:
@@ -66,6 +74,8 @@ Resources:
         Variables:
           DYNAMO_DB_TABLE_NAME: !ImportValue UserFeedbackTableName
           NUMVERIFY_API_PARAM_NAME: "/mood-melody-backend/numverifyapikey"
+          GA4_PROPERTY_ID: "487569854"
+          GA4_SSM_PARAM_NAME: "/mood-melody/GA4_SERVICE_ACCOUNT_JSON"
 
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
@@ -250,6 +260,32 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Headers: true
 
+  ApiGatewayResourceAnalytics:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ApiGatewayResourceRoot
+      PathPart: analytics
+      RestApiId: !Ref ApiGatewayRestApi
+
+  ApiGatewayMethodAnalyticsGet:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      ResourceId: !Ref ApiGatewayResourceAnalytics
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub >
+          arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BackendLambdaFunction.Arn}/invocations
+      MethodResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Headers: true
+
   ApiGatewayDeploymentNew:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
@@ -264,6 +300,8 @@ Resources:
       - ApiGatewayMethodSentimentanalysis
       - ApiGatewayMethodSaveuserfeedback
       - ApiGatewayMethodSaveuserfeedbackOptions
+      - ApiGatewayMethodAnalyticsGet
+
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
