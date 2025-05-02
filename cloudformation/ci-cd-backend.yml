@@ -66,6 +66,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: MoodMelodyBackendFunction
+      Timeout: 300
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/mood-melody-aws:backend-{{resolve:ssm:/mood-melody/backend-timestamp}}"
