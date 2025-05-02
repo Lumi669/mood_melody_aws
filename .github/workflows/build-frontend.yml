@@ -74,9 +74,9 @@ jobs:
             --build-arg NEXT_PUBLIC_API_URL_3=${BACKEND_API_URL}/api/test \
             --build-arg NEXT_PUBLIC_API_URL_4=${BACKEND_API_URL}/api/sentimentanalysis \
             --build-arg NEXT_PUBLIC_API_URL_5=${BACKEND_API_URL}/api/saveuserfeedback \
+            --build-arg NEXT_PUBLIC_API_URL_6=${BACKEND_API_URL}/api/analytics \
             --build-arg NEXT_PUBLIC_PERSONAL_EMAIL=${NEXT_PUBLIC_PERSONAL_EMAIL} \
             --build-arg NEXT_PUBLIC_PERSONAL_PHONE=${NEXT_PUBLIC_PERSONAL_PHONE} \
-            --build-arg NEXT_PUBLIC_API_URL_6=${BACKEND_API_URL}/api/analytics \
             -t mood-melody-aws:frontend-${TIMESTAMP} \
             -t mood-melody-aws:frontend-latest \
             ./frontend

@@ -25,8 +25,8 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<Row[]>([]);
 
   useEffect(() => {
-    const base = process.env.NEXT_PUBLIC_API_BASE!;
-    fetch(`${base}/api/analytics`)
+    const analyticsUrl = process.env.NEXT_PUBLIC_API_URL_6!;
+    fetch(analyticsUrl)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
