@@ -11,6 +11,8 @@ type AnalyticsRow = {
   screenPageViews: number;
 };
 
+AWS.config.update({ region: process.env.AWS_REGION || "eu-north-1" });
+
 const router = Router();
 const ssm = new AWS.SSM();
 const PROPERTY_ID = process.env.GA4_PROPERTY_ID!;
@@ -19,7 +21,10 @@ let analyticsClient: BetaAnalyticsDataClient | null = null;
 async function getClient() {
   if (analyticsClient) return analyticsClient;
   const resp = await ssm
-    .getParameter({ Name: "GA4_SERVICE_ACCOUNT_JSON", WithDecryption: true })
+    .getParameter({
+      Name: "/mood-melody/GA4_SERVICE_ACCOUNT_JSON",
+      WithDecryption: true,
+    })
     .promise();
   const creds = JSON.parse(resp.Parameter!.Value!);
   analyticsClient = new BetaAnalyticsDataClient({
@@ -29,7 +34,7 @@ async function getClient() {
   return analyticsClient;
 }
 
-router.get("/api/analytics/data", async (_req, res, next) => {
+router.get("/data", async (_req, res, next) => {
   try {
     const client = await getClient();
     const [report] = await client.runReport({
@@ -50,6 +55,8 @@ router.get("/api/analytics/data", async (_req, res, next) => {
     // Ensure rows is defined, default to []
     const rows = report.rows ?? [];
 
+    console.log("GA4 rows:", rows);
+
     // Map safely with optional chaining & defaults
     const data: AnalyticsRow[] = rows.map((r) => ({
       pagePath: r.dimensionValues?.[0]?.value ?? "",
@@ -60,9 +67,14 @@ router.get("/api/analytics/data", async (_req, res, next) => {
       screenPageViews: Number(r.metricValues?.[2]?.value) || 0,
     }));
 
+    console.log("GA4 rows========:", rows);
+
     res.json(data);
-  } catch (err) {
-    next(err);
+  } catch (err: any) {
+    console.error("❌ GA4 error in /api/analytics/data:", err);
+    return res.status(500).json({ error: err.message || "Unknown GA4 error" });
+
+    // next(err);
   }
 });
 

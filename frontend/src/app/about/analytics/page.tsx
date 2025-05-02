@@ -25,8 +25,12 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<Row[]>([]);
 
   useEffect(() => {
-    fetch("/api/analytics/data")
-      .then((res) => res.json())
+    const base = process.env.NEXT_PUBLIC_API_BASE!;
+    fetch(`${base}/api/analytics/data`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then((rows: Row[]) => setData(rows))
       .catch(console.error);
   }, []);
