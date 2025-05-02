@@ -35,3 +35,22 @@ export function errorHandler(
   // Send the response
   return res.status(statusCode).json(errorResponse);
 }
+
+// Debug version, enable it when needed and meanwhile comment out above version
+// import { Request, Response, NextFunction } from "express";
+
+// export function errorHandler(
+//   err: any,
+//   req: Request,
+//   res: Response,
+//   _next: NextFunction,
+// ) {
+//   console.error("Error from backend:", err);
+//   if (res.headersSent) {
+//     // If headers are already sent, delegate to default Express handler
+//     return;
+//   }
+//   res
+//     .status(err.status || 500)
+//     .json({ error: err.message || "Internal Server Error" });
+// }
