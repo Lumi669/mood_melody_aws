@@ -1,4 +1,3 @@
-require("dotenv").config({ path: ".env.local" });
 import { ContactFormInputs } from "../types/type";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"; // AWS SDK v3
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb"; // DynamoDB DocumentClient for SDK v3
