@@ -34,7 +34,7 @@ async function getClient() {
   return analyticsClient;
 }
 
-router.get("/data", async (_req, res, next) => {
+router.get("/", async (_req, res, next) => {
   try {
     const client = await getClient();
     const [report] = await client.runReport({
