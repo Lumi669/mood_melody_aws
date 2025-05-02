@@ -66,7 +66,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 - Node.js ≥ 20
 - Docker
-- AWS CLI & credentials configured (for deployment)
+- AWS CLI & credentials configured (for both local dev and deployment)
 
 ---
 
