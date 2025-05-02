@@ -9,6 +9,7 @@ type GA4Row = {
   newUsers: number;
   screenPageViews: number;
 };
+
 type Pivoted = {
   pagePath: string;
   desktopActive: number;
@@ -66,6 +67,7 @@ function pivot(rows: GA4Row[]): Pivoted[] {
 
 export default function AnalyticsPage() {
   const [data, setData] = useState<Pivoted[]>([]);
+
   useEffect(() => {
     fetch(process.env.NEXT_PUBLIC_API_URL_6!)
       .then((res) => {
@@ -81,36 +83,36 @@ export default function AnalyticsPage() {
       <h1 className="text-2xl font-semibold text-center mb-6">
         Analytics (Last 7 days)
       </h1>
-      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg overflow-auto max-h-[70vh]">
+      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg relative overflow-x-auto overflow-y-auto max-h-[70vh]">
         <table className="min-w-full table-auto border-collapse">
-          <thead className="sticky top-0">
+          <thead className="sticky top-0 z-30 bg-white">
             <tr>
               <th
                 rowSpan={2}
-                className="sticky left-0 z-20 px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase bg-gray-100"
+                className="sticky left-0 z-40 px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase bg-gray-100 border-b border-gray-200"
               >
                 Path
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-blue-100"
+                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-blue-100 border-b border-gray-200"
               >
                 Desktop
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-green-100"
+                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-green-100 border-b border-gray-200"
               >
                 Mobile
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-yellow-100"
+                className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase bg-yellow-100 border-b border-gray-200"
               >
                 Total
               </th>
             </tr>
-            <tr>
+            <tr className="bg-white">
               {[
                 "Active",
                 "New",
@@ -131,7 +133,7 @@ export default function AnalyticsPage() {
                 return (
                   <th
                     key={idx}
-                    className={`${bg} px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase`}
+                    className={`${bg} px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase border-b border-gray-200`}
                   >
                     {label}
                   </th>
@@ -139,13 +141,17 @@ export default function AnalyticsPage() {
               })}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody>
             {data.map((r, i) => (
               <tr
                 key={r.pagePath}
-                className={`group hover:bg-gray-100 ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
+                className={`
+                  border-b border-gray-200
+                  group hover:bg-gray-100
+                  ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                `}
               >
-                <td className="sticky left-0 z-10 px-6 py-4 whitespace-nowrap text-sm text-gray-800 bg-white">
+                <td className="sticky left-0 z-20 px-6 py-4 whitespace-nowrap text-sm text-gray-800 bg-white">
                   {r.pagePath}
                 </td>
                 {[
