@@ -1,16 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 
 type GA4Row = {
   pagePath: string;
@@ -24,41 +14,55 @@ type Pivoted = {
   pagePath: string;
   desktopActive: number;
   desktopNew: number;
+  desktopViews: number;
   mobileActive: number;
   mobileNew: number;
+  mobileViews: number;
   totalActive: number;
   totalNew: number;
+  totalViews: number;
 };
 
 function pivot(rows: GA4Row[]): Pivoted[] {
   const map = new Map<string, Pivoted>();
-  for (const { pagePath, deviceCategory, activeUsers, newUsers } of rows) {
-    if (pagePath === "" || pagePath === "/?") continue;
+  for (const {
+    pagePath,
+    deviceCategory,
+    activeUsers,
+    newUsers,
+    screenPageViews,
+  } of rows) {
+    if (!pagePath) continue;
     let rec = map.get(pagePath);
     if (!rec) {
       rec = {
         pagePath,
         desktopActive: 0,
         desktopNew: 0,
+        desktopViews: 0,
         mobileActive: 0,
         mobileNew: 0,
+        mobileViews: 0,
         totalActive: 0,
         totalNew: 0,
+        totalViews: 0,
       };
       map.set(pagePath, rec);
     }
     if (deviceCategory === "desktop") {
       rec.desktopActive += activeUsers;
       rec.desktopNew += newUsers;
+      rec.desktopViews += screenPageViews;
     } else if (deviceCategory === "mobile") {
       rec.mobileActive += activeUsers;
       rec.mobileNew += newUsers;
+      rec.mobileViews += screenPageViews;
     }
     rec.totalActive += activeUsers;
     rec.totalNew += newUsers;
+    rec.totalViews += screenPageViews;
   }
-
-  return Array.from(map.values()).sort((a, b) => b.totalActive - a.totalActive);
+  return Array.from(map.values()).sort((a, b) => b.totalViews - a.totalViews);
 }
 
 export default function AnalyticsPage() {
@@ -75,97 +79,91 @@ export default function AnalyticsPage() {
       .catch(console.error);
   }, []);
 
-  // Top 10 pages for chart
-  const chartData = data.slice(0, 10);
-
   return (
-    <div className="p-6 space-y-8">
-      <h1 className="text-2xl font-bold">Analytics (Last 7 days)</h1>
-
-      {/* TABLE */}
-      <div className="overflow-x-auto">
-        <table className="min-w-[900px] table-auto border-collapse">
-          <thead className="sticky top-0 bg-white">
-            <tr className="bg-gray-200">
-              <th rowSpan={2} className="border px-4 py-2 text-left">
+    <div className="py-8 px-4">
+      <h1 className="text-2xl font-semibold text-center mb-6">
+        Analytics (Last 7 days)
+      </h1>
+      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg overflow-x-auto overflow-y-auto max-h-[70vh]">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50 sticky top-0">
+            <tr>
+              <th
+                rowSpan={2}
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+              >
                 Path
               </th>
-              <th colSpan={2} className="border px-4 py-2 text-center">
+              <th
+                colSpan={3}
+                className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase"
+              >
                 Desktop
               </th>
-              <th colSpan={2} className="border px-4 py-2 text-center">
+              <th
+                colSpan={3}
+                className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase"
+              >
                 Mobile
               </th>
-              <th colSpan={2} className="border px-4 py-2 text-center">
+              <th
+                colSpan={3}
+                className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase"
+              >
                 Total
               </th>
             </tr>
             <tr className="bg-gray-100">
-              <th className="border px-4 py-2 text-right">Active</th>
-              <th className="border px-4 py-2 text-right">New</th>
-              <th className="border px-4 py-2 text-right">Active</th>
-              <th className="border px-4 py-2 text-right">New</th>
-              <th className="border px-4 py-2 text-right">Active</th>
-              <th className="border px-4 py-2 text-right">New</th>
+              {Array.from({ length: 9 }).map((_, idx) => (
+                <th
+                  key={idx}
+                  className="px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase"
+                >
+                  {["Active", "New", "Views"][idx % 3]}
+                </th>
+              ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             {data.map((r, i) => (
               <tr
                 key={r.pagePath}
                 className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
               >
-                <td className="border px-4 py-2">{r.pagePath}</td>
-                <td className="border px-4 py-2 text-right">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  {r.pagePath}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
                   {r.desktopActive.toLocaleString()}
                 </td>
-                <td className="border px-4 py-2 text-right">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
                   {r.desktopNew.toLocaleString()}
                 </td>
-                <td className="border px-4 py-2 text-right">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
+                  {r.desktopViews.toLocaleString()}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
                   {r.mobileActive.toLocaleString()}
                 </td>
-                <td className="border px-4 py-2 text-right">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
                   {r.mobileNew.toLocaleString()}
                 </td>
-                <td className="border px-4 py-2 text-right font-bold">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
+                  {r.mobileViews.toLocaleString()}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm font-semibold text-gray-800 text-right">
                   {r.totalActive.toLocaleString()}
                 </td>
-                <td className="border px-4 py-2 text-right font-bold">
+                <td className="px-4 py-4 whitespace-nowrap text-sm font-semibold text-gray-800 text-right">
                   {r.totalNew.toLocaleString()}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm font-semibold text-gray-800 text-right">
+                  {r.totalViews.toLocaleString()}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* GROUPED BAR CHART */}
-      <div className="w-full" style={{ height: 500 }}>
-        <ResponsiveContainer>
-          <BarChart
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 80 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="pagePath"
-              angle={-45}
-              textAnchor="end"
-              height={80}
-            />
-            <YAxis />
-            <Tooltip
-              formatter={(v) =>
-                typeof v === "number" ? v.toLocaleString() : v
-              }
-            />
-            <Legend />
-            <Bar dataKey="desktopActive" name="Desktop Active" fill="#4F46E5" />
-            <Bar dataKey="mobileActive" name="Mobile Active" fill="#10B981" />
-            <Bar dataKey="totalActive" name="Total Active" fill="#F59E0B" />
-          </BarChart>
-        </ResponsiveContainer>
       </div>
     </div>
   );
