@@ -1,6 +1,8 @@
+**App Website:** https://mood-melody.ensintek.com/
+
 ## Developer's Note
 
-Built solo over the course of a year—with 1,300+ commits and 1,700+ CI/CD runs—this AI-powered project highlights my end-to-end ownership of everything from infrastructure-as-code and serverless backends to a responsive frontend. It reflects my dedication and problem-solving skills in architecting, deploying, and maintaining a scalable full-stack application.
+Over the course of one year, I built this AI-powered project solo—making 1,400 + commits and 1,800 + CI/CD runs—authored and maintained the full application codebase (from backend services to frontend components), and managed end-to-end CI/CD pipelines. It demonstrates my end-to-end ownership of infrastructure-as-code, serverless backends, and a responsive frontend, and reflects my dedication and problem-solving skills in architecting, deploying, and scaling a full-stack solution.
 
 ## Table of Contents
 
@@ -12,7 +14,7 @@ Built solo over the course of a year—with 1,300+ commits and 1,700+ CI/CD runs
 - [Getting Started](#getting-started)
 - [Local Development](#local-development)
 - [Architecture](#architecture)
-- [CI/CD & Deployment](#ci-cd--deployment)
+- [CI/CD & Deployment](#ci-cd-deployment)
 - [License](#license)
 - [Contact](#contact)
 
@@ -49,7 +51,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 - 🎵 Play/pause tracks based on your mood
 - 📊 Mood analytics based on your text input
-- AI‑Powered Curation: Emotion detection via NLP for spot‑on song and image pairing
+- AI‑Powered Curation: Emotion detection via NLP for spot‑on song with its linked image
 - Serverless, scales on AWS Lambda
 - CI/CD setup
 - Docker
@@ -86,11 +88,11 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 pnpm install
 
-### backend
+### mood_melody_aws/backend
 
 cd backend && pnpm install
 
-### frontend
+### mood_melody_aws/frontend
 
 cd ../frontend && pnpm install
 
@@ -103,17 +105,9 @@ cd frontend && pnpm run build && pnpm run dev
 
 App will be available at: http://localhost:3000
 
-To see the health at a glance, check the badges above or visit:
-
-CI runs: https://github.com/Lumi669/mood_melody_aws/actions
-
-Live site: https://mood-melody.ensintek.com/
-
 ### Run local app with docker
 
-#### at root i.e mood_melody_aws
-
-1. backend
+1. mood_melody_aws/backend
 
 #### build backend image
 
@@ -139,7 +133,7 @@ Content-Type: text/plain; charset=utf-8
 
 {"statusCode":200,"headers":{"x-powered-by":"Express","access-control-allow-origin":"\*","x-ratelimit-limit":"5","x-ratelimit-remaining":"4","date":"Fri, 25 Apr 2025 20:53:59 GMT","x-ratelimit-reset":"1745614470","content-type":"application/json; charset=utf-8","content-length":"57","etag":"W/\"39-FqPhC/ocgcZW6apeUQPxYsdw7lc\""},"isBase64Encoded":false,"body":"\"Welcome to the backend of the mood-melody app .......//\""}%
 
-2. frontend
+2. mood_melody_aws/frontend
 
 - build frontend image
 
@@ -193,4 +187,3 @@ See the LICENSE file for details. Commercial use is prohibited without a separat
 ## Contact
 
 Lumi669 – wangjinghuan@yahoo.com
-Project Link: https://github.com/Lumi669/mood_melody_aws
