@@ -13,7 +13,7 @@ Over the course of one year, I built this AI-powered project solo—making 1,400
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Architecture](#architecture)
-- [CI/CD & Deployment](cicd-deployment)
+- [CI/CD & Deployment](#ci-cd--deployment)
 - [License](#license)
 - [Contact](#contact)
 
