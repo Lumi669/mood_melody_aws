@@ -1,43 +1,46 @@
+"use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 interface AboutDropdownProps {
-  closeDropdown?: () => void; // Optional closeDropdown prop
-  isTechActive?: boolean; // Optional isTechActive prop
+  closeDropdown?: () => void;
 }
 
-const AboutDropdown: React.FC<AboutDropdownProps> = ({
-  closeDropdown,
-  isTechActive,
-}) => {
-  const [isTechDropdownOpen, setTechDropdownOpen] = useState(false); // Initial state is false (dropdown closed)
-  const [isHovered, setIsHovered] = useState(false); // State for hover
+const AboutDropdown: React.FC<AboutDropdownProps> = ({ closeDropdown }) => {
+  const pathname = usePathname();
+  const isTechActive = pathname.startsWith("/about/tech");
 
-  // Handle hover state (for desktop only)
+  const [isTechDropdownOpen, setTechDropdownOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Submenu only opens on hover (desktop) or explicit toggle (mobile)
+  const techIsOpen = isHovered || isTechDropdownOpen;
+
+  // Desktop hover handlers
   const handleTechHover = (hovered: boolean) => {
     if (window.innerWidth >= 768) {
       setIsHovered(hovered);
     }
   };
 
-  // Toggle dropdown on click for mobile
-  const handleTechClick = () => {
-    console.log("Tech clicked...");
-    console.log("isTechDropdownOpen === ", isTechDropdownOpen);
+  // Mobile toggle handler
+  const handleTechToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (window.innerWidth < 768) {
-      setTechDropdownOpen((prevState) => !prevState); // Toggle the state between true/false for mobile
+      setTechDropdownOpen((open) => !open);
     }
   };
 
-  // Close dropdown when a subpage link is clicked
+  // Close everything when a link is clicked
   const handleLinkClick = () => {
-    if (closeDropdown) closeDropdown();
+    closeDropdown?.();
+    setTechDropdownOpen(false);
   };
 
-  // Combine styles for active or hover states
-  const techClass =
-    isTechActive || isHovered ? "bg-gray-200 font-bold text-blue-600" : "";
+  const techClass = isTechActive ? "bg-gray-200 font-bold text-blue-600" : "";
 
   return (
     <div className="relative pb-40">
@@ -49,82 +52,56 @@ const AboutDropdown: React.FC<AboutDropdownProps> = ({
           transition={{ duration: 0.2 }}
           className="absolute left-0 w-40 bg-white shadow-lg rounded-md z-50"
         >
-          {/* Tech Menu Item with Nested Dropdown */}
+          {/* Tech menu item */}
           <li
-            className={`relative ${techClass}`} // Apply styles for active or hovered Tech
-            onMouseEnter={() => handleTechHover(true)} // Only for desktop
-            onMouseLeave={() => handleTechHover(false)} // Only for desktop
-            onClick={handleTechClick} // Toggle on click for mobile view
+            className={`relative ${techClass}`}
+            onMouseEnter={() => handleTechHover(true)}
+            onMouseLeave={() => handleTechHover(false)}
           >
-            <div
-              className={`flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-100 ${isTechDropdownOpen ? "bg-gray-100 " : ""}`}
-            >
-              {/* <span>Tech</span> */}
-              <Link href="/about/tech">Tech</Link>
-              {/* Arrow icon toggles direction based on dropdown state */}
-              <span className="md:hidden">
-                {/* Hide arrow on desktop */}
-                {isTechDropdownOpen ? (
-                  <svg
-                    className="w-4 h-4 text-gray-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    ></path>
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-4 h-4 text-gray-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 5l7 7-7 7"
-                    ></path>
-                  </svg>
-                )}
-              </span>
+            <div className="flex justify-between items-center">
+              <Link
+                href="/about/tech"
+                className="flex-1 px-4 py-2 hover:bg-gray-100"
+                onClick={handleLinkClick}
+              >
+                Tech
+              </Link>
+              <button className="md:hidden px-2" onClick={handleTechToggle}>
+                {techIsOpen ? "–" : "+"}
+              </button>
             </div>
+
             <AnimatePresence>
-              {/* Only show nested dropdown when either hovered (desktop) or open (mobile) */}
-              {(isTechDropdownOpen || isHovered || isTechActive) && (
+              {techIsOpen && (
                 <motion.ul
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-full top-0 mt-0 w-40 bg-white shadow-lg rounded-md z-60"
+                  className="absolute left-full top-0 w-40 bg-white shadow-lg rounded-md z-60"
                 >
-                  {["Architecture", "CICD", "Tech Stack"].map((item) => (
-                    <li key={item}>
-                      <Link
-                        href={`/about/tech/${item.replace(" ", "").toLowerCase()}`}
-                        className="block px-4 py-2 hover:bg-gray-100 shadow-inner md:shadow-none"
-                        onClick={handleLinkClick}
-                        onMouseEnter={() => handleTechHover(true)}
-                        onMouseLeave={() => handleTechHover(false)} // Propagate hover state
-                      >
-                        {item}
-                      </Link>
-                    </li>
-                  ))}
+                  {["Architecture", "CICD", "Tech Stack"].map((item) => {
+                    const slug = item.replace(/\s+/g, "").toLowerCase();
+                    return (
+                      <li key={item}>
+                        <Link
+                          href={`/about/tech/${slug}`}
+                          className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={handleLinkClick}
+                          onMouseEnter={() => handleTechHover(true)}
+                          onMouseLeave={() => handleTechHover(false)}
+                        >
+                          {item}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </motion.ul>
               )}
             </AnimatePresence>
           </li>
-          {/* Other About Items */}
+
+          {/* Other About links */}
           {["Privacy", "SourceCode", "Analytics"].map((item) => (
             <li key={item}>
               <Link
