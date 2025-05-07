@@ -83,10 +83,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({
             transition={{ duration: 0.2 }}
             className="absolute left-0 mt-2 bg-white shadow-lg rounded-md z-50"
           >
-            <AboutDropdown
-              closeDropdown={closeMobileMenu}
-              isTechActive={isTechActive}
-            />
+            <AboutDropdown closeDropdown={closeMobileMenu} />
           </motion.div>
         )}
       </AnimatePresence>
