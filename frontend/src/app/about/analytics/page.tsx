@@ -80,42 +80,53 @@ export default function AnalyticsPage() {
 
   return (
     <div className="py-8 px-4">
-      {/* Header & single-line legend */}
+      {/* Header & legend */}
       <div className="max-w-7xl mx-auto px-4 text-center mb-6">
-        <h1 className="text-center mt-4 text-3xl font-extrabold">
-          Analytics (Last 7 days)
-        </h1>
-        <p className="mt-3 text-sm text-gray-500">
+        <h1 className="text-3xl font-extrabold">Analytics (Last 7 days)</h1>
+        <p className="mt-2 text-sm text-gray-500">
           Active Users (returned) &nbsp;·&nbsp; New Users (first-time)
         </p>
       </div>
 
-      {/* Data table */}
-      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg relative overflow-x-auto overflow-y-auto max-h-[60vh]">
+      {/* scroll‐wrapper: both‐axis scroll + bottom padding so rows don't hide under footer */}
+      <div
+        className="
+          max-w-7xl mx-auto
+          bg-white shadow rounded-lg
+          overflow-auto           /* both axes */
+          max-h-[60vh]            /* cap height */
+          pb-16                   /* <-- space for footer (4rem) */
+          relative z-0
+        "
+        style={{
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-x pan-y",
+        }}
+      >
         <table className="min-w-full table-auto border-collapse">
-          <thead className="sticky top-0 z-30 bg-white">
+          <thead className="sticky top-0 bg-white z-10">
             <tr>
               <th
                 rowSpan={2}
-                className="sticky left-0 z-40 px-6 py-3 text-left text-s font-bold text-gray-700 uppercase bg-gray-100 border-b border-gray-200"
+                className="sticky left-0 z-10 px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase bg-gray-100 border-b border-gray-200"
               >
                 Path
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-s font-bold text-gray-700 uppercase bg-blue-100 border-b border-gray-200"
+                className="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase bg-blue-100 border-b"
               >
                 Desktop
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-s font-bold text-gray-700 uppercase bg-green-100 border-b border-gray-200"
+                className="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase bg-green-100 border-b"
               >
                 Mobile
               </th>
               <th
                 colSpan={3}
-                className="px-6 py-3 text-center text-s font-bold text-gray-700 uppercase bg-yellow-100 border-b border-gray-200"
+                className="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase bg-yellow-100 border-b"
               >
                 Total
               </th>
@@ -131,19 +142,15 @@ export default function AnalyticsPage() {
                 "Active",
                 "New",
                 "Views",
-              ].map((label, idx) => {
+              ].map((lbl, i) => {
                 const bg =
-                  idx < 3
-                    ? "bg-blue-50"
-                    : idx < 6
-                      ? "bg-green-50"
-                      : "bg-yellow-50";
+                  i < 3 ? "bg-blue-50" : i < 6 ? "bg-green-50" : "bg-yellow-50";
                 return (
                   <th
-                    key={idx}
-                    className={`${bg} px-4 py-2 text-right text-xs font-bold text-gray-600 uppercase border-b border-gray-200`}
+                    key={i}
+                    className={`${bg} px-4 py-2 text-right text-xs font-semibold text-gray-600 uppercase border-b`}
                   >
-                    {label}
+                    {lbl}
                   </th>
                 );
               })}
@@ -153,13 +160,9 @@ export default function AnalyticsPage() {
             {data.map((r, i) => (
               <tr
                 key={r.pagePath}
-                className={`
-                  border-b border-gray-200
-                  group hover:bg-gray-100
-                  ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                `}
+                className={`${i % 2 === 0 ? "bg-white" : "bg-gray-50"} border-b border-gray-200 hover:bg-gray-100`}
               >
-                <td className="sticky left-0 z-20 px-6 py-4 whitespace-nowrap text-s font-semibold text-gray-800 bg-white">
+                <td className="sticky left-0 z-0 px-6 py-3 whitespace-nowrap font-semibold text-gray-800 bg-white">
                   {r.pagePath}
                 </td>
                 {[
@@ -172,21 +175,21 @@ export default function AnalyticsPage() {
                   r.totalActive,
                   r.totalNew,
                   r.totalViews,
-                ].map((value, idx) => {
+                ].map((v, idx) => {
                   const bg =
                     idx < 3
                       ? "bg-blue-50"
                       : idx < 6
                         ? "bg-green-50"
                         : "bg-yellow-50";
-                  const bold =
+                  const fw =
                     idx >= 6 ? "font-semibold text-gray-900" : "text-gray-700";
                   return (
                     <td
                       key={idx}
-                      className={`${bg} px-4 py-4 whitespace-nowrap text-s text-right ${bold}`}
+                      className={`${bg} px-4 py-3 whitespace-nowrap text-right ${fw}`}
                     >
-                      {value.toLocaleString()}
+                      {v.toLocaleString()}
                     </td>
                   );
                 })}
