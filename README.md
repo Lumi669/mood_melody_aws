@@ -12,7 +12,6 @@ Over the course of one year, I built this AI-powered project solo—making 1,400
 - [Live Demo](#live-demo)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-- [Local Development](#local-development)
 - [Architecture](#architecture)
 - [CI/CD & Deployment](#ci-cd-deployment)
 - [License](#license)
@@ -86,21 +85,21 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 2. Install dependencies
 
-### mood_melody_aws
+#### mood_melody_aws
 
 pnpm install
 
-### mood_melody_aws/backend
+#### mood_melody_aws/backend
 
 cd backend && pnpm install
 
-### mood_melody_aws/frontend
+#### mood_melody_aws/frontend
 
 cd ../frontend && pnpm install
 
 3. Run locally
 
-### in two separate shells:
+#### in two separate shells:
 
 cd backend && pnpm run build && pnpm run dev
 cd frontend && pnpm run build && pnpm run dev
