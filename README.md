@@ -46,7 +46,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 ---
 
-## Features 🎵
+## Features
 
 - 🎵 Play/pause tracks based on your mood
 - 📊 Mood analytics based on your text input
@@ -59,7 +59,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 ---
 
-## Live Demo 🔥
+## Live Demo
 
 ![Mood Melody in action](assets/demo.gif)
 
@@ -156,7 +156,7 @@ docker run -d \
 app is available at http://localhost:7001/
 note: data is not populated
 
-## Architecture 🎨
+## Architecture
 
 <details>
   <summary>🖼️ Click to view full architecture diagram</summary>
@@ -168,7 +168,7 @@ note: data is not populated
 For an interactive tour, see the in-app Tech & Architecture page:  
 🔗 https://mood-melody.ensintek.com/about/tech/architecture
 
-## CI/CD & Deployment 📦
+## CI/CD & Deployment
 
 <details>
   <summary>🖼️ Click to view full deployment diagram</summary>
