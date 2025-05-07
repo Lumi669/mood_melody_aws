@@ -13,7 +13,7 @@ Over the course of one year, I built this AI-powered project solo—making 1,400
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Architecture](#architecture)
-- [CI/CD & Deployment](#ci-cd--deployment)
+- [CI/CD & Deployment](#ci-cd-deployment)
 - [License](#license)
 - [Contact](#contact)
 
@@ -167,6 +167,8 @@ note: data is not populated
 
 For an interactive tour, see the in-app Tech & Architecture page:  
 🔗 https://mood-melody.ensintek.com/about/tech/architecture
+
+<a name="ci-cd-deployment"></a>
 
 ## CI/CD & Deployment
 
