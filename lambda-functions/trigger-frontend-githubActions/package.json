@@ -10,11 +10,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "axios": "^1.9.0"
+  },
   "devDependencies": {
     "@types/aws-sdk": "^2.7.0",
     "@types/node": "^20.14.10",
     "aws-sdk": "^2.1655.0",
-    "axios": "^1.9.0",
     "typescript": "^5.5.3"
   }
 }
