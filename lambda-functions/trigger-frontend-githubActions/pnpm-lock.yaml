@@ -12,13 +12,13 @@ importers:
         version: 1.9.0
     devDependencies:
       "@types/aws-sdk":
-        specifier: ^2.7.0
+        specifier: ^2.7.4
         version: 2.7.4
       "@types/node":
         specifier: ^20.14.10
         version: 20.17.31
       aws-sdk:
-        specifier: ^2.1655.0
+        specifier: ^2.1692.0
         version: 2.1692.0
       typescript:
         specifier: ^5.5.3
