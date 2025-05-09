@@ -42,7 +42,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 | Database              | DynamoDB, SQLite                                               |
 | AI/NLP                | AWS Comprehend                                                 |
 | CI/CD                 | GitHub Actions, AWS CodePipeline, CloudFormation               |
-| Other Infrastructures | S3, API Gateway, IAM                                           |
+| Other Infrastructures | S3, API Gateway, IAM, CloudWatch, Parameter Store              |
 
 ---
 
@@ -87,22 +87,30 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 #### mood_melody_aws
 
+```bash
 pnpm install
+```
 
 #### mood_melody_aws/backend
 
+```bash
 cd backend && pnpm install
+```
 
 #### mood_melody_aws/frontend
 
+```bash
 cd ../frontend && pnpm install
+```
 
 3. Run locally
 
 #### in two separate shells:
 
+```bash
 cd backend && pnpm run build && pnpm run dev
 cd frontend && pnpm run build && pnpm run dev
+```
 
 App will be available at: http://localhost:3000
 
@@ -112,20 +120,26 @@ App will be available at: http://localhost:3000
 
 #### build backend image
 
+```bash
 docker build -t my-backend -f backend/Dockerfile backend
+```
 
 #### Run it, mounting the local DB
 
+```bash
 docker run -d --name my-backend \
  -p 9000:8080 \
  -v "$(pwd)/backend/moodmelodydatabase.db:/var/task/moodmelodydatabase.db" \
  my-backend
+```
 
 #### test backend working or not
 
+```bash
 curl -i -XPOST http://localhost:9000/2015-03-31/functions/function/invocations \
  -H "Content-Type: application/json" \
  -d '{"route":"GET /songs"}'
+```
 
 HTTP/1.1 200 OK
 Date: Fri, 25 Apr 2025 20:53:59 GMT
@@ -138,20 +152,24 @@ Content-Type: text/plain; charset=utf-8
 
 - build frontend image
 
+```bash
   docker build -t my-frontend \
   -f frontend/Dockerfile \
   frontend \
   --build-arg NEXT_PUBLIC_API_URL_0=http://my-backend:9000/2015-03-31/functions/function/invocations
+```
 
 - run frontend
 
-docker rm -f my-frontend  
-docker run -d \
- --name my-frontend \
- --network moodmelody_net \
- -p 7001:7000 \
- -e NEXT_PUBLIC_API_URL_0=http://my-backend:9000/2015-03-31/functions/function/invocations \
- my-frontend
+```bash
+  docker rm -f my-frontend
+  docker run -d \
+  --name my-frontend \
+  --network moodmelody_net \
+  -p 7001:7000 \
+  -e NEXT_PUBLIC_API_URL_0=http://my-backend:9000/2015-03-31/functions/function/invocations \
+  my-frontend
+```
 
 app is available at http://localhost:7001/
 note: data is not populated
