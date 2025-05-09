@@ -4,20 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.9.0",
-    "jmespath": "^0.16.0"
+    "@aws-sdk/client-cloudformation": "^3.806.0",
+    "@aws-sdk/client-codepipeline": "^3.806.0",
+    "@aws-sdk/client-s3": "^3.806.0",
+    "@aws-sdk/client-ssm": "^3.806.0",
+    "axios": "^1.9.0"
   },
   "devDependencies": {
-    "@types/aws-sdk": "^2.7.4",
     "@types/node": "^20.14.10",
-    "aws-sdk": "^2.1692.0",
+    "esbuild": "^0.25.4",
     "typescript": "^5.5.3"
   }
 }
