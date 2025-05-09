@@ -1,10 +1,38 @@
-import * as AWS from "aws-sdk";
+//sdk v3
+
+import {
+  S3Client,
+  HeadObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
+import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
+import {
+  CloudFormationClient,
+  DescribeStacksCommand,
+} from "@aws-sdk/client-cloudformation";
+
+import {
+  CodePipelineClient,
+  PutJobSuccessResultCommand,
+  PutJobFailureResultCommand,
+} from "@aws-sdk/client-codepipeline";
+
 import axios from "axios";
 
-const s3 = new AWS.S3();
-const ssm = new AWS.SSM();
-const cloudformation = new AWS.CloudFormation();
-const codepipeline = new AWS.CodePipeline();
+async function streamToString(stream: any): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const chunks: Uint8Array[] = [];
+    stream.on("data", (c: Uint8Array) => chunks.push(c));
+    stream.on("error", reject);
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf-8")));
+  });
+}
+
+const s3 = new S3Client({});
+const ssm = new SSMClient({});
+const cloudformation = new CloudFormationClient({});
+const codepipeline = new CodePipelineClient({});
 
 const SIGNAL_BUCKET = "mood-melody-signal-bucket";
 const SIGNAL_KEY_PREFIX = "github-action-signal-";
@@ -19,9 +47,9 @@ export const handler = async (event: any) => {
     // Step 1: Retrieve CloudFormation outputs
     const stackName = "mood-melody-backend";
 
-    const describeStacksResponse = await cloudformation
-      .describeStacks({ StackName: stackName })
-      .promise();
+    const describeStacksResponse = await cloudformation.send(
+      new DescribeStacksCommand({ StackName: stackName }),
+    );
 
     if (
       !describeStacksResponse.Stacks ||
@@ -51,9 +79,13 @@ export const handler = async (event: any) => {
 
     // Step 2: Retrieve the GitHub token from Parameter Store
     const parameterName = "github-token-mood-melody";
-    const ssmResponse = await ssm
-      .getParameter({ Name: parameterName, WithDecryption: true })
-      .promise();
+
+    const ssmResponse = await ssm.send(
+      new GetParameterCommand({
+        Name: parameterName,
+        WithDecryption: true,
+      }),
+    );
     let githubToken = ssmResponse.Parameter?.Value;
 
     if (!githubToken) {
@@ -68,6 +100,8 @@ export const handler = async (event: any) => {
     if (invalidChars.test(githubToken)) {
       throw new Error("GitHub token contains invalid characters");
     }
+
+    console.log("end of step 2");
 
     // Step 3: Trigger GitHub Actions workflow via repository dispatch
     const githubRepo = "Lumi669/mood_melody_aws"; // Replace with your GitHub username and frontend repo
@@ -89,20 +123,27 @@ export const handler = async (event: any) => {
 
     // Idempotency: Check if this uniqueId has already been processed
     const processedKey = `${PROCESSED_KEY_PREFIX}${uniqueId}.json`;
+
     try {
-      await s3
-        .headObject({ Bucket: SIGNAL_BUCKET, Key: processedKey })
-        .promise();
+      await s3.send(
+        new HeadObjectCommand({
+          Bucket: SIGNAL_BUCKET,
+          Key: processedKey,
+        }),
+      );
+      await codepipeline.send(new PutJobSuccessResultCommand({ jobId }));
       return {
         statusCode: 200,
         body: JSON.stringify("Already processed."),
       };
-    } catch (error: any) {
-      if (error.code !== "NotFound") {
-        throw error;
+    } catch (err: any) {
+      // only swallow real “not found” errors, rethrow anything else
+      if (err.name !== "NotFound" && err.name !== "NoSuchKey") {
+        throw err;
       }
-      // Proceed if the uniqueId has not been processed
-      console.log(`Processing new uniqueId: ${uniqueId}`);
+      // At this point it's a “marker not found”—that's expected, so continue
+
+      console.log("No existing marker, continuing…");
     }
 
     await axios.post(dispatchUrl, dispatchData, { headers });
@@ -116,14 +157,20 @@ export const handler = async (event: any) => {
       for (let i = 0; i < 60; i++) {
         console.log("Starting iteration i ====== ", i);
         try {
-          const response = await s3
-            .getObject({ Bucket: SIGNAL_BUCKET, Key: signalKey })
-            .promise();
+          const response = await s3.send(
+            new GetObjectCommand({
+              Bucket: SIGNAL_BUCKET,
+              Key: `${SIGNAL_KEY_PREFIX}${uniqueId}.json`,
+            }),
+          );
 
           console.log("response ===== ", response);
 
           if (response.Body) {
-            const signalData = JSON.parse(response.Body.toString("utf-8"));
+            // const signalData = JSON.parse(response.Body.toString("utf-8"));
+            const bodyString = await streamToString(response.Body);
+            const signalData = JSON.parse(bodyString);
+
             console.log("Signal data from S3 === ", signalData);
 
             if (signalData.unique_id === uniqueId) {
@@ -137,7 +184,8 @@ export const handler = async (event: any) => {
             console.log("Response Body is undefined.");
           }
         } catch (error: any) {
-          if (error.code === "NoSuchKey") {
+          console.log("error ======= pppp === ", error);
+          if (error.name === "NotFound" || error.name === "NoSuchKey") {
             console.log("Signal file not found, retrying...");
           } else {
             console.error("Error getting object from S3:", error);
@@ -156,18 +204,16 @@ export const handler = async (event: any) => {
     console.log("signalFound ==== ", signalFound);
 
     if (!signalFound) {
-      // Notify CodePipeline of failure
-      await codepipeline
-        .putJobFailureResult({
+      await codepipeline.send(
+        new PutJobFailureResultCommand({
           jobId,
           failureDetails: {
             message:
               "GitHub Actions failed or signal file not found in S3 within the timeout period.",
             type: "JobFailed",
-            externalExecutionId: jobId,
           },
-        })
-        .promise();
+        }),
+      );
       return {
         statusCode: 500,
         body: JSON.stringify(
@@ -176,18 +222,18 @@ export const handler = async (event: any) => {
       };
     }
 
-    // Mark this uniqueId as processed
-    await s3
-      .putObject({
+    await s3.send(
+      new PutObjectCommand({
         Bucket: SIGNAL_BUCKET,
         Key: processedKey,
         Body: JSON.stringify({ processed: true }),
-      })
-      .promise();
+      }),
+    );
     console.log(`Marked uniqueId ${uniqueId} as processed.`);
 
     // Step 5: Notify CodePipeline of success
-    await codepipeline.putJobSuccessResult({ jobId }).promise();
+    // await codepipeline.putJobSuccessResult({ jobId }).promise();
+    await codepipeline.send(new PutJobSuccessResultCommand({ jobId }));
     console.log("CodePipeline job succeeded for jobId: ", jobId);
 
     return {
@@ -206,16 +252,16 @@ export const handler = async (event: any) => {
     console.error("Error occurred: ", errorMessage);
 
     // Notify CodePipeline of failure
-    await codepipeline
-      .putJobFailureResult({
+
+    await codepipeline.send(
+      new PutJobFailureResultCommand({
         jobId,
         failureDetails: {
-          message: `GitHub Actions failed: ${errorMessage}`,
+          message: errorMessage,
           type: "JobFailed",
-          externalExecutionId: event["CodePipeline.job"].id,
         },
-      })
-      .promise();
+      }),
+    );
 
     return {
       statusCode: 500,
