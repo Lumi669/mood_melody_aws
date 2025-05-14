@@ -55,7 +55,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 - ⏱️ Rate limiting on backend API endpoints to prevent abuse and spikes
 - 🚀 Serverless, scales on AWS Lambda
 - 🔄 CI/CD setup via GitHub Actions & AWS CodePipeline
-- 🐳 Dockerized for easy local development and testing
+- 🐳 Dockerized for easy AWS deployment via ECR
 
 ---
 
