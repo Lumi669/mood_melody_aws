@@ -108,8 +108,8 @@ cd ../frontend && pnpm install
 #### in two separate shells:
 
 ```bash
-cd backend && pnpm run build && pnpm run dev
-cd frontend && pnpm run build && pnpm run dev
+cd backend && pnpm run build && pnpm run start
+cd frontend && pnpm run build && pnpm run start
 ```
 
 App will be available at: http://localhost:3000
