@@ -61,7 +61,7 @@ export default async function RootLayout({
   const musicWithImages = await fetchAllMusicWithImages();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       {/* <body className="min-h-screen flex flex-col"> */}
       <body
         className={`min-h-screen flex flex-col ${
