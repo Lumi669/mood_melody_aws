@@ -11,10 +11,7 @@ Resources:
       KeySchema:
         - AttributeName: "submissionId"
           KeyType: "HASH"
-      BillingMode: PROVISIONED
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
+      BillingMode: PAY_PER_REQUEST
       SSESpecification:
         SSEEnabled: true
       TimeToLiveSpecification:
