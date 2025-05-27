@@ -210,7 +210,16 @@ const MusicPlayer: React.FC = () => {
                 <div className="absolute top-0 left-0 right-0 text-center p-1 bg-opacity-50 bg-black text-white text-xs lg:text-sm font-bold">
                   {getMoodMessage()}
                 </div>
-                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-[120%] text-sm text-white px-3 py-1 rounded bg-black bg-opacity-70 group-hover:opacity-100 opacity-0 transition-opacity duration-300">
+                <span
+                  className="
+    absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-[120%]
+    text-base font-bold text-white px-4 py-2 rounded-lg
+    bg-gradient-to-r from-yellow-500 to-orange-500
+    shadow-lg border-2 border-white
+    opacity-100
+    animate-bounce
+  "
+                >
                   Click to go back
                 </span>
               </div>
