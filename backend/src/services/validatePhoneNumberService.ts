@@ -52,8 +52,6 @@ export const validatePhoneNumber = async (
       throw new Error("NumVerify API key is missing.");
     }
 
-    console.log("Using API key ==== : ", `${apiKey.substring(0, 4)}...`);
-
     // Make the API request
     const response = await axios.get(`http://apilayer.net/api/validate`, {
       params: {
