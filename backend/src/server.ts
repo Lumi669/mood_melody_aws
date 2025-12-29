@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "*", // Or specify the frontend domain for more security
+    origin: "https://mood-melody.ensintek.com", // specify the frontend domain for more security
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
