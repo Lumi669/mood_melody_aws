@@ -19,5 +19,14 @@
     "@types/aws-lambda": "^8.10.149",
     "@types/node": "^22.14.1",
     "typescript": "^5.8.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "js-yaml": "3.14.2",
+      "querystring": "0.2.1"
+    },
+    "ignoredBuiltDependencies": [
+      "aws-sdk"
+    ]
   }
 }
