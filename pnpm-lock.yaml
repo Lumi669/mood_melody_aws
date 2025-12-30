@@ -6,6 +6,7 @@ settings:
 
 overrides:
   js-yaml: 4.1.1
+  "@eslint/plugin-kit": 0.3.4
 
 importers:
   .:
@@ -67,6 +68,13 @@ packages:
       }
     engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
 
+  "@eslint/core@0.15.2":
+    resolution:
+      {
+        integrity: sha512-78Md3/Rrxh83gCxoUc0EiciuOHsIITzLy53m3d9UyiW8y9Dj2D29FeETqyKA+BRK76tnTp6RXWb3pCay8Oyomg==,
+      }
+    engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
+
   "@eslint/eslintrc@3.3.1":
     resolution:
       {
@@ -88,10 +96,10 @@ packages:
       }
     engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
 
-  "@eslint/plugin-kit@0.2.8":
+  "@eslint/plugin-kit@0.3.4":
     resolution:
       {
-        integrity: sha512-ZAoA40rNMPwSm+AeHpCq8STiNAwzWLJuP8Xv4CHIc9wv/PSuExjMrmjfYNj682vW0OOiZ1HKxzvjQr9XZIisQA==,
+        integrity: sha512-Ul5l+lHEcw3L5+k8POx6r74mxEYKG5kOb6Xpy2gCRW6zweT6TEhAf8vhxGgjhqrd/VO/Dirhsb+1hNpD1ue9hw==,
       }
     engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
 
@@ -1144,6 +1152,10 @@ snapshots:
     dependencies:
       "@types/json-schema": 7.0.15
 
+  "@eslint/core@0.15.2":
+    dependencies:
+      "@types/json-schema": 7.0.15
+
   "@eslint/eslintrc@3.3.1":
     dependencies:
       ajv: 6.12.6
@@ -1162,9 +1174,9 @@ snapshots:
 
   "@eslint/object-schema@2.1.6": {}
 
-  "@eslint/plugin-kit@0.2.8":
+  "@eslint/plugin-kit@0.3.4":
     dependencies:
-      "@eslint/core": 0.13.0
+      "@eslint/core": 0.15.2
       levn: 0.4.1
 
   "@humanfs/core@0.19.1": {}
@@ -1314,7 +1326,7 @@ snapshots:
       "@eslint/core": 0.13.0
       "@eslint/eslintrc": 3.3.1
       "@eslint/js": 9.25.1
-      "@eslint/plugin-kit": 0.2.8
+      "@eslint/plugin-kit": 0.3.4
       "@humanfs/node": 0.16.6
       "@humanwhocodes/module-importer": 1.0.1
       "@humanwhocodes/retry": 0.4.2
