@@ -6,6 +6,7 @@ settings:
 
 overrides:
   cookie: 0.7.0
+  form-data: 4.0.5
 
 importers:
   .:
@@ -101,9 +102,6 @@ importers:
       "@storybook/test":
         specifier: ^8.4.6
         version: 8.6.12(storybook@8.6.12)
-      "@types/dompurify":
-        specifier: ^3.2.0
-        version: 3.2.0
       "@types/node":
         specifier: ^20
         version: 20.17.31
@@ -3412,13 +3410,6 @@ packages:
         integrity: sha512-eOIHzCUSH7SMfonMG1LsC2f8vxBFtho6NGBznK41R84YzPuvSBzrhEps33IsQiOW9+VL6NQ9DbjQJznk/S4uRA==,
       }
 
-  "@types/dompurify@3.2.0":
-    resolution:
-      {
-        integrity: sha512-Fgg31wv9QbLDA0SpTOXO3MaxySc4DKGLi8sna4/Utjo4r3ZRPdCt4UQee8BWr+Q5z21yifghREPJGYaEOEIACg==,
-      }
-    deprecated: This is a stub types definition. dompurify provides its own type definitions, so you do not need this installed.
-
   "@types/eslint-scope@3.7.7":
     resolution:
       {
@@ -5718,10 +5709,10 @@ packages:
       typescript: ">3.6.0"
       webpack: ^5.11.0
 
-  form-data@4.0.2:
+  form-data@4.0.5:
     resolution:
       {
-        integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==,
+        integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==,
       }
     engines: { node: ">= 6" }
 
@@ -11482,10 +11473,6 @@ snapshots:
 
   "@types/doctrine@0.0.9": {}
 
-  "@types/dompurify@3.2.0":
-    dependencies:
-      dompurify: 3.2.5
-
   "@types/eslint-scope@3.7.7":
     dependencies:
       "@types/eslint": 9.6.1
@@ -12018,7 +12005,7 @@ snapshots:
   axios@1.9.0:
     dependencies:
       follow-redirects: 1.15.9
-      form-data: 4.0.2
+      form-data: 4.0.5
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
@@ -13089,11 +13076,12 @@ snapshots:
       typescript: 5.8.3
       webpack: 5.99.7(esbuild@0.25.3)
 
-  form-data@4.0.2:
+  form-data@4.0.5:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
       mime-types: 2.1.35
 
   fraction.js@4.3.7: {}
