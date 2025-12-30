@@ -64,7 +64,8 @@
   },
   "pnpm": {
     "overrides": {
-      "form-data": "4.0.5"
+      "form-data": "4.0.5",
+      "pbkdf2": "3.1.5"
     }
   }
 }
