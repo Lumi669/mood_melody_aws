@@ -10,6 +10,7 @@ overrides:
   form-data: 4.0.5
   tar-fs: 2.1.4
   validator: 13.15.22
+  jws: 4.0.1
 
 importers:
   .:
@@ -1831,16 +1832,16 @@ packages:
         integrity: sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==,
       }
 
-  jwa@2.0.0:
+  jwa@2.0.1:
     resolution:
       {
-        integrity: sha512-jrZ2Qx916EA+fq9cEAeCROWPTfCwi1IVHqT2tapuqLEVVDKFDENFw1oL+MwrTvH6msKxsd1YTDVw6uKEcsrLEA==,
+        integrity: sha512-hRF04fqJIP8Abbkq5NKGN0Bbr3JxlQ+qhZufXVr0DvujKy93ZCbXZMHDL4EOtodSbCWxOqR8MS1tXA5hwqCXDg==,
       }
 
-  jws@4.0.0:
+  jws@4.0.1:
     resolution:
       {
-        integrity: sha512-KDncfTmOZoOMTFG4mBlG0qUIOlc03fmzH+ru6RgYVZhPkyiy/92Owlt/8UEN+a4TXR1FQetfIpJE8ApdvdVxTg==,
+        integrity: sha512-EKI/M/yqPncGUUh44xz0PxSidXFr/+r0pA70+gIYhjv+et7yxM+s29Y+VGDkovRofQem0fs7Uvf4+YmAdyRduA==,
       }
 
   lodash.camelcase@4.3.0:
@@ -4025,7 +4026,7 @@ snapshots:
       gaxios: 7.0.0-rc.4
       gcp-metadata: 7.0.0-rc.1
       gtoken: 8.0.0-rc.1
-      jws: 4.0.0
+      jws: 4.0.1
     transitivePeerDependencies:
       - supports-color
 
@@ -4053,7 +4054,7 @@ snapshots:
   gtoken@8.0.0-rc.1:
     dependencies:
       gaxios: 7.0.0-rc.4
-      jws: 4.0.0
+      jws: 4.0.1
     transitivePeerDependencies:
       - supports-color
 
@@ -4168,15 +4169,15 @@ snapshots:
     dependencies:
       bignumber.js: 9.3.0
 
-  jwa@2.0.0:
+  jwa@2.0.1:
     dependencies:
       buffer-equal-constant-time: 1.0.1
       ecdsa-sig-formatter: 1.0.11
       safe-buffer: 5.2.1
 
-  jws@4.0.0:
+  jws@4.0.1:
     dependencies:
-      jwa: 2.0.0
+      jwa: 2.0.1
       safe-buffer: 5.2.1
 
   lodash.camelcase@4.3.0: {}
