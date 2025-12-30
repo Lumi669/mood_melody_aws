@@ -61,5 +61,10 @@
   },
   "resolutions": {
     "cookie": "0.7.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "form-data": "4.0.5"
+    }
   }
 }
