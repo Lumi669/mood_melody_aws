@@ -80,7 +80,7 @@ const TechPage = () => {
                     Component development: <strong>Storybook</strong>
                   </li>
                   <li>
-                    Markup &amp; styles: <strong>HTML, CSS</strong>
+                    Styles: <strong>Tailwind CSS</strong>
                   </li>
                 </ul>
               </div>
