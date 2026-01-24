@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AWS from "aws-sdk";
+import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
 
 type AnalyticsRow = {
@@ -11,21 +11,19 @@ type AnalyticsRow = {
   screenPageViews: number;
 };
 
-AWS.config.update({ region: process.env.AWS_REGION || "eu-north-1" });
-
 const router = Router();
-const ssm = new AWS.SSM();
+const ssm = new SSMClient({ region: process.env.AWS_REGION || "eu-north-1" });
 const PROPERTY_ID = process.env.GA4_PROPERTY_ID!;
 
 let analyticsClient: BetaAnalyticsDataClient | null = null;
 async function getClient() {
   if (analyticsClient) return analyticsClient;
-  const resp = await ssm
-    .getParameter({
+  const resp = await ssm.send(
+    new GetParameterCommand({
       Name: "/mood-melody/GA4_SERVICE_ACCOUNT_JSON",
       WithDecryption: true,
-    })
-    .promise();
+    }),
+  );
   const creds = JSON.parse(resp.Parameter!.Value!);
   analyticsClient = new BetaAnalyticsDataClient({
     credentials: creds,
