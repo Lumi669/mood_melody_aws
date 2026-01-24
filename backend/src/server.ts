@@ -24,7 +24,10 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://mood-melody.ensintek.com", // specify the frontend domain for more security
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://mood-melody.ensintek.com"
+        : ["http://localhost:3000", "http://localhost:4000"],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
