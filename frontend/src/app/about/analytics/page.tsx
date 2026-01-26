@@ -78,6 +78,8 @@ export default function AnalyticsPage() {
       .catch(console.error);
   }, []);
 
+  console.log("data from AnalyticsPage === ", data);
+
   return (
     <div className="py-8 px-4">
       {/* Header & legend */}
