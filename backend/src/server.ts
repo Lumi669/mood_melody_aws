@@ -59,7 +59,6 @@ app.get("/api/cors-test", (req, res) => {
 });
 
 app.use("/api/analytics", analyticsRoutes);
-app.options("/api/analytics", cors());
 
 // Register the error handler as the last middleware
 app.use(errorHandler);
