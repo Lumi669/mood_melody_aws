@@ -70,9 +70,9 @@ router.get("/", async (_req, res, next) => {
     res.json(data);
   } catch (err: any) {
     console.error("❌ GA4 error in /api/analytics/data:", err);
-    return res.status(500).json({ error: err.message || "Unknown GA4 error" });
+    // return res.status(500).json({ error: err.message || "Unknown GA4 error" });
 
-    // next(err);
+    next(err);
   }
 });
 
