@@ -22,6 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// NODE_ENV and its value are set in aws lambda environment variables of aws console
 app.use(
   cors({
     origin:
