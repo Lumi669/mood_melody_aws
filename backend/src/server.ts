@@ -55,6 +55,7 @@ app.use("/api/sentimentanalysis", apiLimiter, sentimentRoutes);
 app.use("/api/saveuserfeedback", apiLimiter, saveUserFeedBack);
 
 app.use("/api/analytics", analyticsRoutes);
+app.options("/api/analytics", cors());
 
 // Register the error handler as the last middleware
 app.use(errorHandler);
