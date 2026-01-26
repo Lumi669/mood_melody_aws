@@ -54,10 +54,6 @@ app.use("/test", testRoutes);
 app.use("/api/sentimentanalysis", apiLimiter, sentimentRoutes);
 app.use("/api/saveuserfeedback", apiLimiter, saveUserFeedBack);
 
-app.get("/api/cors-test", (req, res) => {
-  res.json({ ok: true });
-});
-
 app.use("/api/analytics", analyticsRoutes);
 
 // Register the error handler as the last middleware
