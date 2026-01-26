@@ -66,6 +66,7 @@ router.get("/", async (_req, res, next) => {
     }));
 
     console.log("GA4 rows========:", rows);
+    console.log("GA4 ddddddata========:", data);
 
     res.json(data);
   } catch (err: any) {
