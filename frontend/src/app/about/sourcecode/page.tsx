@@ -46,7 +46,8 @@ const SourceCodePage = () => {
           {/* Project‑health badges */}
           <div className="flex flex-wrap gap-3 justify-center">
             <img
-              src="https://img.shields.io/github/last-commit/Lumi669/mood_melody_aws"
+              //change the number (e.g., ?cacheBust=2) each time you want to force a refresh
+              src="https://img.shields.io/github/last-commit/Lumi669/mood_melody_aws?cacheBust=1"
               alt="Last commit"
             />
             <img

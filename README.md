@@ -23,7 +23,7 @@ Over the course of one year, I built this AI-powered project solo—making 1,400
 
 Mood Melody is an intelligent music player that pairs every song with a mood‑matched image. Tap a mood button or type in your vibe the AI then analyzes your input, curates the perfect soundtrack, and displays an evocative visual for a fully immersive experience.
 
-[![Last Commit](https://img.shields.io/github/last-commit/Lumi669/mood_melody_aws)](https://github.com/Lumi669/mood_melody_aws/commits)
+[![Last Commit](https://img.shields.io/github/last-commit/Lumi669/mood_melody_aws?cacheBust=1)](https://github.com/Lumi669/mood_melody_aws/commits)
 
 [![Backend Build Status](https://github.com/Lumi669/mood_melody_aws/actions/workflows/build-backend.yml/badge.svg)](https://github.com/Lumi669/mood_melody_aws/actions/workflows/build-backend.yml)
 
