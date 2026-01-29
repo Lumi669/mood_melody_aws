@@ -1,14 +1,58 @@
+import axios from "axios";
+import { handler } from "../index";
+
 import {
   CloudFormationClient,
   DescribeStacksCommand,
 } from "@aws-sdk/client-cloudformation";
+
+import {
+  CodePipelineClient,
+  PutJobSuccessResultCommand,
+  PutJobFailureResultCommand,
+} from "@aws-sdk/client-codepipeline";
+
+import {
+  S3Client,
+  HeadObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
+
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 
-// Test CloudFormation integration
-describe("Trigger Frontend GitHub Actions - Error Handling", () => {
-  it("should require CloudFormation to provide BackendApiUrl", () => {
-    // This test verifies the integration points without running the full handler
-    const mockStackResponse = {
+/* -------------------- MOCKS -------------------- */
+
+jest.mock("axios");
+
+const cfSend = jest.fn();
+const cpSend = jest.fn();
+const s3Send = jest.fn();
+const ssmSend = jest.fn();
+
+beforeAll(() => {
+  CloudFormationClient.prototype.send = cfSend;
+  CodePipelineClient.prototype.send = cpSend;
+  S3Client.prototype.send = s3Send;
+  SSMClient.prototype.send = ssmSend;
+});
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
+/* -------------------- HELPERS -------------------- */
+
+const baseEvent = (id: string) => ({
+  "CodePipeline.job": { id },
+});
+
+/* -------------------- TESTS -------------------- */
+
+describe("Trigger Frontend GitHub Actions Lambda", () => {
+  it("succeeds when GitHub signal reports success", async () => {
+    jest.setTimeout(15000);
+    cfSend.mockResolvedValueOnce({
       Stacks: [
         {
           Outputs: [
@@ -19,143 +63,142 @@ describe("Trigger Frontend GitHub Actions - Error Handling", () => {
           ],
         },
       ],
-    };
-
-    // Verify the structure is correct
-    const outputs = mockStackResponse.Stacks[0].Outputs;
-    const apiUrl = outputs?.find((o: any) => o.OutputKey === "BackendApiUrl");
-
-    expect(apiUrl).toBeDefined();
-    expect(apiUrl?.OutputValue).toBe("https://api.example.com");
-  });
-
-  it("should require GitHub token from Parameter Store", () => {
-    const mockTokenResponse = {
-      Parameter: {
-        Value: "my-valid-github-token",
-      },
-    };
-
-    expect(mockTokenResponse.Parameter?.Value).toBeDefined();
-    expect(mockTokenResponse.Parameter.Value).toMatch(/^[a-zA-Z0-9_-]+$/);
-  });
-
-  it("should reject GitHub tokens with invalid characters", () => {
-    const invalidTokens = [
-      "token@invalid",
-      "token#invalid",
-      "token$invalid",
-      "token invalid",
-    ];
-
-    const invalidCharsRegex = /[^a-zA-Z0-9_-]/;
-
-    invalidTokens.forEach((token) => {
-      expect(invalidCharsRegex.test(token)).toBe(true);
     });
-  });
-
-  it("should trim GitHub token whitespace", () => {
-    const tokenWithSpaces = "  valid-token  ";
-    const trimmed = tokenWithSpaces.trim();
-
-    expect(trimmed).toBe("valid-token");
-    expect(trimmed).not.toContain(" ");
-  });
-
-  it("should format GitHub dispatch URL correctly", () => {
-    const repo = "Lumi669/mood_melody_aws";
-    const dispatchUrl = `https://api.github.com/repos/${repo}/dispatches`;
-
-    expect(dispatchUrl).toBe(
-      "https://api.github.com/repos/Lumi669/mood_melody_aws/dispatches",
-    );
-  });
-
-  it("should include required fields in GitHub dispatch payload", () => {
-    const backendUrl = "https://api.example.com";
-    const uniqueId = "20260124174756050";
-
-    const dispatchData = {
-      event_type: "build-frontend",
-      client_payload: {
-        BACKEND_API_URL: backendUrl,
-        UNIQUE_ID: uniqueId,
-      },
-    };
-
-    expect(dispatchData.event_type).toBe("build-frontend");
-    expect(dispatchData.client_payload.BACKEND_API_URL).toBe(backendUrl);
-    expect(dispatchData.client_payload.UNIQUE_ID).toBe(uniqueId);
-  });
-
-  it("should generate unique ID in correct format", () => {
-    // The actual code generates: new Date().toISOString().replace(/[-:.TZ]/g, "")
-    const date = new Date("2024-01-24T17:47:56.050Z");
-    const isoString = date.toISOString();
-    const uniqueId = isoString.replace(/[-:.TZ]/g, "");
-
-    expect(uniqueId).toMatch(/^\d{14,}\d$/);
-    expect(uniqueId.length).toBeGreaterThan(10);
-  });
-
-  it("should use correct CodePipeline job structure", () => {
-    const event = {
-      "CodePipeline.job": {
-        id: "test-job-123",
-      },
-    };
-
-    expect(event["CodePipeline.job"].id).toBe("test-job-123");
-  });
-
-  it("should validate S3 bucket name for signals", () => {
-    const signalBucket = "mood-melody-signal-bucket";
-    const signalKeyPrefix = "github-action-signal-";
-
-    expect(signalBucket).toMatch(/^[a-z0-9-]+$/);
-    expect(signalKeyPrefix).toMatch(/^[a-z0-9-_]+$/);
-  });
-
-  it("should include proper Authorization header", () => {
-    const token = "my-github-token";
-    const headers = {
-      Authorization: `token ${token}`,
-      Accept: "application/vnd.github.v3+json",
-    };
-
-    expect(headers.Authorization).toBe("token my-github-token");
-    expect(headers.Accept).toBe("application/vnd.github.v3+json");
-  });
-
-  it("should handle API URL extraction from CloudFormation", () => {
-    const stackOutputs = [
-      { OutputKey: "BackendApiUrl", OutputValue: "https://api.example.com" },
-      { OutputKey: "SomeOtherOutput", OutputValue: "value" },
-    ];
-
-    let backendApiUrl: string | undefined;
-    for (const output of stackOutputs) {
-      if (output.OutputKey === "BackendApiUrl") {
-        backendApiUrl = output.OutputValue;
-        break;
+    ssmSend.mockResolvedValueOnce({
+      Parameter: { Value: "validGithubToken123" },
+    });
+    // HeadObject → marker not found
+    s3Send.mockRejectedValueOnce({ name: "NotFound" });
+    let capturedUniqueId: string | undefined = undefined;
+    (axios.post as jest.Mock).mockImplementation((url, data) => {
+      capturedUniqueId = data.client_payload.UNIQUE_ID;
+      return Promise.resolve({});
+    });
+    s3Send.mockImplementation((cmd) => {
+      if (cmd instanceof GetObjectCommand) {
+        if (capturedUniqueId) {
+          return Promise.resolve({
+            Body: {
+              on: (event: string, cb: any) => {
+                if (event === "data")
+                  cb(
+                    Buffer.from(
+                      JSON.stringify({
+                        unique_id: capturedUniqueId,
+                        status: "success",
+                      }),
+                    ),
+                  );
+                if (event === "end") cb();
+              },
+            },
+          });
+        }
+        return Promise.resolve({});
       }
-    }
-
-    expect(backendApiUrl).toBe("https://api.example.com");
-  });
-
-  it("should handle missing BackendApiUrl gracefully", () => {
-    const stackOutputs = [{ OutputKey: "OtherOutput", OutputValue: "value" }];
-
-    let backendApiUrl: string | undefined;
-    for (const output of stackOutputs) {
-      if (output.OutputKey === "BackendApiUrl") {
-        backendApiUrl = output.OutputValue;
-        break;
+      if (cmd instanceof PutObjectCommand) {
+        return Promise.resolve({});
       }
-    }
-
-    expect(backendApiUrl).toBeUndefined();
+      return Promise.resolve({});
+    });
+    const result = await handler(baseEvent("job-success-123") as any);
+    expect(axios.post).toHaveBeenCalledTimes(1);
+    expect(cpSend).toHaveBeenCalledWith(expect.any(PutJobSuccessResultCommand));
+    expect(result.statusCode).toBe(200);
   });
+
+  it("fails CodePipeline when GitHub signal reports failure", async () => {
+    jest.setTimeout(15000);
+    cfSend.mockResolvedValueOnce({
+      Stacks: [
+        {
+          Outputs: [
+            {
+              OutputKey: "BackendApiUrl",
+              OutputValue: "https://api.example.com",
+            },
+          ],
+        },
+      ],
+    });
+    ssmSend.mockResolvedValueOnce({
+      Parameter: { Value: "validGithubToken123" },
+    });
+    s3Send.mockRejectedValueOnce({ name: "NotFound" });
+    let capturedUniqueId: string | undefined = undefined;
+    (axios.post as jest.Mock).mockImplementation((url, data) => {
+      capturedUniqueId = data.client_payload.UNIQUE_ID;
+      return Promise.resolve({});
+    });
+    s3Send.mockImplementation((cmd) => {
+      if (cmd instanceof GetObjectCommand) {
+        if (capturedUniqueId) {
+          return Promise.resolve({
+            Body: {
+              on: (event: string, cb: any) => {
+                if (event === "data")
+                  cb(
+                    Buffer.from(
+                      JSON.stringify({
+                        unique_id: capturedUniqueId,
+                        status: "failure",
+                      }),
+                    ),
+                  );
+                if (event === "end") cb();
+              },
+            },
+          });
+        }
+        return Promise.resolve({});
+      }
+      return Promise.resolve({});
+    });
+    const result = await handler(baseEvent("job-failure-456") as any);
+    expect(cpSend).toHaveBeenCalledWith(expect.any(PutJobFailureResultCommand));
+    expect(result.statusCode).toBe(500);
+  });
+
+  it("short-circuits when uniqueId already processed", async () => {
+    jest.setTimeout(15000);
+    cfSend.mockResolvedValueOnce({
+      Stacks: [
+        {
+          Outputs: [
+            {
+              OutputKey: "BackendApiUrl",
+              OutputValue: "https://api.example.com",
+            },
+          ],
+        },
+      ],
+    });
+    ssmSend.mockResolvedValueOnce({
+      Parameter: { Value: "validGithubToken123" },
+    });
+    // HeadObject → already processed
+    s3Send.mockImplementation((cmd) => {
+      if (cmd instanceof HeadObjectCommand) {
+        return Promise.resolve({});
+      }
+      return Promise.resolve({});
+    });
+    const result = await handler(baseEvent("job-idempotent-789") as any);
+    expect(axios.post).not.toHaveBeenCalled();
+    expect(cpSend).toHaveBeenCalledWith(expect.any(PutJobSuccessResultCommand));
+    expect(result.statusCode).toBe(200);
+  });
+
+  it("handles CloudFormation errors gracefully", async () => {
+    cfSend.mockRejectedValueOnce(new Error("CF broken"));
+
+    const result = await handler(baseEvent("job-error-999") as any);
+
+    expect(cpSend).toHaveBeenCalledWith(expect.any(PutJobFailureResultCommand));
+    expect(result.statusCode).toBe(500);
+  });
+});
+
+afterAll(async () => {
+  await new Promise((r) => setImmediate(r));
 });
