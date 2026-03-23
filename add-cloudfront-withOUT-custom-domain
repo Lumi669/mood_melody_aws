@@ -1,1 +1,1 @@
-> **Note:** CloudFront origin updated from `d-t5tuamk2uh.execute-api.eu-north-1.amazonaws.com` (API Gateway custom domain mapping target) to `xnvy286zil.execute-api.eu-north-1.amazonaws.com` (frontend API Gateway invoke domain). Other settings unchanged.
+**Note:** CloudFront origin updated from `d-t5tuamk2uh.execute-api.eu-north-1.amazonaws.com` (API Gateway custom domain mapping target) to `xnvy286zil.execute-api.eu-north-1.amazonaws.com` (frontend API Gateway invoke domain). Other settings unchanged.
