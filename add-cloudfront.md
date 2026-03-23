@@ -51,8 +51,15 @@ Squarespace DNS
   d-t5tuamk2uh.execute-api.eu-north-1.amazonaws.com
   ```
 
-  **Note22: api mapping for API Gateway domain name is frontend api gateway**
-  **i.e the custom domain name is connected to frontend api gateway**
+  **Note22:**
+
+`d-t5tuamk2uh.execute-api.eu-north-1.amazonaws.com` is the API Gateway–generated domain for the custom domain configuration.
+
+- The custom domain `mood-melody.ensintek.com` is configured in API Gateway
+- It maps to this domain via DNS
+- API Gateway then routes incoming requests to:
+  - `mood-melody-frontend` API
+  - `$default` stage
 
 ---
 
