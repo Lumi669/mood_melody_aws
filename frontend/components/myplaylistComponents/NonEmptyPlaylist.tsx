@@ -14,14 +14,13 @@ const NonEmptyPlaylist: React.FC<NonEmptyPlaylistProps> = ({ playlist }) => {
         {playlist.map((item: MusicWithImageSimplified, index: number) => (
           <li
             key={item.ctg}
-            className="flex flex-col md:flex-row items-center w-full max-w-xl mx-auto mb-10"
+            className="mb-10 w-full max-w-xl mx-auto
+                       flex flex-col items-center
+                       md:grid md:grid-cols-[2rem_260px_1fr] md:items-center md:gap-x-8"
           >
-            {/* For mobile view (number with text in the same line) */}
+            {/* Mobile */}
             <div className="flex items-center justify-center mb-4 md:hidden">
-              {/* Number */}
               <span className="text-2xl font-bold mr-2">{index + 1}.</span>
-
-              {/* Text content */}
               <div className="text-center">
                 <div className="text-lg font-semibold">
                   {extractAuthorName(item.name)}
@@ -30,18 +29,18 @@ const NonEmptyPlaylist: React.FC<NonEmptyPlaylistProps> = ({ playlist }) => {
               </div>
             </div>
 
-            {/* Number for desktop (left side of the image) */}
-            <span className="hidden md:block text-2xl font-bold w-8 text-right mr-16">
+            {/* Desktop number */}
+            <span className="hidden md:block text-2xl font-bold w-8 text-right">
               {index + 1}.
             </span>
 
             {/* Image */}
-            <div className="flex-shrink-0 mr-8">
+            <div className="w-[260px] h-[130px] shrink-0">
               <CustomImage
                 src={item.imgUrl}
                 alt={item.name}
                 dataUrl={item.url ?? ""}
-                className="cursor-pointer rounded-lg transition-all object-cover" // Tailwind class for object fit
+                className="w-full h-full object-cover rounded-lg cursor-pointer transition-all"
                 width={260}
                 height={130}
                 ctg={item.ctg}
@@ -49,12 +48,12 @@ const NonEmptyPlaylist: React.FC<NonEmptyPlaylistProps> = ({ playlist }) => {
               />
             </div>
 
-            {/* Text beside image for desktop */}
-            <div className="hidden md:block flex flex-col md:flex-grow md:ml-4">
+            {/* Desktop text */}
+            <div className="hidden md:block min-w-0">
               <div className="font-bold text-blue-900 text-lg md:text-xl">
                 {extractAuthorName(item.name)}
               </div>
-              <div className="text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden">
+              <div className="text-gray-800 text-sm md:text-base truncate">
                 {extractMusicName(item.name)}
               </div>
             </div>
