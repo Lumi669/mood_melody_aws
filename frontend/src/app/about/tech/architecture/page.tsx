@@ -44,7 +44,7 @@ const ArchitecturePage = () => {
         </h1>
         <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-2xl mx-auto">
           <Image
-            src="/architecture-border50-black.webp"
+            src="/architecture-with-cloudfront-border50.webp"
             alt="Architecture"
             width={738}
             height={792}

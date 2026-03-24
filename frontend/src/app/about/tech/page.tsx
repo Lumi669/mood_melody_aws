@@ -91,15 +91,17 @@ const TechPage = () => {
                 </h3>
                 <ul className="list-disc list-inside space-y-2 text-lg">
                   <li>
-                    Source &amp; CI/CD:{" "}
-                    <strong>GitHub, AWS CodePipeline</strong>
+                    CI/CD: <strong>GitHub, AWS CodePipeline</strong>
                   </li>
                   <li>
                     Infrastructure as code: <strong>AWS CloudFormation</strong>
                   </li>
                   <li>
-                    Containerization &amp; registry:{" "}
-                    <strong>Docker, AWS ECR</strong>
+                    Containerization: <strong>Docker, AWS ECR</strong>
+                  </li>
+                  <li>
+                    Content Delivery &amp; Networking:{" "}
+                    <strong>AWS CloudFront (manually provisioned)</strong>
                   </li>
                 </ul>
               </div>

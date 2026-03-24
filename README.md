@@ -35,14 +35,15 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 ## Tech Stack
 
-| Tier                  | Technologies                                                   |
-| --------------------- | -------------------------------------------------------------- |
-| Frontend              | Next.js, React, Tailwind, Docker, Typescript                   |
-| Backend               | AWS Lambda (Node.js), Express, Serverless , Docker, Typescript |
-| Database              | DynamoDB, SQLite                                               |
-| AI/NLP                | AWS Comprehend                                                 |
-| CI/CD                 | GitHub Actions, AWS CodePipeline, CloudFormation               |
-| Other Infrastructures | S3, API Gateway, IAM, CloudWatch, Parameter Store              |
+| Tier                          | Technologies                                                      |
+| ----------------------------- | ----------------------------------------------------------------- |
+| Frontend                      | Next.js, React, Tailwind, Typescript                              |
+| Backend                       | AWS Lambda (Node.js), Express, Serverless, Typescript             |
+| Database                      | DynamoDB, SQLite                                                  |
+| AI/NLP                        | AWS Comprehend                                                    |
+| CI/CD                         | GitHub Actions, AWS CodePipeline, CloudFormation, Docker, AWS ECR |
+| Other Infrastructures         | S3, API Gateway, IAM, CloudWatch, Parameter Store                 |
+| Content Delivery & Networking | AWS CloudFront (manually provisioned)                             |
 
 ---
 
@@ -51,11 +52,12 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 - Play/pause tracks based on your mood
 - Mood analytics based on your text input
 - AI-Powered Curation: Emotion detection via NLP for spot-on song with its linked image
-- Input validation & sanitization to guard against malicious payloads
-- Rate limiting on backend API endpoints to prevent abuse and spikes
-- Serverless, scales on AWS Lambda
+- Serverless, scales on AWS Lambda and DynamoDB
 - CI/CD setup via GitHub Actions & AWS CodePipeline
-- Dockerized for easy AWS deployment via ECR
+- Dockerized for easy AWS deployment via AWS ECR and Docker
+- Fast global content delivery via AWS CloudFront (low latency & caching)
+- Rate limiting on backend API endpoints to prevent abuse and spikes
+- Input validation & sanitization to guard against malicious payloads
 
 ---
 
