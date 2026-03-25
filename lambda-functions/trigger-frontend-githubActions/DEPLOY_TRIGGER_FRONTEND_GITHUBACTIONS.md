@@ -20,7 +20,7 @@ cd trigger-frontend-githubActions
 ## 2. Build & Zip the Layer
 
 ```bash
-cd lambda-layer/nodejs
+cd ../lambda-layer/nodejs
 pnpm install --prod --frozen-lockfile
 cd ..
 rm -f layer.zip
@@ -35,9 +35,15 @@ Upload layer.zip, choose compatible runtimes, and click Create.
 
 Go to Functions → mood-melody-fetchBackendImageApi-triggerFrontentBuild → Configuration → Layers, click Edit, select the new version, and Save.
 
-## Notes
+## 4. Upload the Lambda Function
 
-Upload new .zip for lambda function simply overwrite the existing function code, i.e no need to delete or recreate it.
+Go to AWS Console → Lambda → Functions → mood-melody-fetchBackendImageApi-triggerFrontentBuild
+
+- Click **Upload from → .zip file**
+- Upload the newly generated Lambda zip file (e.g. `function.zip`)
+- Click **Save**
+
+> This will overwrite the existing function code — no need to delete or recreate the function.
 
 Layer uploads always create a new version—remember to point my function at the new version.
 
