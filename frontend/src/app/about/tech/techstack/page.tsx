@@ -44,7 +44,7 @@ const TechStackPage = () => {
         </h1>
         <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-2xl mx-auto">
           <Image
-            src="/techstack-border50-s3.webp"
+            src="/techstack-border50-s3-legends.webp"
             alt="Tech Stack"
             width={861}
             height={1031}
