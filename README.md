@@ -1,9 +1,5 @@
 **App Website:** https://mood-melody.ensintek.com/
 
-## Developer's Note
-
-Over the course of one year, I built this AI-powered project solo—making 1,400 + commits and 1,800 + CI/CD runs—authored and maintained the full application codebase (from backend services to frontend components), and managed end-to-end CI/CD pipelines. It demonstrates my end-to-end ownership of infrastructure-as-code, serverless backends, and a responsive frontend, and reflects my dedication and problem-solving skills in architecting, deploying, and scaling a full-stack solution.
-
 ## Table of Contents
 
 - [About](#about)
