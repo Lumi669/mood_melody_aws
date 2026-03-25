@@ -51,6 +51,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 
 - Play/pause tracks based on your mood
 - Mood analytics based on your text input
+- Background changes with mood
 - AI-Powered Curation: Emotion detection via NLP for spot-on song with its linked image
 - Serverless, scales on AWS Lambda and DynamoDB
 - CI/CD setup via GitHub Actions & AWS CodePipeline
