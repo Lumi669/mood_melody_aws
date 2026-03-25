@@ -56,8 +56,10 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 - CI/CD setup via GitHub Actions & AWS CodePipeline
 - Dockerized for easy AWS deployment via AWS ECR and Docker
 - Fast global content delivery via AWS CloudFront (low latency & caching)
-- Rate limiting on backend API endpoints to prevent abuse and spikes
 - Input validation & sanitization to guard against malicious payloads
+- Multi-layer rate limiting:
+  - Edge-level protection via AWS WAF (CloudFront) to block abusive traffic early
+  - Backend rate limiting on API endpoints for fine-grained control
 
 ---
 
