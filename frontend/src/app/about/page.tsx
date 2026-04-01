@@ -19,47 +19,44 @@ const AboutPage = () => {
       </h1>
       <div className="h-screen overflow-y-scroll px-4 pb-80 p-10">
         <div className="max-w-5xl mx-auto">
-          <div className="indent-8 m-2 text-xl leading-relaxed">
-            <p>
-              This application serves as a demonstration of my{" "}
-              <span className="inline-block bg-indigo-100 text-indigo-800 font-semibold px-2 py-0.5 rounded-md">
-                full-stack development expertise
-              </span>
-              . It highlights my ability to{" "}
-              <span className="inline-block bg-yellow-100 text-yellow-800 font-medium px-2 py-0.5 rounded-md">
-                design
+          <div className="max-w-3xl mx-auto px-6 py-6 text-gray-800">
+            <p className="text-lg leading-relaxed mb-4">
+              This application showcases my ability to design and build an{" "}
+              <span className="font-semibold text-gray-900">
+                end-to-end, full-stack, cloud-native
               </span>{" "}
-              and{" "}
-              <span className="inline-block bg-yellow-100 text-yellow-800 font-medium px-2 py-0.5 rounded-md">
-                develop
-              </span>{" "}
-              user-friendly, responsive web applications, build{" "}
-              <span className="inline-block bg-green-100 text-green-800 font-medium px-2 py-0.5 rounded-md">
-                efficient back-end solutions
-              </span>{" "}
-              and{" "}
-              <span className="inline-block bg-green-100 text-green-800 font-medium px-2 py-0.5 rounded-md">
-                APIs
-              </span>
-              , and integrate modern{" "}
-              <span className="inline-block bg-teal-100 text-teal-800 font-medium px-2 py-0.5 rounded-md">
-                front-end technologies
-              </span>
-              . Additionally, it features a{" "}
-              <span className="inline-block bg-purple-100 text-purple-800 font-semibold px-2 py-0.5 rounded-md">
-                CI/CD pipeline
-              </span>{" "}
-              and{" "}
-              <span className="inline-block bg-purple-100 text-purple-800 font-semibold px-2 py-0.5 rounded-md">
-                DevOps practices
-              </span>
-              , ensuring seamless and automated deployment. Utilizing{" "}
-              <span className="italic text-gray-900">AWS services</span> for
-              hosting and deployment, this project also incorporates{" "}
-              <span className="inline-block bg-indigo-50 text-indigo-800 font-medium px-2 py-0.5 rounded-md">
-                AI-driven functionalities
-              </span>
-              .
+              web application.
+            </p>
+
+            <p className="text-lg leading-relaxed mb-4">
+              It features a responsive frontend built with{" "}
+              <span className="font-medium">Next.js</span> and a serverless
+              backend on <span className="font-medium">AWS</span> using{" "}
+              <span className="font-medium">Lambda</span> and{" "}
+              <span className="font-medium">API Gateway</span>.
+            </p>
+
+            <p className="text-lg leading-relaxed mb-4">
+              Data is managed with <span className="font-medium">DynamoDB</span>{" "}
+              and <span className="font-medium">S3</span>, while{" "}
+              <span className="font-medium">CloudFront</span> is used to
+              optimize content delivery with caching and low-latency
+              distribution.
+            </p>
+
+            <p className="text-lg leading-relaxed mb-4">
+              The application integrates AI via{" "}
+              <span className="font-medium">AWS Comprehend</span> to analyze
+              user input and dynamically generate personalized music and visual
+              experiences.
+            </p>
+
+            <p className="text-lg leading-relaxed">
+              A CI/CD pipeline powered by{" "}
+              <span className="font-medium">GitHub Actions</span> and{" "}
+              <span className="font-medium">AWS CodePipeline</span> enables
+              automated building and deployment, reflecting real-world DevOps
+              practices.
             </p>
           </div>
 

@@ -1,5 +1,9 @@
 **App Website:** https://mood-melody.ensintek.com/
 
+\*👩‍💻 Developer’s Note
+
+This application demonstrates my ability to design and build an end-to-end full-stack, cloud-native web application.
+
 ## Table of Contents
 
 - [About](#about)
@@ -57,6 +61,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 - Multi-layer rate limiting:
   - Edge-level protection via AWS WAF (CloudFront) to block abusive traffic early
   - Backend rate limiting on API endpoints for fine-grained control
+- Automated deployment pipeline with real-time status tracking
 
 ---
 
