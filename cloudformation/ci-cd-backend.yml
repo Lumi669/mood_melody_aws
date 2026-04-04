@@ -82,6 +82,9 @@ Resources:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Name: MoodMelodyBackendApi
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
 
   ApiGatewayResourceRoot:
     Type: AWS::ApiGateway::Resource
