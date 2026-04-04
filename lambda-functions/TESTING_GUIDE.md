@@ -62,7 +62,7 @@ cd ../trigger-frontend-githubActions
 pnpm test
 
 
-# Step 2: Upgrade Node.js to 24 locally (using nvm or similar)
+# Step 2: Upgrade Node.js to 24 locally (using nvm or similar) and update corresponding package.json file
 nvm install 24
 nvm use 24
 

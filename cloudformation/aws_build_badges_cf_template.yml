@@ -124,7 +124,7 @@ Resources:
       Role: !GetAtt
         - IamRoleLambdaExecution
         - Arn
-      Runtime: nodejs20.x
+      Runtime: nodejs24.x
       Timeout: 6
       Environment:
         Variables:
