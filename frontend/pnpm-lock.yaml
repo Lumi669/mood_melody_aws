@@ -17,14 +17,18 @@ overrides:
   lodash: 4.18.0
   yaml: 1.10.3
   rollup: 4.59.0
+  ajv@6: 6.14.0
+  ajv@8: 8.18.0
+  bn.js@4: 4.12.3
+  bn.js@5: 5.2.3
+  picomatch@2: 2.3.2
+  picomatch@4: 4.0.4
   vite: 6.4.2
   "@storybook/experimental-nextjs-vite>vite": 6.4.2
   "@storybook/builder-vite>vite": 6.4.2
   "@storybook/react-vite>vite": 6.4.2
   "@joshwooding/vite-plugin-react-docgen-typescript>vite": 6.4.2
   vite-plugin-storybook-nextjs>vite: 6.4.2
-  picomatch@2.3.1: 2.3.2
-  picomatch@4.0.3: 4.0.4
   anymatch>picomatch: 2.3.2
   micromatch>picomatch: 2.3.2
   "@rollup/pluginutils>picomatch": 4.0.4
@@ -36,8 +40,6 @@ overrides:
   diffie-hellman>bn.js: 4.12.3
   miller-rabin>bn.js: 4.12.3
   public-encrypt>bn.js: 4.12.3
-  schema-utils@3>ajv: 6.14.0
-  schema-utils@4>ajv: 8.18.0
   rimraf: 5.0.0
 
 importers:
@@ -3824,7 +3826,7 @@ packages:
         integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==,
       }
     peerDependencies:
-      ajv: ^8.0.0
+      ajv: 8.18.0
     peerDependenciesMeta:
       ajv:
         optional: true
@@ -3835,7 +3837,7 @@ packages:
         integrity: sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==,
       }
     peerDependencies:
-      ajv: ^6.9.1
+      ajv: 6.14.0
 
   ajv-keywords@5.1.0:
     resolution:
@@ -3843,13 +3845,7 @@ packages:
         integrity: sha512-YCS/JNFAUyr5vAuhk1DWm1CBxRHW9LbJ2ozWeemrIqpbsqKjHVxYPyi5GC0rjZIT5JxJ3virVTS8wk4i/Z+krw==,
       }
     peerDependencies:
-      ajv: ^8.8.2
-
-  ajv@6.12.6:
-    resolution:
-      {
-        integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==,
-      }
+      ajv: 8.18.0
 
   ajv@6.14.0:
     resolution:
@@ -9983,7 +9979,7 @@ snapshots:
 
   "@eslint/eslintrc@3.3.3":
     dependencies:
-      ajv: 6.12.6
+      ajv: 6.14.0
       debug: 4.4.3
       espree: 10.4.0
       globals: 14.0.0
@@ -11509,13 +11505,6 @@ snapshots:
       ajv: 8.18.0
       fast-deep-equal: 3.1.3
 
-  ajv@6.12.6:
-    dependencies:
-      fast-deep-equal: 3.1.3
-      fast-json-stable-stringify: 2.1.0
-      json-schema-traverse: 0.4.1
-      uri-js: 4.4.1
-
   ajv@6.14.0:
     dependencies:
       fast-deep-equal: 3.1.3
@@ -12576,7 +12565,7 @@ snapshots:
       "@humanwhocodes/module-importer": 1.0.1
       "@humanwhocodes/retry": 0.4.3
       "@types/estree": 1.0.8
-      ajv: 6.12.6
+      ajv: 6.14.0
       chalk: 4.1.2
       cross-spawn: 7.0.6
       debug: 4.4.3
