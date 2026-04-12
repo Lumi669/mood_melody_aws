@@ -56,8 +56,8 @@ importers:
         specifier: ^7.4.1
         version: 7.5.0(express@4.21.2)
       sequelize:
-        specifier: ^6.37.3
-        version: 6.37.7
+        specifier: ^6.37.8
+        version: 6.37.8
       serverless-http:
         specifier: ^3.2.0
         version: 3.2.0
@@ -1282,6 +1282,7 @@ packages:
       {
         integrity: sha512-iGCHkfUc5kFekGiqhe8B/mdaurD+lakO9txNnTvKtA6PISrw86LgqHvRzWYPyoE2Ph5aMIrCw9/uko6XHTKCwA==,
       }
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   dunder-proto@1.0.1:
     resolution:
@@ -2137,10 +2138,10 @@ packages:
       }
     engines: { node: ">= 10.0.0" }
 
-  sequelize@6.37.7:
+  sequelize@6.37.8:
     resolution:
       {
-        integrity: sha512-mCnh83zuz7kQxxJirtFD7q6Huy6liPanI67BSlbzSYgVNl5eXVdE2CN1FuAeZwG1SNpGsNRCV+bJAVVnykZAFA==,
+        integrity: sha512-HJ0IQFqcTsTiqbEgiuioYFMSD00TP6Cz7zoTti+zVVBwVe9fEhev9cH6WnM3XU31+ABS356durAb99ZuOthnKw==,
       }
     engines: { node: ">=10.0.0" }
     peerDependencies:
@@ -4127,7 +4128,7 @@ snapshots:
 
   sequelize-pool@7.1.0: {}
 
-  sequelize@6.37.7:
+  sequelize@6.37.8:
     dependencies:
       "@types/debug": 4.1.12
       "@types/validator": 13.15.0
