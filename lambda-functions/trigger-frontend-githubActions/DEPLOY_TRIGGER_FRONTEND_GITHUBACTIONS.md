@@ -29,9 +29,9 @@ zip -r layer.zip nodejs
 
 ## 3. Update in the AWS Console
 
-Go to Lambda → Layers, select my layer, and click Create version.
+Go to Lambda → Layers, select my layer, give it a name and click Create version.
 
-Upload layer.zip, choose compatible runtimes, and click Create.
+Upload layer.zip, choose compatible runtimes and architectures, and click Create.
 
 Go to Functions → mood-melody-fetchBackendImageApi-triggerFrontentBuild → Configuration → Layers, click Edit, select the new version, and Save.
 
@@ -40,7 +40,7 @@ Go to Functions → mood-melody-fetchBackendImageApi-triggerFrontentBuild → Co
 Go to AWS Console → Lambda → Functions → mood-melody-fetchBackendImageApi-triggerFrontentBuild
 
 - Click **Upload from → .zip file**
-- Upload the newly generated Lambda zip file (e.g. `function.zip`)
+- Upload the newly generated Lambda zip file ( `trigger-frontend-build.zip`)
 - Click **Save**
 
 > This will overwrite the existing function code — no need to delete or recreate the function.
