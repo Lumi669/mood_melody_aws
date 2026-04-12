@@ -67,6 +67,7 @@
       "form-data": "4.0.5",
       "pbkdf2": "3.1.5",
       "glob": "10.5.0",
+      "minimatch": "9.0.7",
       "vite": "6.4.1",
       "@storybook/experimental-nextjs-vite>vite": "6.4.1",
       "@storybook/builder-vite>vite": "6.4.1",
