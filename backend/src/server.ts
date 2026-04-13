@@ -15,7 +15,7 @@ import analyticsRoutes from "./routes/analyticsRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import apiLimiter from "./middleware/rateLimiter";
 
-const app = express();
+export const app = express();
 
 app.use((req, res, next) => {
   console.log(`Client IP: ${req.ip}, Method: ${req.method}, Path: ${req.path}`);
@@ -64,7 +64,7 @@ app.use(errorHandler);
 export const handler = serverless(app);
 
 // If running locally, start the server (this block should not be used in a serverless environment)
-if (!process.env.LAMBDA_TASK_ROOT) {
+if (!process.env.LAMBDA_TASK_ROOT && process.env.NODE_ENV !== "test") {
   const port = process.env.PORT || 4000;
   app.listen(port, () =>
     console.log(`Server running on http://localhost:${port}`),
