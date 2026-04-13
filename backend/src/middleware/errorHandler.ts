@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from "express";
 
 export function errorHandler(
   err: any, // Accept any type of error to handle both built-in and custom errors
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) {
   const statusCode = err.status || 500; // Default to 500 if no status code is set
 
@@ -23,8 +23,6 @@ export function errorHandler(
     errorResponse.retryAfter = err.retryAfter;
   }
 
-  res.status(statusCode).json(errorResponse);
-
   console.log(
     "eeeeee errorResponse from backend errorHandler middleware ==== ",
     errorResponse,
@@ -32,7 +30,6 @@ export function errorHandler(
   // above print out this:
   //{ error: 'Too many requests. Try after 14 seconds ', retryAfter: 14 }
 
-  // Send the response
   return res.status(statusCode).json(errorResponse);
 }
 
