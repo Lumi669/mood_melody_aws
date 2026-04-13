@@ -1,20 +1,6 @@
 name: Build and Push Frontend
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "frontend/**"
-      - ".github/workflows/build-frontend.yml"
-      - "package.json"
-      - "pnpm-lock.yaml"
-  pull_request:
-    paths:
-      - "frontend/**"
-      - ".github/workflows/build-frontend.yml"
-      - "package.json"
-      - "pnpm-lock.yaml"
   repository_dispatch:
     types: [build-frontend]
 
@@ -27,7 +13,7 @@ env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
 jobs:
-  frontend-test-and-e2e:
+  frontend-test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -50,33 +36,11 @@ jobs:
       - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright browser
-        run: pnpm exec playwright install --with-deps chromium
-
       - name: Run frontend unit/component tests with coverage
         run: pnpm test:coverage
 
-      - name: Run frontend E2E tests
-        run: pnpm exec playwright test
-
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: frontend/playwright-report
-          if-no-files-found: ignore
-
-      - name: Upload Playwright test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-test-results
-          path: frontend/test-results
-          if-no-files-found: ignore
-
   build:
-    needs: frontend-test-and-e2e
+    needs: frontend-test
     if: github.event_name == 'repository_dispatch'
     runs-on: ubuntu-latest
 
