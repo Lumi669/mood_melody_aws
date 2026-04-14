@@ -197,6 +197,30 @@ describe("Trigger Frontend GitHub Actions Lambda", () => {
     expect(cpSend).toHaveBeenCalledWith(expect.any(PutJobFailureResultCommand));
     expect(result.statusCode).toBe(500);
   });
+
+  it("does not trigger frontend when BackendApiUrl is missing from CloudFormation outputs", async () => {
+    cfSend.mockResolvedValueOnce({
+      Stacks: [
+        {
+          Outputs: [
+            {
+              OutputKey: "SomeOtherOutput",
+              OutputValue: "https://example.com",
+            },
+          ],
+        },
+      ],
+    });
+
+    const result = await handler(baseEvent("job-missing-output-1000") as any);
+
+    expect(axios.post).not.toHaveBeenCalled();
+    expect(cpSend).toHaveBeenCalledWith(expect.any(PutJobFailureResultCommand));
+    expect(result.statusCode).toBe(500);
+    expect(result.body).toContain(
+      "BackendApiUrl not found in CloudFormation stack outputs",
+    );
+  });
 });
 
 afterAll(async () => {
