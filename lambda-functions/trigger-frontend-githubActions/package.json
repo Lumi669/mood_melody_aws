@@ -30,6 +30,7 @@
   "pnpm": {
     "overrides": {
       "form-data": "4.0.5",
+      "follow-redirects": "1.16.0",
       "handlebars": "4.7.9"
     }
   }
