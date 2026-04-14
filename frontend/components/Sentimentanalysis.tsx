@@ -119,8 +119,14 @@ export default function SentimentAnalysisPage({
     <div className="p-4 max-w-3xl mx-auto grid gap-4">
       <div className="relative flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 w-full">
         <div className="w-full relative">
+          <label htmlFor="mood-input" className="sr-only">
+            Describe your mood
+          </label>
           <textarea
+            id="mood-input"
+            name="mood"
             aria-label="Mood input"
+            autoComplete="off"
             value={text}
             onChange={handleTextChange}
             placeholder="Enter text to analyze your sentiment"

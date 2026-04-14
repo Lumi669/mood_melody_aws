@@ -170,6 +170,7 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="firstname"
+              autoComplete="given-name"
               {...register("firstname", {
                 required: "Firstname is required",
 
@@ -194,6 +195,7 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="surname"
+              autoComplete="family-name"
               {...register("surname", {
                 required: "Surname is required",
 
@@ -216,6 +218,7 @@ const ContactForm: React.FC = () => {
             <input
               type="email"
               id="email"
+              autoComplete="email"
               {...register("email", {
                 required: "Email is required",
                 validate: (value) => {
@@ -243,6 +246,7 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="telephonenumber"
+              autoComplete="tel"
               placeholder="+358401234567" // Example format
               {...register("telephonenumber", {
                 required: "Telephone number is required",
@@ -270,6 +274,7 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="title"
+              autoComplete="organization-title"
               {...register("title", {
                 required: "Title is required",
 
@@ -306,6 +311,7 @@ const ContactForm: React.FC = () => {
             <input
               type="text"
               id="organisation"
+              autoComplete="organization"
               {...register("organisation", {
                 required: "Organisation is required",
                 validate: (value) => {
@@ -334,10 +340,10 @@ const ContactForm: React.FC = () => {
         </div>
 
         {/* Role Selection */}
-        <div className="mt-4">
-          <label className="block text-sm font-semibold">
+        <fieldset className="mt-4">
+          <legend className="block text-sm font-semibold">
             I am <span className="text-red-500">*</span>
-          </label>
+          </legend>
           <div className="mt-1 space-y-2">
             {["Recruiters", "Investors", "Mentors", "Partners", "Other"].map(
               (role) => (
@@ -362,7 +368,7 @@ const ContactForm: React.FC = () => {
               </p>
             )}
           </div>
-        </div>
+        </fieldset>
 
         <div className="mt-4">
           <label htmlFor="message" className="block text-sm font-semibold">
@@ -370,6 +376,7 @@ const ContactForm: React.FC = () => {
           </label>
           <textarea
             id="message"
+            autoComplete="off"
             {...register("message", {
               maxLength: {
                 value: 100,
