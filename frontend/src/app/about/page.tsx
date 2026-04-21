@@ -104,6 +104,8 @@ const AboutPage = () => {
                 S3)
               </li>
 
+              <li>• Auto-scaling serverless infrastructure</li>
+
               <li>
                 • CI/CD pipeline using GitHub Actions and AWS CodePipeline
               </li>

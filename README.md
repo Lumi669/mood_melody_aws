@@ -53,7 +53,7 @@ Mood Melody is an intelligent music player that pairs every song with a mood‑
 - Mood analytics based on your text input
 - Background changes with mood
 - AI-Powered Curation: Emotion detection via NLP for spot-on song with its linked image
-- Serverless, scales on AWS Lambda and DynamoDB
+- Serverless, auto-scales on AWS Lambda and DynamoDB
 - CI/CD setup via GitHub Actions & AWS CodePipeline
 - Dockerized for easy AWS deployment via AWS ECR and Docker
 - Fast global content delivery via AWS CloudFront (low latency & caching)
