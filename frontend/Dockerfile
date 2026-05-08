@@ -7,8 +7,8 @@ WORKDIR /app
 COPY tsconfig.json ./
 COPY package.json pnpm-lock.yaml ./
 
-# Enable corepack and prepare pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Enable corepack and prepare the repo-pinned pnpm version
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 
 # Install dependencies using pnpm with frozen lockfile to ensure consistency
 RUN pnpm install --frozen-lockfile
@@ -69,7 +69,7 @@ COPY --from=builder /app/run.sh ./run.sh
 COPY --from=builder /app/server.js ./server.js  
 
 # Install production dependencies
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 RUN pnpm install --frozen-lockfile --prod
 
 # Ensure the .next/cache directory is linked to /tmp/cache
