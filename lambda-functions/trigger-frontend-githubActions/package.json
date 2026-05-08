@@ -17,7 +17,7 @@
     "@aws-sdk/client-codepipeline": "^3.998.0",
     "@aws-sdk/client-s3": "^3.997.0",
     "@aws-sdk/client-ssm": "^3.997.0",
-    "axios": "^1.15.0"
+    "axios": "^1.15.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.13",
@@ -31,6 +31,7 @@
     "overrides": {
       "form-data": "4.0.5",
       "follow-redirects": "1.16.0",
+      "fast-xml-parser": "5.7.0",
       "handlebars": "4.7.9"
     }
   }

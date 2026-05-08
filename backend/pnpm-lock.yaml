@@ -16,13 +16,14 @@ overrides:
   long: 5.2.3
   qs: 6.14.2
   path-to-regexp: 0.1.13
-  fast-xml-parser: 5.5.7
+  fast-xml-parser: 5.7.0
   follow-redirects: 1.16.0
   dottie: 2.0.7
   lodash: 4.18.0
   diff: 4.0.4
   picomatch: 2.3.2
   "@tootallnate/once": 3.0.1
+  protobufjs: 7.5.5
 
 importers:
   .:
@@ -43,8 +44,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0
       axios:
-        specifier: ^1.15.0
-        version: 1.15.0
+        specifier: ^1.15.2
+        version: 1.16.0
       better-sqlite3:
         specifier: ^11.9.1
         version: 11.9.1
@@ -879,6 +880,12 @@ packages:
     resolution:
       {
         integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==,
+      }
+
+  "@nodable/entities@2.1.0":
+    resolution:
+      {
+        integrity: sha512-nyT7T3nbMyBI/lvr6L5TyWbFJAI9FTgVRakNoBqCD+PmID8DzFrrNdLLtHMwMszOtqZa8PAOV24ZqDnQrhQINA==,
       }
 
   "@pkgjs/parseargs@0.11.0":
@@ -1787,10 +1794,10 @@ packages:
         integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==,
       }
 
-  axios@1.15.0:
+  axios@1.16.0:
     resolution:
       {
-        integrity: sha512-wWyJDlAatxk30ZJer+GeCWS209sA42X+N5jU2jy6oHTp7ufw8uzUTVFBX9+wTfAlhiJXGS0Bq7X6efruWjuK9Q==,
+        integrity: sha512-6hp5CwvTPlN2A31g5dxnwAX0orzM7pmCRDLnZSX772mv8WDqICwFjowHuPs04Mc8deIld1+ejhtaMn5vp6b+1w==,
       }
 
   babel-jest@30.3.0:
@@ -2462,16 +2469,16 @@ packages:
         integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==,
       }
 
-  fast-xml-builder@1.1.4:
+  fast-xml-builder@1.1.9:
     resolution:
       {
-        integrity: sha512-f2jhpN4Eccy0/Uz9csxh3Nu6q4ErKxf0XIsasomfOihuSUa3/xw6w8dnOtCDgEItQFJG8KyXPzQXzcODDrrbOg==,
+        integrity: sha512-jcyKVSEX13iseJqg7n/KWw+xnu/7fdrZ333Fac54KjHDIELVCfDDJXYIm6DTJ0Su4gSzrhqiK0DzY/wZbF40mw==,
       }
 
-  fast-xml-parser@5.5.7:
+  fast-xml-parser@5.7.0:
     resolution:
       {
-        integrity: sha512-LteOsISQ2GEiDHZch6L9hB0+MLoYVLToR7xotrzU0opCICBkxOPgHAy1HxAvtxfJNXDJpgAsQN30mkrfpO2Prg==,
+        integrity: sha512-MTcrUoRQ1GSQ9iG3QJzBGquYYYeA7piZaJoIWbPFGbRn6Jj6z7xgoAyi4DrZX4y2ZIQQBF59gc/zmvvejjgoFQ==,
       }
     hasBin: true
 
@@ -3709,10 +3716,10 @@ packages:
       }
     engines: { node: ">=18" }
 
-  protobufjs@7.5.0:
+  protobufjs@7.5.5:
     resolution:
       {
-        integrity: sha512-Z2E/kOY1QjoMlCytmexzYfDm/w5fKAiRwpSzGtdnXW1zC88Z2yXazHHrOtwCzn+7wSxyE8PYM4rvVcMphF9sOA==,
+        integrity: sha512-3wY1AxV+VBNW8Yypfd1yQY9pXnqTAN+KwQxL8iYm3/BjKYMNg4i0owhEe26PWDOMaIrzeeF98Lqd5NGz4omiIg==,
       }
     engines: { node: ">=12.0.0" }
 
@@ -4971,7 +4978,7 @@ snapshots:
   "@aws-sdk/xml-builder@3.972.6":
     dependencies:
       "@smithy/types": 4.13.0
-      fast-xml-parser: 5.5.7
+      fast-xml-parser: 5.7.0
       tslib: 2.8.1
 
   "@aws/lambda-invoke-store@0.2.3": {}
@@ -5200,7 +5207,7 @@ snapshots:
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.2.3
-      protobufjs: 7.5.0
+      protobufjs: 7.5.5
       yargs: 17.7.2
 
   "@isaacs/cliui@8.0.2":
@@ -5431,6 +5438,8 @@ snapshots:
       "@emnapi/runtime": 1.9.2
       "@tybys/wasm-util": 0.10.1
     optional: true
+
+  "@nodable/entities@2.1.0": {}
 
   "@pkgjs/parseargs@0.11.0":
     optional: true
@@ -6001,7 +6010,7 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@1.15.0:
+  axios@1.16.0:
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.5
@@ -6406,13 +6415,14 @@ snapshots:
 
   fast-json-stable-stringify@2.1.0: {}
 
-  fast-xml-builder@1.1.4:
+  fast-xml-builder@1.1.9:
     dependencies:
       path-expression-matcher: 1.5.0
 
-  fast-xml-parser@5.5.7:
+  fast-xml-parser@5.7.0:
     dependencies:
-      fast-xml-builder: 1.1.4
+      "@nodable/entities": 2.1.0
+      fast-xml-builder: 1.1.9
       path-expression-matcher: 1.5.0
       strnum: 2.2.3
 
@@ -6569,7 +6579,7 @@ snapshots:
       node-fetch: 3.3.2
       object-hash: 3.0.0
       proto3-json-serializer: 3.0.0
-      protobufjs: 7.5.0
+      protobufjs: 7.5.5
       retry-request: 8.0.0
     transitivePeerDependencies:
       - supports-color
@@ -7292,9 +7302,9 @@ snapshots:
 
   proto3-json-serializer@3.0.0:
     dependencies:
-      protobufjs: 7.5.0
+      protobufjs: 7.5.5
 
-  protobufjs@7.5.0:
+  protobufjs@7.5.5:
     dependencies:
       "@protobufjs/aspromise": 1.1.2
       "@protobufjs/base64": 1.1.2
