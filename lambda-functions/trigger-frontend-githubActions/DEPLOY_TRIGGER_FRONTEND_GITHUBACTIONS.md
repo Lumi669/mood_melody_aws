@@ -46,5 +46,3 @@ Go to AWS Console → Lambda → Functions → mood-melody-fetchBackendImageApi-
 > This will overwrite the existing function code — no need to delete or recreate the function.
 
 Layer uploads always create a new version—remember to point my function at the new version.
-
-If prefer to use the built-in SDK in Node 20.x, may omit aws-sdk from my bundle like what I am doing.
