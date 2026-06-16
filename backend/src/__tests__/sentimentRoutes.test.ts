@@ -64,6 +64,15 @@ describe("sentimentRoutes", () => {
     });
   });
 
+  it("rejects invalid JSON string bodies", async () => {
+    const response = await invokePost("{");
+
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.responseBody.current).toEqual({
+      error: "Invalid JSON request body",
+    });
+  });
+
   it("rejects whitespace-only text", async () => {
     const response = await invokePost({ text: "   " });
 
@@ -95,6 +104,17 @@ describe("sentimentRoutes", () => {
     mockedAnalyzeSentiment.mockResolvedValue("POSITIVE");
 
     const response = await invokePost({ text: "I feel great today" });
+
+    expect(response.responseBody.current).toEqual({ sentiment: "POSITIVE" });
+    expect(mockedAnalyzeSentiment).toHaveBeenCalledWith("I feel great today");
+  });
+
+  it("returns the analyzed sentiment from a JSON string body", async () => {
+    mockedAnalyzeSentiment.mockResolvedValue("POSITIVE");
+
+    const response = await invokePost(
+      JSON.stringify({ text: "I feel great today" }),
+    );
 
     expect(response.responseBody.current).toEqual({ sentiment: "POSITIVE" });
     expect(mockedAnalyzeSentiment).toHaveBeenCalledWith("I feel great today");

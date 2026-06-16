@@ -4,20 +4,64 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { apiUrls } from "@config/apiConfig";
 
+const getSentimentAnalysisUrl = () => {
+  if (apiUrls.sentimentanalysis) {
+    return apiUrls.sentimentanalysis;
+  }
+
+  if (apiUrls.base) {
+    return `${apiUrls.base.replace(/\/$/, "")}/api/sentimentanalysis`;
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return "http://localhost:4000/api/sentimentanalysis";
+  }
+
+  return "";
+};
+
 export async function POST(req: NextRequest) {
   // console.log("apiUrls from sentimentanalysis route ======== ", apiUrls);
 
-  const { text } = await req.json();
+  let text: unknown;
+  try {
+    const body = await req.json();
+    text = body?.text;
+  } catch (error) {
+    console.error("Failed to parse sentiment analysis request body:", error);
+    return NextResponse.json(
+      { error: "Invalid JSON request body" },
+      { status: 400 },
+    );
+  }
+
   console.log("text for analysing sentiment frontend ====== ", text);
 
+  const sentimentAnalysisUrl = getSentimentAnalysisUrl();
+  if (!sentimentAnalysisUrl) {
+    return NextResponse.json(
+      { error: "Sentiment analysis API URL is not configured" },
+      { status: 503 },
+    );
+  }
+
   // frontend forward request to backend
-  const response = await fetch(`${apiUrls.sentimentanalysis}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text: text }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(sentimentAnalysisUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }),
+    });
+  } catch (error) {
+    console.error("Failed to reach sentiment analysis API:", error);
+    return NextResponse.json(
+      { error: "Sentiment analysis service is unavailable" },
+      { status: 503 },
+    );
+  }
 
   if (!response.ok) {
     let backendError;

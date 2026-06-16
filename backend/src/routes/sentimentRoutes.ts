@@ -8,10 +8,16 @@ router.post("/", async (req, res) => {
   console.log(" backend Route hit ====");
 
   // Parse the body manually if it is a string
-  const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+  let body;
+  try {
+    body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+  } catch (error) {
+    console.error("Invalid JSON body in sentiment route:", error);
+    return res.status(400).json({ error: "Invalid JSON request body" });
+  }
 
   console.log("bbbb body from sentimentRoutes.ts === ", body);
-  const { text } = req.body;
+  const { text } = body ?? {};
 
   if (!text) {
     return res
