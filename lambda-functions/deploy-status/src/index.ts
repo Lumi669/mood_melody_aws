@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { CodePipelineCloudWatchEvent } from "aws-lambda";
+import type { CodePipelineCloudWatchEvent } from "aws-lambda";
 
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
